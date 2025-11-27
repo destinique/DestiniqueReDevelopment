@@ -1,0 +1,36 @@
+.topbar {
+  background: #000;
+  font-size: 14px;
+}
+
+.main-nav {
+  background: #000;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+
+  .navbar-brand .logo {
+    height: 60px;
+  }
+
+  .nav-link {
+    color: #fff !important;
+    margin: 0 12px;
+    font-size: 14px;
+    letter-spacing: 1px;
+  }
+
+  .nav-link:hover {
+    color: #f8f9fa !important;
+  }
+}
+
+.dropdown-menu {
+  background: #111;
+
+  .dropdown-item {
+    color: #fff;
+
+    &:hover {
+      background: #222;
+    }
+  }
+}

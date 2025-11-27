@@ -5,17 +5,21 @@
   <title>Destinique</title>
   <base href="/">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <link rel="icon" type="image/x-icon" href="https://destinique.com/favicon.ico">
 
+  <!-- LOCAL Montserrat (recommended for scores >95) -->
+  <link rel="preload" href="assets/fonts/montserrat-regular.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="assets/fonts/montserrat-semibold.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="assets/fonts/fonts.css">
 
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link rel="preload" as="script" href="https://www.googletagmanager.com/gtag/js?id=G-122QQMGN2V">
-  <link rel="preconnect" href="https://connect.facebook.net">
+  <!-- Preload LCP logo -->
   <link rel="preload" as="image" href="assets/dest-images/assets/logo.webp"/>
 
+  <!-- Do NOT preload GA -->
+  <!-- GA will be dynamically loaded on client-side -->
 </head>
+
 <body>
-  <app-root></app-root>
+<app-root></app-root>
 </body>
 </html>

@@ -1,0 +1,142 @@
+.connectus-container {
+    position: relative;
+    text-align: center;
+    color: #fff;
+    .overlay-effect {
+        opacity: 1;
+        cursor: pointer;
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        transition: 0.5s ease;
+        background-color: rgba(5, 5, 5, 0.6);
+        overflow: hidden;
+    }
+    img {
+        width: 100%;
+        height: 650px !important;
+        object-fit: cover;
+    }
+    .centered {
+        position: absolute;
+        top: 50%;
+        left: 52%;
+        width: 80%;
+        transform: translate(-50%, -50%);
+    }
+    h3 {
+        text-transform: none;
+        letter-spacing: 1px;
+        font-size: 53px;
+        line-height: 72px;
+        font-weight: 100;
+        font-style: normal;
+    }
+    h5 {
+        font-weight: 100;
+        letter-spacing: 1px;
+        font-size: 23px;
+        line-height: 38px;
+        text-transform: capitalize;
+        font-style: normal;
+    }
+    .btn {
+        color: #fff;
+        background: #002245 !important;
+        background-color: #002245 !important;
+        border-color: #002245 !important;
+        font-weight: 700;
+        text-transform: uppercase;
+        font-size: 14px;
+        line-height: 26px;
+        letter-spacing: 3px;
+        border-radius: 0rem;
+    }
+    .btn:hover {
+        background: #002245 !important;
+        border-color: #002245 !important;
+        color: #fff;
+        font-weight: 700;
+        text-transform: uppercase;
+        box-shadow: 0 4px 14px 0 rgba(5, 5, 5, 0.47);
+        font-size: 14px;
+        line-height: 26px;
+        letter-spacing: 3px;
+    }
+    .contact-btn {
+        background: #378f86 !important;
+        background-color: #378f86 !important;
+        color: #fff !important;
+        border-color: #378f86 !important;
+        padding: 10px 20px;
+        box-shadow: 0 2px 6px 1px rgba(20, 20, 20, 0.48);
+        font-weight: 600;
+        text-transform: uppercase;
+        font-size: 14px;
+        line-height: 26px;
+        letter-spacing: 3px;
+        text-decoration: none;
+        border: 0px !important;
+        transition: 0.5s;
+    }
+    .contact-btn:hover {
+        color: #33d286 !important;
+        background: #000 !important;
+        background-color: #000 !important;
+        box-shadow: 0 4px 14px 0 rgba(5, 5, 5, 0.47);
+    }
+}
+@media screen and (max-width: 768px) {
+    .connectus-container {
+        .centered {
+            position: absolute;
+            top: 50%;
+            left: 52%;
+            transform: translate(-50%, -50%);
+        }
+        img {
+            width: 100%;
+            height: 280px !important;
+            object-fit: cover;
+        }
+        h3 {
+            text-transform: none;
+            letter-spacing: 1px;
+            font-size: 24px;
+            line-height: 26px;
+            font-weight: 100;
+            font-style: normal;
+        }
+        h5 {
+            font-weight: 100;
+            letter-spacing: 1px;
+            font-size: 13px;
+            line-height: 1rem;
+            text-transform: capitalize;
+            font-style: normal;
+        }
+
+        .btn {
+            font-weight: 700;
+            text-transform: uppercase;
+            font-size: 10px;
+            line-height: 18px;
+            letter-spacing: 2px;
+            color: #fff !important;
+            background: #378f86 !important;
+            background-color: #378f86 !important;
+            border-color: #378f86 #378f86 #378f86 #378f86 !important;
+        }
+        .btn:hover {
+            background-color: #000 !important;
+            color: #378f86;
+            font-weight: 700;
+            text-transform: uppercase;
+            font-size: 10px;
+            line-height: 18px;
+            letter-spacing: 2px;
+        }
+    }
+}

@@ -1,0 +1,442 @@
+a {
+    text-decoration: none !important;
+}
+a:hover {
+    text-decoration: underline !important;
+}
+.destination-container {
+    position: relative !important;
+}
+.promo-banner {
+    text-align: center;
+    color: #002245;
+    margin-bottom: 1rem;
+}
+.promo-banner img {
+    width: 100%;
+    height: 400px !important;
+    vertical-align: middle;
+    border-style: none;
+    border: 0px;
+    padding: 0px;
+}
+.promo-banner .centered {
+    position: absolute;
+    top: 200px;
+    left: 49%;
+    width: 100%;
+    transform: translate(-50%, -50%);
+}
+.promo-banner .destination-banner-header {
+    font-size: 3rem;
+    line-height: 1.5;
+    font-weight: 300;
+    letter-spacing: 10px;
+    text-align: center;
+    text-transform: uppercase;
+}
+.promo-banner h2 {
+    font-size: 36px;
+    color: rgb(255, 255, 255);
+}
+.centered {
+    margin: 0 auto;
+}
+.destination-summary {
+    font-size: 1.2rem;
+    line-height: 1.5rem;
+    font-weight: 300;
+    justify-content: center;
+    color: #fff;
+    padding-left: 9rem;
+    padding-right: 9rem;
+    margin-bottom: 2.5rem;
+    padding-top: 1rem;
+}
+
+
+/*body*/
+.destinations #destinations-tab .browse-all-destinations-column {
+    background-color: #fffcf6;
+}
+
+.destinations .destination-heading {
+    background-color: #fffcf6;
+    border-bottom: 1px solid #d2c3a4;
+    padding: 30px 18px;
+}
+.destinations .destination-heading h3 {
+    font-size: 26px;
+    line-height: 100%;
+    color: #b7872d;
+    margin-bottom: 0;
+}
+.destinations #destinations-tab .nav-pills .nav-link[aria-selected="false"] {
+    color: #0d0d0d;
+    background-color: #fffcf6;
+    box-shadow: none;
+}
+.destinations-list {
+    list-style-type: none;
+    line-height: 1.75;
+    padding: 0;
+    margin: 0;
+}
+.destinations-list .location {
+    font-size: 0.8rem;
+    list-style-type: none;
+    text-indent: 10px;
+    line-height: 1.65;
+    text-decoration: none;
+}
+.destinations #destinations-tab .nav-pills .nav-link {
+    border-bottom: 0px solid #d2c3a4;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+    padding-left: 3rem;
+    padding-right: 1rem;
+}
+.destinations #destinations-tab .nav-pills .nav-link .properties {
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 19px;
+    color: #d2c3a4;
+    min-width: 125px;
+}
+.destinations #destinations-tab .tab-pane-body .destinations-list {
+    margin-bottom: 0;
+    margin-left: 1.5rem;
+    margin-top: 0rem;
+}
+.destinations-list {
+    list-style-type: none;
+    line-height: 1.75;
+    padding: 0;
+    margin: 0;
+}
+.destinations
+#destinations-tab
+.tab-pane-body
+.destinations-list
+.destination-title {
+    margin-bottom: .5rem;
+    cursor: pointer;
+}
+.destinations #destinations-tab .tab-pane-body .destinations-list .location {
+    margin-bottom: 1.5rem;
+    cursor: pointer;
+}
+.destinations-list .location {
+    font-size: 12.6px;
+    list-style-type: none;
+    text-indent: 10px;
+    line-height: 1.65;
+    text-decoration: none;
+}
+.destinations-list span {
+    padding-right: 2px;
+    font-size: 1rem;
+    color: #000;
+    font-weight: 700;
+}
+.destinations-list li > a {
+    text-decoration: none;
+}
+.scrollSec {
+    height: -webkit-fill-available;
+    overflow-y: auto;
+    padding: 0;
+}
+.scrollSec::-webkit-scrollbar {
+    scrollbar-width: none;
+}
+.destination-relative {
+    cursor: pointer;
+    position: relative;
+    height: 210px;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    /* Optional: Add placeholder/loading state */
+    background-color: #f0f0f0;
+}
+
+/* When image loads, fade it in */
+.destination-relative.loaded {
+  animation: fadeIn 0.5s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0.5; }
+  to { opacity: 1; }
+}
+.destination-img-overlay {
+    bottom: 0;
+    padding: 0;
+    opacity: 1;
+    filter: alpha(opacity = 0);
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, .2);
+    color: #333;
+    display: table !important;
+    position: absolute;
+    transition: all .3s ease-in-out;
+    text-align: center;
+}
+.destination-img-overlay:hover {
+    bottom: 0;
+    padding: 0;
+    opacity: 1;
+    filter: alpha(opacity = 0);
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, .7);
+    color: #333;
+    display: table !important;
+    position: absolute;
+    transition: all .3s ease-in-out;
+    text-align: center;
+    cursor: pointer;
+}
+.active-destination .destination-img-overlay {
+    bottom: 0;
+    padding: 0;
+    opacity: 1;
+    filter: alpha(opacity = 0);
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, .7);
+    color: #333;
+    display: table !important;
+    position: absolute;
+    transition: all .3s ease-in-out;
+    text-align: center;
+}
+.active-destination .destination-img-overlay .destination-name {
+    color: #fff !important;
+}
+.destination-name {
+
+    font-size: 1.8rem;
+    color: #fff;
+    position: absolute;
+    top: 34%;
+    text-transform: uppercase;
+    text-align: center;
+    width: 100%;
+    height: 100%;
+    vertical-align: middle;
+    font-weight: 300;
+}
+.property-number {
+    font-size: 1.4rem;
+    line-height: 2.5rem;
+    letter-spacing: .1em;
+    font-weight: 300;
+    justify-content: center;
+    align-items: center;
+}
+.total-property-number {
+    bottom: .5rem;
+    right: .5rem;
+    position: absolute;
+    color: #fff;
+    padding-top: .2rem;
+    padding-bottom: .2rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    border: 2px solid #fff;
+    background-color: rgba(0, 0, 0, .3);
+}
+.property-text {
+    font-size: .6rem;
+    line-height: 1rem;
+    letter-spacing: .1em;
+    font-weight: 600;
+    justify-content: center;
+    align-items: center;
+}
+.destination-row {
+    padding-top: 13px;
+    padding-bottom: 1.5rem;
+    padding-left: 1.5rem;
+}
+.row.destination-row ul li {
+}
+.destination-area {
+    margin-bottom: 2rem;
+    overflow: hidden;
+}
+.destination-usa .state-name {
+    padding-top: 2.5rem;
+    width: 100%;
+    clear: both;
+}
+.destination-usa .state-name:first-child {
+    padding-top: 0rem !important;
+    clear: both !important;
+}
+.destination-usa .state-name a {
+    color: #000000;
+
+    font-size: 1rem;
+    font-weight: 500 !important;
+    line-height: 1.75rem;
+    text-transform: capitalize;
+}
+.destination-usa .city-name a {
+    font-weight: 400 !important;
+}
+.country-name a{
+    color: #378f86;
+
+    font-size: 1.5rem;
+    font-weight: 500 !important;
+    line-height: 1.75rem;
+}
+.country-name {
+    clear: both;
+}
+.state-name {
+    padding-top: 0.5rem;
+    float: left;
+    position: relative;
+    width: 100%;
+}
+
+.state-name a {
+    color: #000000;
+
+    font-size: 1rem;
+    font-weight: 400 !important;
+    line-height: 1.75rem;
+    text-transform: capitalize;
+}
+.total-property-available-in-state {
+    font-size: 14px;
+    color: #000;
+    padding: 2px 8px;
+    border-radius: 12px;
+    border: 1px solid #9d9d9d;
+    position: relative;
+    top: -1px;
+}
+.city-area .city-name {
+    float: left;
+    position: relative;
+    width: 33.333333%;
+}
+.total-property-available-in-country {
+    font-size: 1rem;
+    background-color: #378f86;
+    color: #fff;
+    padding: 3px 12px;
+    border-radius: 15px;
+    position: relative;
+    top: -3px !important;
+}
+.total-property-available-in-city {
+    font-size: .88rem;
+    color: #000000;
+    padding: 1px 8px;
+    border-radius: 12px;
+    border: 1px solid #9d9d9d;
+    position: relative;
+    top: -1px;
+}
+.city-name a {
+    color: #555;
+
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.75rem;
+    text-transform: capitalize;
+}
+.row {
+    margin-left: 0px;
+    margin-right: 0px;
+}
+.col-md-6,
+.col-md-12 {
+    padding-left: 0px;
+    padding-right: 0px;
+}
+.overlay {
+    position: absolute;
+    bottom: 0;
+    background: rgb(0, 0, 0);
+    background: rgba(0, 0, 0, 0.5);
+    color: #f1f1f1;
+    width: 100%;
+    transition: 0.5s ease;
+    opacity: 1;
+    color: white;
+    padding: 0px;
+    text-align: center;
+}
+img {
+    padding: 1.5px;
+}
+.active-destination {
+    color: #b7872d !important;
+    background-color: #ffffff !important;
+    box-shadow: none !important;
+}
+ul li,
+ol li {
+    font-weight: 400;
+    letter-spacing: 0.01em;
+    line-height: 22px;
+}
+ul li > a {
+    font-weight: 400;
+}
+ul {
+    list-style-type: none !important;
+    padding-left: 1.5rem;
+}
+.nav-pills .nav-link.active, .nav-pills .show>.nav-link {
+    background-color: transparent;
+}
+@media (max-width: 992px) {
+
+    .promo-banner .destination-banner-header {
+        font-size: 2rem;
+    }
+    .destinations #destinations-tab .nav-pills .nav-link {
+        padding-left: 1rem;
+    }
+}
+@media screen and (min-width: 900px) and (max-width:1244px) {
+    .destination-name {
+        font-size: 1.4rem;
+    }
+}
+@media (max-width: 991.98px) {
+    .destination-summary {
+        font-size: 1.1rem;
+        line-height: 1.5rem;
+        font-weight: 300;
+        justify-content: center;
+        color: #fff;
+        padding-left: 1rem;
+        padding-right: 1rem;
+        margin-bottom: 1.5rem;
+    }
+}
+@media (max-width: 767px) {
+    .city-area .city-name {
+        width: 50%;
+    }
+}
+@media (max-width: 576px) {
+    .city-area .city-name {
+        width: 100%;
+    }
+}
+@media (max-width: 380px) {
+    .promo-banner .destination-banner-header {
+        font-size: 1.5rem;
+    }
+}

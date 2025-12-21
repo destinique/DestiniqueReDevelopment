@@ -1,0 +1,165 @@
+.carousel-caption {
+    font-family: "Uninova";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 80%;
+    z-index: 10;
+    padding-top: 0px;
+    padding-bottom: 0px;
+    color: #fff;
+    text-align: center;
+    transform: translate(-50%, -50%);
+}
+.btn {
+    font-family: "Uninova";
+    text-align: right;
+    background: #002245 !important;
+    background-color: #002245 !important;
+    border-style: none none none none;
+    float: none;
+    margin-left: auto !important;
+    margin-right: auto !important;
+    display: table;
+    color: #fff;
+    border-color: #002245 !important;
+    font-weight: 700;
+    text-transform: uppercase;
+    font-size: 14px;
+    line-height: 26px;
+    letter-spacing: 1px;
+    border-radius: 0rem;
+}
+.seeAllBtn {
+    background: #378f86 !important;
+    background-color: #378f86 !important;
+    color: #fff !important;
+    border-color: #378f86 !important;
+    padding: 14px 20px;
+    box-shadow: 0 2px 6px 1px rgba(20, 20, 20, 0.48);
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 14px;
+    line-height: 26px;
+    letter-spacing: 3px;
+    text-decoration: none;
+    border: 0px !important;
+    transition: 0.5s;
+}
+.seeAllBtn:hover {
+    color: #33d286 !important;
+    background: #000 !important;
+    background-color: #000 !important;
+    box-shadow: 0 4px 14px 0 rgba(5, 5, 5, 0.47);
+}
+.btn:hover {
+    background-color: #002245 !important;
+    color: #fff;
+}
+.carousel-effect slide .overlay-effect {
+    opacity: 0;
+    cursor: pointer;
+}
+.overlay-effect {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    opacity: 0;
+    transition: 0.5s;
+    background-color: #378f86;
+    overflow: hidden;
+    border: 1px solid #378f86;
+}
+.successStoriesText h3 {
+    font-size: 53px;
+    line-height: 72px;
+    font-weight: 300;
+    letter-spacing: 1px;
+    text-transform: capitalize;
+    padding-bottom: 1rem;
+    text-align: center;
+    font-family: montserrat alternates !important;
+    color: #3b3b3b;
+}
+.align-center {
+    text-align: center;
+}
+.successStoriesText {
+    text-align: center;
+    vertical-align: middle;
+}
+.slider {
+    height: 640px;
+}
+hr {
+    border-color: #378f86;
+    margin-top: 0rem;
+    margin-bottom: 0rem;
+}
+::ng-deep .carousel-indicators {
+    opacity: 0;
+}
+::ng-deep p {
+    font-family: montserrat alternates !important;
+    font-size: 20px;
+    font-weight: 300;
+    line-height: 30px;
+    letter-spacing: 1px;
+    text-transform: none;
+}
+::ng-deep .guest-title {
+    font-weight: 100;
+    letter-spacing: 1px;
+    font-size: 30px;
+    line-height: 38px;
+    text-transform: capitalize;
+    font-style: normal;
+    color: #fff;
+}
+.bg-white {
+    background-color: #f0f0f0 !important;
+}
+@media screen and (min-width: 768px) {
+    .success-stories-slider {
+        padding-left:2px;
+        padding-top:1px;
+        padding-right:17px;
+    }
+}
+@media screen and (max-width: 768px) {
+    .successStoriesText {
+        margin: 0px 0px 20px 0px;
+    }
+    .btn-centered-cls {
+        margin: 1px 0px 3px 0px;
+    }
+    .slider {
+        height: 540px;
+    }
+    .carousel-caption {
+        font-size: 13px;
+        color: #fff;
+        font-family: "Uninova";
+        line-height: 20px;
+    }
+    .successStories {
+        border-right: none;
+    }
+    .successStoriesText h3 {
+        font-size: 2rem;
+        font-weight: 400;
+    }
+    .carousel-caption {
+        left: 50%;
+        top: 40%;
+        transform: translate(-50%, -50%);
+    }
+    ::ng-deep p {
+        font-size: 16px;
+    }
+    ::ng-deep p {
+        margin-bottom: 0.5rem;
+    }
+}

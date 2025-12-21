@@ -1,0 +1,331 @@
+.kb-wrapper {
+    position: relative;
+    width: 100%;
+    height: calc(100vh - 96px);
+    overflow: hidden;
+}
+
+/* BACKGROUND SLIDES */
+.kb-slide {
+    position: absolute;
+    inset: 0;
+    background-size: cover;
+    background-position: center;
+    opacity: 0;
+    transform: scale(1);
+    transition: opacity 1.5s ease-in-out;
+    will-change: transform, opacity;
+    z-index: 1;
+    pointer-events: none;
+
+    &.active {
+        opacity: 1;
+        z-index: 2;
+        /*animation: kenburnsZoom 9s ease-in-out forwards;*/
+    }
+}
+
+/* FIXED OVERLAY */
+.overlay-content {
+    position: absolute;
+    inset: 0;
+    z-index: 5;
+    display: block;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: #11111169;
+    text-align: center;
+    color: #fff;
+    pointer-events: auto;
+    text-shadow: 1px 1px 8px rgba(0, 0, 0, 0.7);
+}
+
+/* Ken Burns animation */
+@keyframes kenburnsZoom {
+    0%   {
+        transform: scale(1) translate(0, 0);
+    }
+    50%  {
+        transform: scale(1.2) translate(10px, 10px);
+    }
+    100% {
+        transform: scale(1.3) translate(0, 0);
+    }
+}
+
+@keyframes kb-left {
+    from {
+        transform: scale(1) translate(0, 0);
+    }
+    to   {
+        transform: scale(1.3) translate(40px, 0);
+    }
+}
+
+@keyframes kb-right {
+    from {
+        transform: scale(1) translate(0, 0);
+    }
+    to   {
+        transform: scale(1.3) translate(-40px, 0);
+    }
+}
+
+@keyframes kb-top {
+    from {
+        transform: scale(1) translate(0, 0);
+    }
+    to   {
+        transform: scale(1.3) translate(0, 40px);
+    }
+}
+
+@keyframes kb-bottom {
+    from {
+        transform: scale(1) translate(0, 0);
+    }
+    to   {
+        transform: scale(1.3) translate(0, -40px);
+    }
+}
+
+.kb-slide.active.kb-zoom-in-left   {
+    animation: kb-left 9s ease-in-out forwards;
+}
+.kb-slide.active.kb-zoom-in-right  {
+    animation: kb-right 9s ease-in-out forwards;
+}
+.kb-slide.active.kb-zoom-in-top    {
+    animation: kb-top 9s ease-in-out forwards;
+}
+.kb-slide.active.kb-zoom-in-bottom {
+    animation: kb-bottom 9s ease-in-out forwards;
+}
+
+
+
+/**/
+.main-slider {
+    height: calc(100vh - 96px);
+}
+.slider-overlay {
+    position: relative;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: rgba(17, 17, 17, 0.41);
+    z-index: 1;
+}
+.carousel-caption {
+    position: absolute;
+    top: 50%;
+    bottom: unset;
+    left: unset;
+    right: unset;
+    padding: auto;
+    margin: 0 auto;
+    transform: translateY(-50%);
+    width: 100%;
+}
+.carousel_title {
+    color: rgb(255, 255, 255);
+    line-height: 65px;
+    letter-spacing: 15px;
+    font-size: 85px;
+    font-style: normal;
+    font-weight: 400;
+}
+.destinique-sub-title {
+    width: 540px;
+    margin: 0 auto;
+    margin-bottom: 2rem;
+}
+.destinique-sub {
+    text-align: center;
+    font-size: 2.1rem;
+    color: #fff;
+    margin-bottom: 0.1rem;
+    margin-top: 1.4rem;
+    font-weight: 400;
+    border-right: 3px solid #fff;
+    width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    animation: typing 3s steps(38), cursor .5s step-end infinite alternate;
+}
+.destinique-second-sub {
+    position: relative;
+    margin-bottom: 2%;
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 300;
+    color: #fff;
+}
+
+.two-path-layout h3 {
+    font-weight: 100;
+    font-size: 3rem;
+    padding-top: 3rem;
+}
+
+.two-path-layout .input-group {
+    width: 310px;
+    height: 60px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 2rem;
+}
+
+.two-path-layout .form-control {
+    width: 220px;
+    height: 60px !important;
+    background-color: rgba(0,0,0,.6) !important;
+    border: 1px solid #fff;
+    border-radius: .125rem 0 0 .125rem;
+    padding: 1rem;
+    flex-grow: 1;
+    color: #fff;
+    font-size: 1rem;
+}
+
+.two-path-layout .btn.btn-success {
+    height: 60px;
+    border-radius: .125rem 0 0 .125rem;
+    width: 60px;
+    background-color: #2d766f !important;
+    border-color: #2d766f !important;
+}
+
+.two-path-layout .btn.btn-success:hover, .two-path-layout .btn.btn-success:active, .two-path-layout .btn.btn-success:focus {
+    color: #ccc !important;
+}
+
+.two-path-layout .form-control::placeholder {
+    /* Chrome, Firefox, Opera, Safari 10.1+ */
+    color: #757575 !important;
+    opacity: 1;
+    /* Firefox */
+}
+
+.two-path-layout-btn {
+    background-color: #2d766f;
+    height: 60px !important;
+    width: 310px !important;
+    text-transform: uppercase;
+    letter-spacing: 0px;
+    color: #fff !important;
+    max-width: 22.5rem;
+    margin-top: 2rem;
+    line-height: 2.5rem;
+    border-radius: 2px;
+    letter-spacing: 2.5px;
+    font-weight: 400;
+    margin-bottom: 3rem;
+    padding-top: 10px;
+    font-size: 16px;
+}
+
+.two-path-layout-2nd-h3 {
+    margin-bottom: 0px !important;
+}
+
+.two-path-layout-btn:hover, .two-path-layout-btn:focus, .two-path-layout-btn:active {
+    color: #ccc !important;
+    background-color: #378f86 !important;
+    border-color:  #378f86 !important;
+    transition: 0.3s;
+}
+.ken-burns-slideshow {
+    position: absolute;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 0;
+}
+
+@keyframes cursor {
+    50% {
+        border-color: transparent
+    }
+}
+
+@keyframes typing {
+    from {
+        width: 0
+    }
+    to {
+        width: 100%;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .carousel_title {
+        font-size: 32px;
+        font-weight: 400;
+    }
+}
+
+@media screen and (max-width: 767px) {
+    .destinique-sub-title {
+        width: 504px;
+        margin: 0 auto;
+    }
+    .destinique-sub {
+        font-size: 26px;
+        font-weight: 400;
+        border-right: 3px solid #fff;
+        width: 100%;
+        white-space: nowrap;
+        overflow: hidden;
+        animation: typing 3s steps(38), cursor .5s step-end infinite alternate;
+    }
+    .two-path-2nd-layout {
+        display: none !important;
+    }
+
+
+
+    .onlyDesktop {
+        display: block;
+    }
+
+}
+@media (max-width: 660px) {
+    .destinique-sub-title {
+        width: 464px;
+        margin: 0 auto;
+    }
+
+    .destinique-sub {
+        text-align: center;
+        font-size: 24px;
+        color: #fff;
+        margin-bottom: 0.1rem;
+        margin-top: 1.4rem;
+        font-weight: 400;
+        border-right: 3px solid #fff;
+        width: 100%;
+        white-space: nowrap;
+        overflow: hidden;
+        animation: typing 3s steps(38), cursor .5s step-end infinite alternate;
+    }
+}
+@media screen and (max-width: 500px) {
+    .destinique-sub-title {
+        width: 332px;
+        margin: 0 auto;
+    }
+    .destinique-sub {
+        font-size: 17px;
+    }
+}
+@media screen and (max-width: 376px) {
+    .onlyDesktop {
+        display: block;
+    }
+}

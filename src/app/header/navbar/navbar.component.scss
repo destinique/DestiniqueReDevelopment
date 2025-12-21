@@ -7,7 +7,31 @@
         }
     }
 }
-
+.icon-1 {
+    color: #fff;
+}
+.nav-whatsapp {
+    width: 16px;
+    margin: 6px;
+}
+.nav-search {
+    width: 16px;
+}
+.nav-profile {
+    width: 24px;
+}
+.nav-user {
+    width: 16px;
+    margin-right: 4px;
+}
+.nav-log-out {
+    width: 16px;
+    margin-right: 4px;
+}
+.nav-whatsapp-call {
+    width: 26px;
+    height: 26px;
+}
 .main-nav {
     background: #000 !important;
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
@@ -19,7 +43,11 @@
         position: relative;
         top: 24px;
         padding: 1rem;
-        z-index: 99;
+        z-index: 99999;
+    }
+    #main-nav-items {
+        z-index: 999;
+        background-color: #000 !important;
     }
     .nav-link {
         color: #e0e0e0 !important;
@@ -62,7 +90,6 @@
             border-color: #e0e0e0;
         }
     }
-
     .nav-search-btn {
         background-color: transparent;
         border: 0px;
@@ -72,6 +99,7 @@
     }
     .input-group {
         min-width: 234px;
+        margin-bottom: 14px;
     }
     .navbar-nav {
         &:first-child {
@@ -93,7 +121,6 @@
         }
     }
 }
-
 .dropdown-menu {
     background: #111;
     border-radius: 0;
@@ -113,27 +140,54 @@
         &:hover {
             background-color: #222 !important;
             color: #33d286 !important;
+            text-decoration: underline;
         }
     }
 }
-
 @media (max-width: 1200px) {
+    .main-nav {
+        height: 80px;
+    }
     .navbar-brand{
-        max-height: 87px;
+        max-height: 72px;
         width: calc(100% - 170px);
         .logo {
-            top: 20px !important;
+            height: 134px !important;
+            top: 16px !important;
             margin: 0 auto;
         }
     }
     .container-fluid {
         background-color: #000;
+        padding-left: 0px;
+        padding-right: 0px;
     }
     .navbar-toggler {
         position: relative;
         top: -6px !important;
         margin-right: 30px;
-        font-size: 24px
+        box-shadow: none;
+        &:focus {
+            box-shadow: none;
+        }
+        &:active {
+            box-shadow: none;
+        }
+    }
+    .nav-bars-solid {
+        width: 30px;
+    }
+    .collapsed .nav-xmark, .navbar-toggler .nav-xmark {
+        width: 30px;
+        display: none;
+    }
+    .navbar-toggler[aria-expanded="true"]{
+        .nav-xmark {
+            display: block !important;
+        }
+        .nav-bars-solid {
+            display: none;
+        }
     }
     .navbar-nav {
         padding-left: 30px;
@@ -147,10 +201,37 @@
     }
     .phone-contact {
         display: block !important;
-        font-size: 24px;
         padding-bottom: .5rem!important;
     }
     .web-contact {
         display: none !important;
+    }
+}
+@media (min-width: 992px) {
+    .navbar-expand-xl .navbar-nav .dropdown-menu {
+        top: 48px
+    }
+}
+@media (max-width: 480px) {
+    .navbar-toggler {
+        margin-right: 0rem;
+    }
+    .ps-4 {
+        padding-left: .5rem !important;
+    }
+    .navbar-brand {
+        max-height: 50px;
+    }
+    .main-nav .navbar-brand .logo {
+        height: 100px;
+    }
+    .navbar-brand .logo {
+        top: 10px !important;
+    }
+    .navbar-brand .logo {
+        height: 106px !important;
+    }
+    .main-nav {
+        height: 58px;
     }
 }

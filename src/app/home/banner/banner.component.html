@@ -1,0 +1,62 @@
+<div class="kb-wrapper">
+    <!-- Background slides -->
+    <div
+        class="kb-slide"
+        *ngFor="let img of slidesToShow(); let i = index"
+        #kbSlide
+        [attr.data-index]="i"
+        [style.backgroundImage]="
+        loadedSlides[i]
+        ? 'url(' + img + ')'
+        : 'url(assets/website_images/home/banner/banner_404.webp)'
+        "
+        [class.active]="i === activeSlideIndex"
+        [class]="slideAnimations[i]"
+        >
+    </div>
+
+    <!-- FIXED overlay -->
+    <div class="overlay-content">
+        <div class="main-slider">
+            <div class="slider-overlay"></div>
+            <div class="carousel-caption">
+                <h1 class="text-center mb-3">
+                    <span class="carousel_title">DESTINIQUE</span>
+                </h1>
+
+                <div class="destinique-sub-title">
+                    <h2 class="destinique-sub">Stay somewhere that stays with you...</h2>
+                </div>
+
+                <div>
+                    <h2 class="destinique-second-sub">Luxury vacation rentals, private villas, and curated resort stays — handpicked by expert travel advisors.</h2>
+                </div>
+
+
+
+                <div class="container">
+                    <div class="row two-path-layout">
+                        <div class="col-md-6 col-sm-12">
+                            <h3>Where Are You Headed?</h3>
+                            <div class="input-group mb-3">
+                                <input type="text" class="form-control" placeholder="Enter Destination...">
+                                <div class="input-group-append">
+                                    <button class="btn btn-success" type="submit">
+                                        <svg width="24" height="24" fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640"><path d="M480 272C480 317.9 465.1 360.3 440 394.7L566.6 521.4C579.1 533.9 579.1 554.2 566.6 566.7C554.1 579.2 533.8 579.2 521.3 566.7L394.7 440C360.3 465.1 317.9 480 272 480C157.1 480 64 386.9 64 272C64 157.1 157.1 64 272 64C386.9 64 480 157.1 480 272zM272 416C351.5 416 416 351.5 416 272C416 192.5 351.5 128 272 128C192.5 128 128 192.5 128 272C128 351.5 192.5 416 272 416z"/></svg>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 two-path-2nd-layout" style="border-left: 2px solid #fff !important;">
+                            <h3 class="two-path-layout-2nd-h3">Request Expert Travel Help</h3>
+                            <a href="#" class="btn two-path-layout-btn">Plan My Stay</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>

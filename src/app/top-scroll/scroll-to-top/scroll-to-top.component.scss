@@ -1,0 +1,57 @@
+.scroll-to-top {
+  position: fixed;
+  bottom: 1rem;        // Using Bootstrap spacing units
+  left: 0.5rem;
+  opacity: 0;
+  visibility: hidden;  // CRITICAL: Hide by default
+  z-index: 1030;       // Bootstrap modal z-index is 1050, this is below
+  transition: all 0.3s ease-in-out;
+
+  &.show-scrollTop {
+    visibility: visible;
+    opacity: 1;
+  }
+}
+
+.example-button-container {
+  display: flex;
+  justify-content: center;
+  width: 3.125rem; // 50px
+
+  img {
+    border-radius: 50%;
+    height: 3.125rem; // 50px
+    width: 3.125rem;  // 50px
+    cursor: pointer;
+    border: 1px solid #002245;
+    transition: all 0.3s ease;
+
+    // Bootstrap-like hover effect
+    &:hover {
+      transform: translateY(-0.25rem);
+      box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
+    }
+
+    &:active {
+      transform: translateY(-0.125rem);
+    }
+  }
+}
+
+// Mobile Responsive with Bootstrap breakpoints
+@media (max-width: 768px) {
+  .scroll-to-top {
+    bottom: 3rem;
+    left: 0.25rem;
+  }
+
+  .example-button-container {
+    width: 2.5rem; // 40px
+
+    img {
+      height: 2.5rem; // 40px
+      width: 2.5rem;  // 40px
+      border-width: 1px;
+    }
+  }
+}

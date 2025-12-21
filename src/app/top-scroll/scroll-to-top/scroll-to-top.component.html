@@ -1,0 +1,8 @@
+<!-- Main container that shows/hides based on scroll position -->
+<div class="scroll-to-top" [ngClass]="{ 'show-scrollTop': windowScrolled }">
+    <!-- Clickable button container -->
+    <div class="example-button-container" (click)="scrollToTop()">
+        <!-- Arrow icon/image -->
+        <img src="assets/dest-images/misc/uparrow.svg" alt="scroll to top" />
+     </div>
+</div>

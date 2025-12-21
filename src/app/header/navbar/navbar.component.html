@@ -1,90 +1,102 @@
-<!-- Main Navbar -->
+<!-- MAIN NAVBAR -->
 <nav class="navbar navbar-expand-xl main-nav bg-dark navbar-dark">
-    <div class="container-fluid">
-        
-        <!-- CONTACT -->
-        <div class="topbar justify-content-end align-items-center ps-4 text-white phone-contact">
-            <a href="https://wa.me/18503125400" target="blank" class="dest-call"><i class="fa-regular fa-headphones"></i></a>
-        </div>
+  <div class="container-fluid">
 
-        <!-- LOGO -->
-        <a class="navbar-brand d-flex align-items-center" href="#">
-            <img src="assets/dest-images/assets/logo.webp" alt="Destinique" class="logo">
-        </a>
-
-        <!-- MOBILE TOGGLE -->
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav">
-            <i class="fa-solid fa-bars-staggered"></i>
-        </button>
-
-        <!-- MENU -->
-        <div class="collapse navbar-collapse position-relative" id="mainNav">
-            <ul class="navbar-nav mb-2 mb-lg-0">
-
-                <li class="nav-item">
-                    <a class="nav-link" [routerLink]="['/']">HOME</a>
-                </li>
-
-                <li class="nav-item">
-                    <a class="nav-link" [routerLink]="['/destinations']">DESTINATIONS</a>
-                </li>
-
-                <li class="nav-item">
-                    <a class="nav-link" [routerLink]="['/collection']">DESTINIQUE COLLECTION</a>
-                </li>
-
-                <li class="nav-item">
-                    <a class="nav-link" [routerLink]="['/collection']">PARTNER COLLECTION</a>
-                </li>
-
-                <li class="nav-item">
-                    <a class="nav-link" [routerLink]="['/contact']">CONTACT US</a>
-                </li>
-
-                <!-- DROPDOWN -->
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
-                        MORE
-                    </a>
-                    <ul class="dropdown-menu">
-                        <li><a class="dropdown-item">MAP</a></li>
-                        <li><a class="dropdown-item">PROMOS</a></li>
-                        <li><a class="dropdown-item">BLOG</a></li>
-                        <li><a class="dropdown-item">LUXURY SERVICES</a></li>
-                        <li><a class="dropdown-item">TESTIMONIAL</a></li>
-                        <li><a class="dropdown-item">ABOUT US</a></li>
-                    </ul>
-                </li>
-
-            </ul>
-
-            <ul class="navbar-nav mb-2 mb-lg-0">
-                <li class="nav-item">
-                    <form class="end-0">
-                        <!-- Top contact bar -->
-                        <div class="topbar d-flex justify-content-end align-items-center ps-4 py-2 text-white web-contact">
-                            <a href="https://wa.me/18503125400" target="blank" class="dest-call"><i class="fa-brands fa-whatsapp"></i> +1-850-312-5400</a>
-                        </div>
-
-                        <div class="d-flex">
-                            <div class="input-group mb-3">
-                                <input type="text" class="form-control nav-search-box" placeholder="SEARCH BY PROPERTY ID">
-                                <button class="btn btn-success nav-search-btn" type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
-                            </div> &nbsp;
-
-                            <div class="dropdown">
-                                <button type="button" class="btn btn-primary dropdown-toggle user-btn" data-bs-toggle="dropdown">
-                                    <i class="fa-regular fa-circle-user"></i>
-                                </button>
-                                <ul class="dropdown-menu dropdown-menu-end">
-                                    <li><a class="dropdown-item" href="#"><i class="fa-regular fa-user"></i> PROFILE</a></li>
-                                    <li><a class="dropdown-item" href="#"><i class="fa-solid fa-arrow-right-from-bracket"></i> LOG OUT</a></li>
-                                </ul>
-                            </div>
-                        </div>
-                    </form>
-                </li>
-            </ul>
-        </div>
+    <!-- CONTACT -->
+    <div class="topbar justify-content-end align-items-center ps-4 text-white phone-contact">
+      <a href="https://wa.me/18503125400" target="blank" class="dest-call">
+        <img class="nav-whatsapp-call" src="assets/icons/phone-volume-solid.svg" alt="call">
+      </a>
     </div>
+
+    <!-- LOGO -->
+    <a class="navbar-brand d-flex align-items-center" href="#">
+      <img src="assets/dest-images/assets/logo.webp"
+           width="224"
+           height="122"
+           alt="Destinique"
+           class="logo"
+           fetchpriority="high">
+    </a>
+
+    <!-- MOBILE TOGGLE -->
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#main-nav-items">
+      <img class="nav-bars-solid" src="assets/icons/bars-staggered-solid.svg" alt="bars">
+      <img class="nav-xmark" src="assets/icons/xmark-solid.svg" alt="xmark">
+    </button>
+
+    <!-- MENU -->
+    <div class="collapse navbar-collapse position-relative" id="main-nav-items">
+      <ul class="navbar-nav mb-2 mb-lg-0">
+
+        <li class="nav-item">
+          <a class="nav-link" [routerLink]="['/']">HOME</a>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link" [routerLink]="['/destinations']">DESTINATIONS</a>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link" [routerLink]="['/properties']">DESTINIQUE COLLECTION</a>
+        </li>
+
+        <!--
+        <li class="nav-item">
+          <a class="nav-link" [routerLink]="['/collection']">PARTNER COLLECTION</a>
+        </li>
+        -->
+
+        <li class="nav-item">
+          <a class="nav-link" [routerLink]="['/contact']">CONTACT US</a>
+        </li>
+
+        <!-- DROPDOWN -->
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
+            MORE
+          </a>
+          <ul class="dropdown-menu">
+            <li><a [routerLink]="['/map']" class="dropdown-item">MAP</a></li>
+            <li><a [routerLink]="['/promotions']" class="dropdown-item">PROMOS</a></li>
+            <li><a target="_blank" href="https://blog.destinique.com" class="dropdown-item">BLOG</a></li>
+            <li><a [routerLink]="['/our-services']" class="dropdown-item">LUXURY SERVICES</a></li>
+            <li><a [routerLink]="['/testimonials']" class="dropdown-item">TESTIMONIAL</a></li>
+            <li><a [routerLink]="['/aboutus']" class="dropdown-item">ABOUT US</a></li>
+          </ul>
+        </li>
+      </ul>
+
+      <ul class="navbar-nav mb-2 mb-lg-0">
+        <li class="nav-item">
+          <form class="end-0">
+            <!-- TOP CONTACT BAR -->
+            <div class="topbar d-flex justify-content-end align-items-center ps-4 py-2 text-white web-contact">
+              <a href="https://wa.me/18503125400" target="blank" class="dest-call">
+                <img class="nav-whatsapp" src="assets/icons/whatsapp-brands-solid.svg" alt="whatsapp"> +1-850-312-5400</a>
+            </div>
+
+            <div class="d-flex">
+              <div class="input-group">
+                <input type="text" class="form-control nav-search-box" placeholder="SEARCH BY PROPERTY ID">
+                <button class="btn btn-success nav-search-btn" type="submit">
+                  <img class="nav-search" src="assets/icons/magnifying-glass-solid.svg" alt="search">
+                </button>
+              </div> &nbsp;
+
+              <div class="dropdown">
+                <button type="button" class="btn btn-primary dropdown-toggle user-btn" data-bs-toggle="dropdown">
+                  <img class="nav-profile" src="assets/icons/circle-user-regular.svg" alt="profile">
+                </button>
+                <ul class="dropdown-menu dropdown-menu-end">
+                  <li><a class="dropdown-item" href="#"><img class="nav-user" src="assets/icons/user-regular.svg" alt="user"> PROFILE</a></li>
+                  <li><a class="dropdown-item" href="#"><img class="nav-log-out" src="assets/icons/arrow-right-from-bracket-solid.svg" alt="log out"> LOG OUT</a></li>
+                </ul>
+              </div>
+            </div>
+          </form>
+        </li>
+      </ul>
+    </div>
+  </div>
 </nav>

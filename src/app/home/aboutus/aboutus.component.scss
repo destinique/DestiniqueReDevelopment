@@ -1,0 +1,263 @@
+.aboutUs-flexContainer {
+    background-color: #173c58;
+    padding: 50px 0px 0px 0px;
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+    .mainContainer {
+        max-width: 1170px;
+        width: 100% !important;
+        position: relative;
+        margin-right: auto;
+        margin-left: auto;
+    }
+    .mainContainer > .containers {
+        background: #fff;
+        background-color: rgba(255, 255, 255, 1);
+    }
+    .destinique-difference-section {
+        font-size: 53px;
+        line-height: 72px;
+        font-weight: 300;
+        letter-spacing: 1px;
+        text-transform: capitalize;
+        padding-bottom: 1rem;
+        text-align: center;
+        color: #fff;
+    }
+    .destinique-baner-text {
+        font-size: 1.1rem;
+        text-align: center;
+        padding: 0rem 2rem 1rem 2rem;
+        margin-bottom: 1rem;
+        font-weight: 400;
+        color: rgba(255, 255, 255, 0.9);
+    }
+
+}
+.how-it-works {
+    background-color: #F5F3EE;
+    padding: 50px 0px 0px 0px;
+    .dd-header, .dd-text {
+        color: #3b3b3b !important;
+    }
+    .destinique-how-it-works-section {
+        font-size: 53px;
+        line-height: 72px;
+        font-weight: 300;
+        letter-spacing: 1px;
+        text-transform: capitalize;
+        padding-bottom: 3rem;
+        text-align: center;
+        color: #3b3b3b;
+    }
+}
+.dd-main-content {
+    margin-bottom: 0rem;
+}
+.dd-content img {
+    transition: transform 0.4s !important;
+}
+.dd-content:hover img.d-block {
+    transform: scale(1.1);
+}
+.dd-top {
+    min-height: 225px;
+}
+.dd-img-header {
+    min-height: 106px;
+}
+.dd-img img {
+    height: 80px;
+}
+.dd-img-number-header {
+    min-height: 186px;
+}
+img {
+    vertical-align: middle;
+    max-width: 100%;
+}
+.dd-header {
+    font-size: 12px;
+    letter-spacing: 0.1em;
+    font-weight: 600;
+    text-align: center;
+    padding-top: 0.5rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    color: rgba(255, 255, 255, 0.9);
+    min-height: 51px;
+    text-transform: uppercase;
+}
+.dd-text {
+    font-size: 14px;
+    line-height: 1.25rem;
+    text-align: center;
+    padding-top: 1.25rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    margin-bottom: 1rem;
+    color: rgba(255, 255, 255, 0.9);
+}
+.btn {
+    background-color: #002245 !important;
+    color: #fff;
+    font-size: 1.2rem;
+    border-radius: unset;
+    &:hover {
+        background-color: #002245 !important;
+        color: #378f86;
+        font-size: 1.2rem;
+        cursor: pointer;
+    }
+}
+.btn-vacation-rentals {
+    background-color: #378f86 !important;
+    color: #fff;
+    border-color: #378f86;
+    padding: 9px 20px;
+    box-shadow: 0 2px 6px 1px rgba(20, 20, 20, 0.48);
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 14px;
+    line-height: 26px;
+    letter-spacing: 3px;
+    text-decoration: none;
+    transition: 0.5s;
+    &:hover, &:focus,&:active {
+        box-shadow: 0 4px 14px 0 rgba(5, 5, 5, 0.47);
+        background: #000 !important;
+        background-color: #000 !important;
+        font-size: 14px !important;
+        color: #33d286 !important;
+        border-color: #000 !important;
+        text-decoration: none;
+        transition: 0.5s;
+    }
+}
+.our-vacation-btn {
+    margin-bottom: 2rem;
+}
+.dd-number {
+    width: 100%;
+}
+.dd-counter {
+    font-size: 1.5rem;
+    line-height: 2rem;
+    border-color: #000;
+    border-radius: 50%;
+    text-align: center;
+    width: 3rem;
+    height: 3rem;
+    border: 0.8px solid;
+    padding: 7px;
+    margin: 1.5rem auto 0.5rem auto;
+}
+
+.dd-right-arrow {
+    top: 291px;
+    position: absolute;
+    width: 80px;
+    margin-left: 190px;
+}
+
+.luxury-services-font-b {
+    font-weight: 500;
+}
+
+.get-started-button {
+    text-align: center;
+    margin-top: 2rem;
+}
+
+
+.personal-travel-advisors-img {
+    padding-left: 30px;
+}
+.you-approve-quote-img {
+    padding-left: 45px;
+}
+
+@media (min-width: 1920px) {
+    .aboutUs-flexContainer {
+        .dd-top {
+            min-height: 200px;
+        }
+    }
+}
+@media (min-width: 2560px) {
+    .aboutUs-flexContainer {
+        .dd-top {
+            min-height: 175px;
+        }
+    }
+}
+@media (max-width: 1300px) {
+    .aboutUs-flexContainer {
+        .dd-right-arrow {
+            margin-left: 166px;
+        }
+    }
+}
+@media (max-width: 1150px) {
+    .aboutUs-flexContainer {
+        .dd-right-arrow {
+            margin-left: 142px;
+        }
+    }
+}
+@media (max-width: 1050px) {
+    .aboutUs-flexContainer {
+        .dd-right-arrow {
+            margin-left: 120px;
+        }
+    }
+}
+@media (max-width: 992px) {
+    .aboutUs-flexContainer {
+        .dd-right-arrow {
+            display: none
+        }
+        .dd-text {
+            font-size: 0.9rem;
+            line-height: 1.25rem;
+            text-align: center;
+            padding-top: 1.25rem;
+            padding-left: 1rem;
+            padding-right: 1rem;
+            margin-bottom: 3rem;
+        }
+        .dd-top {
+            min-height: 165px !important;
+        }
+    }
+}
+@media all and (max-width: 768px) {
+    .how-it-works {
+        .destinique-how-it-works-section {
+            font-size: 2rem;
+            font-weight: 400;
+            line-height: 47px;
+        }
+    }
+    .aboutUs-flexContainer {
+        .destinique-difference-section {
+            font-size: 2rem;
+            font-weight: 400;
+            line-height: 47px;
+        }
+        .destinique-baner-text {
+            font-size: 1.1rem;
+        }
+        .our-vacation-btn,
+        .btn-vacation-rentals {
+            width: 94% !important;
+        }
+        .btn:hover {
+            background-color: #000 !important;
+            color: #378f86;
+            font-size: 1rem;
+            cursor: pointer;
+        }
+    }
+}

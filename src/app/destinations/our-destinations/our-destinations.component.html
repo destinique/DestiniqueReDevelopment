@@ -1,0 +1,118 @@
+<div class="destination-container">
+    <ngx-spinner
+      bdColor="rgba(0, 0, 0, 0.8)"
+      size="medium"
+      color="#fff"
+      type="ball-circus"
+      [fullScreen]="true"
+      class="spinner"
+    >
+      <p style="color: white">Loading...</p>
+    </ngx-spinner>
+
+    <div class="promo-banner">
+        <img src="assets/website_images/destinations/promo-banner.webp" alt="Destinique destinations banner showcasing luxury travel destinations">
+
+        <div class="centered">
+            <h2 class="text-center destination-banner-header">DESTINATIONS</h2>
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="destination-summary">
+                        Indulge in the art of travel and choose from our array of destinations, where every locale becomes a canvas for your extraordinary adventure. From the sun-kissed beaches of the Caribbean to the enchanting landscapes of Europe and beyond, each destination offers a unique tapestry of luxury villas and experiences waiting to be explored.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row justify-content-center">
+        <div class="col-md-12">
+            <div class="d-lg-block destinations">
+                <div id="destinations-tab" class="row g-0">
+                    <div class="col-lg-4 browse-all-destinations-column scrollSec">
+                        <div id="v-pills-tab" role="tablist" aria-orientation="vertical" class="nav flex-column nav-pills">
+                          <div *ngFor="let item of destinationData; let i = index">
+                            <div
+                              id="v-pills-tab-0"
+                              [class.active-destination]="i === currentIndex"
+                              data-bs-toggle="pill"
+                              data-bs-target="#v-pills-16"
+                              role="tab"
+                              aria-controls="v-pills-16"
+                              aria-selected="false"
+                              class="nav-link"
+                            >
+                            <div
+                              class="destination-relative lazy-bg"
+                              [style.background-image]="'url(' + item.image_url + ')'">
+                                    <a (click)="showDestinationList(i)" href="JavaScript:void(0);"
+                                       [attr.aria-label]="'View ' + item.user_friendly_label + ' destinations'">
+                                        <div class="destination-img-overlay">
+                                            <div class="destination-name">{{item.user_friendly_label}}</div>
+                                            <div class="total-property-number">
+                                                <div class="property-number">{{item.prop_count}}</div>
+                                                <div class="property-text"> PROPERTIES</div>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </div>
+                            </div>
+                          </div>
+                        </div>
+                    </div>
+                    <div
+                      *ngIf="destinationData && destinationData[currentIndex]"
+                      class="col-lg-8 scrollSec">
+                        <div id="v-pills-tabContent" class="tab-content">
+                            <div
+                                 role="tabpanel"
+                                 aria-labelledby="v-pills-tab-2"
+                                 class="tab-pane fade active show"
+                            >
+                                <div class="tab-pane-body">
+                                    <div class="row destination-row">
+                                        <div class="col-12">
+                                            <div class="destination-area" [ngClass]="{ 'destination_usa': showUSADestination }"
+                                                 *ngFor="
+                                                 let listItem of destinationData[currentIndex]
+                                                 ?.country_islands;
+                                                 let i = index
+                                                 "
+                                            >
+                                              <h5 class="country-name">
+                                                <a [href]="'/properties/' + ((listItem?.search_parameters && listItem.search_parameters.trim() !== '') ? listItem.search_parameters : listItem?.country_island_name)" target="_blank">
+                                                  {{ listItem?.country_island_name }} <span class="total-property-available-in-country">{{listItem.prop_count}}</span>
+                                                </a>
+                                              </h5>
+                                                <ul *ngIf="listItem.country_island_name == 'United States' || listItem.country_island_name == 'Canada'" class="state-city-area">
+                                                  <li class="state-name"
+                                                      *ngFor="
+                                                        let location of listItem.states;
+                                                        let l = index">
+                                                    <a [href]="'/properties/' + ((location?.search_parameters && location.search_parameters.trim() !== '') ? location.search_parameters : location?.StateNme)" target="_blank">
+                                                      <img _ngcontent-rif-c111="" loading="lazy" src="assets/dest-images/dot.png" alt="Location indicator" style="height: 12px; width: 12px;"> {{location.StateNme}} <span class="total-property-available-in-state">{{location.prop_count}}</span>
+                                                    </a>
+                                                    <ng-container *ngIf="location.cities.length > 0 && listItem.country_island_name=='United States'">
+                                                      <ul class="city-area">
+                                                        <li
+                                                          *ngFor="let city of location.cities"
+                                                          class="city-name">
+                                                          <a [href]="'/properties/' + ((city?.search_parameters && city.search_parameters.trim() !== '') ? city.search_parameters : city?.City)" target="_blank">
+                                                            <i class="fa fa-angle-right" aria-hidden="true"></i> {{ city.City }} <span class="total-property-available-in-city">{{city.prop_count}}</span>
+                                                          </a>
+                                                        </li>
+                                                      </ul>
+                                                    </ng-container>
+                                                  </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -45,6 +45,20 @@ const routes: Routes = [
       import("./services/services.module").then((m) => m.ServicesModule),
   },
   {
+    path: "terms-and-conditions",
+    loadChildren: () =>
+      import("./terms-and-conditions/terms-and-conditions.module").then(
+        (m) => m.TermsAndConditionsModule
+      ),
+  },
+  {
+    path: "privacypolicies",
+    loadChildren: () =>
+      import("./privacy-policy/privacy-policy.module").then(
+        (m) => m.PrivacyPolicyModule
+      ),
+  },
+  {
     path: "testimonials",
     loadChildren: () =>
       import("./testimonials/testimonials.module").then(

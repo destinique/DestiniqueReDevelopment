@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 
 import { PromotionsRoutingModule } from './promotions-routing.module';
 import { OurPromotionsComponent } from './our-promotions/our-promotions.component';
+import {NgxSpinnerModule} from "ngx-spinner";
 
 
 @NgModule({
@@ -11,7 +12,8 @@ import { OurPromotionsComponent } from './our-promotions/our-promotions.componen
   ],
   imports: [
     CommonModule,
-    PromotionsRoutingModule
+    PromotionsRoutingModule,
+    NgxSpinnerModule
   ]
 })
 export class PromotionsModule { }

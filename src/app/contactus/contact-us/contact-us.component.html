@@ -1,4 +1,381 @@
-<p>contact-us works!</p>
-<p>contact-us works!</p>
-<p>contact-us works!</p>
-<p>contact-us works!</p>
+<div class="contact-header-container">
+    <div class="overlay-effect h-100 w-100"></div>
+    <img src="assets/website_images/contact/contact-banner.webp" alt="contact-banner"
+         loading="lazy" decoding="async" class="img-fluid"
+    />
+    <div class="centered">
+        <h2 class="text-center contact-banner-header">Destinique <br> Travel Request Form</h2>
+    </div>
+</div>
+
+<div class="container contact-form">
+    <form>
+        <div class="row">
+            <div class="col-12">
+                <div class="w-100">
+                    <h2 class="text-center lbl-head title-color">Travel Request Form</h2>
+                    <h5 class="contact-welcome-text">
+                        Can’t find the perfect property for your needs? No problem! Simply fill out our Travel Request Form, share your specific requirements, and let us help you find your dream vacation rental.
+                    </h5>
+                    <h5 class="contact-form-note">NOTE: <span>Required fields indicated by an asterisk*</span></h5>
+                </div>
+            </div>
+            <div class="col-sm-6 col-6 d-flex flex-column">
+                <div class="w-100 lbl title-color">
+                    First Name <span>*</span>
+                </div>
+                <div class="w-100">
+                    <div class="mb-3">
+                        <input type="text" class="form-control"/>
+                        <div class="invalid-feedback">
+                            First name is required.
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6 col-6 d-flex flex-column">
+                <div class="w-100 lbl title-color">
+                    Last Name <span>*</span>
+                </div>
+                <div class="w-100">
+                    <div class="mb-3">
+                        <input type="text" class="form-control"/>
+                        <div class="invalid-feedback">
+                            Last name is required.
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6 col-6 d-flex flex-column">
+                <div class="w-100 lbl title-color">
+                    Email Address <span>*</span>
+                </div>
+                <div class="w-100">
+                    <div class="mb-3">
+                        <input type="email" class="form-control"/>
+                        <div class="invalid-feedback">
+                            Email must be a valid email address
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6 col-6 d-flex flex-column">
+                <div class="w-100 lbl title-color">
+                    Phone Number <span>*</span>
+                </div>
+                <div class="w-100">
+                    <div class="mb-3">
+                        <input type="text" class="form-control"/>
+                        <div class="invalid-feedback">
+                            Phone number is required (Min 10 and Max 12 digits allowed)
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 d-flex flex-column">
+                <div class="w-100 lbl title-color">
+                    Desired Destination <span>*</span>
+                </div>
+                <div class="w-100">
+                    <div class="mb-3">
+                        <input type="text" id="destin" class="form-control"/>
+                        <div class="invalid-feedback">
+                            Desired destination is required.
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 d-flex flex-column">
+                <div class="w-100 lbl title-color">
+                    If you are open to other locations, please list the areas you would like to consider:
+                </div>
+                <div class="w-100">
+                    <div class="mb-3">
+                        <input type="text" class="form-control"/>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6 col-6 col-md-4 d-flex flex-column">
+                <div class="w-100 lbl title-color">
+                    Arrival Date <span>*</span>
+                </div>
+                <div class="w-100">
+                    <div class="mb-3">
+                        <div class="input-group">
+                            <input type="text" placeholder="MM/DD/YYYY" class="form-control"/>
+                        </div>
+                        <div class="invalid-feedback">
+                            Arrival date is required
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-6 col-6 col-md-4 d-flex flex-column">
+                <div class="w-100 lbl title-color">
+                    Departure Date <span>*</span>
+                </div>
+                <div class="w-100">
+                    <div class="mb-3">
+                        <div class="input-group">
+                            <input type="text" placeholder="MM/DD/YYYY" class="form-control"/>
+                        </div>
+                        <div class="invalid-feedback">
+                            Departure date is required
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6 col-6 col-md-4 d-flex flex-column">
+                <div class="w-100 lbl title-color">
+                    Total Guests <span>*</span>
+                </div>
+                <div class="w-100">
+                    <div class="mb-3 bg-white">
+                        <input type="number" class="form-control"/>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 d-flex flex-column">
+                <div class="w-100 lbl title-color">
+                    If your dates are flexible, enter the alternate dates here.
+                </div>
+                <div class="w-100">
+                    <div class="mb-3">
+                        <input type="text" id="altDates" class="form-control"/>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6 col-6 col-md-4 d-flex flex-column">
+                <div class="w-100 lbl title-color">Adults</div>
+                <div class="w-100">
+                    <div class="mb-3">
+                        <input type="number" class="form-control"/>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-6 col-6 col-md-4 d-flex flex-column">
+                <div class="w-100 lbl title-color">Kids 3 - 16 years</div>
+                <div class="w-100">
+                    <div class="mb-3">
+                        <input type="number" class="form-control"/>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-6 col-6 col-md-4 d-flex flex-column">
+                <div class="w-100 lbl title-color">Babies Under 3 Years</div>
+                <div class="w-100">
+                    <div class="mb-3">
+                        <input type="number" class="form-control"/>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-6 col-6 col-md-4 d-flex flex-column">
+                <div class="w-100 lbl title-color">Minimum Bedrooms</div>
+                <div class="w-100">
+                    <div class="mb-3">
+                        <select class="form-control d-block w-100" aria-label="Select number of rooms">
+                            <option value="1">1+</option>
+                            <option value="2">2+</option>
+                            <option value="3">3+</option>
+                            <option value="4">4+</option>
+                            <option value="5">5+</option>
+                            <option value="6">6+</option>
+                            <option value="7">7+</option>
+                            <option value="8">8+</option>
+                            <option value="9">9+</option>
+                            <option value="10">10+</option>
+                            <option value="11">11+</option>
+                            <option value="12">12+</option>
+                            <option value="13">13+</option>
+                            <option value="14">14+</option>
+                            <option value="15">15+</option>
+                            <option value="16">16+</option>
+                            <option value="17">17+</option>
+                            <option value="19">18+</option>
+                            <option value="19">19+</option>
+                            <option value="20">20+</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6 col-6 col-md-4 d-flex flex-column">
+                <div class="w-100 lbl title-color">
+                    Total MAX Budget
+                    <span>*</span>
+                </div>
+                <div class="w-100">
+                    <input type="number" placeholder="Budget" class="form-control"/>
+                </div>
+            </div>
+            <div class="col-sm-6 col-6 col-md-4 d-flex flex-column">
+                <div class="w-100 lbl title-color">Proximity to Beach</div>
+                <div class="w-100">
+                    <div class="mb-3">
+                        <select class="form-control d-block w-100" id="proximity" name="proximity">
+                            <option value="Not applicable">Not applicable</option>
+                            <option value="Short walk to the beach">Short walk to the beach</option>
+                            <option value="Ocean Front">Ocean Front</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 d-flex flex-column">
+                <div class="w-100 lbl title-color">
+                    Accommodation Type Preference?
+                    <span>*</span>
+                </div>
+                <div class="w-100">
+                    <div class="mb-3">
+                        <select class="form-select" id="accommodation" name="accommodation">
+                            <option>Private Home</option>
+                            <option>Condo</option>
+                            <option>Resort</option>
+                            <option>Villa</option>
+                        </select>
+                        <div class="invalid-feedback">
+                            Accommodation Type Preference is required.
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 d-flex flex-column">
+                <div class="w-100 lbl title-color">Views?</div>
+                <div class="w-100">
+                    <div class="mb-3">
+                        <div class="row no-border">
+                            <div class="col-md-3">
+                                <label><input type="checkbox"/> Ocean View</label>
+                            </div>
+                            <div class="col-md-3">
+                                <label><input type="checkbox"/> Oceanfront View</label>
+                            </div>
+                            <div class="col-md-3">
+                                <label><input type="checkbox"/> Partial Ocean View</label>
+                            </div>
+                            <div class="col-md-3">
+                                <label><input type="checkbox"/> Golf Course View</label>
+                            </div>
+                            <div class="col-md-3">
+                                <label><input type="checkbox"/> Mountain View</label>
+                            </div>
+                            <div class="col-md-3">
+                                <label><input type="checkbox"/> Lake View</label>
+                            </div>
+                            <div class="col-md-3">
+                                <label><input type="checkbox"/> Wood/Forest
+                                </label>
+                            </div>
+                            <div class="col-md-3">
+                                <label><input type="checkbox"/> Not Applicable</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 d-flex flex-column">
+                <div class="w-100 lbl title-color"> Amenities?</div>
+                <div class="w-100">
+                    <div class="mb-3">
+                        <div class="row no-border">
+                            <div class="col-md-4">
+                                <label><input type="checkbox"/> Boat Slip Available</label>
+                            </div>
+                            <div class="col-md-4">
+                                <label><input type="checkbox"/> Pet Friendly (For a Fee)</label>
+                            </div>
+                            <div class="col-md-4">
+                                <label><input type="checkbox"/> Pool - Community</label>
+                            </div>
+                            <div class="col-md-4">
+                                <label><input type="checkbox"/> Pool - Private</label>
+                            </div>
+                            <div class="col-md-4">
+                                <label><input type="checkbox"/> Snowbird Rentals Accepted</label>
+                            </div>
+                            <div class="col-md-4">
+                                <label><input type="checkbox"/> Tennis Courts</label>
+                            </div>
+                            <div class="col-md-4">
+                                <label><input type="checkbox"/> Elevator in Unit</label>
+                            </div>
+                            <div class="col-md-4">
+                                <label><input type="checkbox"/> Ground Floor</label>
+                            </div>
+                            <div class="col-md-4">
+                                <label><input type="checkbox"/> Pool - Heated</label>
+                            </div>
+                            <div class="col-md-4">
+                                <label><input type="checkbox"/> Pickleball Courts</label>
+                            </div>
+                            <div class="col-md-4">
+                                <label><input type="checkbox"/> Golf on Site</label>
+                            </div>
+                            <div class="col-md-4">
+                                <label><input type="checkbox"/> Electric Vehicle Charger</label>
+                            </div>
+                            <div class="col-md-4">
+                                <label><input type="checkbox"/> Washer/Dryer</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 d-flex flex-column">
+                <div class="w-100 lbl title-color"> Additional Notes</div>
+                <div class="w-100">
+                    <div class="mb-3">
+                        <textarea class="form-control" rows="6" placeholder="Let us know if there is anything else you require for your upcoming stay."></textarea>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="row">
+                <div class="col-12 opt-in-text-s">
+                    <label for="SMS_MMS_Consent">
+                        <div class="sms-mms-consent">
+                            <div class="collapse" id="sms-mms-consent">
+                                <input type="checkbox" id="SMS_MMS_Consent" name="SMS_MMS_Consent" value="Bike" checked><span class="fw-bold"> SMS/MMS Consent: </span>
+                                "I agree to receive text (SMS/MMS) messages from Destinique at the number provided. Messages will primarily be one-on-one conversations related to vacation rental inquiries, property availability, and notifications about quote updates. Occasional promotional messages may also be sent. Some messages may include images or videos. We do not share mobile opt-in information with third parties unrelated to Destinique. Message & data rates may apply. Message frequency varies. Text reply STOP to cancel. Reply HELP to get help."
+                            </div>
+                            <a class="collapsed" data-bs-toggle="collapse" href="#sms-mms-consent" aria-expanded="false" aria-controls="sms-mms-consent"></a>
+                        </div>
+                    </label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12 opt-in-text-s">
+                    <label for="Email_Consent">
+                        <div class="email-consent">
+                            <div class="collapse" id="email-consent">
+                                <input type="checkbox" id="Email_Consent" name="Email_Consent" value="Bike" checked><span class="fw-bold"> Email Consent:</span>
+                                "I agree to receive emails from Destinique. Email Frequency varies and will include vacation rental updates, responses to questions, quotes, booking information, exclusive travel deals, and property recommendations. I understand I can unsubscribe at any time via the unsubscribe link in any email."
+                            </div>
+                            <a class="collapsed" data-bs-toggle="collapse" href="#email-consent" aria-expanded="false" aria-controls="email-consent"></a>
+                        </div>
+                    </label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12 opt-in-text-s">
+                    View our [<a class="link-primary" [routerLink]="['/terms&conditions']">Terms of Service</a>] and [<a class="link-primary" [routerLink]="['/privacypolicies']">Privacy Policy</a>].
+                </div>
+            </div>
+
+            <div class="col-12 d-flex contact-btn-right">
+                <button class="btn btn-secondary mr-2" type="reset">
+                    Reset
+                </button>
+
+                <button class="btn btn-secondary contact-submit-btn">
+                    <!--<span class="spinner-border spinner-border-sm"></span>-->
+                    Submit
+                </button>
+            </div>
+        </div>
+    </form>
+</div>

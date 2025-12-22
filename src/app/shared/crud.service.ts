@@ -30,4 +30,19 @@ export class CrudService {
   getAllPublishedFeebacks(): Observable<any[]> {
     return this.http.get<any[]>(this.baseUrl + "getAllPublishedFeebacks.php");
   }
+
+  getAllPublishedPromotions(id: string | number): Observable<any[]> {
+    const headers = {'Content-Type': 'application/json'};
+    const currentUser = localStorage.getItem("currentUser")
+    if (currentUser){
+      (headers as any).Authorization = 'Bearer ' + JSON.parse(currentUser).token;
+    }
+
+    if (id){
+      return this.http.get<any[]>(this.baseUrl + "getPromotions.php?id="+id, { headers });
+    }
+    else {
+      return this.http.get<any[]>(this.baseUrl + "getPromotions.php", { headers });
+    }
+  }
 }

@@ -1,30 +1,45 @@
-import { Component, OnInit, AfterViewInit } from "@angular/core";
+import { Component, OnInit, AfterViewInit, OnDestroy} from "@angular/core";
 import { CrudService } from "src/app/shared/crud.service";
 import { NgxSpinnerService } from "ngx-spinner";
 import { ActivatedRoute } from "@angular/router";
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
-
+import { UserRoleService } from '../../services/user-role.service';
+import { Subscription } from 'rxjs';  // ← Add this import
 
 @Component({
   selector: 'app-our-promotions',
   templateUrl: './our-promotions.component.html',
   styleUrls: ['./our-promotions.component.scss']
 })
-export class OurPromotionsComponent implements OnInit, AfterViewInit {
+export class OurPromotionsComponent implements OnInit, AfterViewInit, OnDestroy {
   promoData: any = [];
   id: any; //Getting Promotion id from URL
   selectedPromotion: any = null;
   carouselImages: any[] = [];
+  userRole: number | null = null;
+  private subscription: Subscription | null = null;
 
   constructor(
     private crudService: CrudService,
     private spinner: NgxSpinnerService,
     private actRoute: ActivatedRoute,
+    private userRoleService: UserRoleService,
     public sanitizer: DomSanitizer
   ) { }
 
   ngOnInit() {
     this.id = this.actRoute.snapshot.params["id"];
+    // Subscribe to get the role dynamically
+    this.subscription = this.userRoleService.role$.subscribe(role => {
+      this.userRole = role;
+      console.log('Role changed to:', role);
+    });
+  }
+
+  ngOnDestroy() {
+    if (this.subscription) {
+      this.subscription.unsubscribe();// Prevent memory leaks
+    }
   }
 
   ngAfterViewInit() {

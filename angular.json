@@ -173,14 +173,20 @@
           "options": {
             "routes": [
               "/",
+              "/home",
               "/destinations",
               "/properties",
+              "/property",
               "/contact",
               "/map",
               "/promotions",
               "/our-services",
+              "/terms-and-conditions",
+              "/privacypolicies",
               "/testimonials",
-              "/aboutus"
+              "/aboutus",
+              "/register",
+              "/my-profile"
             ]
           },
           "configurations": {

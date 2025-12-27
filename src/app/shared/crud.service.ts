@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 export interface BannerImage {
   title: string;
@@ -44,5 +45,20 @@ export class CrudService {
     else {
       return this.http.get<any[]>(this.baseUrl + "getPromotions.php", { headers });
     }
+  }
+
+  registerInquiries(name: string, email: string, phone: string, message: string) {
+    return this.http
+      .post<any>(this.baseUrl + "inquiries_register.php", {
+        name,
+        email,
+        phone,
+        message
+      })
+      .pipe(
+        map((user:any) => {
+          return user;
+        })
+      );
   }
 }

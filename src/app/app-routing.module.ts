@@ -25,6 +25,13 @@ const routes: Routes = [
         .then(m => m.PropertiesModule)
   },
   {
+    path: "property",
+    loadChildren: () =>
+      import("./propertydetails/propertydetails.module").then(
+        m => m.PropertydetailsModule
+      ),
+  },
+  {
     path: "contact",
     loadChildren: () =>
       import("./contactus/contactus.module").then((m) => m.ContactusModule),
@@ -69,6 +76,18 @@ const routes: Routes = [
     path: "aboutus",
     loadChildren: () =>
       import("./aboutus/aboutus.module").then((m) => m.AboutusModule),
+  },
+  {
+    path: "register",
+    loadChildren: () =>
+      import("./user-register/user-register.module").then(
+        (m) => m.UserRegisterModule
+      ),
+  },
+  {
+    path: "my-profile",
+    loadChildren: () =>
+      import("./myprofile/myprofile.module").then((m) => m.MyprofileModule),
   }
 ];
 

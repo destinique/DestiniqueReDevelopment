@@ -1,0 +1,52 @@
+<div class="modal-content border-0 shadow-lg promo-modal-content">
+  <div class="modal-body p-0" *ngIf="promoDetailsData">
+    <!-- Close Button -->
+    <button type="button" class="btn-close btn-close-white position-absolute" (click)="activeModal.dismiss('Cross click')" aria-label="Close">&times;</button>
+
+    <!-- Carousel Section -->
+    <div *ngIf="carouselImages.length > 0" class="carousel-section">
+      <ngb-carousel
+        [showNavigationArrows]="showNavigationArrows"
+        [showNavigationIndicators]="showNavigationIndicators"
+        [interval]="interval"
+        [pauseOnHover]="pauseOnHover"
+        [wrap]="wrap">
+
+        <ng-template ngbSlide *ngFor="let img of carouselImages; let i = index">
+          <div class="carousel-image-wrapper">
+            <img [src]="getImageSrc(img.path)"
+                 [alt]="img.title"
+                 class="d-block w-100"
+                 loading="lazy">
+          </div>
+          <div class="carousel-caption d-none d-md-block">
+            <p class="mb-0" [innerHTML]="img.title"></p>
+          </div>
+        </ng-template>
+
+      </ngb-carousel>
+    </div>
+
+    <div class="promo-details-con">
+      <span *ngIf="(promoDetailsData.display_location | lowercase) === 'yes'" class="m-term">{{promoDetailsData.location}}</span>
+      <div class="m-top">
+        <div *ngIf="(promoDetailsData.display_travel_date | lowercase) === 'yes'" class="m-period">Travel date: {{promoDetailsData.travel_start_date  | date:'MMMM d'}}<span class="modal-content-date-to"> to </span>{{promoDetailsData.travel_end_date | date:'MMMM d'}}</div>
+        <h2 *ngIf="(promoDetailsData.display_title | lowercase) === 'yes'" class="m-title" [innerHTML]="safeTitle"></h2>
+      </div>
+      <div class="m-desc" [innerHTML]="safeHtmlContent"></div>
+      <div *ngIf="(promoDetailsData.display_property_name | lowercase) === 'yes'" class="m-discount" [innerHTML]="safePropertyNname"></div>
+
+      <div class="m-top">
+        <div *ngIf="(promoDetailsData.display_offer_date | lowercase) === 'yes'" class="m-period">Offer date:
+          {{promoDetailsData.offer_start_date  | date:'MMMM d'}}<span class="modal-content-date-to"> to </span>{{promoDetailsData.offer_end_date  | date:'MMMM d'}}</div>
+      </div>
+
+      <div class="m-details-url">
+        <a target="_blank" [attr.href]=" promoDetailsData.cta_button ? promoDetailsData.cta_button : 'https://destinique.com/property/'+promoDetailsData.list_id">{{promoDetailsData.cta_btn_txt}}</a>
+      </div>
+      <div *ngIf="promoDetailsData.backed_promotion_link" class="m-details-url" style="margin-top: 20px;">
+        <a target="_blank" [attr.href]="promoDetailsData.backed_promotion_link">Backend Promotions APP</a>
+      </div>
+    </div>
+  </div>
+</div>

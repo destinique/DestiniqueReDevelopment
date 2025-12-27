@@ -1,0 +1,139 @@
+<div class="container bg-white">
+    <h5 class="register-header">Destinique - Registration Form</h5>
+    <div class="card">
+        <div class="card-body">
+            <form>
+                <div class="row">
+                    <div class="mb-3 col-12 col-sm-12 col-md-6 col-lg-4">
+                        <div class="w-100 lbl titleColor"> First Name <span>*</span></div>
+                        <input type="text" class="form-control"/>
+                        <div class="invalid-feedback">
+                            First name is required.
+                        </div>
+                    </div>
+
+                    <div class="mb-3 col-12 col-sm-12 col-md-6 col-lg-4">
+                        <div class="w-100 lbl titleColor"> Last Name <span>*</span></div>
+                        <input type="text" class="form-control"/>
+                        <div class="invalid-feedback">
+                            Last name is required.
+                        </div>
+                    </div>
+
+                    <div class="mb-3 col-12 col-sm-12 col-md-6 col-lg-4">
+                        <div class="w-100 lbl titleColor"> Username <span>*</span></div>
+                        <input type="text" class="form-control"/>
+                        <div class="invalid-feedback">
+                            User name is required.
+                        </div>
+                    </div>
+
+                    <div class="mb-3 col-12 col-sm-12 col-md-6 col-lg-4">
+                        <div class="w-100 lbl titleColor"> Email Address <span>*</span></div>
+                        <input type="text" class="form-control"/>
+                        <div class="invalid-feedback">
+                            Email must be a valid email address
+                        </div>
+                    </div>
+
+                    <div class="mb-3 col-12 col-sm-12 col-md-6 col-lg-4">
+                        <div class="row">
+                            <div class="col-6">
+                                <div class="w-100 lbl titleColor"> Password <span>*</span></div>
+                                <input type="password" id="password" class="form-control" />
+                            </div>
+                            <div class="col-6 pl-0">
+                                <div class="w-100 lbl titleColor">Confirm Pass<span>*</span></div>
+                                <input type="password" class="form-control"/>
+                            </div>
+                        </div>
+                        <div class="invalid-feedback">
+                            Password does not match !
+                        </div>
+
+                    </div>
+
+
+
+                    <div class="mb-3 col-12 col-sm-12 col-md-6 col-lg-4">
+                        <div class="w-100 lbl titleColor"> Phone Number <span>*</span></div>
+                        <input type="text" class="form-control"/>
+                        <div class="invalid-feedback">
+                            Phone number is required
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12 opt-in-text-s">
+                        <label for="SMS_MMS_Consent">
+                            <div class="sms-mms-consent">
+                                <div [ngbCollapse]="isSmsConsentCollapsed" class="collapse" id="sms-mms-consent">
+                                    <input type="checkbox" id="SMS_MMS_Consent" name="SMS_MMS_Consent" value="Bike" checked><span class="fw-bold"> SMS/MMS Consent: </span>
+                                    "I agree to receive text (SMS/MMS) messages from Destinique at the number provided. Messages will primarily be one-on-one conversations related to vacation rental inquiries, property availability, and notifications about quote updates. Occasional promotional messages may also be sent. Some messages may include images or videos. We do not share mobile opt-in information with third parties unrelated to Destinique. Message & data rates may apply. Message frequency varies. Text reply STOP to cancel. Reply HELP to get help."
+                                </div>
+                                <!-- Toggle link - REPLACED -->
+                                <a href="javascript:void(0)"
+                                   class="collapsed toggle-link"
+                                   (click)="isSmsConsentCollapsed = !isSmsConsentCollapsed"
+                                   [attr.aria-expanded]="!isSmsConsentCollapsed"
+                                   aria-controls="sms-mms-consent">
+                                  {{ isSmsConsentCollapsed ? '+ Read More' : '- Read Less' }}
+                                </a>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12 opt-in-text-s">
+                        <label for="Email_Consent">
+                            <div class="email-consent">
+                                <div [ngbCollapse]="isEmailConsentCollapsed" class="collapse" id="email-consent">
+                                    <input type="checkbox" id="Email_Consent" name="Email_Consent" value="Bike" checked><span class="fw-bold"> Email Consent:</span>
+                                    "I agree to receive emails from Destinique. Email Frequency varies and will include vacation rental updates, responses to questions, quotes, booking information, exclusive travel deals, and property recommendations. I understand I can unsubscribe at any time via the unsubscribe link in any email."
+                                </div>
+                                <a href="javascript:void(0)"
+                                   class="collapsed toggle-link"
+                                   (click)="isEmailConsentCollapsed = !isEmailConsentCollapsed"
+                                   [attr.aria-expanded]="!isEmailConsentCollapsed"
+                                   aria-controls="email-consent">
+                                  {{ isEmailConsentCollapsed ? '+ Read More' : '- Read Less' }}
+                                </a>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12 opt-in-text-s">
+                        View our [<a class="link-primary" [routerLink]="['/terms-and-conditions']" target="_blank">Terms of Service</a>] and [<a class="link-primary" [routerLink]="['/privacypolicies']" target="_blank">Privacy Policy</a>].
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-12">
+                        <div class="opt-in-text-s">
+                            <label  for="testim-thank-fb">
+                                Thank you for your feedback. We value your privacy and will adhere to your selected option.
+                                <br>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <hr>
+                <div class="row">
+                    <div class="mb-3 col-12 col-md TOP btn-al-r">
+                        <button class="btn btn-primary mr-1">
+                            Register
+                        </button>
+                        <button class="btn btn-secondary mr-1" type="reset">
+                            Reset
+                        </button>
+                        <button class="btn btGreen mr-1">
+                            Cancel
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

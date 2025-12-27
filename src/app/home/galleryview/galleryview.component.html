@@ -2,81 +2,89 @@
     <hr/>
     <h1>Choose Your Destination <span>Usa</span></h1>
     <div class="row phone-v">
-        <div id="destination-usa" class="carousel slide" data-ride="carousel">
-            <div class="carousel-inner">
-                <div class="carousel-item active">
+      <ngb-carousel
+        #destinationCarousel
+        id="destination-usa"
+        [showNavigationArrows]="true"
+        [showNavigationIndicators]="false"
+        [interval]="5000"
+        [pauseOnHover]="true"
+        [wrap]="true"
+        [keyboard]="true"
+        class="carousel slide">
+            <ng-template ngbSlide>
                     <img loading="lazy" decoding="async" src="assets/website_images/home/galleryview/miramar-beach.webp" alt="Miramar" class="img-fluid">
                     <div class="carousel-caption">
                         <a target="_blank" href="/properties/Miramar%20Beach,%20FL,%20USA?Latitude=30.374367&Longitude=-86.3585578&State=Florida&Country=United+States">
                             Miramar
                         </a>
                     </div>
-                </div>
-                <div class="carousel-item">
+            </ng-template>
+            <ng-template ngbSlide>
                     <img loading="lazy" decoding="async" src="assets/website_images/home/galleryview/FLORIDA-GULF-COAST-sand-trail-to-the-beach-in-florida-2022-12-23-04-19-22-utc.webp" alt="FLORIDA GULF COAST" class="img-fluid">
                     <div class="carousel-caption">
                         <a target="_blank" href="/properties/Florida%20Gulf%20Coast%20University,%20FL,%20USA?Latitude=26.4588273&Longitude=-81.7622951&State=Florida&Country=United+States">
                             Florida Gulf Coast
                         </a>
                     </div>
-                </div>
-                <div class="carousel-item">
+            </ng-template>
+            <ng-template ngbSlide>
                     <img loading="lazy" decoding="async" src="assets/website_images/home/galleryview/SOUTH-CAROLINA-charleston-south-carolina-usa-2021-08-26-18-13-07-utc.webp" alt="SOUTH CAROLINA" class="img-fluid">
                     <div class="carousel-caption">
                         <a target="_blank" href="/properties/South%20Carolina,%20USA?Latitude=33.836081&Longitude=-81.1637245&State=South+Carolina&Country=United+States">
                             South Carolina
                         </a>
                     </div>
-                </div>
-                <div class="carousel-item">
+            </ng-template>
+            <ng-template ngbSlide>
                     <img loading="lazy" decoding="async"  src="assets/website_images/home/galleryview/256102156_Beaches-of-30A-etc.webp" alt="30A" class="img-fluid">
                     <div class="carousel-caption">
                         <a target="_blank" href="/properties/FL-30A,%20Panama%20City,%20FL,%20USA?Latitude=30.17520649999999&Longitude=-85.6689667&State=Florida&Country=United+States">
                             30A
                         </a>
                     </div>
-                </div>
-                <div class="carousel-item">
+            </ng-template>
+            <ng-template ngbSlide>
                     <img loading="lazy" decoding="async" src="assets/website_images/home/galleryview/Fort-Walton-Beach-and-Okaloosa-Island.webp" alt="Fort Walton Beach" class="img-fluid">
                     <div class="carousel-caption">
                         <a target="_blank" href="/properties/Fort%20Walton%20Beach,%20FL,%20USA?Latitude=30.42007079999999&Longitude=-86.6170308&State=Florida&Country=United+States">
                             Fort Walton Beach
                         </a>
                     </div>
-                </div>
-                <div class="carousel-item">
+            </ng-template>
+            <ng-template ngbSlide>
                     <img loading="lazy" decoding="async" src="assets/website_images/home/galleryview/353042653-orlando-etc.webp" alt="ORLANDO" class="img-fluid">
                     <div class="carousel-caption">
                         <a target="_blank" href="/properties/Orlando,%20FL,%20USA?Latitude=28.5383832&Longitude=-81.3789269&State=Florida&Country=United+States">
                             Orlando
                         </a>
                     </div>
-                </div>
-                <div class="carousel-item">
+            </ng-template>
+            <ng-template ngbSlide>
                     <img loading="lazy" decoding="async"  src="assets/website_images/home/galleryview/Destin-Area-CrystalBeachFrangistaBeachSandestinHolidayIsle.webp" alt="DESTIN AREA" class="img-fluid">
                     <div class="carousel-caption">
                         <a target="_blank" href="/properties/Destin,%20FL%2032541,%20USA?Latitude=30.389606&Longitude=-86.48362340000001&State=Florida&Country=United+States">
                             Destin Area
                         </a>
                     </div>
-                </div>
-                <div class="carousel-item">
+            </ng-template>
+            <ng-template ngbSlide>
                     <img loading="lazy" decoding="async" src="assets/website_images/home/galleryview/miami-beach-florida-2021-08-26-18-12-58-utc.webp" alt="MIAMI BEACH FLORIDA" class="img-fluid">
                     <div class="carousel-caption">
                         <a target="_blank" href="/properties/Miami%20Beach,%20FL,%20USA?Latitude=25.790654&Longitude=-80.1300455&State=Florida&Country=United+States">
                             Miami Beach Florida
                         </a>
                     </div>
-                </div>
-                <div class="carousel-item">
+            </ng-template>
+            <ng-template ngbSlide>
                     <img loading="lazy" decoding="async" src="assets/website_images/home/galleryview/Pensacola-Perdido-Key-and-Navarre-2022-11-14-04-26-08-utc.webp" alt="PENSACOLA" class="img-fluid">
                     <div class="carousel-caption">
                         <a target="_blank" href="/properties/Pensacola,%20FL,%20USA?Latitude=30.4076647&Longitude=-87.2189746&State=Florida&Country=United+States">
                             Pensacola
                         </a>
                     </div>
-                </div>
-            </div>
+            </ng-template>
+
             <button type="button" class="carousel-control-prev" data-bs-target="#destination-usa" data-bs-slide="prev">
                 <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="currentColor" class="bi bi-arrow-left-circle-fill" viewBox="0 0 16 16">
                 <path d="M8 0a8 8 0 1 0 0 16A8 8 0 0 0 8 0m3.5 7.5a.5.5 0 0 1 0 1H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5z"/>
@@ -87,7 +95,7 @@
                 <path d="M8 0a8 8 0 1 1 0 16A8 8 0 0 1 8 0M4.5 7.5a.5.5 0 0 0 0 1h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 1 0-.708.708L10.293 7.5z"/>
                 </svg>
             </button>
-        </div>
+      </ngb-carousel>
     </div>
 
     <div class="row desktop-v">
@@ -206,94 +214,100 @@
     <h1>Other Destinations</h1>
 
     <div class="row phone-v">
-        <div id="other-destination" class="carousel slide" data-ride="carousel">
-            <div class="carousel-inner">
-                <div class="carousel-item active">
+          <ngb-carousel
+            #otherDdestinationCarousel
+            id="other-destination"
+            [showNavigationArrows]="true"
+            [showNavigationIndicators]="false"
+            [interval]="5000"
+            [pauseOnHover]="true"
+            [wrap]="true"
+            [keyboard]="true"
+            class="carousel slide">
+            <ng-template ngbSlide>
                     <img loading="lazy" decoding="async" class="img-fluid" src="assets/website_images/home/galleryview/1_CANADA.webp" alt="Canada">
                     <div class="carousel-caption">
                         <a target="_blank" href="/properties/Canada?Latitude=56.130366&Longitude=-106.346771&Country=Canada">
                             Canada
                         </a>
                     </div>
-                </div>
-                <div class="carousel-item">
+            </ng-template>
+            <ng-template ngbSlide>
                     <img loading="lazy" decoding="async" class="img-fluid" src="assets/website_images/home/galleryview/4_SOUTH-AMERICA.webp" alt="South-America">
                     <div class="carousel-caption">
                         <a target="_blank" href="/properties/South%20America?Latitude=-8.783195&Longitude=-55.491477">
                             South-America
                         </a>
                     </div>
-                </div>
-                <div class="carousel-item">
+            </ng-template>
+            <ng-template ngbSlide>
                     <img loading="lazy" decoding="async" class="img-fluid" src="assets/website_images/home/galleryview/2_OCEANIA.webp" alt="Oceania">
                     <div class="carousel-caption">
                         <a target="_blank" href="/properties/Oceania?Latitude=-22.7359095&Longitude=140.0187653">
                             Oceania
                         </a>
                     </div>
-                </div>
-                <div class="carousel-item">
+            </ng-template>
+            <ng-template ngbSlide>
                     <img loading="lazy" decoding="async" class="img-fluid" src="assets/website_images/home/galleryview/3_MEXICO.webp" alt="Mexico">
                     <div class="carousel-caption">
                         <a target="_blank" href="/properties/Mexico?Latitude=23.634501&Longitude=-102.552784&Country=Mexico">
                             Mexico
                         </a>
                     </div>
-                </div>
-                <div class="carousel-item">
+            </ng-template>
+            <ng-template ngbSlide>
                     <img loading="lazy" decoding="async" class="img-fluid"  src="assets/website_images/home/galleryview/5_AFRICA.webp" alt="Africa">
                     <div class="carousel-caption">
                         <a target="_blank" href="/properties/Africa?Latitude=-8.783195&Longitude=34.508523">
                             Africa
                         </a>
                     </div>
-                </div>
-                <div class="carousel-item">
+            </ng-template>
+            <ng-template ngbSlide>
                     <img loading="lazy" decoding="async" class="img-fluid" src="assets/website_images/home/galleryview/6_paris.webp" alt="Europe">
                     <div class="carousel-caption">
                         <a target="_blank" href="/properties/Europe?Latitude=54.5259614&Longitude=15.2551187">
                             Europe
                         </a>
                     </div>
-                </div>
-                <div class="carousel-item">
+            </ng-template>
+            <ng-template ngbSlide>
                     <img loading="lazy" decoding="async" class="img-fluid" src="assets/website_images/home/galleryview/7_CENTRAL-AMERICA.webp" alt="Central-America">
                     <div class="carousel-caption">
                         <a target="_blank" href="/properties/Central%20America?Latitude=12.7690126&Longitude=-85.60236429999999">
                             Central-America
                         </a>
                     </div>
-                </div>
-                <div class="carousel-item">
+            </ng-template>
+            <ng-template ngbSlide>
                     <img loading="lazy" decoding="async"  class="img-fluid" src="assets/website_images/home/galleryview/9_CARIBBEAN.webp" alt="Caribbean">
                     <div class="carousel-caption">
                         <a target="_blank" href="/Caribbean?Latitude=21.4691137&Longitude=-78.6568942">
                             Caribbean
                         </a>
                     </div>
-                </div>
-                <div class="carousel-item">
+            </ng-template>
+            <ng-template ngbSlide>
                     <img loading="lazy" decoding="async" class="img-fluid"  src="assets/website_images/home/galleryview/8_ASIA.webp" alt="ASIA">
                     <div class="carousel-caption">
                         <a target="_blank" href="/properties/Asia?Latitude=34.047863&Longitude=100.6196553">
                             ASIA
                         </a>
                     </div>
-                </div>
-            </div>
-            <button type="button" class="carousel-control-prev" data-bs-target="#other-destination" data-bs-slide="prev">
+            </ng-template>
+              <button type="button" class="carousel-control-prev" data-bs-target="#other-destination" data-bs-slide="prev">
                 <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="currentColor" class="bi bi-arrow-left-circle-fill" viewBox="0 0 16 16">
-                <path d="M8 0a8 8 0 1 0 0 16A8 8 0 0 0 8 0m3.5 7.5a.5.5 0 0 1 0 1H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5z"/>
+                  <path d="M8 0a8 8 0 1 0 0 16A8 8 0 0 0 8 0m3.5 7.5a.5.5 0 0 1 0 1H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5z"/>
                 </svg>
-            </button>
-            <button type="button" class="carousel-control-next" data-bs-target="#other-destination" data-bs-slide="next">
+              </button>
+              <button type="button" class="carousel-control-next" data-bs-target="#other-destination" data-bs-slide="next">
                 <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="currentColor" class="bi bi-arrow-right-circle-fill" viewBox="0 0 16 16">
-                <path d="M8 0a8 8 0 1 1 0 16A8 8 0 0 1 8 0M4.5 7.5a.5.5 0 0 0 0 1h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 1 0-.708.708L10.293 7.5z"/>
+                  <path d="M8 0a8 8 0 1 1 0 16A8 8 0 0 1 8 0M4.5 7.5a.5.5 0 0 0 0 1h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 1 0-.708.708L10.293 7.5z"/>
                 </svg>
-            </button>
-        </div>
+              </button>
+          </ngb-carousel>
     </div>
-
 
     <div class="row desktop-v">
         <div class="col-md-3">

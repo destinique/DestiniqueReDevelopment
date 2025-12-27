@@ -2,66 +2,152 @@
   <div class="feedback">
     <h3 class="form-heading">CONTACT US</h3>
     <h6 class="form-inquiries-title">General Inquiries</h6>
-    <div class="card">
+    <div class="card" *ngIf="!toggle">
       <div class="card-body footer-contact-elements">
-        <form action="">
+          <form
+            [formGroup]="registerForm"
+            (ngSubmit)="postregisterdata()"
+            autocomplete="off"
+          >
+
           <div class="mb-3">
-            <input  class="form-control" type="text" placeholder="Your name *">
-            <div class="invalid-feedback">Name is required</div>
+            <input
+              type="text"
+              placeholder="Your name *"
+              style="font-family: Arial, FontAwesome"
+              formControlName="name"
+              class="form-control"
+              [class.is-invalid]="submitted && f['name'].invalid"
+            />
+            <div *ngIf="submitted && f['name'].errors" class="invalid-feedback">Name is required</div>
           </div>
+
           <div class="mb-3">
-            <input  class="form-control" type="text" placeholder="Email address *">
-            <div class="invalid-feedback">Email must be a valid email address</div>
+            <input
+              type="text"
+              placeholder="Email address *"
+              style="font-family: Arial, FontAwesome"
+              formControlName="email"
+              class="form-control"
+              [class.is-invalid]="submitted && f['email'].invalid"
+            />
+            <div *ngIf="submitted && f['email'].errors" class="invalid-feedback">Email must be a valid email address</div>
           </div>
+
           <div class="mb-3">
-            <input type="text" placeholder="Phone number (optional)" class="form-control">
-            <div class="invalid-feedback">Enter a valid phone number.</div>
+            <input
+              type="text"
+              placeholder="Phone number (optional)"
+              style="font-family: Arial, FontAwesome"
+              formControlName="phone"
+              class="form-control"
+              [class.is-invalid]="submitted && f['phone'].invalid"
+            />
+            <div *ngIf="submitted && f['phone'].errors" class="invalid-feedback">Enter a valid phone number.</div>
           </div>
+
           <div class="mb-3">
-            <textarea name="message" id="message" rows="4" placeholder="Message *" class="form-control"></textarea>
-            <div class="invalid-feedback">Message is required</div>
+              <textarea
+                name="message"
+                id="message"
+                rows="4"
+                placeholder="Message *"
+                style="font-family: Arial, FontAwesome"
+                formControlName="message"
+                class="form-control"
+                [class.is-invalid]="submitted && f['message'].invalid"
+              ></textarea>
+              <div *ngIf="submitted && f['message'].errors" class="invalid-feedback">Message is required</div>
           </div>
 
           <div class="row">
             <div class="col-12 opt-in-text-s">
               <label for="SMS_MMS_Consent">
                 <div class="sms-mms-consent">
-                  <div class="collapse" id="sms-mms-consent">
+                  <div [ngbCollapse]="isSmsConsentCollapsed" class="collapse" id="sms-mms-consent">
                     <input type="checkbox" id="SMS_MMS_Consent" name="SMS_MMS_Consent" value="Bike" checked><span class="fw-bold"> SMS/MMS Consent: </span>
                     "I agree to receive text (SMS/MMS) messages from Destinique at the number provided. Messages will primarily be one-on-one conversations related to vacation rental inquiries, property availability, and notifications about quote updates. Occasional promotional messages may also be sent. Some messages may include images or videos. We do not share mobile opt-in information with third parties unrelated to Destinique. Message & data rates may apply. Message frequency varies. Text reply STOP to cancel. Reply HELP to get help."
                   </div>
+                  <!--
                   <a class="collapsed" data-bs-toggle="collapse" href="#sms-mms-consent" aria-expanded="false" aria-controls="sms-mms-consent"></a>
+                  -->
+                  <!-- Toggle link - REPLACED -->
+                  <a href="javascript:void(0)"
+                     class="collapsed toggle-link"
+                     (click)="isSmsConsentCollapsed = !isSmsConsentCollapsed"
+                     [attr.aria-expanded]="!isSmsConsentCollapsed"
+                     aria-controls="sms-mms-consent">
+                    {{ isSmsConsentCollapsed ? '+ Read More' : '- Read Less' }}
+                  </a>
                 </div>
               </label>
             </div>
+          </div>
+          <div class="row">
+              <div class="col-12 opt-in-text-s">
+                &nbsp;&nbsp;
+              </div>
           </div>
 
           <div class="row">
             <div class="col-12 opt-in-text-s">
               <label for="Email_Consent">
                 <div class="email-consent">
-                  <div class="collapse" id="email-consent">
+                  <div [ngbCollapse]="isEmailConsentCollapsed" class="collapse" id="email-consent">
                     <input type="checkbox" id="Email_Consent" name="Email_Consent" value="Bike" checked><span class="fw-bold"> Email Consent:</span>
                     "I agree to receive emails from Destinique. Email Frequency varies and will include vacation rental updates, responses to questions, quotes, booking information, exclusive travel deals, and property recommendations. I understand I can unsubscribe at any time via the unsubscribe link in any email."
                   </div>
+                  <!--
                   <a class="collapsed" data-bs-toggle="collapse" href="#email-consent" aria-expanded="false" aria-controls="email-consent"></a>
+                  -->
+                  <!-- Toggle link - REPLACED -->
+                  <a href="javascript:void(0)"
+                     class="collapsed toggle-link"
+                     (click)="isEmailConsentCollapsed = !isEmailConsentCollapsed"
+                     [attr.aria-expanded]="!isEmailConsentCollapsed"
+                     aria-controls="email-consent">
+                    {{ isEmailConsentCollapsed ? '+ Read More' : '- Read Less' }}
+                  </a>
                 </div>
               </label>
             </div>
           </div>
+
           <div class="row">
             <div class="col-12 opt-in-text-s">
-              View our [<a target="_blank" [routerLink]="['/terms&conditions']">Terms of Service</a>] and [<a target="_blank" [routerLink]="['/privacypolicies']">Privacy Policy</a>].
+              &nbsp;&nbsp;
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-12 opt-in-text-s">
+              View our [<a target="_blank" [routerLink]="['/terms-and-conditions']">Terms of Service</a>] and [<a target="_blank" [routerLink]="['/privacypolicies']">Privacy Policy</a>].
             </div>
           </div>
 
           <div class="form-row">
             <div class="form-group col-12">
-              <button class="btn btn-secondary mr-1" type="reset">Reset</button>
-              <button class="btn btn-primary mr-1 footer-review-sub-btn">Submit</button>
+              <button class="btn btn-secondary mr-1"
+                type="reset"
+                (click)="onReset()">Reset
+              </button>
+
+              <button [disabled]="loading" class="btn btn-primary mr-1 footer-review-sub-btn">
+                  <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>Submit
+              </button>
             </div>
           </div>
         </form>
+      </div>
+    </div>
+    <div *ngIf="toggle" class="contact-message">
+      <div class="contact-success text-center">
+        <h2 class="success">Success!</h2>
+        <h4>Inquiry has been successfully submitted.</h4>
+        <br />
+        <button (click)="gotohome()" class="btn btn-primary mr-1">
+          Submit again
+        </button>
       </div>
     </div>
   </div>

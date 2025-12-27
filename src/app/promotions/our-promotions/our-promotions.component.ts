@@ -2,9 +2,12 @@ import { Component, OnInit, AfterViewInit, OnDestroy} from "@angular/core";
 import { CrudService } from "src/app/shared/crud.service";
 import { NgxSpinnerService } from "ngx-spinner";
 import { ActivatedRoute } from "@angular/router";
-import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { UserRoleService } from '../../services/user-role.service';
 import { Subscription } from 'rxjs';  // ← Add this import
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { PromotepropertyComponent } from '../promoteproperty/promoteproperty.component';
+// import {AuthService} from "../../services/auth.service";
+import { ChangeDetectorRef } from '@angular/core';
 
 @Component({
   selector: 'app-our-promotions',
@@ -14,17 +17,18 @@ import { Subscription } from 'rxjs';  // ← Add this import
 export class OurPromotionsComponent implements OnInit, AfterViewInit, OnDestroy {
   promoData: any = [];
   id: any; //Getting Promotion id from URL
-  selectedPromotion: any = null;
-  carouselImages: any[] = [];
   userRole: number | null = null;
   private subscription: Subscription | null = null;
+  // Add this for mobile menu collapse
+  isMenuCollapsed = true;
 
   constructor(
+    private modalService: NgbModal,
     private crudService: CrudService,
     private spinner: NgxSpinnerService,
     private actRoute: ActivatedRoute,
     private userRoleService: UserRoleService,
-    public sanitizer: DomSanitizer
+    private cdr: ChangeDetectorRef
   ) { }
 
   ngOnInit() {
@@ -60,116 +64,25 @@ export class OurPromotionsComponent implements OnInit, AfterViewInit, OnDestroy 
         this.spinner.hide();
       });
   }
+
   getImageUrl(path: string): string {
     if (!path) return '';
     // Return CSS background-image URL
     return `url(${encodeURI(path)})`;
   }
 
-  getImageSrc(path: string): string {
-    if (!path) return '';
-    // Return image src URL
-    return encodeURI(path);
-  }
-
-  private prepareCarouselImages(promotion: any): void {
-    this.carouselImages = [];
-
-    // Check if promotion has additional_images array
-    if (promotion.additional_images && Array.isArray(promotion.additional_images) && promotion.additional_images.length > 0) {
-      // Use additional images
-      this.carouselImages = promotion.additional_images;
-    }
-    // Also include main image as first carousel item
-    if (promotion.promo_main_image?.path) {
-      const mainImage = {
-        path: promotion.promo_main_image.path,
-        title: promotion.title || 'Promotion image'
-      };
-      // Add main image at the beginning
-      this.carouselImages = [mainImage, ...this.carouselImages];
-    }
-
-    // If still no images, add a fallback
-    if (this.carouselImages.length === 0) {
-      this.carouselImages = [{
-        path: 'assets/website_images/home/banner/banner_404.webp',
-        title: 'Promotion image'
-      }];
-    }
-  }
-
-  openPromotionModal(promotion: any): void {
-    this.selectedPromotion = promotion;
-    this.prepareCarouselImages(promotion);
-
-    // Small delay to ensure DOM is ready
-    setTimeout(() => {
-      const modalElement = document.getElementById('promo-details');
-      if (modalElement) {
-        // Use Bootstrap's modal instance
-        const modal = new (window as any).bootstrap.Modal(modalElement);
-        modal.show();
-      }
-    }, 50);
-  }
-
-  closeModal(): void {
-    const modalElement = document.getElementById('promo-details');
-    if (modalElement) {
-      const modal = (window as any).bootstrap.Modal.getInstance(modalElement);
-      if (modal) {
-        modal.hide();
-      }
-    }
-    // Manually remove backdrop if it persists
-    this.removeBackdrop();
-  }
-
-  private removeBackdrop(): void {
-    // Remove Bootstrap backdrop
-    const backdrop = document.querySelector('.modal-backdrop');
-    if (backdrop) {
-      backdrop.remove();
-    }
-
-    // Remove modal-open class from body
-    document.body.classList.remove('modal-open');
-
-    // Reset body inline styles
-    document.body.style.overflow = '';
-    document.body.style.paddingRight = '';
-  }
-
-  // Helper methods for template
-  shouldDisplay(field: string, promotion: any): boolean {
-    if (!promotion || !promotion[field]) return false;
-    return promotion[field].toString().toLowerCase() === 'yes';
-  }
-
-  formatDate(dateString: any): string {
-    if (!dateString) return '';
-    try {
-      const date = new Date(dateString);
-      return date.toLocaleDateString('en-US', {
-        month: 'short',
-        day: 'numeric',
-        year: 'numeric'
+  // Open promotion modal
+  openPromotionModal(promoDetailsData: any): void {
+    //this.closeMobileMenu(); // Close mobile menu if open
+    const modalRef = this.modalService.open(PromotepropertyComponent,
+      {
+        size: "lg",
+        centered: true,
+        backdrop: 'static',
+        keyboard: false,
+        windowClass: 'promotion-modal-window'
       });
-    } catch {
-      return String(dateString);
-    }
-  }
-
-  getOfferPrice(promotion: any): string {
-    return promotion.offer_price || '$0';
-  }
-
-  getPropertyUrl(promotion: any): string {
-    return promotion.property_url || '#';
-  }
-
-  getEditUrl(promotion: any): string {
-    return promotion.edit_url || 'https://quote.destinique.com/destin/promotions/';
+    modalRef.componentInstance.promoDetailsData = promoDetailsData;
+    this.cdr.detectChanges();  // Trigger change detection
   }
 }

@@ -1,0 +1,277 @@
+.login-content {
+    background-color: #fff;
+    padding: 0;
+    margin: 0;
+}
+.col-lg-6 {
+    padding: 0;
+    margin: 0;
+}
+.log-in-info {
+    background-image: url(/assets/website_images/login/loginBG.webp);
+    height: 100%;
+    width: 100%;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+.close {
+    font-size: 32px;
+    font-weight: 700;
+    line-height: 1;
+    color: #000;
+    background-color: transparent;
+    cursor: pointer;
+    padding: 0rem 1rem;
+    margin: 1px;
+    width: 100%;
+    text-align: right;
+}
+::ng-deep .close {
+    border: none;
+    background: #000;
+}
+
+.mobile-v {
+    display: none;
+}
+.log-in-destinique-logo-sec {
+    width: 100%;
+}
+.log-in-destinique-logo {
+    padding: 30px 30px 0px 30px;
+    height: 130px;
+    width: auto;
+    margin: 0 auto;
+    display: block;
+}
+.log-in-destinique-text {
+    line-height: 25px;
+    letter-spacing: 13px;
+    font-size: 24px;
+    font-style: normal;
+    font-weight: 600;
+    font-family: 'Montserrat', sans-serif !important;
+    text-transform: uppercase;
+    color: #fff;
+    text-align: center;
+    padding-left: 12px;
+    margin-top: 1rem;
+}
+.log-in-destinique-sub-text {
+    font-weight: 400 !important;
+    color: #fff;
+    text-align: center;
+    font-size: 14px;
+    letter-spacing: 2.4px;
+}
+.log-in-desc-info {
+    padding: 3rem 1.5rem 1.5rem 1.5rem;
+}
+.log-in-desc-info p {
+    color: #fff;
+    font-size: .875rem;
+    line-height: 1.25rem;
+}
+.loginModal {
+    border: 0px solid rgba(0, 0, 0, 0)
+}
+.loginPopup {
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+.loginPopup .form-row .form-group a {
+    color: #bf1212;
+}
+.loginPopup .form-row .form-group {
+    text-align: center;
+}
+.modal-header {
+    border-top-left-radius: 0rem;
+    border-top-right-radius: 0rem;
+    padding: .5rem 0rem 0rem 1rem !important;
+    border: 0px;
+}
+.login-modal-header {
+    background-color: #fff !important;
+    color: #555;
+}
+.login-modal-body {
+    background-color: #fff !important;
+    width: auto;
+    color: #000;
+    padding-top: .5rem;
+}
+#exampleModalLongTitle {
+    text-align: center !important;
+    width: 100%;
+    margin-bottom: 1rem;
+    font-size: 21px;
+    line-height: 2rem;
+}
+.form-input {
+    position: relative;
+}
+.form-input input {
+    background-color: #fff !important;
+    border-color: #e0e0e0 !important;
+    width: 100%;
+    padding: .75rem .75rem .5rem .75rem;
+    margin-bottom: 20px;
+    box-sizing: border-box;
+    box-shadow: none;
+    border: 1px solid #e0e0e0;
+    border-radius: 0px;
+    outline: none;
+    font-size: 15px;
+    line-height: 1.5rem;
+    color: #555;
+    letter-spacing: 1.5px;
+    accent-color: #378f86;
+}
+.form-input span {
+    position: absolute;
+    top: 10px;
+    padding-left: 15px;
+    color: #378f86;
+}
+.form-input input::placeholder {
+    color: #aaa;
+    padding-left: 0px;
+}
+.form-input input:focus,
+.form-input input:valid {
+    border: 1px solid #e0e0e0;
+}
+.form-input input:focus::placeholder {
+    color: #aaa;
+}
+.btn-primary {
+    background: #378f86;
+    background-color: #378f86;
+    color: #fff;
+    border-color: #378f86;
+    padding: 6px 20px;
+    box-shadow: 0 2px 6px 1px rgba(20, 20, 20, 0.48);
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 26px;
+    letter-spacing: 3px;
+    text-decoration: none;
+    transition: 0.5s;
+    border-radius: 0px;
+    text-transform: uppercase;
+}
+.recover-user-url {
+    text-decoration: underline;
+    text-decoration-color: #bf1212;
+
+}
+#recoverID {
+    color: #bf1212 !important;
+    font-size: 13px !important;
+    border-color: #bf1212 !important;
+    margin-top: 12px;
+    margin-bottom: 0;
+    color: #bf1212;
+}
+.modal-footer {
+    justify-content: center;
+    background-color: #fff;
+    border-bottom-left-radius: 0rem;
+    border-bottom-right-radius: 0rem;
+}
+.register-link {
+    color: #378f86 !important;
+}
+
+@media screen and (max-width: 991px) {
+    .close {
+        padding-right: 8px;
+    }
+    .mobile-v {
+        display: block;
+    }
+    .login-modal-header {
+        display: none;
+    }
+    #exampleModalLongTitle {
+        margin-top: 1rem;
+    }
+    .login-content .col-lg-6 {
+        margin-top: -1px;
+    }
+}
+@media screen and (max-width: 768px) {
+    .modal-body {
+        padding: 1rem 0rem;
+    }
+}
+
+/*Consent*/
+.opt-in-text-s {
+    font-size: 12px;
+    color: #495057;
+    max-width: 500px;
+    text-align: justify;
+    padding: 2px 6px;
+}
+.read-more-sms-mms-consent .collapse:not(.show) {
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    height: auto !important;
+    max-width: calc(100% - 80px);
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+.read-more-email-consent .collapse:not(.show) {
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    height: auto !important;
+    max-width: calc(100% - 80px);
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+.read-more-sms-mms-consent .collapse, .read-more-email-consent .collapse {
+    float: left;
+}
+.read-more-sms-mms-consent .collapsing, .read-more-email-consent .collapsing {
+    min-height: 20px !important;
+}
+
+/*
+.read-more-sms-mms-consent a.collapsed:after, .read-more-email-consent a.collapsed:after {
+    content: '+ Read More';
+}
+.read-more-sms-mms-consent a:not(.collapsed):after, .read-more-email-consent a:not(.collapsed):after {
+    content: '- Read Less';
+}
+*/
+
+a.collapsed, .read-more-sms-mms-consent a, .read-more-email-consent a {
+    color: #378f86 !important;
+}
+.read-more-sms-mms-consent a:hover, .read-more-sms-mms-consent a:active, .read-more-sms-mms-consent a:focus, .read-more-email-consent a:hover, .read-more-email-consent a:active, .read-more-email-consent a:focus {
+    color: #6fccc2;
+    text-decoration: underline;
+}
+.f-w-b {
+    font-weight: bold;
+}
+label, .form-row {
+    display: block;
+}
+input {
+    accent-color: #378f86;
+}
+.btn-block {
+    display: block;
+    width: 100%;
+}
+@media (max-width: 600px) {
+    .opt-in-text-s {
+        padding: 2px 15px;
+    }
+}

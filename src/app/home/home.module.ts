@@ -1,5 +1,6 @@
 import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { NgbCarouselModule } from '@ng-bootstrap/ng-bootstrap';
 
 import { HomeRoutingModule } from './home-routing.module';
 import { HomeComponent } from './home.component';
@@ -12,7 +13,6 @@ import { ServiceblockComponent } from './serviceblock/serviceblock.component';
 import { GalleryviewComponent } from './galleryview/galleryview.component';
 import { OurreviewsComponent } from './ourreviews/ourreviews.component';
 import { SocialviewComponent } from './socialview/socialview.component';
-
 
 @NgModule({
   declarations: [
@@ -29,6 +29,7 @@ import { SocialviewComponent } from './socialview/socialview.component';
   ],
   imports: [
     CommonModule,
+    NgbCarouselModule,
     HomeRoutingModule
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]

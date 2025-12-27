@@ -101,12 +101,14 @@ input::placeholder, textarea::placeholder {
 .sms-mms-consent .collapsing, .email-consent .collapsing {
   min-height: 20px !important;
 }
+/*
 .sms-mms-consent a.collapsed:after, .email-consent a.collapsed:after {
   content: '+ Read More';
 }
 .sms-mms-consent a:not(.collapsed):after, .email-consent a:not(.collapsed):after {
   content: '- Read Less';
 }
+*/
 a.collapsed {
   color: #6fccc2;
 }

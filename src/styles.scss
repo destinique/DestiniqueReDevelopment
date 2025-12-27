@@ -1,0 +1,27 @@
+/*
+@import 'bootstrap/scss/bootstrap';
+*/
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+body {
+    font-family: "Montserrat", sans-serif;
+    font-optical-sizing: auto;
+    font-style: normal;
+}
+.toast-custom-top-right {
+  position: fixed !important;
+  top: 20px !important;
+  right: 20px !important;
+  z-index: 999999 !important;
+}
+
+//Adjusting the login modal width
+ngb-modal-window.destinique-login-dialog {
+  --bs-modal-width: 600px !important;
+    z-index: 999999 !important;
+}
+@media screen and (max-width: 600px) {
+    ngb-modal-window.destinique-login-dialog {
+        --bs-modal-width: 320px !important;
+        z-index: 999999 !important;
+    }
+}

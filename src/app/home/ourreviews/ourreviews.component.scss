@@ -3,14 +3,17 @@ hr {
     margin-top: 0rem;
     margin-bottom: 0rem;
 }
+
 .container-fluid {
     background-color: #f0f0f0 !important;
+
     .ss-txt {
         text-align: center;
         vertical-align: middle;
         margin-top: 60px;
         margin-bottom: 100px;
     }
+
     h3 {
         font-size: 53px;
         line-height: 72px;
@@ -21,6 +24,7 @@ hr {
         color: #3b3b3b;
     }
 }
+
 .seeAllBtn {
     background: #378f86 !important;
     background-color: #378f86 !important;
@@ -35,6 +39,7 @@ hr {
     text-decoration: none;
     border: 0px !important;
     transition: 0.5s;
+
     &:hover{
         color: #33d286 !important;
         background: #000 !important;
@@ -42,29 +47,86 @@ hr {
         box-shadow: 0 4px 14px 0 rgba(5, 5, 5, 0.47);
     }
 }
-#ss-slider {
+
+// Background container
+.review-carousel-container {
+    position: relative;
+    min-height: 640px;
+    // Prevents layout shift
+
+    // Loading skeleton animation
+    &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, #e0e0e0 25%, #f0f0f0 37%, #e0e0e0 63%);
+        background-size: 400% 100%;
+        animation: loading 1.4s ease infinite;
+        z-index: 1;
+    }
+
+    &.image-loaded::before {
+        display: none;
+    }
+}
+
+.background-image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: 2;
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out;
+
+    &.loaded {
+        opacity: 1;
+    }
+}
+
+@keyframes loading {
+    0% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0 50%;
+    }
+}
+
+.review-carousel {
     padding: 100px;
-    background-image: url("https://destinique.com/assets/website_images/home/ourreviews/review.webp");
-    background-repeat: no-repeat;
-    background-size: cover;
-    .carousel-item {
-        transition: transform .0s ease-in-out;
-        height: 440px;
-        font-size: 20px;
-        font-weight: 300;
-        line-height: 30px;
-        letter-spacing: 1px;
-        text-transform: none;
-        color: #fff;
+    position: relative;
+    z-index: 3;
+    // Above the background image
+
+    .carousel-inner {
+        overflow: visible;
     }
-    .carousel-item-next, .carousel-item-prev, .carousel-item.active {
-        display: flex;
-    }
+
     .carousel-item-container {
         display: block;
+        max-width: 800px;
+        text-align: center;
+
+        .testimonial-content {
+            margin-bottom: 2rem;
+            font-size: 20px;
+            color: #fff;
+            font-weight: 300;
+        }
+
         .carousel-icon {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
             margin-top: 2rem;
-            p {
+
+            .author-name {
                 font-weight: 100;
                 letter-spacing: 1px;
                 font-size: 30px;
@@ -72,32 +134,156 @@ hr {
                 text-transform: capitalize;
                 font-style: normal;
                 color: #fff;
+                margin: 0;
+                margin-top: 4px;
             }
-            svg {
-                margin-right: .5rem;
-                height: 30px;
-                width: 30px;
+        }
+    }
+
+
+    // Custom arrow styling
+    .carousel-control-prev,
+    .carousel-control-next {
+        width: 5%;
+        opacity: 1;
+
+        .carousel-control-prev-icon,
+        .carousel-control-next-icon {
+            background-color: rgba(0, 0, 0, 0.5);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            background-size: 60% 60%;
+        }
+
+        &:hover {
+            .carousel-control-prev-icon,
+            .carousel-control-next-icon {
+                background-color: rgba(0, 0, 0, 0.7);
+            }
+        }
+    }
+
+    // Custom indicator styling
+    .carousel-indicators {
+        margin-bottom: 1rem;
+
+        button {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            margin: 0 5px;
+            background-color: rgba(255, 255, 255, 0.5);
+
+            &.active {
+                background-color: #378f86;
             }
         }
     }
 }
+
+// Stars styling
+.stars-row {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 4px;
+    margin-bottom: 8px;
+
+    .star-icon {
+        width: 18px;
+        height: 18px;
+        fill: #ffffff;
+        display: inline-block;
+
+        path {
+            fill: #ffffff;
+        }
+    }
+}
+
 @media screen and (max-width: 992px) {
     h3 {
         font-size: 3rem;
         font-weight: 400;
     }
+
+    .review-carousel-container {
+        min-height: 600px;
+    }
 }
+
 @media screen and (max-width: 768px) {
-    .carousel-item {
-        font-size: 16px;
-    }
-    #ss-slider {
+    .review-carousel {
         padding: 60px;
+
+        .carousel-item {
+            font-size: 16px;
+
+            .carousel-item-container {
+                .carousel-icon {
+                    .author-name {
+                        font-size: 24px;
+                        line-height: 32px;
+                    }
+                }
+            }
+        }
+    }
+
+    .review-carousel-container {
+        min-height: 560px;
+    }
+
+    .stars-row {
+        .star-icon {
+            width: 16px;
+            height: 16px;
+        }
     }
 }
+
+@media screen and (max-width: 576px) {
+    .review-carousel-container {
+        min-height: 500px;
+    }
+}
+
 @media screen and (max-width: 410px) {
-    #ss-slider .carousel-item {
+    .review-carousel .carousel-item {
         font-size: 16px;
         line-height: 20px;
+        height: auto;
+        min-height: 440px;
+
+        .carousel-item-container {
+            .carousel-icon {
+                .author-name {
+                    font-size: 20px;
+                    line-height: 26px;
+                }
+            }
+        }
     }
+
+    .review-carousel-container {
+        min-height: 440px;
+    }
+
+    .stars-row {
+        .star-icon {
+            width: 14px;
+            height: 14px;
+        }
+    }
+}
+
+// Fallback for browsers that don't support loading="lazy"
+.no-js .background-image {
+    display: none;
+}
+
+.no-js .review-carousel-container::before {
+    background: #e0e0e0;
+    animation: none;
 }

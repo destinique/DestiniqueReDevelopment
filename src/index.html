@@ -1,161 +1,85 @@
 <!doctype html>
 <html lang="en">
-<head>
-  <!-- ========================================= -->
-  <!-- PERFORMANCE & CACHE HEADERS -->
-  <!-- ========================================= -->
-  <meta http-equiv="Cache-Control" content="public, max-age=31536000">
-  <meta http-equiv="Expires" content="31536000">
-  <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+    <head>
+        <!-- ========================================= -->
+        <!-- PERFORMANCE & CACHE HEADERS -->
+        <!-- ========================================= -->
+        <meta http-equiv="Cache-Control" content="public, max-age=31536000">
+        <meta http-equiv="Expires" content="31536000">
+        <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
 
-  <meta charset="utf-8">
-  <title>Destinique</title>
-  <meta name="description" content="Book luxury villas vacation rentals worldwide with Destinique. Enjoy elite stays, private amenities & personalized travel advice from top luxury Travel advisors.">
-  <meta name="keywords" content="luxury villas for rent, luxury travel agent, hidden villas, oceanfront hotels, beachfront homes.">
+        <meta charset="utf-8">
+        <title>Destinique</title>
+        <meta name="description" content="Book luxury villas vacation rentals worldwide with Destinique. Enjoy elite stays, private amenities & personalized travel advice from top luxury Travel advisors.">
+        <meta name="keywords" content="luxury villas for rent, luxury travel agent, hidden villas, oceanfront hotels, beachfront homes.">
 
-  <base href="/">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="icon" type="image/x-icon" href="https://destinique.com/favicon.ico">
+        <base href="/">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="icon" type="image/x-icon" href="https://destinique.com/favicon.ico">
 
-  <!-- ========================================= -->
-  <!-- SOCIAL META TAGS -->
-  <!-- ========================================= -->
-  <meta property="og:title" content="Luxury Villas Vacation Rentals | Luxury Travel Advisor -Destinique.">
-  <meta property="og:description" content="Book luxury villas vacation rentals worldwide with Destinique. Enjoy elite stays, private amenities & personalized travel advice from top luxury Travel advisors.">
-  <meta property="og:image" content="assets/website_images/home/banner/banner_404.webp">
-  <meta property="og:url" content="https://destinique.com/">
-  <meta property="og:type" content="website">
+        <!-- ========================================= -->
+        <!-- SOCIAL META TAGS -->
+        <!-- ========================================= -->
+        <meta property="og:title" content="Luxury Villas Vacation Rentals | Luxury Travel Advisor -Destinique.">
+        <meta property="og:description" content="Book luxury villas vacation rentals worldwide with Destinique. Enjoy elite stays, private amenities & personalized travel advice from top luxury Travel advisors.">
+        <meta property="og:image" content="assets/website_images/home/banner/banner_404.webp">
+        <meta property="og:url" content="https://destinique.com/">
+        <meta property="og:type" content="website">
 
-  <!-- LOCAL Montserrat (recommended for scores >95) -->
-  <link rel="preload" href="assets/fonts/montserrat-regular.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="preload" href="assets/fonts/montserrat-semibold.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="stylesheet" href="assets/fonts/fonts.css">
+        <!-- LOCAL Montserrat (recommended for scores >95) -->
+        <link rel="preload" href="assets/fonts/montserrat-regular.woff2" as="font" type="font/woff2" crossorigin>
+        <link rel="preload" href="assets/fonts/montserrat-semibold.woff2" as="font" type="font/woff2" crossorigin>
+        <link rel="stylesheet" href="assets/fonts/fonts.css">
 
-  <!-- Preload LCP logo -->
-  <link rel="preload" as="image" href="assets/dest-images/assets/logo.webp" type="image/webp" fetchpriority="high"/>
+        <!-- Preload LCP logo -->
+        <link rel="preload" as="image" href="assets/dest-images/assets/logo.webp" type="image/webp"/>
 
-  <!-- ========================================= -->
-  <!-- LCP IMAGE PRELOAD -->
-  <!-- ========================================= -->
-  <link rel="preload" href="assets/website_images/home/banner/banner_404.webp" as="image" type="image/webp" fetchpriority="high">
+        <!-- ========================================= -->
+        <!-- LCP IMAGE PRELOAD -->
+        <!-- ========================================= -->
+        <link rel="preload" href="assets/website_images/home/banner/banner_404.webp" as="image" type="image/webp" fetchpriority="high">
+    </head>
+    <body>
+        <app-root></app-root>
+        <script>
+          (function () {
+            var allowedHosts = ['destinique.com', 'www.destinique.com'];
 
-  <!-- Preload Bootstrap JS for faster loading when triggered -->
-  <link rel="preload" href="/assets/bootstrap/bootstrap.bundle.min.js" as="script">
-  <!--
-  <link rel="preconnect" href="https://www.googletagmanager.com">
-  <link rel="dns-prefetch" href="https://www.googletagmanager.com">
- -->
+            if (!allowedHosts.includes(window.location.hostname)) {
+              return;
+            }
 
-  <!-- Do NOT preload GA -->
-  <!-- GA will be dynamically loaded on client-side -->
+            var gaLoaded = false;
 
-  <!-- Partytown Init -->
-  <script>
-    window.partytown = {
-      lib: "/partytown/",
-      debug: false,
-      forward: ["dataLayer.push", "gtag"],
-      resolveUrl(url) {
-        if (url.href.includes("fbevents.js")) {
-          return { url: url.href, skipWorker: true };
-        }
-        return url;
-      }
-    };
-  </script>
-  <script src="/partytown/partytown.js"></script>
-  <!-- Facebook Pixel via Partytown -->
+            function loadGA() {
+              if (gaLoaded) return;
+              gaLoaded = true;
 
-  <!-- GA bootstrap (runs inside worker) -->
-  <script type="text/partytown">
-    window.dataLayer = window.dataLayer || [];
-    window.gtag = function () { dataLayer.push(arguments); };
-  </script>
+              var s = document.createElement('script');
+              s.src = 'https://www.googletagmanager.com/gtag/js?id=G-122QQMGN2V';
+              s.async = true;
+              document.head.appendChild(s);
 
-  <!-- GA4 Loader -->
-  <script type="text/partytown" src="https://www.googletagmanager.com/gtag/js?id=G-122QQMGN2V"></script>
+              window.dataLayer = window.dataLayer || [];
+              function gtag(){dataLayer.push(arguments);}
+              window.gtag = gtag;
 
-  <!-- GA4 Config -->
-  <script type="text/partytown">
-    if (location.hostname === "destinique.com") {
-      gtag('js', new Date());
-      gtag('config', 'G-122QQMGN2V', { send_page_view: true });
-    }
-  </script>
+              gtag('js', new Date());
+              gtag('config', 'G-122QQMGN2V', { send_page_view: true });
+            }
 
-  <script type="text/partytown">
-    console.log("Partytown: GA loaded", location.hostname);
-  </script>
-</head>
-<body>
-<noscript>
-  <img height="1" width="1"
-       style="display:none"
-       src="https://www.facebook.com/tr?id=1706147529981140&ev=PageView&noscript=1"/>
-</noscript>
+            // Load GA on first user interaction (best for mobile)
+            ['touchstart', 'scroll', 'keydown', 'click'].forEach(function (event) {
+              window.addEventListener(event, loadGA, { once: true, passive: true });
+            });
 
-<app-root></app-root>
-<script>
-  let bootstrapLoaded = false;
-
-  function loadBootstrap() {
-    if (bootstrapLoaded) return;
-    bootstrapLoaded = true;
-
-    const script = document.createElement('script');
-    script.src = '/assets/bootstrap/bootstrap.bundle.min.js';
-    script.defer = true;
-    script.async = true;
-
-    // Add error handling
-    script.onerror = () => {
-      console.warn('Bootstrap failed to load, retrying...');
-      loadBootstrapFallback();
-    };
-
-    script.onload = () => {
-      console.log('Bootstrap JS loaded successfully');
-      initBootstrapComponents();
-    };
-
-    document.body.appendChild(script);
-  }
-
-  function loadBootstrapFallback() {
-    // CDN fallback if local fails
-    const fallback = document.createElement('script');
-    fallback.src = 'https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js';
-    fallback.integrity = 'sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz';
-    fallback.crossOrigin = 'anonymous';
-    fallback.defer = true;
-    document.body.appendChild(fallback);
-  }
-
-  function initBootstrapComponents() {
-    // Initialize any Bootstrap JS components that need it
-    // Tooltips, popovers, etc.
-    // const tooltips = document.querySelectorAll('[data-bs-toggle="tooltip"]');
-    // if (tooltips.length > 0 && window.bootstrap) {
-    //   [...tooltips].forEach(el => new bootstrap.Tooltip(el));
-    // }
-  }
-
-  // Load when user interacts with UI
-  window.addEventListener('click', loadBootstrap, { once: true });
-  window.addEventListener('touchstart', loadBootstrap, { once: true });
-  window.addEventListener('scroll', loadBootstrap, { once: true });
-  window.addEventListener('keydown', loadBootstrap, { once: true });
-
-  // Optional: direct navbar click trigger
-  document.addEventListener('DOMContentLoaded', () => {
-    const navbar = document.querySelector('.navbar');
-    if (navbar) {
-      navbar.addEventListener('click', loadBootstrap, { once: true });
-    }
-  });
-
-  // Safety net: Load after 3 seconds if not already loaded
-  setTimeout(loadBootstrap, 3000);
-</script>
-</body>
+            // Fallback: load GA when browser is idle
+            if ('requestIdleCallback' in window) {
+              requestIdleCallback(loadGA, { timeout: 3000 });
+            } else {
+              setTimeout(loadGA, 3000);
+            }
+          })();
+        </script>
+    </body>
 </html>

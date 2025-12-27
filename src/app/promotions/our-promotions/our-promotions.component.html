@@ -34,7 +34,7 @@
             <div class="promotions-item">
                 <a href="#"
                    [ngStyle]="{'background-image': getImageUrl(item.promo_main_image?.path)}"
-                   class="promotions-link" data-bs-toggle="modal" data-bs-target="#promo-details"
+                   class="promotions-link"
                    (click)="openPromotionModal(item); $event.preventDefault()"
                 >
                   <div class="promotions-info">
@@ -47,9 +47,6 @@
                 </a>
 
                 <div class="b-b">
-                  <!--
-                    <button class="promotions-button" data-bs-toggle="modal" data-bs-target="#promo-details">
-                      -->
                       <button class="promotions-button btn btn-outline-primary btn-sm"
                               (click)="openPromotionModal(item)">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-box-arrow-up-right" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5"/><path fill-rule="evenodd" d="M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0z"/></svg>
@@ -82,101 +79,4 @@
             </div>
         </div>
     </div>
-</div>
-
-
-<!-- SINGLE MODAL for all promotions -->
-<div class="modal fade" id="promo-details" tabindex="-1" aria-labelledby="promoModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered modal-lg">
-    <div class="modal-content border-0 shadow-lg" style="background-color: transparent;">
-      <!-- Modal Header -->
-      <!--
-      <div class="modal-header bg-primary text-white">
-        <h5 class="modal-title" id="promoModalLabel">
-          <i class="fas fa-percent me-2"></i>
-          Promotion Details
-        </h5>
-        <button type="button" class="btn-close btn-close-white" (click)="closeModal()" data-bs-dismiss="modal"></button>
-      </div>
-      -->
-      <!-- Modal Body -->
-      <div class="modal-body p-0" *ngIf="selectedPromotion">
-            <!--
-            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-            -->
-            <button type="button" class="btn-close btn-close-white" (click)="closeModal()" data-bs-dismiss="modal"></button>
-            <!-- Carousel Section -->
-           <div *ngIf="carouselImages.length > 0" class="carousel-section">
-              <div id="promoCarousel" class="carousel slide" data-bs-ride="carousel">
-                <!-- Indicators/dots -->
-                <div class="carousel-indicators">
-                  <button *ngFor="let img of carouselImages; let i = index"
-                          type="button"
-                          data-bs-target="#promoCarousel"
-                          [attr.data-bs-slide-to]="i"
-                          [class.active]="i === 0"
-                          [attr.aria-label]="'Slide ' + (i + 1)">
-                  </button>
-                </div>
-
-                <!-- The slideshow/Carousel Items -->
-                <div class="carousel-inner">
-                  <div *ngFor="let img of carouselImages; let i = index"
-                       class="carousel-item"
-                       [class.active]="i === 0">
-                    <img [src]="getImageSrc(img.path)"
-                         [alt]="img.title || selectedPromotion.title"
-                         class=" img-fluid d-block w-100"
-                         style="height: 400px; object-fit: cover;"
-                         loading="lazy" decoding="async">
-                  </div>
-                </div>
-
-                <!-- Left and right controls/icons -->
-                <button class="carousel-control-prev" type="button" data-bs-target="#promoCarousel" data-bs-slide="prev">
-                  <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                  <span class="visually-hidden">Previous</span>
-                </button>
-                <button class="carousel-control-next" type="button" data-bs-target="#promoCarousel" data-bs-slide="next">
-                  <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                  <span class="visually-hidden">Next</span>
-                </button>
-              </div>
-           </div>
-
-          <!-- Promotion Details Section -->
-          <div class="promo-details-con">
-              <span class="m-term" *ngIf="(selectedPromotion.display_location | lowercase) === 'yes'">
-                  {{selectedPromotion.location}}
-              </span>
-              <div class="m-top">
-                  <div class="m-period" *ngIf="(selectedPromotion.display_travel_date | lowercase) === 'yes'">
-                      Travel date: {{selectedPromotion.travel_start_date  | date:'MMMM d'}}
-                      <span class="modal-content-date-to"> to </span>
-                      {{selectedPromotion.travel_end_date | date:'MMMM d'}}
-                  </div>
-                  <h2 class="m-title" *ngIf="(selectedPromotion.display_title | lowercase) === 'yes'" [innerHTML]="selectedPromotion.title"></h2>
-              </div>
-              <div *ngIf="selectedPromotion.description"
-                  class="m-desc"
-                  [innerHTML]="selectedPromotion.description"
-              ></div>
-              <!-- <div class="m-discount">$13,000</div> -->
-              <div class="m-top">
-                  <div *ngIf="(selectedPromotion.display_offer_date | lowercase) === 'yes'" class="m-period">
-                      Offer date: {{selectedPromotion.offer_start_date  | date:'MMMM d'}}
-                      <span class="modal-content-date-to"> to </span>
-                      {{selectedPromotion.offer_end_date  | date:'MMMM d'}}
-                  </div>
-              </div>
-              <div class="m-details-url">
-                  <a target="_blank" [attr.href]=" selectedPromotion.cta_button ? selectedPromotion.cta_button : 'https://destinique.com/property/'+selectedPromotion.list_id">{{selectedPromotion.cta_btn_txt}}</a>
-              </div>
-              <div *ngIf="userRole == 1 || userRole == 2" class="m-details-url" style="margin-top: 20px;">
-                <a target="_blank" [attr.href]="selectedPromotion.backed_promotion_link">Backend Promotions APP</a>
-              </div>
-          </div>
-      </div>
-    </div>
-  </div>
 </div>

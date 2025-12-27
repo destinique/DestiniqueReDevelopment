@@ -1,0 +1,126 @@
+
+<div class="row login-content">
+    <div class="col-lg-6">
+        <div class="log-in-info">
+            <span aria-hidden="true" class="close mobile-v"  (click)="activeModal.dismiss('Cross click')">&times;</span>
+
+            <div class="log-in-destinique-logo-sec">
+                <img class="log-in-destinique-logo" src="assets/website_images/login/logo.png">
+                    <div class="log-in-destinique-text">Destinique</div>
+                    <div class="log-in-destinique-sub-text">Luxury Rental Travel Advisors</div>
+            </div>
+
+            <div class="log-in-desc-info">
+                <p>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-star-fill" viewBox="0 0 16 16"><path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"/></svg>
+                    Save Your Favorites Homes and Villas
+                </p>
+
+                <p>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-star-fill" viewBox="0 0 16 16"><path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"/></svg>
+                    Receive Our Newsletters
+                </p>
+
+                <p>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-star-fill" viewBox="0 0 16 16"><path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"/></svg>
+                    Get Updated On Our Promotions
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-6">
+        <div class="loginModal">
+            <div class="loginPopup">
+                <div class="modal-header login-modal-header">
+
+                    <div aria-hidden="true" class="close" (click)="activeModal.dismiss('Cross click')">&times;</div>
+                </div>
+                <div class="modal-body login-modal-body">
+                    <div class="container">
+                        <h5 class="text-center" id="exampleModalLongTitle">DESTINIQUE - Sign In</h5>
+                        <form autocomplete="off">
+                            <div class="form-input">
+                                <input type="text" placeholder="USERNAME OR EMAIL" required>
+                            </div>
+                            <div class="invalid-feedback" ></div>
+                            <div class="form-input">
+                                <input type="password" placeholder="PASSWORD" required>
+                            </div>
+                            <div class="invalid-feedback"></div>
+                            <div class="row">
+                                <div class="col-12 opt-in-text-s ">
+                                    <label for="SMS_MMS_Consent">
+                                        <div class="read-more-sms-mms-consent">
+                                            <div [ngbCollapse]="isSmsConsentCollapsed" class="collapse" id="read-more-sms-mms-consent">
+                                                <input type="checkbox" id="SMS_MMS_Consent" name="SMS_MMS_Consent" value="Bike" checked>
+                                                <span class="f-w-b"> SMS/MMS Consent:</span>
+                                                "I agree to receive text (SMS/MMS) messages from Destinique at the number provided. Messages will primarily be one-on-one conversations related to vacation rental inquiries, property availability, and notifications about quote updates. Occasional promotional messages may also be sent. Some messages may include images or videos. We do not share mobile opt-in information with third parties unrelated to Destinique. Message & data rates may apply. Message frequency varies. Text reply STOP to cancel. Reply HELP to get help."
+                                            </div>
+
+                                            <!-- Toggle link - REPLACED -->
+                                            <a href="javascript:void(0)"
+                                               class="collapsed toggle-link"
+                                               (click)="isSmsConsentCollapsed = !isSmsConsentCollapsed"
+                                               [attr.aria-expanded]="!isSmsConsentCollapsed"
+                                               aria-controls="read-more-sms-mms-consent">
+                                              {{ isSmsConsentCollapsed ? '+ Read More' : '- Read Less' }}
+                                            </a>
+                                        </div>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-12 opt-in-text-s">
+                                    <label for="Email_Consent">
+                                        <div class="read-more-email-consent">
+                                            <div [ngbCollapse]="isEmailConsentCollapsed" class="collapse" id="read-more-email-consent">
+                                                <input type="checkbox" id="Email_Consent" name="Email_Consent" value="Bike" checked>
+                                                    <span class="f-w-b"> Email Consent:</span>
+                                                    "I agree to receive emails from Destinique. Email Frequency varies and will include vacation rental updates, responses to questions, quotes, booking information, exclusive travel deals, and property recommendations. I understand I can unsubscribe at any time via the unsubscribe link in any email."
+                                            </div>
+                                            <a href="javascript:void(0)"
+                                               class="collapsed toggle-link"
+                                               (click)="isEmailConsentCollapsed = !isEmailConsentCollapsed"
+                                               [attr.aria-expanded]="!isEmailConsentCollapsed"
+                                               aria-controls="read-more-email-consent">
+                                              {{ isEmailConsentCollapsed ? '+ Read More' : '- Read Less' }}
+                                            </a>
+                                        </div>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div class="row ">
+                                <div class="col-12 opt-in-text-s mb-3">
+                                    View our [<a [routerLink]="['/terms-and-conditions']" target="_blank">Terms of Service</a>] and
+                                    [<a [routerLink]="['/privacypolicies']" target="_blank" >Privacy Policy</a>].
+                                </div>
+                            </div>
+                            <button  class="btn btn-primary btn-block">
+                                Login
+                            </button>
+
+                            <div class="row">
+                                <div class="col-12">
+                                    <a class="recover-user-url" href="#">
+                                        <p id="recoverID">
+                                            Recover Username or Passsword?
+                                        </p>
+                                    </a>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="modal-footer text-center">
+                    Don't have an account?
+                    <a class="register-link" href="#">
+                        Register here
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

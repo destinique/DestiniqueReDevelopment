@@ -13,7 +13,7 @@ import { ToastrModule } from 'ngx-toastr';
   declarations: [DestFooterComponent, FeedbackviewComponent],
   imports: [
     ToastrModule.forRoot({
-      timeOut: 90000,
+      timeOut: 7000,
       // positionClass: 'toast-top-right',
       positionClass: 'toast-custom-top-right', // Custom class
       toastClass: 'ngx-toastr', // Ensure proper class

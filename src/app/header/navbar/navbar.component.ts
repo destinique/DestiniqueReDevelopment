@@ -1,10 +1,14 @@
-// navbar.component.ts
 import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Router, ActivatedRoute } from "@angular/router";
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Subscription } from 'rxjs';
 import { UserLoginComponent } from '../../login/user-login/user-login.component';
 import { AuthService } from '../../services/auth.service';
 import { UserRoleService } from '../../services/user-role.service';
+
+import { CrudService } from "src/app/shared/crud.service";
+import { NgxSpinnerService } from "ngx-spinner";
+import { ToastrService } from "ngx-toastr";
 
 @Component({
   selector: 'app-navbar',
@@ -26,11 +30,96 @@ export class NavbarComponent implements OnInit, OnDestroy {
   private roleSubscription: Subscription | null = null;
   public userLoggedIn = true;
 
+  //search form in the header menu
+  public propertyNumber: any;
+
   constructor(
+    private router: Router,
+    private route: ActivatedRoute,
+    private crudService: CrudService,
     private modalService: NgbModal,
     private authService: AuthService,
-    private userRoleService: UserRoleService
+    private userRoleService: UserRoleService,
+    private spinner: NgxSpinnerService,
+    private toast: ToastrService
   ) {}
+
+
+  showSuccess() {
+    this.toast.success('Operation completed!', 'Success');
+  }
+
+  showError() {
+    this.toast.error('Something went wrong!', 'Error');
+  }
+
+  showWarning() {
+    this.toast.warning('Please check your input', 'Warning');
+  }
+
+  showInfo() {
+    this.toast.info('New update available', 'Information');
+  }
+
+  search() {
+    const propertyId = parseInt(this.propertyNumber);
+
+    // Validate input
+    if (isNaN(propertyId)) {
+      this.toast.error('Please enter a valid Property ID number', 'Invalid Input');
+      return;
+    }
+
+    this.spinner.show();
+
+    this.crudService.getPropertyDetails(propertyId).subscribe({
+      next: (resp: any) => {
+        this.spinner.hide();
+
+        if (resp?.length > 0) {
+          const listId = resp[0].list_id;
+          /*
+          // check if the url is on /property/ then reload
+          if (window.location.href.includes('/property/')){
+            this.router.navigateByUrl("/property/" + resp[0].list_id);
+            setTimeout(() => {
+              window.location.replace(window.location.href);
+            }, 0);
+          }
+          else{
+            this.router.navigateByUrl("/property/" + resp[0].list_id);
+          }
+          */
+
+          if (window.location.href.includes('/property/')) {
+            this.router.navigate(['/property', listId]).then(() => {
+              window.location.reload();
+            });
+          } else {
+            this.router.navigate(['/property', listId]);
+          }
+        } else {
+          this.showPropertyError();
+        }
+      },
+      error: () => {
+        this.spinner.hide();
+        this.showPropertyError();
+      }
+    });
+  }
+
+  private showPropertyError() {
+    this.toast.error(
+      'This property is no longer online. Please call 850-312-5400 for further assistance',
+      'Property Not Found',
+      {
+        tapToDismiss: true,
+        timeOut: 0,
+        positionClass: 'toast-top-center'
+      }
+    );
+  }
 
   ngOnInit(): void {
     // Subscribe to authentication state changes

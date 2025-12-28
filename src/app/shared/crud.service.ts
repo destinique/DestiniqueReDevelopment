@@ -24,6 +24,27 @@ export class CrudService {
     );
   }
 
+  getPropertyDetails(id: string | number) {
+    const currentUser = localStorage.getItem("currentUser");
+
+    if (currentUser) {
+      try {
+        const userData = JSON.parse(currentUser);
+        const headers = {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${userData.token}`
+        };
+        return this.http.get(`${this.baseUrl}showPropertyDetails.php?propId=${id}`, { headers });
+      } catch (error) {
+        console.error('Error parsing user data:', error);
+        // Fallback to unauthenticated request
+        return this.http.get(`${this.baseUrl}showPropertyDetails.php?propId=${id}`);
+      }
+    } else {
+      return this.http.get(`${this.baseUrl}showPropertyDetails.php?propId=${id}`);
+    }
+  }
+
   getDestinationData(): Observable<any> {
       return this.http.get(this.destinationAPIUrl);
   }

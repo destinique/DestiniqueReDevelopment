@@ -12,9 +12,8 @@ export class UserhomeComponent implements AfterViewInit{
   ) { }
   ngAfterViewInit() {
     this.spinner.show();
-    const self = this;  // Store reference to component instance
-    setTimeout(function () {
-      self.spinner.hide();
-    }, 800)
+    setTimeout(() => {  // Arrow function preserves 'this' context
+      this.spinner.hide();
+    }, 500);
   }
 }

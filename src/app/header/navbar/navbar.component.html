@@ -82,7 +82,6 @@
 
             <ul class="navbar-nav mb-2 mb-lg-0 ms-auto">
                 <li class="nav-item">
-                    <form class="end-0" (submit)="$event.preventDefault()">
                         <!-- TOP CONTACT BAR - Desktop only -->
                         <div class="topbar d-flex justify-content-end align-items-center ps-4 py-2 text-white web-contact">
                             <a href="https://wa.me/18503125400" target="blank" class="dest-call">
@@ -91,13 +90,18 @@
                         </div>
 
                         <div class="d-flex align-items-center">
-                            <div class="input-group me-2">
-                                <input type="text" class="form-control nav-search-box" placeholder="SEARCH BY PROPERTY ID">
-                                <button class="btn btn-success nav-search-btn" type="submit">
-                                    <img class="nav-search" src="assets/icons/magnifying-glass-solid.svg" alt="search">
-                                </button>
-                            </div>
-
+                            <form
+                              (ngSubmit)="search()"
+                              class="form-inline end-0"
+                              autocomplete="off"
+                            >
+                              <div class="input-group me-2">
+                                  <input [(ngModel)]="propertyNumber" name="propertyNumber" type="text" class="form-control nav-search-box" placeholder="SEARCH BY PROPERTY ID">
+                                  <button class="btn btn-success nav-search-btn" type="submit">
+                                      <img class="nav-search" src="assets/icons/magnifying-glass-solid.svg" alt="search">
+                                  </button>
+                              </div>
+                            </form>
                             <!-- USER DROPDOWN - FIXED -->
                             <div ngbDropdown class="dropdown" placement="bottom-end">
                                 <button type="button" class="btn btn-primary dropdown-toggle user-btn" ngbDropdownToggle
@@ -135,7 +139,6 @@
                                 </div>
                             </div>
                         </div>
-                    </form>
                 </li>
             </ul>
         </div>

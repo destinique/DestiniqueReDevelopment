@@ -13,6 +13,7 @@ import { ServiceblockComponent } from './serviceblock/serviceblock.component';
 import { GalleryviewComponent } from './galleryview/galleryview.component';
 import { OurreviewsComponent } from './ourreviews/ourreviews.component';
 import { SocialviewComponent } from './socialview/socialview.component';
+import {NgxSpinnerModule} from "ngx-spinner";
 
 @NgModule({
   declarations: [
@@ -30,7 +31,8 @@ import { SocialviewComponent } from './socialview/socialview.component';
   imports: [
     CommonModule,
     NgbCarouselModule,
-    HomeRoutingModule
+    HomeRoutingModule,
+    NgxSpinnerModule
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })

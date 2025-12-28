@@ -9,6 +9,9 @@ import { NgxSpinnerService } from "ngx-spinner";
 })
 export class TestimonialsComponent implements OnInit {
   allFeedbacks: any = [];
+  isSmsConsentCollapsed = true;
+  isEmailConsentCollapsed = true;
+
   constructor(private crudService: CrudService,
               private spinner: NgxSpinnerService) {
   }

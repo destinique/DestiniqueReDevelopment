@@ -106,32 +106,46 @@
                         <div class="row">
                             <div class="col-12 opt-in-text-s">
                                 <label for="SMS_MMS_Consent">
-                                    <div class="sms-mms-consent">
-                                        <div class="collapse" id="sms-mms-consent">
-                                            <input type="checkbox" id="SMS_MMS_Consent" name="SMS_MMS_Consent" value="Bike" checked><span class="fw-bold"> SMS/MMS Consent: </span>
-                                                "I agree to receive text (SMS/MMS) messages from Destinique at the number provided. Messages will primarily be one-on-one conversations related to vacation rental inquiries, property availability, and notifications about quote updates. Occasional promotional messages may also be sent. Some messages may include images or videos. We do not share mobile opt-in information with third parties unrelated to Destinique. Message & data rates may apply. Message frequency varies. Text reply STOP to cancel. Reply HELP to get help."
-                                        </div>
-                                        <a class="collapsed" data-bs-toggle="collapse" href="#sms-mms-consent" aria-expanded="false" aria-controls="sms-mms-consent"></a>
+                                  <div class="sms-mms-consent">
+                                    <div [ngbCollapse]="isSmsConsentCollapsed" class="collapse" id="sms-mms-consent">
+                                      <input type="checkbox" id="SMS_MMS_Consent" name="SMS_MMS_Consent" value="Bike" checked><span class="fw-bold"> SMS/MMS Consent: </span>
+                                      "I agree to receive text (SMS/MMS) messages from Destinique at the number provided. Messages will primarily be one-on-one conversations related to vacation rental inquiries, property availability, and notifications about quote updates. Occasional promotional messages may also be sent. Some messages may include images or videos. We do not share mobile opt-in information with third parties unrelated to Destinique. Message & data rates may apply. Message frequency varies. Text reply STOP to cancel. Reply HELP to get help."
                                     </div>
+                                    <!-- Toggle link - REPLACED -->
+                                    <a href="javascript:void(0)"
+                                       class="collapsed toggle-link"
+                                       (click)="isSmsConsentCollapsed = !isSmsConsentCollapsed"
+                                       [attr.aria-expanded]="!isSmsConsentCollapsed"
+                                       aria-controls="sms-mms-consent">
+                                      {{ isSmsConsentCollapsed ? '+ Read More' : '- Read Less' }}
+                                    </a>
+                                  </div>
                                 </label>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-12 opt-in-text-s">
                                 <label for="Email_Consent">
-                                    <div class="email-consent">
-                                        <div class="collapse" id="email-consent">
-                                            <input type="checkbox" id="Email_Consent" name="Email_Consent" value="Bike" checked><span class="fw-bold"> Email Consent:</span>
-                                                "I agree to receive emails from Destinique. Email Frequency varies and will include vacation rental updates, responses to questions, quotes, booking information, exclusive travel deals, and property recommendations. I understand I can unsubscribe at any time via the unsubscribe link in any email."
-                                        </div>
-                                        <a class="collapsed" data-bs-toggle="collapse" href="#email-consent" aria-expanded="false" aria-controls="email-consent"></a>
+                                  <div class="email-consent">
+                                    <div [ngbCollapse]="isEmailConsentCollapsed" class="collapse" id="email-consent">
+                                      <input type="checkbox" id="Email_Consent" name="Email_Consent" value="Bike" checked><span class="fw-bold"> Email Consent:</span>
+                                      "I agree to receive emails from Destinique. Email Frequency varies and will include vacation rental updates, responses to questions, quotes, booking information, exclusive travel deals, and property recommendations. I understand I can unsubscribe at any time via the unsubscribe link in any email."
                                     </div>
+                                    <a href="javascript:void(0)"
+                                       class="collapsed toggle-link"
+                                       (click)="isEmailConsentCollapsed = !isEmailConsentCollapsed"
+                                       [attr.aria-expanded]="!isEmailConsentCollapsed"
+                                       aria-controls="email-consent">
+                                      {{ isEmailConsentCollapsed ? '+ Read More' : '- Read Less' }}
+                                    </a>
+                                  </div>
                                 </label>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-12 opt-in-text-s">
-                                View our [<a class="link-primary" href="#">Terms of Service</a>] and [<a class="link-primary" href="#">Privacy Policy</a>].
+                                View our [<a class="link-primary" [routerLink]="['/terms-and-conditions']" target="_blank">Terms of Service</a>]
+                                     and [<a class="link-primary" [routerLink]="['/privacypolicies']" target="_blank">Privacy Policy</a>].
                             </div>
                         </div>
 

@@ -15,6 +15,6 @@ export class UserhomeComponent implements AfterViewInit{
     const self = this;  // Store reference to component instance
     setTimeout(function () {
       self.spinner.hide();
-    }, 2000)
+    }, 800)
   }
 }

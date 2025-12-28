@@ -3,6 +3,8 @@ import { CommonModule } from '@angular/common';
 import {NgxSpinnerModule} from "ngx-spinner";
 import { TestimonialsRoutingModule } from './testimonials-routing.module';
 import { TestimonialsComponent } from './testimonials/testimonials.component';
+import {RouterModule} from "@angular/router";
+import {NgbCollapseModule} from '@ng-bootstrap/ng-bootstrap';
 
 @NgModule({
   declarations: [
@@ -10,6 +12,8 @@ import { TestimonialsComponent } from './testimonials/testimonials.component';
   ],
   imports: [
     CommonModule,
+    RouterModule,
+    NgbCollapseModule,
     TestimonialsRoutingModule,
     NgxSpinnerModule
   ]

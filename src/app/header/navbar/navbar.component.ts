@@ -62,11 +62,15 @@ export class NavbarComponent implements OnInit, OnDestroy {
   }
 
   search() {
-    const propertyId = parseInt(this.propertyNumber);
-
+    const propertyId = parseInt(this.propertyNumber.trim());
     // Validate input
     if (isNaN(propertyId)) {
       this.toast.error('Please enter a valid Property ID number', 'Invalid Input');
+      return;
+    }
+
+    if (propertyId <= 0) {
+      this.toast.error('Please enter a valid positive Property ID', 'Invalid Input');
       return;
     }
 

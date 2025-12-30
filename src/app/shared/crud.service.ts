@@ -24,6 +24,7 @@ export class CrudService {
     );
   }
 
+  /*
   getPropertyDetails(id: string | number) {
     const currentUser = localStorage.getItem("currentUser");
 
@@ -43,6 +44,38 @@ export class CrudService {
     } else {
       return this.http.get(`${this.baseUrl}showPropertyDetails.php?propId=${id}`);
     }
+  }
+  */
+
+  getPropertyDetails(id: string | number): Observable<any> {
+    try {
+      const currentUserStr = localStorage.getItem("currentUser");
+
+      if (!currentUserStr) {
+        return this.makeUnauthenticatedRequest(id);
+      }
+
+      const userData = JSON.parse(currentUserStr);
+
+      if (!userData?.token) {
+        console.warn('User data exists but token is missing');
+        return this.makeUnauthenticatedRequest(id);
+      }
+
+      const headers = {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${userData.token}`
+      };
+
+      return this.http.get(`${this.baseUrl}showPropertyDetails.php?propId=${id}`, { headers });
+    } catch (error) {
+      console.error('Error processing authentication:', error);
+      return this.makeUnauthenticatedRequest(id);
+    }
+  }
+
+  private makeUnauthenticatedRequest(id: string | number): Observable<any> {
+    return this.http.get(`${this.baseUrl}showPropertyDetails.php?propId=${id}`);
   }
 
   getDestinationData(): Observable<any> {

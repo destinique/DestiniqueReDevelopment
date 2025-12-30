@@ -20,6 +20,8 @@
             "outputPath": "dist/destinique/browser",
             "index": "src/index.html",
             "main": "src/main.ts",
+            "baseHref": "/",
+            "deployUrl": "/",
             "polyfills": [
               "zone.js"
             ],

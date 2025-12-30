@@ -32,20 +32,93 @@
                     <h2 class="destinique-second-sub">Luxury vacation rentals, private villas, and curated resort stays — handpicked by expert travel advisors.</h2>
                 </div>
 
-
-
                 <div class="container">
                     <div class="row two-path-layout">
                         <div class="col-md-6 col-sm-12">
                             <h3>Where Are You Headed?</h3>
-                            <div class="input-group mb-3">
-                                <input type="text" class="form-control" placeholder="Enter Destination...">
-                                <div class="input-group-append">
-                                    <button class="btn btn-success" type="submit">
-                                        <svg width="24" height="24" fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640"><path d="M480 272C480 317.9 465.1 360.3 440 394.7L566.6 521.4C579.1 533.9 579.1 554.2 566.6 566.7C554.1 579.2 533.8 579.2 521.3 566.7L394.7 440C360.3 465.1 317.9 480 272 480C157.1 480 64 386.9 64 272C64 157.1 157.1 64 272 64C386.9 64 480 157.1 480 272zM272 416C351.5 416 416 351.5 416 272C416 192.5 351.5 128 272 128C192.5 128 128 192.5 128 272C128 351.5 192.5 416 272 416z"/></svg>
-                                    </button>
+                            <form [formGroup]="searchForm" (ngSubmit)="search()" autocomplete="off" class="search-form">
+                            <div class="input-group search-container">
+                              <input
+                                #cityInput
+                                type="text"
+                                class="form-control"
+                                [class.loading]="isLoadingAutocomplete"
+                                [placeholder]="isLoadingAutocomplete ? 'Loading suggestions...' : 'Search Destination'"
+                                formControlName="City"
+                                style="font-family: 'Ripple', 'FontAwesome'"
+                                [attr.disabled]="isLoadingAutocomplete ? true : null"
+                                autocomplete="off"
+                                aria-label="Search destination city"
+                                (input)="onCityInput($event)"
+                                (focus)="onCityFocus()"
+                                (blur)="onCityBlur()"
+
+                              />
+
+                              <!-- Fallback datalist for when Google Maps fails -->
+                              <datalist id="city-suggestions-fallback">
+                                <option value="Destin, FL">
+                                <option value="Panama City, FL">
+                                <option value="Pensacola, FL">
+                                <option value="Miami, FL">
+                                <option value="Orlando, FL">
+                                <option value="Tampa, FL">
+                                <option value="Gulf Shores, AL">
+                                <option value="Orange Beach, AL">
+                              </datalist>
+
+                              <div class="input-group-append">
+                                <button class="btn btn-success" type="submit" [disabled]="searchForm.invalid || isLoadingAutocomplete" aria-label="Search">
+                                  <svg width="24" height="24" fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640">
+                                    <path d="M480 272C480 317.9 465.1 360.3 440 394.7L566.6 521.4C579.1 533.9 579.1 554.2 566.6 566.7C554.1 579.2 533.8 579.2 521.3 566.7L394.7 440C360.3 465.1 317.9 480 272 480C157.1 480 64 386.9 64 272C64 157.1 157.1 64 272 64C386.9 64 480 157.1 480 272zM272 416C351.5 416 416 351.5 416 272C416 192.5 351.5 128 272 128C192.5 128 128 192.5 128 272C128 351.5 192.5 416 272 416z"/>
+                                  </svg>
+                                </button>
+                              </div>
+
+                              <!-- Custom dropdown for place predictions -->
+                              <div *ngIf="showPredictions && placePredictions.length > 0" class="city-dropdown">
+                                <div
+                                  class="autocomplete-item"
+                                  *ngFor="let prediction of placePredictions"
+                                  (mousedown)="selectPrediction(prediction)"
+                                  (touchstart)="selectPrediction(prediction)"
+                                >
+                                  <div class="prediction-main">{{ prediction.structured_formatting.main_text }}</div>
+                                  <div class="prediction-secondary">{{ prediction.structured_formatting.secondary_text }}</div>
                                 </div>
+                              </div>
                             </div>
+
+                            <!-- Loading indicator -->
+                            <div *ngIf="isLoadingAutocomplete && !placePredictions.length" class="loading-indicator">
+                              <small class="text-muted">Loading city suggestions...</small>
+                            </div>
+
+                            <!-- Selected city display (optional) -->
+                              <!--
+                            <div *ngIf="selectedCityName" class="selected-city">
+                              <small>Selected: <strong>{{ selectedCityName }}</strong></small>
+                            </div>
+                              -->
+
+                              <!-- Add after the form -->
+                              <div *ngIf="selectedLocation" class="location-details">
+                                <div class="selected-city">
+                                  <small>Selected: <strong>{{ selectedLocation.city }}</strong></small>
+                                  <small>formattedAddress: <strong>{{ selectedLocation.formattedAddress }}</strong></small>
+                                  <div *ngIf="selectedLocation.state || selectedLocation.country" class="location-meta">
+                                    <span *ngIf="selectedLocation.state">{{ selectedLocation.state }}</span>
+                                    <span *ngIf="selectedLocation.state && selectedLocation.country">, </span>
+                                    <span *ngIf="selectedLocation.country">{{ selectedLocation.country }}</span>
+                                  </div>
+                                  <div *ngIf="selectedLocation.latitude && selectedLocation.longitude" class="coordinates">
+                                    <small>Coordinates: {{ selectedLocation.latitude | number:'1.4-4' }}, {{ selectedLocation.longitude | number:'1.4-4' }}</small>
+                                  </div>
+                                </div>
+                              </div>
+
+
+                          </form>
                         </div>
                         <div class="col-md-6 two-path-2nd-layout" style="border-left: 2px solid #fff !important;">
                             <h3 class="two-path-layout-2nd-h3">Request Expert Travel Help</h3>

@@ -163,7 +163,7 @@
 .recover-user-url {
     text-decoration: underline;
     text-decoration-color: #bf1212;
-
+    cursor: pointer;
 }
 #recoverID {
     color: #bf1212 !important;
@@ -181,6 +181,7 @@
 }
 .register-link {
     color: #378f86 !important;
+    cursor: pointer;
 }
 
 @media screen and (max-width: 991px) {

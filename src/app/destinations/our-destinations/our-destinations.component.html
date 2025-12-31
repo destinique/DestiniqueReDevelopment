@@ -11,8 +11,7 @@
     </ngx-spinner>
 
     <div class="promo-banner">
-        <img src="assets/website_images/destinations/promo-banner.webp" alt="Destinique destinations banner showcasing luxury travel destinations">
-
+        <img loading="lazy" decoding="async" class="img-fluid" src="assets/website_images/destinations/promo-banner.webp" alt="Destinique destinations banner showcasing luxury travel destinations">
         <div class="centered">
             <h2 class="text-center destination-banner-header">DESTINATIONS</h2>
             <div class="row">
@@ -89,7 +88,7 @@
                                                         let location of listItem.states;
                                                         let l = index">
                                                     <a [href]="'/properties/' + ((location?.search_parameters && location.search_parameters.trim() !== '') ? location.search_parameters : location?.StateNme)" target="_blank">
-                                                      <img _ngcontent-rif-c111="" loading="lazy" src="assets/dest-images/dot.png" alt="Location indicator" style="height: 12px; width: 12px;"> {{location.StateNme}} <span class="total-property-available-in-state">{{location.prop_count}}</span>
+                                                      <img _ngcontent-rif-c111="" loading="lazy" decoding="async" class="img-fluid" src="assets/dest-images/dot.png" alt="Location indicator" style="height: 12px; width: 12px;"> {{location.StateNme}} <span class="total-property-available-in-state">{{location.prop_count}}</span>
                                                     </a>
                                                     <ng-container *ngIf="location.cities.length > 0 && listItem.country_island_name=='United States'">
                                                       <ul class="city-area">

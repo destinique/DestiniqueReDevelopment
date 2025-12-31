@@ -5,7 +5,7 @@
         <!-- CONTACT -->
         <div class="topbar justify-content-end align-items-center ps-4 text-white phone-contact">
             <a href="https://wa.me/18503125400" target="blank" class="dest-call">
-                <img class="nav-whatsapp-call" src="assets/icons/phone-volume-solid.svg" alt="call">
+                <img loading="lazy" decoding="async" class="nav-whatsapp-call img-fluid" src="assets/icons/phone-volume-solid.svg" alt="call">
             </a>
         </div>
 
@@ -13,10 +13,11 @@
         <a class="navbar-brand d-flex align-items-center" [routerLink]="['/']"
            (click)="closeMobileMenu()">
             <img src="assets/dest-images/assets/logo.webp"
+                 decoding="async"
                  width="224"
                  height="122"
                  alt="Destinique"
-                 class="logo"
+                 class="logo img-fluid"
                  fetchpriority="high">
         </a>
 
@@ -26,8 +27,8 @@
                 [attr.aria-expanded]="!isMenuCollapsed"
                 aria-label="Toggle navigation">
             <!-- Custom toggle icons -->
-            <img *ngIf="isMenuCollapsed" class="nav-bars-solid" src="assets/icons/bars-staggered-solid.svg" alt="menu">
-            <img *ngIf="!isMenuCollapsed" class="nav-xmark" src="assets/icons/xmark-solid.svg" alt="close">
+            <img *ngIf="isMenuCollapsed" class="nav-bars-solid img-fluid" src="assets/icons/bars-staggered-solid.svg" alt="menu" loading="lazy" decoding="async">
+            <img *ngIf="!isMenuCollapsed" class="nav-xmark img-fluid" src="assets/icons/xmark-solid.svg" alt="close" loading="lazy" decoding="async">
         </button>
 
         <!-- MENU -->
@@ -85,7 +86,7 @@
                         <!-- TOP CONTACT BAR - Desktop only -->
                         <div class="topbar d-flex justify-content-end align-items-center ps-4 py-2 text-white web-contact">
                             <a href="https://wa.me/18503125400" target="blank" class="dest-call">
-                                <img class="nav-whatsapp" src="assets/icons/whatsapp-brands-solid.svg" alt="whatsapp"> +1-850-312-5400
+                                <img class="nav-whatsapp img-fluid" src="assets/icons/whatsapp-brands-solid.svg" alt="whatsapp" loading="lazy" decoding="async"> +1-850-312-5400
                             </a>
                         </div>
 
@@ -98,7 +99,7 @@
                               <div class="input-group me-2">
                                   <input [(ngModel)]="propertyNumber" name="propertyNumber" type="text" class="form-control nav-search-box" placeholder="SEARCH BY PROPERTY ID">
                                   <button class="btn btn-success nav-search-btn" type="submit">
-                                      <img class="nav-search" src="assets/icons/magnifying-glass-solid.svg" alt="search">
+                                      <img loading="lazy" decoding="async" class="nav-search img-fluid" src="assets/icons/magnifying-glass-solid.svg" alt="search">
                                   </button>
                               </div>
                             </form>
@@ -106,7 +107,7 @@
                             <div ngbDropdown class="dropdown" placement="bottom-end">
                                 <button type="button" class="btn btn-primary dropdown-toggle user-btn" ngbDropdownToggle
                                         (click)="$event.preventDefault()">
-                                    <img class="nav-profile" src="assets/icons/circle-user-regular.svg" alt="profile">
+                                    <img loading="lazy" decoding="async" class="nav-profile img-fluid" src="assets/icons/circle-user-regular.svg" alt="profile">
                                 </button>
                                 <div class="dropdown-menu dropdown-menu-end" ngbDropdownMenu>
                                     <!-- Show when logged in -->

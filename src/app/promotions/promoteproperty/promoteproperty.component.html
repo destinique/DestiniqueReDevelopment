@@ -16,8 +16,8 @@
           <div class="carousel-image-wrapper">
             <img [src]="getImageSrc(img.path)"
                  [alt]="img.title"
-                 class="d-block w-100"
-                 loading="lazy">
+                 class="d-block w-100 img-fluid"
+                 loading="lazy" decoding="async">
           </div>
           <div class="carousel-caption d-none d-md-block">
             <p class="mb-0" [innerHTML]="img.title"></p>

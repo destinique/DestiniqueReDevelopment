@@ -1,13 +1,11 @@
-
 <div class="row login-content">
     <div class="col-lg-6">
         <div class="log-in-info">
-            <span aria-hidden="true" class="close mobile-v"  (click)="activeModal.dismiss('Cross click')">&times;</span>
-
+            <span aria-hidden="true" class="close mobile-v" (click)="activeModal.dismiss('Cross click')">&times;</span>
             <div class="log-in-destinique-logo-sec">
-                <img class="log-in-destinique-logo" src="assets/website_images/login/logo.png">
-                    <div class="log-in-destinique-text">Destinique</div>
-                    <div class="log-in-destinique-sub-text">Luxury Rental Travel Advisors</div>
+                <img loading="lazy" decoding="async" class="img-fluid" class="log-in-destinique-logo" src="assets/website_images/login/logo.png">
+                <div class="log-in-destinique-text">Destinique</div>
+                <div class="log-in-destinique-sub-text">Luxury Rental Travel Advisors</div>
             </div>
 
             <div class="log-in-desc-info">
@@ -15,12 +13,10 @@
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-star-fill" viewBox="0 0 16 16"><path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"/></svg>
                     Save Your Favorites Homes and Villas
                 </p>
-
                 <p>
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-star-fill" viewBox="0 0 16 16"><path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"/></svg>
                     Receive Our Newsletters
                 </p>
-
                 <p>
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-star-fill" viewBox="0 0 16 16"><path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"/></svg>
                     Get Updated On Our Promotions
@@ -33,21 +29,47 @@
         <div class="loginModal">
             <div class="loginPopup">
                 <div class="modal-header login-modal-header">
-
                     <div aria-hidden="true" class="close" (click)="activeModal.dismiss('Cross click')">&times;</div>
                 </div>
                 <div class="modal-body login-modal-body">
                     <div class="container">
                         <h5 class="text-center" id="exampleModalLongTitle">DESTINIQUE - Sign In</h5>
-                        <form autocomplete="off">
+                        <!-- Success Message -->
+                        <div *ngIf="successMessage" class="alert alert-success alert-dismissible fade show" role="alert">
+                          {{ successMessage }}
+                        </div>
+
+                        <!-- Error Message -->
+                        <div *ngIf="errorMessage" class="alert alert-danger alert-dismissible fade show" role="alert">
+                          {{ errorMessage }}
+                        </div>
+                        <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" autocomplete="off">
+                            <!-- Username/Email Field -->
                             <div class="form-input">
-                                <input type="text" placeholder="USERNAME OR EMAIL" required>
+                                <input
+                                  type="text"
+                                  formControlName="username"
+                                  placeholder="USERNAME OR EMAIL"
+                                  required
+                                  [class.is-invalid]="formControls['username'].invalid && formControls['username'].touched">
                             </div>
-                            <div class="invalid-feedback" ></div>
+                            <div *ngIf="formControls['username'].invalid && formControls['username'].touched" class="invalid-feedback d-block">
+                                Username or email is required.
+                            </div>
+
+                            <!-- Password Field -->
                             <div class="form-input">
-                                <input type="password" placeholder="PASSWORD" required>
+                                <input
+                                  type="password"
+                                  formControlName="password"
+                                  placeholder="PASSWORD"
+                                  required
+                                  [class.is-invalid]="formControls['password'].invalid && formControls['password'].touched">
                             </div>
-                            <div class="invalid-feedback"></div>
+                            <div *ngIf="formControls['password'].invalid && formControls['password'].touched" class="invalid-feedback d-block">
+                                Password is required.
+                            </div>
+
                             <div class="row">
                                 <div class="col-12 opt-in-text-s ">
                                     <label for="SMS_MMS_Consent">
@@ -98,13 +120,19 @@
                                     [<a [routerLink]="['/privacypolicies']" target="_blank" >Privacy Policy</a>].
                                 </div>
                             </div>
-                            <button  class="btn btn-primary btn-block">
-                                Login
+
+                            <!-- Submit Button -->
+                            <button
+                              type="submit"
+                              class="btn btn-primary btn-block"
+                              [disabled]="isSubmitting">
+                              <span *ngIf="!isSubmitting">Login</span>
+                              <span *ngIf="isSubmitting"><span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>Logging in...</span>
                             </button>
 
                             <div class="row">
                                 <div class="col-12">
-                                    <a class="recover-user-url" href="#">
+                                    <a class="recover-user-url" (click)="onRecoverClick()">
                                         <p id="recoverID">
                                             Recover Username or Passsword?
                                         </p>
@@ -116,7 +144,7 @@
                 </div>
                 <div class="modal-footer text-center">
                     Don't have an account?
-                    <a class="register-link" href="#">
+                    <a class="register-link" (click)="onRegisterClick()">
                         Register here
                     </a>
                 </div>

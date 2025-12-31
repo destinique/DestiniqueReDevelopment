@@ -5,6 +5,8 @@ import { CommonModule } from '@angular/common';
 import { UserLoginComponent } from './user-login/user-login.component';
 import { NgbCollapseModule } from '@ng-bootstrap/ng-bootstrap';
 import { RouterModule } from '@angular/router'; // Add this
+import { FormsModule, ReactiveFormsModule } from '@angular/forms'; // Add this
+import { ToastrModule } from 'ngx-toastr';
 
 @NgModule({
   declarations: [
@@ -13,7 +15,10 @@ import { RouterModule } from '@angular/router'; // Add this
   imports: [
     CommonModule,
     NgbCollapseModule,
-    RouterModule
+    RouterModule,
+    FormsModule,
+    ReactiveFormsModule, // Add this line
+    ToastrModule,     // <-- Just import, no forRoot()
     // LoginRoutingModule
   ],
   exports: [UserLoginComponent] // Make sure this line exists

@@ -20,6 +20,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
   userName = '';
   userInitial = '';
   userRole: number | null = null;
+  userFullName = '';
 
   // Add this for mobile menu collapse
   isMenuCollapsed = true;
@@ -27,7 +28,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
   // Subscriptions
   private authSubscription: Subscription | null = null;
   private roleSubscription: Subscription | null = null;
-  public userLoggedIn = true;
+  // public userLoggedIn = true;
 
   //search form in the header menu
   public propertyNumber: any;
@@ -42,7 +43,6 @@ export class NavbarComponent implements OnInit, OnDestroy {
     private spinner: NgxSpinnerService,
     private toast: ToastrService
   ) {}
-
 
   showSuccess() {
     this.toast.success('Operation completed!', 'Success');
@@ -129,16 +129,19 @@ export class NavbarComponent implements OnInit, OnDestroy {
     this.authSubscription = this.authService.authState$.subscribe(user => {
       this.isLoggedIn = !!user;
       if (user) {
-        this.userName = user.name || user.email;
-        this.userInitial = this.userName.charAt(0).toUpperCase();
+        this.userName = user.username || user.email;
+        this.userFullName = user.name || `${user.firstName} ${user.lastName}` || user.email;
+        this.userInitial = this.userFullName.charAt(0).toUpperCase();
       } else {
         this.userName = '';
+        this.userFullName = '';
         this.userInitial = '';
       }
     });
 
     // Subscribe to role changes
     this.roleSubscription = this.userRoleService.role$.subscribe(role => {
+      console.log('Navbar: Role updated to:', role);
       this.userRole = role;
     });
 
@@ -157,23 +160,76 @@ export class NavbarComponent implements OnInit, OnDestroy {
   }
 
   private checkInitialAuthState(): void {
-    // Check if user is already logged in (from localStorage)
+    // Check localStorage for existing auth data
     const token = localStorage.getItem('auth_token');
+    const userRole = localStorage.getItem('user_role');
+    const userData = localStorage.getItem('currentUser');
+
     if (token) {
-      // Optional: Validate token with backend
-      this.authService.validateToken(token).subscribe({
-        next: (user) => {
-          // Token is valid, user is logged in
-          this.isLoggedIn = true;
-          this.userName = user.name || user.email;
-          this.userInitial = this.userName.charAt(0).toUpperCase();
-        },
-        error: () => {
-          // Token invalid, clear it
-          localStorage.removeItem('auth_token');
+      // If we have a token, consider user logged in
+      this.isLoggedIn = true;
+
+      if (userData) {
+        try {
+          const user = JSON.parse(userData);
+          this.userName = user.email || user.username;
+          this.userFullName = user.name || `${user.firstName} ${user.lastName}` || user.email;
+          this.userInitial = this.userFullName.charAt(0).toUpperCase();
+        } catch (e) {
+          console.error('Error parsing user data:', e);
         }
-      });
+      }
+
+      // Set role if available
+      if (userRole) {
+        this.userRole = Number(userRole);
+        // Also update UserRoleService
+        this.userRoleService.setRole(this.userRole);
+      }
+
+      // Optional: Validate token with backend
+      // this.validateToken(token);
     }
+  }
+
+  private validateToken(token: string): void {
+    this.authService.validateToken(token).subscribe({
+      next: (user) => {
+        // Token is valid
+        this.isLoggedIn = true;
+        this.userName = user.username || user.email;
+        this.userFullName = user.name || `${user.firstName} ${user.lastName}` || user.email;
+        this.userInitial = this.userFullName.charAt(0).toUpperCase();
+
+        // Update UserRoleService if needed
+        if (user.role) {
+          this.userRoleService.setRole(user.role);
+        }
+      },
+      error: () => {
+        // Token invalid, clear everything
+        this.clearAuthData();
+      }
+    });
+  }
+
+  private clearAuthData(): void {
+    localStorage.removeItem('auth_token');
+    localStorage.removeItem('currentUser');
+    localStorage.removeItem('user_role');
+    localStorage.removeItem('user_id');
+    localStorage.removeItem('user_name');
+
+    this.isLoggedIn = false;
+    this.userName = '';
+    this.userFullName = '';
+    this.userInitial = '';
+    this.userRole = null;
+
+    // Also clear from services
+    this.userRoleService.setRole(null);
+    // AuthService should also clear its state
+    // this.authService.logoutLocally();
   }
 
   // Close mobile menu when clicking links (for mobile view)
@@ -203,10 +259,18 @@ export class NavbarComponent implements OnInit, OnDestroy {
     });
   }
 
-  // Open registration modal
+// Open registration modal
   openRegisterModal(): void {
-    this.closeMobileMenu(); // Close mobile menu if open
-    console.log('Open register modal - implement this');
+    this.closeMobileMenu();
+    // You can create a RegisterComponent similar to UserLoginComponent
+    // For now, navigate to register page
+    this.router.navigate(['/register']);
+  }
+
+  // Navigate to profile
+  openProfile(): void {
+    this.closeMobileMenu();
+    this.router.navigate(['/my-profile']);
   }
 
   // Open forgot password modal
@@ -217,15 +281,40 @@ export class NavbarComponent implements OnInit, OnDestroy {
 
   // Logout user
   logout(): void {
-    this.closeMobileMenu(); // Close mobile menu if open
-    this.authService.logout().subscribe({
-      next: () => {
-        console.log('Logout successful');
-      },
-      error: (error) => {
-        console.error('Logout error:', error);
-      }
-    });
+    this.closeMobileMenu();
+
+    // Show confirmation dialog
+    if (confirm('Are you sure you want to logout?')) {
+      this.spinner.show();
+
+      this.authService.logout().subscribe({
+        next: () => {
+          // Clear local data
+          this.clearAuthData();
+
+          this.spinner.hide();
+          this.toast.success('You have been logged out successfully.', 'Logged Out', {
+            timeOut: 3000,
+            positionClass: 'toast-top-right'
+          });
+
+          // Redirect to home page
+          this.router.navigate(['/']);
+        },
+        error: (error) => {
+          this.spinner.hide();
+          console.error('Logout error:', error);
+
+          // Even if server logout fails, clear local data
+          this.clearAuthData();
+
+          this.toast.error('There was an error logging out.', 'Error', {
+            timeOut: 3000,
+            positionClass: 'toast-top-right'
+          });
+        }
+      });
+    }
   }
 
   // Check if user has specific role
@@ -233,7 +322,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
     return this.userRole === requiredRole;
   }
 
-  // Check if user is admin
+  // Check if user is admin (assuming role 1 or 3 are admin)
   isAdmin(): boolean {
     return this.userRole === 1 || this.userRole === 3;
   }

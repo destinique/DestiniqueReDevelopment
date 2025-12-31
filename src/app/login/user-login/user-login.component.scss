@@ -276,3 +276,51 @@ input {
         padding: 2px 15px;
     }
 }
+
+
+//User badge
+// User badge styling
+.user-initial-badge {
+  display: inline-block;
+  width: 32px;
+  height: 32px;
+  line-height: 32px;
+  text-align: center;
+  background-color: #ffffff;
+  color: #007bff;
+  border-radius: 50%;
+  font-weight: bold;
+  font-size: 14px;
+}
+
+// In dropdown header
+.user-initial-large {
+  display: inline-block;
+  width: 48px;
+  height: 48px;
+  line-height: 48px;
+  text-align: center;
+  background-color: #007bff;
+  color: white;
+  border-radius: 50%;
+  font-weight: bold;
+  font-size: 20px;
+  margin: 0 auto;
+}
+
+// Make dropdown menu wider
+.dropdown-menu {
+  min-width: 250px;
+}
+
+.dropdown-header {
+  padding: 10px 15px;
+  white-space: normal;
+}
+
+// Profile icon alignment
+.dropdown-item svg {
+  width: 16px;
+  height: 16px;
+  margin-right: 8px;
+}

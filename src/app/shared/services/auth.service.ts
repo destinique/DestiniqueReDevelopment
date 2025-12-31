@@ -7,13 +7,15 @@ import { tap } from 'rxjs/operators';
 interface User {
   id: number;
   username: string;
-  password: string;
   firstName: string;
   lastName: string;
-  token: string;
   email: string;
-  name: string;
+  mobile: string;
+  token: string;
   role: number;
+  expireAt: number;
+  // Optional: Add name for compatibility
+  name?: string;
 }
 
 @Injectable({ providedIn: 'root' })
@@ -30,11 +32,17 @@ export class AuthService {
       .pipe(
         tap((response: any) => {
           if (response.user && response.token) {
-            this.authSubject.next(response.user);
+            response.username = response.user;
+            response.name = `${response.firstname} ${response.lastname}`;
             if (response.status != "inactive") {
               // store user details and jwt token in local storage to keep user logged in between page refreshes
               localStorage.setItem("currentUser", JSON.stringify(response));
               localStorage.setItem('auth_token', response.token);
+              localStorage.setItem('user_id', response.id.toString());
+              localStorage.setItem('user_name', `${response.firstname} ${response.lastname}`);
+              localStorage.setItem('user_role', response.role.toString());
+
+              this.authSubject.next(response);
             }
           }
         })

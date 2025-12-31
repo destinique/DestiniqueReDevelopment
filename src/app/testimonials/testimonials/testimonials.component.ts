@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { CrudService } from "src/app/shared/crud.service";
+import { CrudService } from "src/app/shared/services/crud.service";
 import { NgxSpinnerService } from "ngx-spinner";
 
 @Component({

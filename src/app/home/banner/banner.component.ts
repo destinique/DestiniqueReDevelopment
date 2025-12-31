@@ -17,8 +17,8 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { Subject, debounceTime, distinctUntilChanged, switchMap, takeUntil } from 'rxjs';
-import { CrudService, BannerImage } from 'src/app/shared/crud.service';
-import { GoogleMapsService, PlacePrediction } from '../../services/google-maps.service';
+import { CrudService, BannerImage } from 'src/app/shared/services/crud.service';
+import { GoogleMapsService, PlacePrediction } from 'src/app/shared/services/google-maps.service';
 
 declare const google: any;
 // Add interface for location data
@@ -173,7 +173,7 @@ export class BannerComponent implements OnInit, AfterViewInit, OnDestroy {
       console.log('⏰ Loading Google Maps after 3-second delay...');
       this.isDelayedLoadInProgress = true;
       this.loadGoogleMapsIfNotLoaded();
-    }, 3000); // 3 seconds
+    }, 6000); // 3 seconds
   }
 
   private loadCallId = 0;

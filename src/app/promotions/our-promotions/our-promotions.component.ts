@@ -1,12 +1,12 @@
 import { Component, OnInit, AfterViewInit, OnDestroy} from "@angular/core";
-import { CrudService } from "src/app/shared/crud.service";
 import { NgxSpinnerService } from "ngx-spinner";
 import { ActivatedRoute } from "@angular/router";
-import { UserRoleService } from '../../services/user-role.service';
+import { CrudService } from "src/app/shared/services/crud.service";
+import {AuthService} from "src/app/shared/services/auth.service";
+import { UserRoleService } from 'src/app/shared/services/user-role.service';
 import { Subscription } from 'rxjs';  // ← Add this import
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { PromotepropertyComponent } from '../promoteproperty/promoteproperty.component';
-// import {AuthService} from "../../services/auth.service";
 import { ChangeDetectorRef } from '@angular/core';
 
 @Component({

@@ -3,10 +3,9 @@ import { Router, ActivatedRoute } from "@angular/router";
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Subscription } from 'rxjs';
 import { UserLoginComponent } from '../../login/user-login/user-login.component';
-import { AuthService } from '../../services/auth.service';
-import { UserRoleService } from '../../services/user-role.service';
-
-import { CrudService } from "src/app/shared/crud.service";
+import { AuthService } from 'src/app/shared/services/auth.service';
+import { UserRoleService } from 'src/app/shared/services/user-role.service';
+import { CrudService } from "src/app/shared/services/crud.service";
 import { NgxSpinnerService } from "ngx-spinner";
 import { ToastrService } from "ngx-toastr";
 

@@ -1,7 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 import {FormBuilder, FormGroup, Validators, AbstractControl, ValidationErrors} from '@angular/forms';
 import { ToastrService } from "ngx-toastr";
-import { CrudService } from "src/app/shared/crud.service";
+import { CrudService } from "src/app/shared/services/crud.service";
 import { first } from "rxjs/operators";
 
 @Component({
@@ -55,6 +55,10 @@ export class FeedbackviewComponent implements OnInit {
       // Stop if form is invalid
       if (this.registerForm.invalid) {
         this.markAllAsTouched();
+        this.toast.error(
+          "Something went wrong!, Please verify the entered information. "
+        );
+
         return;
       }
 

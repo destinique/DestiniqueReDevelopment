@@ -12,13 +12,7 @@ import { ToastrModule } from 'ngx-toastr';
 @NgModule({
   declarations: [DestFooterComponent, FeedbackviewComponent],
   imports: [
-    ToastrModule.forRoot({
-      timeOut: 7000,
-      // positionClass: 'toast-top-right',
-      positionClass: 'toast-custom-top-right', // Custom class
-      toastClass: 'ngx-toastr', // Ensure proper class
-      preventDuplicates: false,
-    }),
+    ToastrModule,     // <-- Just import, no forRoot()
     NgbCollapseModule,
     FooterRoutingModule,
     CommonModule,

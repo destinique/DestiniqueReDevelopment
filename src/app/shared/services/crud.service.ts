@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
+import { Observable, throwError } from 'rxjs';
+import { catchError, map } from 'rxjs/operators';
 
 export interface BannerImage {
   title: string;
@@ -9,8 +9,20 @@ export interface BannerImage {
   status: number;
 }
 
+interface RegisterUserData {
+  username: string;
+  password: string;
+  firstname: string;
+  lastname: string;
+  email: string;
+  mobile: string;
+  subscribe?: number;
+  roles?: number;
+  status?: number;
+}
+
 @Injectable({
-  providedIn: 'root'   // 👈 singleton, app-wide
+  providedIn: 'root'
 })
 export class CrudService {
   private readonly baseUrl = 'https://api.destinique.com/api-user/';
@@ -18,34 +30,25 @@ export class CrudService {
 
   constructor(private http: HttpClient) {}
 
-  getBannerImages(): Observable<BannerImage[]> {
-    return this.http.get<BannerImage[]>(
-      `${this.baseUrl}getAllBannerImages.php`
+  // Registration method
+  registerUser(userData: RegisterUserData): Observable<any> {
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json'
+    });
+
+    return this.http.post<any>(`${this.baseUrl}register.php`, userData, {
+      headers: headers,
+      observe: 'response'
+    }).pipe(
+      map(response => response.body),
+      catchError((error: HttpErrorResponse) => throwError(() => error))
     );
   }
 
-  /*
-  getPropertyDetails(id: string | number) {
-    const currentUser = localStorage.getItem("currentUser");
-
-    if (currentUser) {
-      try {
-        const userData = JSON.parse(currentUser);
-        const headers = {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${userData.token}`
-        };
-        return this.http.get(`${this.baseUrl}showPropertyDetails.php?propId=${id}`, { headers });
-      } catch (error) {
-        console.error('Error parsing user data:', error);
-        // Fallback to unauthenticated request
-        return this.http.get(`${this.baseUrl}showPropertyDetails.php?propId=${id}`);
-      }
-    } else {
-      return this.http.get(`${this.baseUrl}showPropertyDetails.php?propId=${id}`);
-    }
+  // Other methods remain the same...
+  getBannerImages(): Observable<BannerImage[]> {
+    return this.http.get<BannerImage[]>(`${this.baseUrl}getAllBannerImages.php`);
   }
-  */
 
   getPropertyDetails(id: string | number): Observable<any> {
     try {
@@ -79,7 +82,7 @@ export class CrudService {
   }
 
   getDestinationData(): Observable<any> {
-      return this.http.get(this.destinationAPIUrl);
+    return this.http.get(this.destinationAPIUrl);
   }
 
   getAllPublishedFeebacks(): Observable<any[]> {
@@ -87,32 +90,31 @@ export class CrudService {
   }
 
   getAllPublishedPromotions(id: string | number): Observable<any[]> {
-    const headers = {'Content-Type': 'application/json'};
-    const currentUser = localStorage.getItem("currentUser")
-    if (currentUser){
-      (headers as any).Authorization = 'Bearer ' + JSON.parse(currentUser).token;
+    const headers: any = {'Content-Type': 'application/json'};
+    const currentUser = localStorage.getItem("currentUser");
+
+    if (currentUser) {
+      headers.Authorization = 'Bearer ' + JSON.parse(currentUser).token;
     }
 
-    if (id){
-      return this.http.get<any[]>(this.baseUrl + "getPromotions.php?id="+id, { headers });
-    }
-    else {
-      return this.http.get<any[]>(this.baseUrl + "getPromotions.php", { headers });
+    if (id) {
+      return this.http.get<any[]>(`${this.baseUrl}getPromotions.php?id=${id}`, { headers });
+    } else {
+      return this.http.get<any[]>(`${this.baseUrl}getPromotions.php`, { headers });
     }
   }
 
   registerInquiries(name: string, email: string, phone: string, message: string) {
-    return this.http
-      .post<any>(this.baseUrl + "inquiries_register.php", {
-        name,
-        email,
-        phone,
-        message
-      })
-      .pipe(
-        map((user:any) => {
-          return user;
-        })
-      );
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json'
+    });
+
+    return this.http.post<any>(
+      `${this.baseUrl}inquiries_register.php`,
+      { name, email, phone, message },
+      { headers }
+    ).pipe(
+      map((user: any) => user)
+    );
   }
 }

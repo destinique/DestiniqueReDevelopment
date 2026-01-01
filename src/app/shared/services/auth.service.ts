@@ -43,6 +43,23 @@ export class AuthService {
     }
   }
 
+  register(firstname: string, lastname: string, username: string, email: string, mobile: string, password: string) {
+    return this.http
+      .post<any>(this.apiUrl + "register.php", {
+        firstname,
+        lastname,
+        username,
+        email,
+        mobile,
+        password
+      })
+      .pipe(
+        tap((user) => {
+          return user;
+        })
+      );
+  }
+
   login(username: string, password: string) {
     return this.http
       .post<any>(this.apiUrl + "login.php", { username, password })

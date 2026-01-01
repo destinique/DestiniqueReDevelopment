@@ -1,139 +1,265 @@
 <div class="container bg-white">
-    <h5 class="register-header">Destinique - Registration Form</h5>
-    <div class="card">
-        <div class="card-body">
-            <form>
-                <div class="row">
-                    <div class="mb-3 col-12 col-sm-12 col-md-6 col-lg-4">
-                        <div class="w-100 lbl titleColor"> First Name <span>*</span></div>
-                        <input type="text" class="form-control"/>
-                        <div class="invalid-feedback">
-                            First name is required.
-                        </div>
-                    </div>
+  <h5 class="register-header">Destinique - Registration Form</h5>
+  <div class="card">
+    <div class="card-body">
+      <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+        <div class="row">
+          <!-- First Name -->
+          <div class="mb-3 col-12 col-sm-12 col-md-6 col-lg-4">
+            <div class="w-100 lbl titleColor"> First Name <span>*</span></div>
+            <input type="text"
+                   class="form-control"
+                   formControlName="firstName"
+                   [class.is-invalid]="f['firstName'].touched && f['firstName'].errors"
+                   placeholder="Enter first name"/>
+            <div *ngIf="f['firstName'].touched && f['firstName'].errors" class="invalid-feedback">
+              {{ getFieldError('firstName') }}
+            </div>
+          </div>
 
-                    <div class="mb-3 col-12 col-sm-12 col-md-6 col-lg-4">
-                        <div class="w-100 lbl titleColor"> Last Name <span>*</span></div>
-                        <input type="text" class="form-control"/>
-                        <div class="invalid-feedback">
-                            Last name is required.
-                        </div>
-                    </div>
+          <!-- Last Name -->
+          <div class="mb-3 col-12 col-sm-12 col-md-6 col-lg-4">
+            <div class="w-100 lbl titleColor"> Last Name <span>*</span></div>
+            <input type="text"
+                   class="form-control"
+                   formControlName="lastName"
+                   [class.is-invalid]="f['lastName'].touched && f['lastName'].errors"
+                   placeholder="Enter last name"/>
+            <div *ngIf="f['lastName'].touched && f['lastName'].errors" class="invalid-feedback">
+              {{ getFieldError('lastName') }}
+            </div>
+          </div>
 
-                    <div class="mb-3 col-12 col-sm-12 col-md-6 col-lg-4">
-                        <div class="w-100 lbl titleColor"> Username <span>*</span></div>
-                        <input type="text" class="form-control"/>
-                        <div class="invalid-feedback">
-                            User name is required.
-                        </div>
-                    </div>
+          <!-- Username - WITH SERVER ERROR SUPPORT -->
+          <div class="mb-3 col-12 col-sm-12 col-md-6 col-lg-4">
+            <div class="w-100 lbl titleColor"> Username <span>*</span></div>
+            <input type="text"
+                   class="form-control"
+                   formControlName="username"
+                   [class.is-invalid]="(f['username'].touched && f['username'].errors) || serverErrors.username"
+                   placeholder="Choose a username"/>
+            <div *ngIf="(f['username'].touched && f['username'].errors) || serverErrors.username"
+                 class="invalid-feedback">
+              {{ getFieldError('username') }}
+            </div>
+          </div>
 
-                    <div class="mb-3 col-12 col-sm-12 col-md-6 col-lg-4">
-                        <div class="w-100 lbl titleColor"> Email Address <span>*</span></div>
-                        <input type="text" class="form-control"/>
-                        <div class="invalid-feedback">
-                            Email must be a valid email address
-                        </div>
-                    </div>
+          <!-- Email - WITH SERVER ERROR SUPPORT -->
+          <div class="mb-3 col-12 col-sm-12 col-md-6 col-lg-4">
+            <div class="w-100 lbl titleColor"> Email Address <span>*</span></div>
+            <input type="email"
+                   class="form-control"
+                   formControlName="email"
+                   [class.is-invalid]="(f['email'].touched && f['email'].errors) || serverErrors.email"
+                   placeholder="Enter email address"/>
+            <div *ngIf="(f['email'].touched && f['email'].errors) || serverErrors.email"
+                 class="invalid-feedback">
+              {{ getFieldError('email') }}
+            </div>
+          </div>
 
-                    <div class="mb-3 col-12 col-sm-12 col-md-6 col-lg-4">
-                        <div class="row">
-                            <div class="col-6">
-                                <div class="w-100 lbl titleColor"> Password <span>*</span></div>
-                                <input type="password" id="password" class="form-control" />
-                            </div>
-                            <div class="col-6 pl-0">
-                                <div class="w-100 lbl titleColor">Confirm Pass<span>*</span></div>
-                                <input type="password" class="form-control"/>
-                            </div>
-                        </div>
-                        <div class="invalid-feedback">
-                            Password does not match !
-                        </div>
-
-                    </div>
-
-
-
-                    <div class="mb-3 col-12 col-sm-12 col-md-6 col-lg-4">
-                        <div class="w-100 lbl titleColor"> Phone Number <span>*</span></div>
-                        <input type="text" class="form-control"/>
-                        <div class="invalid-feedback">
-                            Phone number is required
-                        </div>
-                    </div>
+          <!-- Password Section -->
+          <div class="mb-3 col-12 col-sm-12 col-md-6 col-lg-4">
+            <div class="row g-2">
+              <div class="col-6">
+                <div class="w-100 lbl titleColor"> Password <span>*</span></div>
+                <div class="input-group password-input-group">
+                  <input [type]="showPassword ? 'text' : 'password'"
+                         id="password"
+                         class="form-control"
+                         formControlName="password"
+                         [class.is-invalid]="f['password'].touched && f['password'].errors"
+                         placeholder="Enter password"/>
+                  <button class="btn btn-outline-secondary password-toggle-btn"
+                          type="button"
+                          (click)="togglePasswordVisibility()">
+                    <i class="fas" [ngClass]="showPassword ? 'fa-eye-slash' : 'fa-eye'"></i>
+                  </button>
                 </div>
-                <div class="row">
-                    <div class="col-12 opt-in-text-s">
-                        <label for="SMS_MMS_Consent">
-                            <div class="sms-mms-consent">
-                                <div [ngbCollapse]="isSmsConsentCollapsed" class="collapse" id="sms-mms-consent">
-                                    <input type="checkbox" id="SMS_MMS_Consent" name="SMS_MMS_Consent" value="Bike" checked><span class="fw-bold"> SMS/MMS Consent: </span>
-                                    "I agree to receive text (SMS/MMS) messages from Destinique at the number provided. Messages will primarily be one-on-one conversations related to vacation rental inquiries, property availability, and notifications about quote updates. Occasional promotional messages may also be sent. Some messages may include images or videos. We do not share mobile opt-in information with third parties unrelated to Destinique. Message & data rates may apply. Message frequency varies. Text reply STOP to cancel. Reply HELP to get help."
-                                </div>
-                                <!-- Toggle link - REPLACED -->
-                                <a href="javascript:void(0)"
-                                   class="collapsed toggle-link"
-                                   (click)="isSmsConsentCollapsed = !isSmsConsentCollapsed"
-                                   [attr.aria-expanded]="!isSmsConsentCollapsed"
-                                   aria-controls="sms-mms-consent">
-                                  {{ isSmsConsentCollapsed ? '+ Read More' : '- Read Less' }}
-                                </a>
-                            </div>
-                        </label>
-                    </div>
+                <!-- PASSWORD FIELD ERROR -->
+                <div *ngIf="f['password'].touched && f['password'].errors"
+                     class="invalid-feedback d-block mt-1">
+                  {{ getPasswordErrorMessage() }}
                 </div>
-                <div class="row">
-                    <div class="col-12 opt-in-text-s">
-                        <label for="Email_Consent">
-                            <div class="email-consent">
-                                <div [ngbCollapse]="isEmailConsentCollapsed" class="collapse" id="email-consent">
-                                    <input type="checkbox" id="Email_Consent" name="Email_Consent" value="Bike" checked><span class="fw-bold"> Email Consent:</span>
-                                    "I agree to receive emails from Destinique. Email Frequency varies and will include vacation rental updates, responses to questions, quotes, booking information, exclusive travel deals, and property recommendations. I understand I can unsubscribe at any time via the unsubscribe link in any email."
-                                </div>
-                                <a href="javascript:void(0)"
-                                   class="collapsed toggle-link"
-                                   (click)="isEmailConsentCollapsed = !isEmailConsentCollapsed"
-                                   [attr.aria-expanded]="!isEmailConsentCollapsed"
-                                   aria-controls="email-consent">
-                                  {{ isEmailConsentCollapsed ? '+ Read More' : '- Read Less' }}
-                                </a>
-                            </div>
-                        </label>
-                    </div>
+              </div>
+              <div class="col-6">
+                <div class="w-100 lbl titleColor">Confirm Pass<span>*</span></div>
+                <div class="input-group password-input-group">
+                  <input [type]="showConfirmPassword ? 'text' : 'password'"
+                         class="form-control"
+                         formControlName="confirmPassword"
+                         [class.is-invalid]="f['confirmPassword'].touched && f['confirmPassword'].errors"
+                         placeholder="Confirm password"/>
+                  <button class="btn btn-outline-secondary password-toggle-btn"
+                          type="button"
+                          (click)="toggleConfirmPasswordVisibility()">
+                    <i class="fas" [ngClass]="showConfirmPassword ? 'fa-eye-slash' : 'fa-eye'"></i>
+                  </button>
                 </div>
-                <div class="row">
-                    <div class="col-12 opt-in-text-s">
-                        View our [<a class="link-primary" [routerLink]="['/terms-and-conditions']" target="_blank">Terms of Service</a>] and [<a class="link-primary" [routerLink]="['/privacypolicies']" target="_blank">Privacy Policy</a>].
-                    </div>
+                <!-- CONFIRM PASSWORD ERROR -->
+                <div *ngIf="f['confirmPassword'].touched && f['confirmPassword'].errors"
+                     class="invalid-feedback d-block mt-1">
+                  {{ getFieldError('confirmPassword') }}
                 </div>
+              </div>
+            </div>
+            <small class="form-text text-muted mt-2">
+              Password must be at least 6 characters with at least one letter and one number
+            </small>
+          </div>
 
-                <div class="row">
-                    <div class="col-12">
-                        <div class="opt-in-text-s">
-                            <label  for="testim-thank-fb">
-                                Thank you for your feedback. We value your privacy and will adhere to your selected option.
-                                <br>
-                            </label>
-                        </div>
-                    </div>
-                </div>
-
-                <hr>
-                <div class="row">
-                    <div class="mb-3 col-12 col-md TOP btn-al-r">
-                        <button class="btn btn-primary mr-1">
-                            Register
-                        </button>
-                        <button class="btn btn-secondary mr-1" type="reset">
-                            Reset
-                        </button>
-                        <button class="btn btGreen mr-1">
-                            Cancel
-                        </button>
-                    </div>
-                </div>
-            </form>
+          <!-- Phone Number - WITH SERVER ERROR SUPPORT -->
+          <div class="mb-3 col-12 col-sm-12 col-md-6 col-lg-4">
+            <div class="w-100 lbl titleColor"> Phone Number <span>*</span></div>
+            <input type="tel"
+                   class="form-control"
+                   formControlName="mobile"
+                   [class.is-invalid]="(f['mobile'].touched && f['mobile'].errors) || serverErrors.mobile"
+                   placeholder="Enter phone number"/>
+            <div *ngIf="(f['mobile'].touched && f['mobile'].errors) || serverErrors.mobile"
+                 class="invalid-feedback">
+              {{ getFieldError('mobile') }}
+            </div>
+          </div>
         </div>
+
+        <!-- SMS/MMS Consent -->
+        <div class="row">
+          <div class="col-12 opt-in-text-s">
+            <div class="sms-mms-consent">
+              <div [ngbCollapse]="isSmsConsentCollapsed" class="collapse" id="sms-mms-consent">
+                <div class="form-check custom-checkbox">
+                  <input class="form-check-input"
+                         type="checkbox"
+                         id="SMS_MMS_Consent"
+                         formControlName="smsConsent">
+                  <label class="form-check-label fw-bold" for="SMS_MMS_Consent">
+                    SMS/MMS Consent:
+                  </label>
+                </div>
+                <p class="mt-1 mb-0">
+                  "I agree to receive text (SMS/MMS) messages from Destinique at the number provided. Messages will primarily be one-on-one conversations related to vacation rental inquiries, property availability, and notifications about quote updates. Occasional promotional messages may also be sent. Some messages may include images or videos. We do not share mobile opt-in information with third parties unrelated to Destinique. Message & data rates may apply. Message frequency varies. Text reply STOP to cancel. Reply HELP to get help."
+                </p>
+              </div>
+              <a href="javascript:void(0)"
+                 class="collapsed toggle-link d-inline-block mt-1"
+                 (click)="isSmsConsentCollapsed = !isSmsConsentCollapsed"
+                 [attr.aria-expanded]="!isSmsConsentCollapsed"
+                 aria-controls="sms-mms-consent">
+                {{ isSmsConsentCollapsed ? '+ Read More' : '- Read Less' }}
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Email Consent -->
+        <div class="row">
+          <div class="col-12 opt-in-text-s">
+            <div class="email-consent">
+              <div [ngbCollapse]="isEmailConsentCollapsed" class="collapse" id="email-consent">
+                <div class="form-check custom-checkbox">
+                  <input class="form-check-input"
+                         type="checkbox"
+                         id="Email_Consent"
+                         formControlName="emailConsent">
+                  <label class="form-check-label fw-bold" for="Email_Consent">
+                    Email Consent:
+                  </label>
+                </div>
+                <p class="mt-1 mb-0">
+                  "I agree to receive emails from Destinique. Email Frequency varies and will include vacation rental updates, responses to questions, quotes, booking information, exclusive travel deals, and property recommendations. I understand I can unsubscribe at any time via the unsubscribe link in any email."
+                </p>
+              </div>
+              <a href="javascript:void(0)"
+                 class="collapsed toggle-link d-inline-block mt-1"
+                 (click)="isEmailConsentCollapsed = !isEmailConsentCollapsed"
+                 [attr.aria-expanded]="!isEmailConsentCollapsed"
+                 aria-controls="email-consent">
+                {{ isEmailConsentCollapsed ? '+ Read More' : '- Read Less' }}
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Terms and Privacy -->
+        <div class="row">
+          <div class="col-12 opt-in-text-s">
+            View our [<a class="link-primary" [routerLink]="['/terms-and-conditions']" target="_blank">Terms of Service</a>] and [<a class="link-primary" [routerLink]="['/privacypolicies']" target="_blank">Privacy Policy</a>].
+          </div>
+        </div>
+
+        <!-- Agree to Terms -->
+        <div class="row">
+          <div class="col-12 opt-in-text-s">
+            <div class="form-check custom-checkbox">
+              <input type="checkbox"
+                     class="form-check-input"
+                     id="agreeToTerms"
+                     formControlName="agreeToTerms"
+                     [class.is-invalid]="f['agreeToTerms'].touched && f['agreeToTerms'].errors">
+              <label class="form-check-label" for="agreeToTerms">
+                I have read and agree to the Terms of Service and Privacy Policy
+                <span class="text-danger">*</span>
+              </label>
+              <!-- Error message -->
+              <div *ngIf="f['agreeToTerms'].touched && f['agreeToTerms'].errors"
+                   class="invalid-feedback d-block">
+                You must agree to the terms and conditions
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- General Server Error Display -->
+        <div *ngIf="serverErrors.general" class="row mt-2">
+          <div class="col-12">
+            <div class="alert alert-danger" role="alert">
+              <i class="fas fa-exclamation-circle me-2"></i>
+              {{ serverErrors.general }}
+            </div>
+          </div>
+        </div>
+
+        <hr>
+
+        <!-- Buttons -->
+        <div class="row">
+          <div class="mb-3 col-12 col-md btn-al-r">
+            <button class="btn btn-primary me-2"
+                    type="submit"
+                    [disabled]="isSubmitting">
+              <span *ngIf="!isSubmitting">Register</span>
+              <span *ngIf="isSubmitting">
+                <i class="fas fa-spinner fa-spin me-1"></i> Registering...
+              </span>
+            </button>
+            <button class="btn btn-secondary me-2"
+                    type="button"
+                    (click)="onReset()"
+                    [disabled]="isSubmitting">
+              Reset
+            </button>
+            <button class="btn btGreen"
+                    type="button"
+                    (click)="onCancel()"
+                    [disabled]="isSubmitting">
+              Cancel
+            </button>
+          </div>
+        </div>
+
+        <!-- Registration Status (for debugging - remove in production) -->
+        <!--
+        <div *ngIf="isSubmitting" class="row mt-3">
+          <div class="col-12">
+            <div class="alert alert-info" role="alert">
+              <i class="fas fa-spinner fa-spin me-2"></i>
+              Processing registration...
+            </div>
+          </div>
+        </div>
+        -->
+      </form>
     </div>
+  </div>
 </div>

@@ -38,6 +38,16 @@
         <link rel="preload" href="assets/fonts/montserrat-regular.woff2" as="font" type="font/woff2" crossorigin>
         <link rel="preload" href="assets/fonts/montserrat-semibold.woff2" as="font" type="font/woff2" crossorigin>
         <link rel="stylesheet" href="assets/fonts/fonts.css">
+        <!-- Preload Font Awesome asynchronously -->
+        <link
+          rel="preload"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+          as="style"
+          onload="this.onload=null;this.rel='stylesheet'"
+        >
+        <noscript>
+          <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+        </noscript>
 
         <!-- Preload LCP logo -->
         <link rel="preload" as="image" href="assets/dest-images/assets/logo.webp" type="image/webp"/>

@@ -1,196 +1,484 @@
 .container {
-    padding-top: 2rem;
-    padding-bottom: 2rem;
-    margin: 0 auto;
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+  margin: 0 auto;
 }
 .register-header {
-    background-color: #fff !important;
-    border-radius: 0px;
-    padding: 1rem !important;
-    border: 0px solid rgba(0, 0, 0, .125);
-    margin-bottom: 2rem;
-    font-size: 2rem;
-    line-height: 1;
-    font-weight: 300;
-    letter-spacing: 8px;
-    text-align: center;
-    color: #378f86;
-    text-transform: uppercase;
+  background-color: #fff !important;
+  border-radius: 0px;
+  padding: 1rem !important;
+  border: 0px solid rgba(0, 0, 0, .125);
+  margin-bottom: 2rem;
+  font-size: 2rem;
+  line-height: 1;
+  font-weight: 300;
+  letter-spacing: 8px;
+  text-align: center;
+  color: #378f86;
+  text-transform: uppercase;
 }
 .card {
-    margin: 0 auto;
-    float: none;
-    margin-bottom: 10px;
-    width: 100%;
-    border-radius: 0px;
-    border: 1px solid #E0E0E0 !important;
+  margin: 0 auto;
+  margin-bottom: 10px;
+  width: 100%;
+  border-radius: 0px;
+  border: 1px solid #E0E0E0 !important;
 }
 .w-100 {
-    width: 100% !important;
-}
-.pl-0 {
-    padding-left: 0px !important;
+  width: 100% !important;
 }
 .lbl {
-    font-weight: 400;
-    font-size: .9rem;
-    text-transform: uppercase;
-    line-height: 1.5rem;
-    letter-spacing: .1em;
+  font-weight: 400;
+  font-size: .9rem;
+  text-transform: uppercase;
+  line-height: 1.5rem;
+  letter-spacing: .1em;
 }
 .titleColor {
-    color: #002245 !important;
+  color: #002245 !important;
 }
 .titleColor span {
-    color: red !important;
+  color: red !important;
 }
 .form-control {
-    font-weight: 500;
-    color: #000000;
-    display: block;
-    width: 100%;
-    height: calc(1.5em + .75rem + 2px);
-    background-clip: padding-box;
-    border: 1px solid #ced4da;
-    transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
+  font-weight: 500;
+  color: #000000;
+  display: block;
+  width: 100%;
+  height: calc(1.5em + .75rem + 2px);
+  background-clip: padding-box;
+  border: 1px solid #ced4da;
+  transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
 }
 input{
-    background-color: #fff !important;
-    border-color: #E0E0E0 !important;
-    border-width: 1px !important;
-    border-radius: 0 !important;
-    padding: .75rem .75rem .5rem .75rem !important;
-    font-size: 1rem !important;
-    line-height: 1.5rem !important;
-    font-weight: 400 !important;
-    letter-spacing: 1px !important;
-    padding-block-end: 8px !important;
-    padding-block-start: 12px !important;
-    padding-inline-end: 12px !important;
-    padding-inline-start: 12px !important;
-    accent-color: #378f86;
+  background-color: #fff !important;
+  border-color: #E0E0E0 !important;
+  border-width: 1px !important;
+  border-radius: 0 !important;
+  padding: .75rem .75rem .5rem .75rem !important;
+  font-size: 1rem !important;
+  line-height: 1.5rem !important;
+  font-weight: 400 !important;
+  letter-spacing: 1px !important;
+  padding-block-end: 8px !important;
+  padding-block-start: 12px !important;
+  padding-inline-end: 12px !important;
+  padding-inline-start: 12px !important;
 }
 input::placeholder, textarea::placeholder {
-    color: #aaa !important;
-    font-weight: 400 !important;
-    text-transform: uppercase;
+  color: #aaa !important;
+  font-weight: 400 !important;
+  text-transform: uppercase;
 }
 .invalid-feedback {
-    font-size: 13px;
-    font-weight: 400;
+  font-size: 13px;
+  font-weight: 400;
 }
 .btn {
-    padding: 6px 20px;
-    box-shadow: 0 2px 6px 1px rgba(20, 20, 20, 0.48);
-    font-weight: 600;
-    font-size: 14px;
-    line-height: 26px;
-    letter-spacing: 1px;
-    text-decoration: none;
-    transition: 0.5s;
-    border-radius: 0px;
-    text-transform: uppercase;
-    border: 0px;
+  padding: 6px 20px;
+  box-shadow: 0 2px 6px 1px rgba(20, 20, 20, 0.48);
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 26px;
+  letter-spacing: 1px;
+  text-decoration: none;
+  transition: 0.5s;
+  border-radius: 0px;
+  text-transform: uppercase;
+  border: 0px;
 }
 .btn:hover {
-    background-color: #000 !important;
-    border-color: #000 !important;
-    color: #33d286 !important;
-    border: 0px;
-    box-shadow: 0 4px 14px 0 rgba(5, 5, 5, 0.47);
+  background-color: #000 !important;
+  border-color: #000 !important;
+  color: #33d286 !important;
+  border: 0px;
+  box-shadow: 0 4px 14px 0 rgba(5, 5, 5, 0.47);
 }
 .btn-al-r {
-    text-align: right;
-    display: inline-block;
+  text-align: right;
+  display: inline-block;
 }
 .btn-primary {
-    background-color: #378f86 !important;
-    color: #fff;
-    border-radius: 0rem;
+  background-color: #378f86 !important;
+  color: #fff;
+  border-radius: 0rem;
 }
 .btn-secondary {
-    border-radius: 0rem;
+  border-radius: 0rem;
 }
 .btGreen {
-    background-color: #21e0bd;
-    border-radius: 0rem;
-    color: #fff;
+  background-color: #21e0bd;
+  border-radius: 0rem;
+  color: #fff;
 }
-.mr-1, .mx-1 {
-    margin-right: .25rem !important;
-}
-@media screen and (max-width: 768px) {
-    .register-header {
-        font-size: 1.5rem;
-        font-weight: 300;
-        letter-spacing: 4px;
-    }
+.me-2 {
+  margin-right: .5rem !important;
 }
 
+@media screen and (max-width: 768px) {
+  .register-header {
+    font-size: 1.5rem;
+    font-weight: 300;
+    letter-spacing: 4px;
+  }
+}
 
 /*consent*/
 .opt-in-text-s {
-    font-size: 12px;
-    color: #555;
-    margin-bottom: 1rem;
-    label {
-        display: block;
-    }
+  font-size: 12px;
+  color: #555;
+  margin-bottom: 1rem;
+  label {
+    display: block;
+  }
 }
 .sms-mms-consent .collapse:not(.show) {
-    display: -webkit-box;
-    -webkit-line-clamp: 1;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-    height: auto !important;
-    max-width: calc(100% - 90px);
-    white-space: nowrap;
-    text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  height: auto !important;
+  max-width: calc(100% - 90px);
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 .sms-mms-consent .collapse, .email-consent .collapse {
-    float: left;
+  float: left;
 }
 .sms-mms-consent .collapsing, .email-consent .collapsing {
-    min-height: 20px !important;
+  min-height: 20px !important;
 }
-/*
-.sms-mms-consent a.collapsed:after, .email-consent a.collapsed:after {
-    content: '+ Read More';
-}
-.sms-mms-consent a:not(.collapsed):after, .email-consent a:not(.collapsed):after {
-    content: '- Read Less';
-}
-*/
 a.collapsed {
-    color: #6fccc2;
+  color: #6fccc2;
 }
 .sms-mms-consent a:hover, .sms-mms-consent a:active, .sms-mms-consent a:focus, .email-consent a:hover, .email-consent a:active, .email-consent a:focus {
-    color: #6fccc2;
-    text-decoration: underline;
-}
-.opt-in-text-s input {
-    background-color: #fff !important;
-    border-color: #E0E0E0 !important;
-    border-width: 1px !important;
-    border-radius: 0 !important;
-    padding: .75rem .75rem .5rem .75rem !important;
-    font-size: 1rem !important;
-    line-height: 1.5rem !important;
-    font-weight: 400 !important;
-    letter-spacing: 1px !important;
-    padding-block-end: 8px !important;
-    padding-block-start: 12px !important;
-    padding-inline-end: 12px !important;
-    padding-inline-start: 12px !important;
-    accent-color: #378f86;
+  color: #6fccc2;
+  text-decoration: underline;
 }
 .email-consent .collapse:not(.show) {
-    display: -webkit-box;
-    -webkit-line-clamp: 1;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-    height: auto !important;
-    max-width: calc(100% - 90px);
-    white-space: nowrap;
-    text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  height: auto !important;
+  max-width: calc(100% - 90px);
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+// FORM VALIDATION
+.is-invalid {
+  border-color: #dc3545 !important;
+}
+
+// PASSWORD TOGGLE BUTTONS
+.password-input-group {
+  display: flex;
+  width: 100%;
+
+  .form-control {
+    flex: 1;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+  }
+
+  .password-toggle-btn {
+    border: 1px solid #E0E0E0;
+    border-left: 0;
+    background-color: #f8f9fa;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 15px;
+    min-width: 50px;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+
+    &:hover, &:focus {
+      background-color: #e9ecef;
+      border-color: #E0E0E0;
+      box-shadow: none;
+      color: #555;
+    }
+
+    i {
+      color: #555;
+      font-size: 18px;
+    }
+  }
+}
+
+// DISABLED BUTTONS
+.btn:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+  box-shadow: none;
+
+  &:hover {
+    background-color: inherit !important;
+    color: inherit !important;
+  }
+}
+
+// LOADING SPINNER
+.fa-spinner {
+  margin-right: 5px;
+}
+
+// FORM HINT TEXT
+.form-text.text-muted {
+  font-size: 12px;
+  margin-top: 5px;
+  color: #6c757d !important;
+  display: block;
+}
+
+// CUSTOM CHECKBOXES - WORKING SOLUTION (UPDATE THIS SECTION)
+.custom-checkbox {
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 1rem;
+  padding-left: 0;
+  min-height: 1.5rem;
+  position: relative; // Add this for error positioning
+
+  .form-check-input {
+    // Reset everything
+    all: revert;
+
+    // Basic styling
+    width: 20px;
+    height: 20px;
+    margin: 2px 10px 0 0;
+    cursor: pointer;
+    flex-shrink: 0;
+
+    // Native checkbox with custom color
+    appearance: auto;
+    -webkit-appearance: checkbox;
+    -moz-appearance: checkbox;
+
+    // Use modern accent-color property
+    accent-color: #378f86;
+
+    // Error state
+    &.is-invalid {
+      outline: 2px solid #dc3545;
+    }
+
+    // Focus state
+    &:focus {
+      outline: 2px solid #86b7fe;
+      outline-offset: 2px;
+    }
+  }
+
+  .form-check-label {
+    flex: 1;
+    margin-bottom: 0;
+    line-height: 1.5;
+    cursor: pointer;
+    user-select: none;
+    padding-right: 10px; // Add some padding
+  }
+
+  // Error message positioning for custom-checkbox
+  .invalid-feedback {
+    position: absolute;
+    left: 30px; // Align with text (checkbox width + margin)
+    top: 100%;
+    margin-top: 2px;
+    width: calc(100% - 30px);
+    display: block;
+    white-space: normal;
+  }
+}
+
+// For the agreeToTerms specifically (since it has longer label)
+#agreeToTerms + .form-check-label {
+  white-space: normal;
+  word-break: normal;
+  line-height: 1.5;
+}
+
+// Ensure error doesn't overlap on small screens
+@media (max-width: 768px) {
+  .custom-checkbox .invalid-feedback {
+    position: static;
+    left: 0;
+    width: 100%;
+    margin-top: 5px;
+    margin-left: 30px;
+  }
+}
+
+// Fallback for older browsers that don't support accent-color
+@supports not (accent-color: #378f86) {
+  .custom-checkbox .form-check-input:checked {
+    position: relative;
+    background-color: #378f86;
+    border-color: #378f86;
+
+    &:after {
+      content: '';
+      position: absolute;
+      left: 7px;
+      top: 3px;
+      width: 5px;
+      height: 10px;
+      border: solid white;
+      border-width: 0 2px 2px 0;
+      transform: rotate(45deg);
+    }
+  }
+}
+
+// CONSENT SECTIONS
+.sms-mms-consent,
+.email-consent {
+  .custom-checkbox {
+    margin-bottom: 0.5rem;
+
+    .form-check-label {
+      font-weight: bold;
+    }
+  }
+
+  p {
+    font-size: 12px;
+    line-height: 1.4;
+    margin-top: 0.25rem;
+    margin-bottom: 0.5rem;
+    clear: both;
+  }
+
+  .toggle-link {
+    display: inline-block;
+    margin-top: 0.25rem;
+    clear: both;
+  }
+}
+
+// FIX FOR COLLAPSED CONTENT
+.collapse.show {
+  clear: both;
+  display: block;
+}
+
+// RESPONSIVE ADJUSTMENTS
+@media screen and (max-width: 768px) {
+  .password-input-group {
+    margin-bottom: 10px;
+  }
+
+  .btn-al-r {
+    text-align: center !important;
+
+    .btn {
+      margin-bottom: 0.5rem;
+      width: 100%;
+      display: block;
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
+  }
+
+  // Fix for consent sections on mobile
+  .sms-mms-consent .collapse:not(.show),
+  .email-consent .collapse:not(.show) {
+    max-width: 100%;
+  }
+}
+
+// FIX FOR VALIDATION MESSAGES
+.invalid-feedback.d-block {
+  margin-top: 0.25rem;
+}
+
+// SPINNER ANIMATION
+@keyframes fa-spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.fa-spinner.fa-spin {
+  animation: fa-spin 1s linear infinite;
+}
+
+// GRID SPACING
+.row.g-2 {
+  --bs-gutter-x: 0.5rem;
+  --bs-gutter-y: 0.5rem;
+}
+
+// CONSISTENT INPUT HEIGHTS
+.form-control, .password-input-group .btn {
+  height: calc(1.5em + .75rem + 2px);
+}
+
+// FONT AWESOME ICON FIXES
+::ng-deep {
+  // Ensure Font Awesome icons are visible
+  .fa-eye:before,
+  .fa-eye-slash:before,
+  .fa-spinner:before {
+    font-family: 'Font Awesome 6 Free' !important;
+    font-weight: 900 !important;
+    display: inline-block !important;
+    font-style: normal !important;
+  }
+
+  // Make sure the icons are visible
+  .password-toggle-btn i {
+    opacity: 1 !important;
+    visibility: visible !important;
+    display: inline-block !important;
+  }
+}
+
+// Simple checkbox layout
+.d-flex.align-items-start {
+  .form-check-input {
+    margin-top: 3px;
+    flex-shrink: 0;
+  }
+
+  .flex-grow-1 {
+    .form-check-label {
+      display: block;
+      line-height: 1.5;
+      white-space: normal;
+    }
+
+    .invalid-feedback {
+      margin-top: 5px;
+      margin-left: 0;
+      display: block;
+    }
+  }
+}
+
+// Fix for password error messages
+.password-input-group + .invalid-feedback {
+  display: block !important;
+  margin-top: 4px;
+  margin-bottom: 0;
+}
+
+// Ensure error messages are visible
+.invalid-feedback.d-block {
+  display: block !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+// Make sure the input shows red border when invalid
+.form-control.is-invalid {
+  border-color: #dc3545 !important;
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12' width='12' height='12' fill='none' stroke='%23dc3545'%3e%3ccircle cx='6' cy='6' r='4.5'/%3e%3cpath stroke-linejoin='round' d='M5.8 3.6h.4L6 6.5z'/%3e%3ccircle cx='6' cy='8.2' r='.6' fill='%23dc3545' stroke='none'/%3e%3c/svg%3e") !important;
+  background-repeat: no-repeat !important;
+  background-position: right calc(0.375em + 0.1875rem) center !important;
+  background-size: calc(0.75em + 0.375rem) calc(0.75em + 0.375rem) !important;
 }

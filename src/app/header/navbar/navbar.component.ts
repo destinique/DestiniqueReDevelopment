@@ -1,10 +1,11 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Router, ActivatedRoute } from "@angular/router";
+import { Router } from "@angular/router";
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Subscription } from 'rxjs';
 import { UserLoginComponent } from '../../login/user-login/user-login.component';
 import { AuthService } from 'src/app/shared/services/auth.service';
 import { UserRoleService } from 'src/app/shared/services/user-role.service';
+import { StorageService } from 'src/app/shared/services/storage.service'; // Add this import
 import { CrudService } from "src/app/shared/services/crud.service";
 import { NgxSpinnerService } from "ngx-spinner";
 import { ToastrService } from "ngx-toastr";
@@ -15,31 +16,23 @@ import { ToastrService } from "ngx-toastr";
   styleUrls: ['./navbar.component.scss']
 })
 export class NavbarComponent implements OnInit, OnDestroy {
-  // Authentication state
   isLoggedIn = false;
   userName = '';
   userInitial = '';
   userRole: number | null = null;
   userFullName = '';
-
-  // Add this for mobile menu collapse
   isMenuCollapsed = true;
-
-  // Subscriptions
   private authSubscription: Subscription | null = null;
   private roleSubscription: Subscription | null = null;
-  // public userLoggedIn = true;
-
-  //search form in the header menu
   public propertyNumber: any;
 
   constructor(
     private router: Router,
-    private route: ActivatedRoute,
     private crudService: CrudService,
     private modalService: NgbModal,
     private authService: AuthService,
     private userRoleService: UserRoleService,
+    private storageService: StorageService, // Add this
     private spinner: NgxSpinnerService,
     private toast: ToastrService
   ) {}
@@ -62,7 +55,6 @@ export class NavbarComponent implements OnInit, OnDestroy {
 
   search() {
     const propertyId = parseInt(this.propertyNumber.trim());
-    // Validate input
     if (isNaN(propertyId)) {
       this.toast.error('Please enter a valid Property ID number', 'Invalid Input');
       return;
@@ -81,20 +73,9 @@ export class NavbarComponent implements OnInit, OnDestroy {
 
         if (resp?.length > 0) {
           const listId = resp[0].list_id;
-          /*
-          // check if the url is on /property/ then reload
-          if (window.location.href.includes('/property/')){
-            this.router.navigateByUrl("/property/" + resp[0].list_id);
-            setTimeout(() => {
-              window.location.replace(window.location.href);
-            }, 0);
-          }
-          else{
-            this.router.navigateByUrl("/property/" + resp[0].list_id);
-          }
-          */
 
-          if (window.location.href.includes('/property/')) {
+          // Check if we're in browser before accessing window
+          if (this.storageService.isBrowser() && window.location.href.includes('/property/')) {
             this.router.navigate(['/property', listId]).then(() => {
               window.location.reload();
             });
@@ -150,7 +131,6 @@ export class NavbarComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    // Clean up subscriptions
     if (this.authSubscription) {
       this.authSubscription.unsubscribe();
     }
@@ -160,88 +140,53 @@ export class NavbarComponent implements OnInit, OnDestroy {
   }
 
   private checkInitialAuthState(): void {
-    // Check localStorage for existing auth data
-    const token = localStorage.getItem('auth_token');
-    const userRole = localStorage.getItem('user_role');
-    const userData = localStorage.getItem('currentUser');
+    // Use AuthService to get token (it uses StorageService internally)
+    const token = this.authService.getToken();
 
     if (token) {
-      // If we have a token, consider user logged in
       this.isLoggedIn = true;
 
-      if (userData) {
-        try {
-          const user = JSON.parse(userData);
-          this.userName = user.email || user.username;
-          this.userFullName = user.name || `${user.firstName} ${user.lastName}` || user.email;
-          this.userInitial = this.userFullName.charAt(0).toUpperCase();
-        } catch (e) {
-          console.error('Error parsing user data:', e);
+      // Get user data from AuthService
+      const user = this.authService.getCurrentUserFromStorage();
+      if (user) {
+        this.userName = user.email || user.username;
+        this.userFullName = user.name || `${user.firstName} ${user.lastName}` || user.email;
+        this.userInitial = this.userFullName.charAt(0).toUpperCase();
+      }
+
+      // Get role from StorageService
+      const userRole = this.storageService.getItem('user_role');
+      if (userRole) {
+        const roleNumber = Number(userRole);
+        if (!isNaN(roleNumber)) {
+          this.userRole = roleNumber;
+          this.userRoleService.setRole(this.userRole);
         }
       }
-
-      // Set role if available
-      if (userRole) {
-        this.userRole = Number(userRole);
-        // Also update UserRoleService
-        this.userRoleService.setRole(this.userRole);
-      }
-
-      // Optional: Validate token with backend
-      // this.validateToken(token);
     }
   }
 
-  private validateToken(token: string): void {
-    this.authService.validateToken(token).subscribe({
-      next: (user) => {
-        // Token is valid
-        this.isLoggedIn = true;
-        this.userName = user.username || user.email;
-        this.userFullName = user.name || `${user.firstName} ${user.lastName}` || user.email;
-        this.userInitial = this.userFullName.charAt(0).toUpperCase();
-
-        // Update UserRoleService if needed
-        if (user.role) {
-          this.userRoleService.setRole(user.role);
-        }
-      },
-      error: () => {
-        // Token invalid, clear everything
-        this.clearAuthData();
-      }
-    });
-  }
-
   private clearAuthData(): void {
-    localStorage.removeItem('auth_token');
-    localStorage.removeItem('currentUser');
-    localStorage.removeItem('user_role');
-    localStorage.removeItem('user_id');
-    localStorage.removeItem('user_name');
-
+    // Clear auth state through services
     this.isLoggedIn = false;
     this.userName = '';
     this.userFullName = '';
     this.userInitial = '';
     this.userRole = null;
 
-    // Also clear from services
+    // Clear role via service
     this.userRoleService.setRole(null);
-    // AuthService should also clear its state
-    // this.authService.logoutLocally();
   }
 
-  // Close mobile menu when clicking links (for mobile view)
   closeMobileMenu(): void {
-    if (window.innerWidth < 1200) {
+    // Use StorageService to check if we're in browser
+    if (this.storageService.isBrowser() && window.innerWidth < 1200) {
       this.isMenuCollapsed = true;
     }
   }
 
-  // Open login modal
   openLoginModal(): void {
-    this.closeMobileMenu(); // Close mobile menu if open
+    this.closeMobileMenu();
     const modalRef = this.modalService.open(UserLoginComponent, {
       centered: true,
       size: 'md',
@@ -250,46 +195,41 @@ export class NavbarComponent implements OnInit, OnDestroy {
       windowClass: 'destinique-login-dialog'
     });
 
-    // After modal is rendered
     modalRef.shown.subscribe(() => {
-      const modalElement = document.querySelector('.destinique-login-dialog .modal-dialog');
-      if (modalElement) {
-        modalElement.id = 'destinique-login-modal';
+      // Check if we're in browser before DOM manipulation
+      if (this.storageService.isBrowser()) {
+        const modalElement = document.querySelector('.destinique-login-dialog .modal-dialog');
+        if (modalElement) {
+          modalElement.id = 'destinique-login-modal';
+        }
       }
     });
   }
 
-// Open registration modal
   openRegisterModal(): void {
     this.closeMobileMenu();
-    // You can create a RegisterComponent similar to UserLoginComponent
-    // For now, navigate to register page
     this.router.navigate(['/register']);
   }
 
-  // Navigate to profile
   openProfile(): void {
     this.closeMobileMenu();
     this.router.navigate(['/my-profile']);
   }
 
-  // Open forgot password modal
   openForgotPasswordModal(): void {
-    this.closeMobileMenu(); // Close mobile menu if open
+    this.closeMobileMenu();
     console.log('Open forgot password modal - implement this');
   }
 
-  // Logout user
   logout(): void {
     this.closeMobileMenu();
 
-    // Show confirmation dialog
-    if (confirm('Are you sure you want to logout?')) {
+    // Check if we're in browser before showing confirm dialog
+    if (this.storageService.isBrowser() && confirm('Are you sure you want to logout?')) {
       this.spinner.show();
 
       this.authService.logout().subscribe({
         next: () => {
-          // Clear local data
           this.clearAuthData();
 
           this.spinner.hide();
@@ -298,14 +238,12 @@ export class NavbarComponent implements OnInit, OnDestroy {
             positionClass: 'toast-top-right'
           });
 
-          // Redirect to home page
           this.router.navigate(['/']);
         },
         error: (error) => {
           this.spinner.hide();
           console.error('Logout error:', error);
 
-          // Even if server logout fails, clear local data
           this.clearAuthData();
 
           this.toast.error('There was an error logging out.', 'Error', {
@@ -314,15 +252,17 @@ export class NavbarComponent implements OnInit, OnDestroy {
           });
         }
       });
+    } else if (!this.storageService.isBrowser()) {
+      // On server side, just clear the data
+      this.clearAuthData();
+      this.toast.info('Logged out', 'Info');
     }
   }
 
-  // Check if user has specific role
   hasRole(requiredRole: number): boolean {
     return this.userRole === requiredRole;
   }
 
-  // Check if user is admin (assuming role 1 or 3 are admin)
   isAdmin(): boolean {
     return this.userRole === 1 || this.userRole === 3;
   }

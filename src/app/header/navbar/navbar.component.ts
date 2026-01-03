@@ -128,6 +128,9 @@ export class NavbarComponent implements OnInit, OnDestroy {
 
     // Check initial auth state
     this.checkInitialAuthState();
+
+    // Listen for the custom event to open login modal
+    window.addEventListener('open-login-modal', this.openLoginModal.bind(this));
   }
 
   ngOnDestroy(): void {
@@ -137,6 +140,9 @@ export class NavbarComponent implements OnInit, OnDestroy {
     if (this.roleSubscription) {
       this.roleSubscription.unsubscribe();
     }
+
+    // Clean up the event listener when component is destroyed
+    window.removeEventListener('open-login-modal', this.openLoginModal.bind(this));
   }
 
   private checkInitialAuthState(): void {

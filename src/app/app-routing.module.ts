@@ -85,6 +85,20 @@ const routes: Routes = [
       ),
   },
   {
+    path: "destinique-forgotpassword",
+    loadChildren: () =>
+      import("./forgot-password/forgot-password.module").then(
+        (m) => m.ForgotPasswordModule
+      ),
+  },
+  {
+    path: "reset-password/:resetToken",
+    loadChildren: () =>
+      import("./reset-password/reset-password.module").then(
+        (m) => m.ResetPasswordModule
+      ),
+  },
+  {
     path: "my-profile",
     loadChildren: () =>
       import("./myprofile/myprofile.module").then((m) => m.MyprofileModule),

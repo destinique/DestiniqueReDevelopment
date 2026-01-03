@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
-import { catchError, map } from 'rxjs/operators';
+import { retry, catchError, map, delay } from 'rxjs/operators';
 
 export interface BannerImage {
   title: string;
@@ -19,6 +19,15 @@ interface RegisterUserData {
   subscribe?: number;
   roles?: number;
   status?: number;
+}
+
+interface ResetPasswordRequest {
+  email: string;
+}
+
+interface ResetPasswordResponse {
+  status: string;
+  message?: string;
 }
 
 @Injectable({
@@ -43,6 +52,22 @@ export class CrudService {
       map(response => response.body),
       catchError((error: HttpErrorResponse) => throwError(() => error))
     );
+  }
+
+  requestReset(email: string): Observable<ResetPasswordResponse> {
+    const requestData: ResetPasswordRequest = { email };
+    return this.http
+      .post<ResetPasswordResponse>(this.baseUrl + "request_reset_password.php", requestData)
+      .pipe(
+        // Retry 2 times with 1 second delay between attempts
+        retry({
+          count: 2,
+          delay: 1000 // 1 second delay
+        }),
+        map((response: ResetPasswordResponse) => {
+          return response;
+        })
+      );
   }
 
   // Other methods remain the same...

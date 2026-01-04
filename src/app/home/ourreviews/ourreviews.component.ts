@@ -1,4 +1,4 @@
-import { Component, ViewChild, ElementRef } from '@angular/core';
+import { Component, ViewChild, AfterViewInit, Renderer2, ElementRef } from '@angular/core';
 import { NgbCarousel } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
@@ -6,9 +6,10 @@ import { NgbCarousel } from '@ng-bootstrap/ng-bootstrap';
   templateUrl: './ourreviews.component.html',
   styleUrls: ['./ourreviews.component.scss']
 })
-export class OurreviewsComponent {
+export class OurreviewsComponent implements AfterViewInit {
   // Add ViewChild for carousel and background image
-  @ViewChild('testimonialCarousel') testimonialCarousel!: NgbCarousel;
+  // @ViewChild('testimonialCarousel') testimonialCarousel!: NgbCarousel;
+  @ViewChild('testimonialCarousel', { read: ElementRef }) testimonialCarousel!: ElementRef;
   @ViewChild('bgImage') bgImage!: ElementRef<HTMLImageElement>;
 
   // Carousel settings for ngb-carousel
@@ -36,7 +37,17 @@ export class OurreviewsComponent {
       rating: 5
     }
   ];
-
+  constructor(private renderer: Renderer2) {}
+  ngAfterViewInit() {
+    // Add a small delay to ensure DOM is ready
+    setTimeout(() => {
+      const carouselInner = this.testimonialCarousel.nativeElement.querySelector('.carousel-inner');
+      if (carouselInner) {
+        this.renderer.addClass(carouselInner, 'd-flex');
+        this.renderer.addClass(carouselInner, 'align-items-center');
+      }
+    }, 100);
+  }
   // Method to handle background image load event
   onImageLoad() {
     // This will be called when the image loads

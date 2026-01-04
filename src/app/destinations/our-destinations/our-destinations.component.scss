@@ -163,12 +163,16 @@ a:hover {
 
 /* When image loads, fade it in */
 .destination-relative.loaded {
-  animation: fadeIn 0.5s ease;
+    animation: fadeIn 0.5s ease;
 }
 
 @keyframes fadeIn {
-  from { opacity: 0.5; }
-  to { opacity: 1; }
+    from {
+        opacity: 0.5;
+    }
+    to {
+        opacity: 1;
+    }
 }
 .destination-img-overlay {
     bottom: 0;
@@ -312,6 +316,10 @@ a:hover {
     font-weight: 400 !important;
     line-height: 1.75rem;
     text-transform: capitalize;
+    svg {
+        height: 12px;
+        width: 12px;
+    }
 }
 .total-property-available-in-state {
     font-size: 14px;
@@ -326,6 +334,9 @@ a:hover {
     float: left;
     position: relative;
     width: 33.333333%;
+    svg {
+        height: 14px;
+    }
 }
 .total-property-available-in-country {
     font-size: 1rem;

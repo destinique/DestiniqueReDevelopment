@@ -35,14 +35,14 @@
                     <div class="container">
                         <h5 class="text-center" id="exampleModalLongTitle">DESTINIQUE - Sign In</h5>
                         <!-- Success Message -->
-                        <div *ngIf="successMessage" class="alert alert-success alert-dismissible fade show" role="alert">
+<!--                        <div *ngIf="successMessage" class="alert alert-success alert-dismissible fade show" role="alert">
                           {{ successMessage }}
-                        </div>
+                        </div>-->
 
                         <!-- Error Message -->
-                        <div *ngIf="errorMessage" class="alert alert-danger alert-dismissible fade show" role="alert">
+<!--                        <div *ngIf="errorMessage" class="alert alert-danger alert-dismissible fade show" role="alert">
                           {{ errorMessage }}
-                        </div>
+                        </div>-->
                         <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" autocomplete="off">
                             <!-- Username/Email Field -->
                             <div class="form-input">
@@ -71,7 +71,7 @@
                             </div>
 
                             <div class="row">
-                                <div class="col-12 opt-in-text-s ">
+                                <div class="col-12 opt-in-text-s mt-3">
                                     <label for="SMS_MMS_Consent">
                                         <div class="read-more-sms-mms-consent">
                                             <div [ngbCollapse]="isSmsConsentCollapsed" class="collapse" id="read-more-sms-mms-consent">

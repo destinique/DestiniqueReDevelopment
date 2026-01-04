@@ -120,12 +120,10 @@
                               <ng-container *ngIf="isLoggedIn; else loginSection">
                                 <!-- User info header -->
                                 <div class="dropdown-header text-center">
-                                  <div class="user-initial-large mb-2">{{ userInitial }}</div>
                                   <strong>{{ userFullName }}</strong>
-                                  <div class="small text-muted">{{ userName }}</div>
-                                  <div class="small text-muted mt-1" *ngIf="userRole === 1">Administrator</div>
-                                  <div class="small text-muted mt-1" *ngIf="userRole === 2">Agent</div>
-                                  <div class="small text-muted mt-1" *ngIf="userRole === 3">Manager</div>
+                                  <div class="small mt-1" *ngIf="userRole === 1">Administrator</div>
+                                  <div class="small mt-1" *ngIf="userRole === 2">Agent</div>
+                                  <div class="small mt-1" *ngIf="userRole === 3">Manager</div>
                                 </div>
                                 <div class="dropdown-divider"></div>
 
@@ -147,8 +145,6 @@
                                   </svg>
                                   DASHBOARD
                                 </a>
-
-                                <div class="dropdown-divider"></div>
 
                                 <a class="dropdown-item text-danger" href="javascript:void(0)" ngbDropdownItem
                                    (click)="logout(); $event.preventDefault()">

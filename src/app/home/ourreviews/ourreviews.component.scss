@@ -49,6 +49,9 @@ hr {
 }
 
 // Background container
+.success-stories-slider {
+    padding-left: 0px;
+}
 .review-carousel-container {
     position: relative;
     min-height: 640px;
@@ -110,7 +113,6 @@ hr {
 
     .carousel-item-container {
         display: block;
-        max-width: 800px;
         text-align: center;
 
         .testimonial-content {
@@ -203,6 +205,9 @@ hr {
 }
 
 @media screen and (max-width: 992px) {
+    .success-stories-slider {
+        padding-right: 0px;
+    }
     h3 {
         font-size: 3rem;
         font-weight: 400;
@@ -240,6 +245,9 @@ hr {
             width: 16px;
             height: 16px;
         }
+    }
+    .container-fluid h3 {
+        font-size: 2.5rem;
     }
 }
 

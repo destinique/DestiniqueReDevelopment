@@ -45,7 +45,6 @@
                                 [class.loading]="isLoadingAutocomplete"
                                 [placeholder]="isLoadingAutocomplete ? 'Loading suggestions...' : 'Search Destination'"
                                 formControlName="City"
-                                style="font-family: 'Ripple', 'FontAwesome'"
                                 [attr.disabled]="isLoadingAutocomplete ? true : null"
                                 autocomplete="off"
                                 aria-label="Search destination city"
@@ -120,7 +119,7 @@
 
                           </form>
                         </div>
-                        <div class="col-md-6 two-path-2nd-layout" style="border-left: 2px solid #fff !important;">
+                        <div class="col-md-6 two-path-2nd-layout">
                             <h3 class="two-path-layout-2nd-h3">Request Expert Travel Help</h3>
                             <a [routerLink]="['/contact']" class="btn two-path-layout-btn">Plan My Stay</a>
                         </div>

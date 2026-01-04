@@ -190,7 +190,9 @@
               "/testimonials",
               "/aboutus",
               "/register",
-              "/my-profile"
+              "/my-profile",
+              "destinique-forgotpassword",
+              "reset-password"
             ]
           },
           "configurations": {

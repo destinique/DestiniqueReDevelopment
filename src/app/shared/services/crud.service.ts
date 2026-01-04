@@ -30,6 +30,14 @@ interface ResetPasswordResponse {
   message?: string;
 }
 
+interface loadProfileApiResponse {
+  status: 'success' | 'error';
+  message: string;
+  data?: any;
+  code: number;
+  timestamp?: string;
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -141,5 +149,93 @@ export class CrudService {
     ).pipe(
       map((user: any) => user)
     );
+  }
+
+  // Method to load user profile - accepts token as parameter
+  loadProfileDetails(token: string): Observable<loadProfileApiResponse> {
+    // Validate token
+    if (!token || token.trim() === '') {
+      return throwError(() => new Error('Invalid authentication token provided.'));
+    }
+
+    // Create headers with Authorization
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    });
+
+    // Option 1: Send token in Authorization header (Recommended)
+    return this.http.get<loadProfileApiResponse>(
+      `${this.baseUrl}get_profile_details.php`,
+      { headers }
+    ).pipe(
+      retry({
+        count: 1,
+        delay: 1000
+      }),
+      map((response: loadProfileApiResponse) => {
+        // Log successful response (optional)
+        console.log('Profile data loaded successfully:', response);
+        return response;
+      }),
+      catchError((error) => this.handleProfileError(error, token))
+    );
+
+    // Option 2: If your API expects token as query parameter
+    // return this.http.get<loadProfileApiResponse>(
+    //   `${this.baseUrl}get_profile_details.php?token=${token}`,
+    //   { headers: new HttpHeaders({'Content-Type': 'application/json'}) }
+    // ).pipe(...)
+  }
+
+  // Enhanced error handler for profile requests
+  private handleProfileError(error: HttpErrorResponse, token: string): Observable<never> {
+    let errorMessage = 'An error occurred while loading profile.';
+    let userFriendlyMessage = 'Failed to load profile. Please try again.';
+
+    if (error.error instanceof ErrorEvent) {
+      // Client-side error
+      errorMessage = `Client error: ${error.error.message}`;
+    }
+    else {
+      // Server-side error
+      errorMessage = `Server error: ${error.status} - ${error.message}`;
+
+      // Custom messages based on status codes
+      switch (error.status) {
+        case 0:
+          userFriendlyMessage = 'Network error. Please check your internet connection.';
+          break;
+        case 400:
+          userFriendlyMessage = 'Invalid request. Please try again.';
+          break;
+        case 401:
+          userFriendlyMessage = 'Session expired. Please login again.';
+          break;
+        case 403:
+          userFriendlyMessage = 'Access denied. You do not have permission.';
+          break;
+        case 404:
+          userFriendlyMessage = 'Profile not found.';
+          break;
+        case 500:
+          userFriendlyMessage = 'Server error. Please try again later.';
+          break;
+      }
+    }
+
+    // Log token details (masked for security)
+    const maskedToken = token.length > 10
+      ? `${token.substring(0, 10)}...${token.substring(token.length - 4)}`
+      : '***';
+    console.error(`Profile loading error (Token: ${maskedToken}):`, errorMessage);
+
+    // Return a structured error response
+    return throwError(() => ({
+      originalError: error,
+      message: userFriendlyMessage,
+      status: error.status,
+      timestamp: new Date().toISOString()
+    }));
   }
 }

@@ -88,7 +88,8 @@
                                                         let location of listItem.states;
                                                         let l = index">
                                                     <a [href]="'/properties/' + ((location?.search_parameters && location.search_parameters.trim() !== '') ? location.search_parameters : location?.StateNme)" target="_blank">
-                                                      <img _ngcontent-rif-c111="" loading="lazy" decoding="async" class="img-fluid" src="assets/dest-images/dot.png" alt="Location indicator" style="height: 12px; width: 12px;"> {{location.StateNme}} <span class="total-property-available-in-state">{{location.prop_count}}</span>
+                                                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640"><path d="M64 320C64 178.6 178.6 64 320 64C461.4 64 576 178.6 576 320C576 461.4 461.4 576 320 576C178.6 576 64 461.4 64 320z"/></svg>
+                                                        {{location.StateNme}} <span class="total-property-available-in-state">{{location.prop_count}}</span>
                                                     </a>
                                                     <ng-container *ngIf="location.cities.length > 0 && listItem.country_island_name=='United States'">
                                                       <ul class="city-area">
@@ -96,7 +97,8 @@
                                                           *ngFor="let city of location.cities"
                                                           class="city-name">
                                                           <a [href]="'/properties/' + ((city?.search_parameters && city.search_parameters.trim() !== '') ? city.search_parameters : city?.City)" target="_blank">
-                                                            <i class="fa fa-angle-right" aria-hidden="true"></i> {{ city.City }} <span class="total-property-available-in-city">{{city.prop_count}}</span>
+                                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640"><path d="M471.1 297.4C483.6 309.9 483.6 330.2 471.1 342.7L279.1 534.7C266.6 547.2 246.3 547.2 233.8 534.7C221.3 522.2 221.3 501.9 233.8 489.4L403.2 320L233.9 150.6C221.4 138.1 221.4 117.8 233.9 105.3C246.4 92.8 266.7 92.8 279.2 105.3L471.2 297.3z"/></svg>
+                                                              {{ city.City }} <span class="total-property-available-in-city">{{city.prop_count}}</span>
                                                           </a>
                                                         </li>
                                                       </ul>

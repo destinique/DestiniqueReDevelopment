@@ -222,7 +222,7 @@ img {
             font-size: 0.9rem;
             line-height: 1.25rem;
             text-align: center;
-            padding-top: 1.25rem;
+            padding-top: 0rem;
             padding-left: 1rem;
             padding-right: 1rem;
             margin-bottom: 3rem;
@@ -259,5 +259,18 @@ img {
             font-size: 1rem;
             cursor: pointer;
         }
+    }
+}
+@media (max-width: 575px) {
+    .dd-header {
+        min-height: auto;
+        margin-bottom: .5rem;
+        font-size: 13px;
+    }
+    .aboutUs-flexContainer .dd-text {
+        margin-bottom: 0rem;
+    }
+    .dd-img img {
+        margin-top: 1.5rem;
     }
 }

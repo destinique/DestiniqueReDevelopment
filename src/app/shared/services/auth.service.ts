@@ -1,8 +1,8 @@
 // services/auth.service.ts
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, Observable } from 'rxjs';
-import { tap } from 'rxjs/operators';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { BehaviorSubject, Observable, throwError } from 'rxjs';
+import { map, tap, catchError } from 'rxjs/operators';
 import { StorageService } from "src/app/shared/services/storage.service";
 
 interface User {
@@ -16,6 +16,11 @@ interface User {
   role: number;
   expireAt: number;
   name?: string;
+}
+
+interface ResetPasswordResponse {
+  status: string;
+  message?: string;
 }
 
 @Injectable({ providedIn: 'root' })
@@ -98,7 +103,8 @@ export class AuthService {
   }
 
   validateToken(token: string): Observable<User> {
-    return this.http.post<User>(`${this.apiUrl}/validate`, { token });
+    return this.http.post<User>(`${this.apiUrl}validate.php`, { token })
+      .pipe(catchError(this.handleError));
   }
 
   // Get token safely
@@ -123,4 +129,50 @@ export class AuthService {
   isAuthenticated(): boolean {
     return !!this.getToken() && !!this.authSubject.getValue();
   }
+
+  ValidPasswordToken(resettoken: string): Observable<ResetPasswordResponse> {
+    return this.http
+      .post<ResetPasswordResponse>(this.apiUrl + "verify_reset_password_token.php", {
+        resettoken,
+      })
+      .pipe(
+        map((response: ResetPasswordResponse) => response),
+        catchError(this.handleError)
+      );
+  }
+
+  responseReset(resettoken: string, newPassword: string): Observable<ResetPasswordResponse> {
+    return this.http
+      .post<ResetPasswordResponse>(this.apiUrl + "response_reset_password.php", {
+        resettoken,
+        newPassword,
+      })
+      .pipe(
+        map((response: ResetPasswordResponse) => response),
+        catchError(this.handleError)
+      );
+  }
+
+  private handleError(error: HttpErrorResponse): Observable<never> {
+    let errorMessage = 'An unknown error occurred!';
+
+    if (error.error instanceof ErrorEvent) {
+      // Client-side error
+      errorMessage = `Error: ${error.error.message}`;
+    } else {
+      // Server-side error
+      errorMessage = `Error Code: ${error.status}\nMessage: ${error.message}`;
+
+      // Custom messages based on status codes
+      if (error.status === 404) {
+        errorMessage = 'Resource not found.';
+      } else if (error.status === 500) {
+        errorMessage = 'Internal server error. Please try again later.';
+      }
+    }
+
+    console.error('AuthService Error:', errorMessage);
+    return throwError(() => new Error(errorMessage));
+  }
+
 }

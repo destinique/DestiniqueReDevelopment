@@ -147,6 +147,14 @@ img {
     .footer-copyright{
         padding-left: 0;
     }
+    .footer-col {
+        .footer-navs-header {
+            letter-spacing: 2px;
+            font-weight: 600;
+            padding-bottom: 1.25rem;
+            font-size: 1rem;
+        }
+    }
 }
 @media screen and (max-width: 768px) {
     .footer-col {

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { CrudService } from 'src/app/shared/services/crud.service';
+import { StorageService } from 'src/app/shared/services/storage.service'; // Import StorageService
 import { ToastrService } from "ngx-toastr";
 import { NgxSpinnerService } from "ngx-spinner";
 import { catchError, finalize } from 'rxjs/operators';
@@ -26,7 +27,8 @@ export class DestforgotpasswordComponent implements OnInit {
     private crudService: CrudService,
     private spinner: NgxSpinnerService,
     private toast: ToastrService,
-    private formBuilder: FormBuilder
+    private formBuilder: FormBuilder,
+    private storageService: StorageService
   ) { }
 
   ngOnInit(): void {
@@ -41,9 +43,11 @@ export class DestforgotpasswordComponent implements OnInit {
 
   // Method to trigger login modal via window event
   openLoginModal(): void {
-    // Dispatch a custom event that the navbar can listen to
-    const event = new CustomEvent('open-login-modal');
-    window.dispatchEvent(event);
+    // Use StorageService to check browser environment
+    if (this.storageService.isBrowser() && typeof window !== 'undefined') {
+      const event = new CustomEvent('open-login-modal');
+      window.dispatchEvent(event);
+    }
   }
 
   // Check if specific control has specific error

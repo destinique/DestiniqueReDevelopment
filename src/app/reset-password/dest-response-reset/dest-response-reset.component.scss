@@ -1,0 +1,266 @@
+// Variables
+$primary-color: #002245;
+$secondary-color: #6c757d;
+$success-color: #198754;
+$danger-color: #dc3545;
+$warning-color: #ffc107;
+$info-color: #0dcaf0;
+
+// Main Container
+.flow-container {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #f5f7fa 0%, #e4e8f0 100%);
+  padding: 2rem 0;
+
+  // Pattern overlay
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23002245' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    opacity: 0.3;
+    z-index: 0;
+  }
+
+  > * {
+    position: relative;
+    z-index: 1;
+  }
+
+  @media (max-width: 768px) {
+    padding: 1rem;
+  }
+}
+
+// Card Styles
+.card {
+  border: none;
+  border-radius: 20px;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+  background: rgba(255, 255, 255, 0.98);
+  box-shadow: 0 10px 30px rgba(0, 34, 69, 0.1);
+
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 35px rgba(0, 34, 69, 0.15);
+  }
+
+  .card-header {
+    background: linear-gradient(135deg, $primary-color 0%, lighten($primary-color, 10%) 100%);
+    border-bottom: 4px solid rgba(255, 255, 255, 0.2);
+  }
+}
+
+// Form Styles
+.form-label {
+  color: $primary-color;
+  font-weight: 600;
+}
+
+.form-control {
+  border: 2px solid #e1e5eb;
+  border-radius: 12px;
+  padding: 1rem 1.25rem;
+  font-size: 1.05rem;
+  transition: all 0.3s ease;
+
+  &:focus {
+    border-color: $primary-color;
+    box-shadow: 0 0 0 0.25rem rgba($primary-color, 0.25);
+    transform: translateY(-1px);
+  }
+
+  &.is-invalid {
+    border-color: $danger-color;
+
+    &:focus {
+      box-shadow: 0 0 0 0.25rem rgba($danger-color, 0.25);
+    }
+  }
+
+  &:disabled {
+    background-color: #f8f9fa;
+    opacity: 0.7;
+    cursor: not-allowed;
+  }
+}
+
+// Input Group
+.input-group {
+  .input-group-text {
+    background-color: #f8f9fa;
+    border: 2px solid #e1e5eb;
+    border-right: none;
+    color: #6c757d;
+    transition: all 0.3s ease;
+    font-size: 1.1rem;
+
+    .fa-key {
+      transition: color 0.3s ease;
+    }
+  }
+
+  .form-control {
+    border-left: none;
+
+    &:focus + .input-group-text {
+      border-color: $primary-color;
+      background-color: lighten($primary-color, 45%);
+      color: $primary-color;
+    }
+  }
+}
+
+// Button Styles
+.btn {
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  transition: all 0.3s ease;
+  border-radius: 12px;
+
+  &:hover:not(:disabled) {
+    transform: translateY(-2px);
+  }
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, $primary-color 0%, lighten($primary-color, 5%) 100%);
+  border: none;
+  padding: 1rem 2rem;
+
+  &:hover:not(:disabled) {
+    background: linear-gradient(135deg, lighten($primary-color, 5%) 0%, lighten($primary-color, 10%) 100%);
+    box-shadow: 0 5px 15px rgba($primary-color, 0.3);
+  }
+
+  &:disabled {
+    opacity: 0.65;
+    cursor: not-allowed;
+  }
+}
+
+.btn-outline-secondary {
+  border: 2px solid $secondary-color;
+  color: $secondary-color;
+
+  &:hover:not(:disabled) {
+    background-color: $secondary-color;
+    color: white;
+  }
+}
+
+// Alert Styles
+.alert {
+  border-radius: 12px;
+  border: none;
+
+  &.alert-info {
+    background: linear-gradient(135deg, #e0f2fe 0%, #bae6fd 100%);
+    color: #0369a1;
+    border-left: 4px solid $info-color;
+  }
+
+  &.alert-success {
+    background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+    color: #065f46;
+    border-left: 4px solid $success-color;
+  }
+
+  &.alert-warning {
+    background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+    color: #92400e;
+    border-left: 4px solid $warning-color;
+  }
+
+  &.alert-danger {
+    background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+    color: #991b1b;
+    border-left: 4px solid $danger-color;
+  }
+
+  &.alert-light {
+    background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+    border-left: 4px solid $primary-color;
+  }
+}
+
+// Loading Animation
+@keyframes pulse {
+  0% { opacity: 1; }
+  50% { opacity: 0.7; }
+  100% { opacity: 1; }
+}
+
+.btn:disabled {
+  animation: pulse 1.5s infinite;
+}
+
+// Responsive Adjustments
+@media (max-width: 768px) {
+  .card {
+    border-radius: 16px;
+    margin: 0.5rem;
+  }
+
+  .card-header {
+    padding: 1.5rem 1rem;
+
+    h4 {
+      font-size: 1.25rem;
+    }
+  }
+
+  .btn-lg {
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+  }
+
+  .form-control {
+    font-size: 1rem;
+    padding: 0.875rem 1rem;
+  }
+}
+
+// Placeholder styling
+::placeholder {
+  color: #6c757d;
+  opacity: 0.7;
+}
+
+// Focus styles for accessibility
+*:focus {
+  outline: 3px solid rgba($primary-color, 0.5);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+// Password strength indicator (optional)
+.password-strength {
+  margin-top: 0.5rem;
+
+  .strength-bar {
+    height: 5px;
+    border-radius: 2.5px;
+    transition: width 0.3s ease;
+
+    &.weak {
+      background-color: $danger-color;
+      width: 33%;
+    }
+
+    &.medium {
+      background-color: $warning-color;
+      width: 66%;
+    }
+
+    &.strong {
+      background-color: $success-color;
+      width: 100%;
+    }
+  }
+}

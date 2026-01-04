@@ -1,1 +1,268 @@
-<p>dest-response-reset works!</p>
+<div class="flow-container bg-white">
+  <ngx-spinner
+    bdColor="rgba(0, 0, 0, 0.8)"
+    size="medium"
+    color="#fff"
+    type="ball-circus"
+    [fullScreen]="true"
+  >
+    <p style="color: white">Please wait...</p>
+  </ngx-spinner>
+
+  <div class="container mt-5">
+    <div class="row justify-content-center">
+      <div class="col-md-6 col-lg-5">
+        <div class="card shadow-lg border-0">
+          <div class="card-header bg-gradient-primary text-white text-center py-4">
+            <div class="d-flex align-items-center justify-content-center">
+              <i class="fas fa-key fa-2x me-3"></i>
+              <div>
+                <h4 class="mb-1">Set New Password</h4>
+                <p class="small mb-0 opacity-75">Destinique Account Security</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="card-body p-4 p-md-5">
+            <!-- Token Verification Status -->
+            <!-- Loading State -->
+            <div *ngIf="!tokenVerificationComplete" class="alert alert-info">
+              <div class="d-flex align-items-center">
+                <i class="fas fa-spinner fa-spin me-3 fa-lg"></i>
+                <div>
+                  <h6 class="mb-1">Verifying your reset token...</h6>
+                  <p class="mb-0 small">Please wait while we validate your password reset link.</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Invalid Token State -->
+            <div *ngIf="tokenVerificationComplete && CurrentState === 'NotVerified'" class="alert alert-danger">
+              <div class="d-flex align-items-center">
+                <i class="fas fa-exclamation-triangle me-3 fa-lg"></i>
+                <div>
+                  <h6 class="mb-1">Invalid or Expired Token</h6>
+                  <p class="mb-0">This password reset link is invalid or has expired.</p>
+                  <button class="btn btn-sm btn-outline-light mt-2" (click)="goToForgotPassword()">
+                    Request New Reset Link
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Valid Token State -->
+            <div *ngIf="tokenVerificationComplete && CurrentState === 'Verified'" class="alert alert-success">
+              <div class="d-flex align-items-center">
+                <i class="fas fa-check-circle me-3 fa-lg"></i>
+                <div>
+                  <h6 class="mb-1">Token Verified Successfully</h6>
+                  <p class="mb-0">Your reset token is valid. Please create a new password below.</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Only show form if token is verified -->
+            <div *ngIf="isTokenVerified">
+              <!-- Password Requirements -->
+              <div class="alert alert-light border mb-4">
+                <div class="d-flex">
+                  <i class="fas fa-shield-alt text-primary fa-lg me-3 mt-1"></i>
+                  <div>
+                    <h6 class="alert-heading mb-2">Password Requirements</h6>
+                    <ul class="mb-0 ps-3 small">
+                      <li>At least 6 characters long</li>
+                      <li>At least one uppercase letter</li>
+                      <li>At least one lowercase letter</li>
+                      <li>At least one number</li>
+                      <li>Optional one special character (@$!%*?&)</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Password Reset Form -->
+              <form
+                [formGroup]="ResponseResetForm"
+                (ngSubmit)="postresponseresetdata()"
+                autocomplete="off"
+                novalidate
+              >
+                <!-- New Password -->
+                <div class="mb-4">
+                  <label for="newPassword" class="form-label fw-semibold mb-3">
+                    <i class="fas fa-lock me-2"></i>New Password
+                    <span class="text-danger">*</span>
+                  </label>
+
+                  <div class="input-group input-group-lg">
+                    <span class="input-group-text bg-light">
+                      <i
+                        class="fas fa-key"
+                        [ngClass]="{
+                          'text-primary': !hasError('newPassword', 'required') &&
+                                         !hasError('newPassword', 'minlength') &&
+                                         !hasError('newPassword', 'pattern'),
+                          'text-danger': hasError('newPassword', 'required') ||
+                                         hasError('newPassword', 'minlength') ||
+                                         hasError('newPassword', 'pattern')
+                        }"
+                      ></i>
+                    </span>
+                    <input
+                      class="form-control"
+                      placeholder="Enter new password"
+                      type="password"
+                      id="newPassword"
+                      formControlName="newPassword"
+                      [ngClass]="{
+                        'is-invalid': hasError('newPassword', 'required') ||
+                                      hasError('newPassword', 'minlength') ||
+                                      hasError('newPassword', 'pattern')
+                      }"
+                      [disabled]="loading"
+                      autocomplete="new-password"
+                    />
+                  </div>
+
+                  <!-- Validation Messages -->
+                  <div *ngIf="hasError('newPassword', 'required')" class="mt-2">
+                    <div class="alert alert-danger py-2 small">
+                      <i class="fas fa-exclamation-triangle me-2"></i>
+                      Password is required!
+                    </div>
+                  </div>
+
+                  <div *ngIf="hasError('newPassword', 'minlength')" class="mt-2">
+                    <div class="alert alert-danger py-2 small">
+                      <i class="fas fa-exclamation-triangle me-2"></i>
+                      Password must be at least 6 characters!
+                    </div>
+                  </div>
+
+                  <div *ngIf="hasError('newPassword', 'pattern')" class="mt-2">
+                    <div class="alert alert-danger py-2 small">
+                      <i class="fas fa-exclamation-triangle me-2"></i>
+                      Password must include uppercase, lowercase, number, and special character!
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Confirm Password -->
+                <div class="mb-4">
+                  <label for="confirmPassword" class="form-label fw-semibold mb-3">
+                    <i class="fas fa-lock me-2"></i>Confirm Password
+                    <span class="text-danger">*</span>
+                  </label>
+
+                  <div class="input-group input-group-lg">
+                    <span class="input-group-text bg-light">
+                      <i
+                        class="fas fa-key"
+                        [ngClass]="{
+                          'text-primary': !hasError('confirmPassword', 'required') &&
+                                         !hasError('confirmPassword', 'mustMatch'),
+                          'text-danger': hasError('confirmPassword', 'required') ||
+                                         hasError('confirmPassword', 'mustMatch')
+                        }"
+                      ></i>
+                    </span>
+                    <input
+                      type="password"
+                      placeholder="Confirm new password"
+                      formControlName="confirmPassword"
+                      class="form-control"
+                      [ngClass]="{
+                        'is-invalid': hasError('confirmPassword', 'required') ||
+                                      hasError('confirmPassword', 'mustMatch')
+                      }"
+                      [disabled]="loading"
+                      autocomplete="new-password"
+                    />
+                  </div>
+
+                  <!-- Validation Messages -->
+                  <div *ngIf="hasError('confirmPassword', 'required')" class="mt-2">
+                    <div class="alert alert-danger py-2 small">
+                      <i class="fas fa-exclamation-triangle me-2"></i>
+                      Confirm password is required!
+                    </div>
+                  </div>
+
+                  <div *ngIf="hasError('confirmPassword', 'mustMatch')" class="mt-2">
+                    <div class="alert alert-danger py-2 small">
+                      <i class="fas fa-exclamation-triangle me-2"></i>
+                      Passwords do not match!
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="d-grid gap-3 mt-4">
+                  <button
+                    class="btn btn-primary btn-lg py-3"
+                    type="submit"
+                    [disabled]="loading || ResponseResetForm.invalid"
+                  >
+                    <span *ngIf="!loading; else loadingSpinner">
+                      <i class="fas fa-check-circle me-2"></i>
+                      Reset Password
+                    </span>
+                    <ng-template #loadingSpinner>
+                      <span
+                        class="spinner-border spinner-border-sm me-2"
+                        role="status"
+                        aria-hidden="true"
+                      ></span>
+                      Resetting...
+                    </ng-template>
+                  </button>
+
+                  <button
+                    type="button"
+                    class="btn btn-outline-secondary btn-lg py-3"
+                    (click)="goToForgotPassword()"
+                    [disabled]="loading"
+                  >
+                    <i class="fas fa-arrow-left me-2"></i>
+                    Back to Forgot Password
+                  </button>
+                </div>
+              </form>
+            </div>
+
+            <!-- If token is not verified, show alternative message -->
+            <div *ngIf="tokenVerificationComplete && !isTokenVerified" class="text-center mt-4">
+              <p class="text-muted">
+                Unable to verify your reset token. Please request a new password reset link.
+              </p>
+              <button
+                type="button"
+                class="btn btn-primary"
+                (click)="goToForgotPassword()"
+              >
+                <i class="fas fa-redo me-2"></i>
+                Request New Reset Link
+              </button>
+            </div>
+          </div>
+
+          <!-- Security Note -->
+          <div class="card-footer bg-light text-center py-3">
+            <small class="text-muted">
+              <i class="fas fa-shield-alt me-1"></i>
+              Your password is encrypted and securely stored.
+            </small>
+          </div>
+        </div>
+
+        <!-- Additional Info -->
+        <div class="text-center mt-4">
+          <small class="text-muted">
+            <i class="fas fa-clock me-1"></i>
+            Reset links expire in 24 hours for security reasons.
+          </small>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -47,17 +47,40 @@ export class ViewprofileComponent implements OnInit, AfterViewInit, OnDestroy {
     private authService: AuthService
   ) {}
 
+  /*
   ngOnInit(): void {
-    // this.spinner.show();
-    // this.spinner.hide();
-    // this.loadProfileDetails();
   }
 
   ngAfterViewInit(): void {
     // Wait for Angular to fully hydrate the prerendered content
     setTimeout(() => {
       this.loadProfileDetails();
-    }, 100);
+    }, 1000);
+  }
+  */
+
+  ngOnInit(): void {
+    console.log('ngOnInit called');
+
+    // Test token immediately
+    setTimeout(() => {
+      const token = this.authService.getToken();
+      console.log('Immediate token test in ngOnInit:', token);
+    }, 0);
+  }
+
+  ngAfterViewInit(): void {
+    console.log('ngAfterViewInit called');
+
+    // Test token at this moment
+    const token = this.authService.getToken();
+    console.log('Token test in ngAfterViewInit (before delay):', token);
+
+    // Wait for next tick instead of 1 second
+    setTimeout(() => {
+      console.log('ngAfterViewInit timeout fired');
+      this.loadProfileDetails();
+    }, 0); // Changed from 1000 to 0
   }
 
   ngOnDestroy(): void {
@@ -69,6 +92,11 @@ export class ViewprofileComponent implements OnInit, AfterViewInit, OnDestroy {
 
   // Method to load profile details - gets token from StorageService and passes to CrudService
   loadProfileDetails(): void {
+    this.isLoading = true;
+    this.hasError = false;
+    this.errorMessage = '';
+    this.spinner.show();
+
     // Use AuthService to get token (it uses StorageService internally)
     const token = this.authService.getToken();
     console.log('Token retrieved from storage:', token);
@@ -83,11 +111,6 @@ export class ViewprofileComponent implements OnInit, AfterViewInit, OnDestroy {
       this.handleInvalidToken(token);
       return;
     }
-
-    this.isLoading = true;
-    this.hasError = false;
-    this.errorMessage = '';
-    this.spinner.show();
 
     // Load profile data from API - pass token as argument
     this.profileSubscription = this.crudService.loadProfileDetails(token).subscribe({
@@ -105,9 +128,70 @@ export class ViewprofileComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   private handleNoToken(): void {
+    console.group('🔍 handleNoToken() Called');
+
+    // Track when this was called
+    const callTime = Date.now();
+    console.log('Called at timestamp:', callTime);
+
+    // Give storage a chance to initialize
+    let attempts = 0;
+    const maxAttempts = 5;
+    const checkInterval = 50; // 50ms
+
+    const checkTokenWithRetry = () => {
+      attempts++;
+      const token = this.authService.getToken();
+      console.log(`Retry attempt ${attempts}:`, token ? 'Token found!' : 'No token');
+
+      if (token) {
+        console.log(`✅ Token found after ${attempts} retry attempts`);
+        console.log('Loading profile instead of showing error');
+        console.groupEnd();
+        this.loadProfileDetails();
+        return;
+      }
+
+      if (attempts < maxAttempts) {
+        console.log(`Retrying in ${checkInterval}ms...`);
+        setTimeout(checkTokenWithRetry, checkInterval);
+      } else {
+        console.log(`❌ No token found after ${maxAttempts} attempts`);
+        console.log('Time elapsed:', Date.now() - callTime, 'ms');
+
+        // Only show error if we haven't already
+        if (!this.hasError) {
+          this.hasError = true;
+          this.isLoading = false;
+          this.errorMessage = 'You are not logged in. Please login to view your profile.';
+
+          console.log('Showing toast notification');
+
+          this.toast.error(this.errorMessage, 'Authentication Required', {
+            timeOut: 2000,
+            progressBar: true,
+            closeButton: true
+          });
+        }
+
+        console.groupEnd();
+      }
+    };
+
+    // Start the retry loop
+    checkTokenWithRetry();
+  }
+
+  private handleNoTokenBAK(): void {
     this.hasError = true;
     this.errorMessage = 'You are not logged in. Please login to view your profile.';
-    this.toast.error(this.errorMessage, 'Authentication Required');
+    this.toast.error(this.errorMessage, 'Authentication Required',
+    {
+      timeOut: 2000,
+        progressBar: true,
+      closeButton: true
+    }
+    );
 
     // Clear any potentially corrupted auth data
     //this.clearAuthData();
@@ -212,7 +296,8 @@ export class ViewprofileComponent implements OnInit, AfterViewInit, OnDestroy {
       fullname: `${apiData.firstname || ''} ${apiData.lastname || ''}`.trim(),
       email: apiData.email || '',
       mobile: apiData.mobile || '',
-      role: this.getRoleName(apiData.role),
+      role: apiData.role,
+      // role: this.getRoleName(apiData.role),
       created_at: apiData.created_at || '',
       updated_at: apiData.updated_at || '',
       formattedCreatedAt: this.formatDate(apiData.created_at),
@@ -269,7 +354,7 @@ export class ViewprofileComponent implements OnInit, AfterViewInit, OnDestroy {
   refreshProfile(): void {
     setTimeout(() => {
       this.loadProfileDetails();
-    }, 100);
+    }, 1500);
   }
 
   // Public method to get current token (useful for debugging)

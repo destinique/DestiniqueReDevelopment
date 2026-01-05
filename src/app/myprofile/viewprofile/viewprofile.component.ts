@@ -1,9 +1,10 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, AfterViewInit, OnDestroy } from '@angular/core';
 import { NgxSpinnerService } from "ngx-spinner";
 import { StorageService } from 'src/app/shared/services/storage.service';
 import { CrudService } from "src/app/shared/services/crud.service";
 import { ToastrService } from 'ngx-toastr';
 import { Subscription } from 'rxjs';
+import { AuthService } from 'src/app/shared/services/auth.service';
 
 // Interface for component's user data
 interface UserProfile {
@@ -26,7 +27,7 @@ interface UserProfile {
   templateUrl: './viewprofile.component.html',
   styleUrls: ['./viewprofile.component.scss']
 })
-export class ViewprofileComponent implements OnInit, OnDestroy {
+export class ViewprofileComponent implements OnInit, AfterViewInit, OnDestroy {
   userProfile: UserProfile | null = null;
   isLoading = false;
   hasError = false;
@@ -42,13 +43,21 @@ export class ViewprofileComponent implements OnInit, OnDestroy {
     private crudService: CrudService,
     private storageService: StorageService,
     private toast: ToastrService,
-    private spinner: NgxSpinnerService
+    private spinner: NgxSpinnerService,
+    private authService: AuthService
   ) {}
 
   ngOnInit(): void {
     // this.spinner.show();
     // this.spinner.hide();
-    this.loadProfileDetails();
+    // this.loadProfileDetails();
+  }
+
+  ngAfterViewInit(): void {
+    // Wait for Angular to fully hydrate the prerendered content
+    setTimeout(() => {
+      this.loadProfileDetails();
+    }, 100);
   }
 
   ngOnDestroy(): void {
@@ -60,9 +69,9 @@ export class ViewprofileComponent implements OnInit, OnDestroy {
 
   // Method to load profile details - gets token from StorageService and passes to CrudService
   loadProfileDetails(): void {
-    // Get token from StorageService
-    const token = this.storageService.getItem('auth_token');
-
+    // Use AuthService to get token (it uses StorageService internally)
+    const token = this.authService.getToken();
+    console.log('Token retrieved from storage:', token);
     // Check if token exists
     if (!token) {
       this.handleNoToken();
@@ -101,7 +110,7 @@ export class ViewprofileComponent implements OnInit, OnDestroy {
     this.toast.error(this.errorMessage, 'Authentication Required');
 
     // Clear any potentially corrupted auth data
-    this.clearAuthData();
+    //this.clearAuthData();
   }
 
   private handleInvalidToken(token: string): void {
@@ -116,7 +125,7 @@ export class ViewprofileComponent implements OnInit, OnDestroy {
     console.error(`Invalid token format detected: ${maskedToken}`);
 
     // Clear corrupted token
-    this.clearAuthData();
+    //this.clearAuthData();
   }
 
   private isValidTokenFormat(token: string): boolean {
@@ -258,7 +267,9 @@ export class ViewprofileComponent implements OnInit, OnDestroy {
 
   // Method to refresh profile data
   refreshProfile(): void {
-    this.loadProfileDetails();
+    setTimeout(() => {
+      this.loadProfileDetails();
+    }, 100);
   }
 
   // Public method to get current token (useful for debugging)

@@ -109,7 +109,31 @@ export class AuthService {
 
   // Get token safely
   getToken(): string | null {
-    return this.storageService.getItem('auth_token');
+    try {
+      // Try to get from currentUser first
+      const currentUserStr = this.storageService.getItem('currentUser');
+
+      if (currentUserStr) {
+        const userData = JSON.parse(currentUserStr);
+
+        // Check multiple possible token property names
+        const token = userData?.token ||
+          userData?.accessToken ||
+          userData?.jwt ||
+          userData?.authToken;
+
+        if (token) {
+          return token;
+        }
+      }
+
+      // Fallback to legacy auth_token storage
+      return this.storageService.getItem('auth_token');
+
+    } catch (error) {
+      console.error('Error retrieving authentication token:', error);
+      return null;
+    }
   }
 
   // Get current user from storage

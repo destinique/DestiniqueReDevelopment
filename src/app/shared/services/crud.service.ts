@@ -169,10 +169,10 @@ export class CrudService {
       `${this.baseUrl}get_profile_details.php`,
       { headers }
     ).pipe(
-      retry({
-        count: 1,
-        delay: 1000
-      }),
+      // retry({
+      //   count: 1,
+      //   delay: 1000
+      // }),
       map((response: loadProfileApiResponse) => {
         // Log successful response (optional)
         console.log('Profile data loaded successfully:', response);

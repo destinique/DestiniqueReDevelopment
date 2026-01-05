@@ -6,6 +6,7 @@ import { UserRoleService } from 'src/app/shared/services/user-role.service';
 import { Router } from '@angular/router';
 import { finalize } from 'rxjs/operators';
 import { ToastrService } from "ngx-toastr";
+import { StorageService } from "src/app/shared/services/storage.service";
 
 @Component({
   selector: 'app-user-login',
@@ -27,7 +28,8 @@ export class UserLoginComponent implements OnInit{
     private authService: AuthService,
     private userRoleService: UserRoleService,
     private router: Router,
-    private toast: ToastrService
+    private toast: ToastrService,
+    private storageService: StorageService
   ) {
     this.loginForm = this.formBuilder.group({
       username: ['', [Validators.required]],
@@ -114,16 +116,37 @@ export class UserLoginComponent implements OnInit{
             // Update user role in UserRoleService
             this.userRoleService.setRole(response.role);
 
-            // Close modal after short delay
-            setTimeout(() => {
-              this.activeModal.close({
-                success: true,
-                message: 'login_success',
-                user: response.user
-              });
-              // Optional: Navigate to dashboard or home
-              this.router.navigate(['/']);
-            }, 1000);
+            this.toast.success('Login successful!', 'Success', {
+              timeOut: 2000,
+              progressBar: true
+            });
+
+            // Verify token is actually saved before navigating
+            this.verifyTokenSaved(response.token).then((isSaved) => {
+              if (isSaved) {
+                setTimeout(() => {
+                  this.activeModal.close({
+                    success: true,
+                    message: 'login_success',
+                    user: response.user
+                  });
+                  this.router.navigate(['/']);
+                }, 1000);
+              } else {
+                console.error('Token was not saved properly!');
+                // Handle error - maybe save manually
+                this.storageService.setItem('auth_token', response.token);
+                // Then proceed with navigation
+                setTimeout(() => {
+                  this.activeModal.close({
+                    success: true,
+                    message: 'login_success',
+                    user: response.user
+                  });
+                  this.router.navigate(['/']);
+                }, 100);
+              }
+            });
           }
           else if (response.status == "inactive") {
             this.errorMessage = username +' is currently inactive. Please contact admin';
@@ -173,6 +196,33 @@ export class UserLoginComponent implements OnInit{
 
         }
       });
+  }
+
+  private verifyTokenSaved(expectedToken: string): Promise<boolean> {
+    return new Promise((resolve) => {
+      let attempts = 0;
+      const maxAttempts = 5;
+      const checkInterval = 100; // ms
+
+      const checkToken = () => {
+        attempts++;
+        const savedToken = this.storageService.getItem('auth_token');
+
+        if (savedToken === expectedToken) {
+          console.log(`Token verified after ${attempts} attempt(s)`);
+          resolve(true);
+        } else if (attempts < maxAttempts) {
+          setTimeout(checkToken, checkInterval);
+        } else {
+          console.error(`Token verification failed after ${maxAttempts} attempts`);
+          console.log('Expected:', expectedToken?.substring(0, 20) + '...');
+          console.log('Got:', savedToken?.substring(0, 20) + '...');
+          resolve(false);
+        }
+      };
+
+      checkToken();
+    });
   }
 
   onRegisterClick(): void {

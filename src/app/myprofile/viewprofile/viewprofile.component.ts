@@ -79,7 +79,10 @@ export class ViewprofileComponent implements OnInit, AfterViewInit, OnDestroy {
     // Wait for next tick instead of 1 second
     setTimeout(() => {
       console.log('ngAfterViewInit timeout fired');
-      this.loadProfileDetails();
+
+      if (this.storageService.isBrowser()){
+        this.loadProfileDetails();
+      }
     }, 0); // Changed from 1000 to 0
   }
 
@@ -128,6 +131,9 @@ export class ViewprofileComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   private handleNoToken(): void {
+    if (!this.storageService.isBrowser()){
+      return;
+    }
     console.group('🔍 handleNoToken() Called');
 
     // Track when this was called
@@ -166,12 +172,13 @@ export class ViewprofileComponent implements OnInit, AfterViewInit, OnDestroy {
           this.errorMessage = 'You are not logged in. Please login to view your profile.';
 
           console.log('Showing toast notification');
-
+          /*
           this.toast.error(this.errorMessage, 'Authentication Required', {
             timeOut: 2000,
             progressBar: true,
             closeButton: true
           });
+          */
         }
 
         console.groupEnd();
@@ -180,21 +187,6 @@ export class ViewprofileComponent implements OnInit, AfterViewInit, OnDestroy {
 
     // Start the retry loop
     checkTokenWithRetry();
-  }
-
-  private handleNoTokenBAK(): void {
-    this.hasError = true;
-    this.errorMessage = 'You are not logged in. Please login to view your profile.';
-    this.toast.error(this.errorMessage, 'Authentication Required',
-    {
-      timeOut: 2000,
-        progressBar: true,
-      closeButton: true
-    }
-    );
-
-    // Clear any potentially corrupted auth data
-    //this.clearAuthData();
   }
 
   private handleInvalidToken(token: string): void {

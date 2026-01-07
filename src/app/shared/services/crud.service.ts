@@ -38,6 +38,9 @@ interface loadProfileApiResponse {
   timestamp?: string;
 }
 
+// Interfaces
+import { ContactUSFormData, ContactUSApiResponse } from 'src/app/shared/interfaces/contact-form.interface';
+
 @Injectable({
   providedIn: 'root'
 })
@@ -237,5 +240,53 @@ export class CrudService {
       status: error.status,
       timestamp: new Date().toISOString()
     }));
+  }
+
+  /**
+   * Submit contact form data to the API
+   * @param formData Contact form data
+   * @returns Observable with API response
+   */
+  submitContactForm(formData: ContactUSFormData): Observable<ContactUSApiResponse> {
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Accept': 'application/json'
+    });
+
+    return this.http.post<ContactUSApiResponse>(`${this.baseUrl}maincontactusregister_new.php`, formData, { headers })
+      .pipe(
+        catchError(this.handleError)
+      );
+  }
+
+  /**
+   * Handle HTTP errors
+   * @param error HttpErrorResponse
+   * @returns Observable with error
+   */
+  private handleError(error: HttpErrorResponse): Observable<never> {
+    let errorMessage = 'An unknown error occurred!';
+
+    if (error.error instanceof ErrorEvent) {
+      // Client-side error
+      errorMessage = `Error: ${error.error.message}`;
+    } else {
+      // Server-side error
+      if (error.status === 0) {
+        // Network error
+        errorMessage = 'Network error: Please check your internet connection';
+      } else {
+        // Server returned error
+        if (error.error && error.error.message) {
+          // Use server error message
+          errorMessage = error.error.message;
+        } else {
+          errorMessage = `Server Error: ${error.status} ${error.statusText}`;
+        }
+      }
+    }
+
+    console.error('API Error:', errorMessage);
+    return throwError(() => new Error(errorMessage));
   }
 }

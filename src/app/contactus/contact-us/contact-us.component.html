@@ -1,4 +1,15 @@
 <div class="contact-header-container">
+    <!-- Loading Spinner -->
+    <ngx-spinner
+      bdColor="rgba(0, 0, 0, 0.8)"
+      size="medium"
+      color="#fff"
+      type="ball-circus"
+      [fullScreen]="true"
+      *ngIf="isLoading">
+      <p style="color: white">{{ loadingText }}</p>
+    </ngx-spinner>
+
     <div class="overlay-effect h-100 w-100"></div>
     <img src="assets/website_images/contact/contact-banner.webp" alt="contact-banner"
          loading="lazy" decoding="async" class="img-fluid"
@@ -9,7 +20,7 @@
 </div>
 
 <div class="container contact-form">
-    <form>
+    <form [formGroup]="contactForm" (ngSubmit)="onSubmit()" novalidate>
         <div class="row">
             <div class="col-12">
                 <div class="w-100">
@@ -20,360 +31,513 @@
                     <h5 class="contact-form-note">NOTE: <span>Required fields indicated by an asterisk*</span></h5>
                 </div>
             </div>
+
+            <!-- First Name -->
             <div class="col-sm-6 col-6 d-flex flex-column">
-                <div class="w-100 lbl title-color">
-                    First Name <span>*</span>
+              <div class="w-100 lbl title-color">
+                First Name <span>*</span>
+              </div>
+              <div class="w-100">
+                <div class="mb-3">
+                  <input
+                    type="text"
+                    class="form-control"
+                    formControlName="firstName"
+                    (blur)="markFieldAsTouched('firstName')"
+                    [class.is-invalid]="isFieldInvalid('firstName')"/>
+                  <div
+                    class="invalid-feedback"
+                    *ngIf="isFieldInvalid('firstName')">
+                    {{ getFieldError('firstName') }}
+                  </div>
                 </div>
-                <div class="w-100">
-                    <div class="mb-3">
-                        <input type="text" class="form-control"/>
-                        <div class="invalid-feedback">
-                            First name is required.
-                        </div>
-                    </div>
-                </div>
+              </div>
             </div>
+
+            <!-- Last Name -->
             <div class="col-sm-6 col-6 d-flex flex-column">
-                <div class="w-100 lbl title-color">
-                    Last Name <span>*</span>
+              <div class="w-100 lbl title-color">
+                Last Name <span>*</span>
+              </div>
+              <div class="w-100">
+                <div class="mb-3">
+                  <input
+                    type="text"
+                    class="form-control"
+                    formControlName="lastName"
+                    (blur)="markFieldAsTouched('lastName')"
+                    [class.is-invalid]="isFieldInvalid('lastName')"/>
+                  <div
+                    class="invalid-feedback"
+                    *ngIf="isFieldInvalid('lastName')">
+                    {{ getFieldError('lastName') }}
+                  </div>
                 </div>
-                <div class="w-100">
-                    <div class="mb-3">
-                        <input type="text" class="form-control"/>
-                        <div class="invalid-feedback">
-                            Last name is required.
-                        </div>
-                    </div>
-                </div>
+              </div>
             </div>
+
+            <!-- Email Address -->
             <div class="col-sm-6 col-6 d-flex flex-column">
-                <div class="w-100 lbl title-color">
-                    Email Address <span>*</span>
+              <div class="w-100 lbl title-color">
+                Email Address <span>*</span>
+              </div>
+              <div class="w-100">
+                <div class="mb-3">
+                  <input
+                    type="email"
+                    class="form-control"
+                    formControlName="email"
+                    (blur)="markFieldAsTouched('email')"
+                    [class.is-invalid]="isFieldInvalid('email')"/>
+                  <div
+                    class="invalid-feedback"
+                    *ngIf="isFieldInvalid('email')">
+                    {{ getFieldError('email') }}
+                  </div>
                 </div>
-                <div class="w-100">
-                    <div class="mb-3">
-                        <input type="email" class="form-control"/>
-                        <div class="invalid-feedback">
-                            Email must be a valid email address
-                        </div>
-                    </div>
-                </div>
+              </div>
             </div>
+
+            <!-- Phone Number -->
             <div class="col-sm-6 col-6 d-flex flex-column">
-                <div class="w-100 lbl title-color">
-                    Phone Number <span>*</span>
+              <div class="w-100 lbl title-color">
+                Phone Number <span>*</span>
+              </div>
+              <div class="w-100">
+                <div class="mb-3">
+                  <input
+                    type="text"
+                    class="form-control"
+                    formControlName="phone"
+                    (blur)="markFieldAsTouched('phone')"
+                    [class.is-invalid]="isFieldInvalid('phone')"/>
+                  <div
+                    class="invalid-feedback"
+                    *ngIf="isFieldInvalid('phone')">
+                    {{ getFieldError('phone') }}
+                  </div>
                 </div>
-                <div class="w-100">
-                    <div class="mb-3">
-                        <input type="text" class="form-control"/>
-                        <div class="invalid-feedback">
-                            Phone number is required (Min 10 and Max 12 digits allowed)
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-12 d-flex flex-column">
-                <div class="w-100 lbl title-color">
-                    Desired Destination <span>*</span>
-                </div>
-                <div class="w-100">
-                    <div class="mb-3">
-                        <input type="text" id="destin" class="form-control"/>
-                        <div class="invalid-feedback">
-                            Desired destination is required.
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-12 d-flex flex-column">
-                <div class="w-100 lbl title-color">
-                    If you are open to other locations, please list the areas you would like to consider:
-                </div>
-                <div class="w-100">
-                    <div class="mb-3">
-                        <input type="text" class="form-control"/>
-                    </div>
-                </div>
-            </div>
-            <div class="col-sm-6 col-6 col-md-4 d-flex flex-column">
-                <div class="w-100 lbl title-color">
-                    Arrival Date <span>*</span>
-                </div>
-                <div class="w-100">
-                    <div class="mb-3">
-                        <div class="input-group">
-                            <input type="text" placeholder="MM/DD/YYYY" class="form-control"/>
-                        </div>
-                        <div class="invalid-feedback">
-                            Arrival date is required
-                        </div>
-                    </div>
-                </div>
+              </div>
             </div>
 
-            <div class="col-sm-6 col-6 col-md-4 d-flex flex-column">
-                <div class="w-100 lbl title-color">
-                    Departure Date <span>*</span>
-                </div>
-                <div class="w-100">
-                    <div class="mb-3">
-                        <div class="input-group">
-                            <input type="text" placeholder="MM/DD/YYYY" class="form-control"/>
-                        </div>
-                        <div class="invalid-feedback">
-                            Departure date is required
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-sm-6 col-6 col-md-4 d-flex flex-column">
-                <div class="w-100 lbl title-color">
-                    Total Guests <span>*</span>
-                </div>
-                <div class="w-100">
-                    <div class="mb-3 bg-white">
-                        <input type="number" class="form-control"/>
-                    </div>
-                </div>
-            </div>
+            <!-- Desired Destination -->
             <div class="col-12 d-flex flex-column">
-                <div class="w-100 lbl title-color">
-                    If your dates are flexible, enter the alternate dates here.
+              <div class="w-100 lbl title-color">
+                Desired Destination <span>*</span>
+              </div>
+              <div class="w-100">
+                <div class="mb-3">
+                  <input
+                    type="text"
+                    id="destin"
+                    class="form-control"
+                    formControlName="desDestination"
+                    (blur)="markFieldAsTouched('desDestination')"
+                    [class.is-invalid]="isFieldInvalid('desDestination')"/>
+                  <div
+                    class="invalid-feedback"
+                    *ngIf="isFieldInvalid('desDestination')">
+                    {{ getFieldError('desDestination') }}
+                  </div>
                 </div>
-                <div class="w-100">
-                    <div class="mb-3">
-                        <input type="text" id="altDates" class="form-control"/>
-                    </div>
-                </div>
-            </div>
-            <div class="col-sm-6 col-6 col-md-4 d-flex flex-column">
-                <div class="w-100 lbl title-color">Adults</div>
-                <div class="w-100">
-                    <div class="mb-3">
-                        <input type="number" class="form-control"/>
-                    </div>
-                </div>
+              </div>
             </div>
 
-            <div class="col-sm-6 col-6 col-md-4 d-flex flex-column">
-                <div class="w-100 lbl title-color">Kids 3 - 16 years</div>
-                <div class="w-100">
-                    <div class="mb-3">
-                        <input type="number" class="form-control"/>
-                    </div>
+            <!-- Other Areas -->
+            <div class="col-12 d-flex flex-column">
+              <div class="w-100 lbl title-color">
+                If you are open to other locations, please list the areas you would like to consider:
+              </div>
+              <div class="w-100">
+                <div class="mb-3">
+                  <input
+                    type="text"
+                    class="form-control"
+                    formControlName="otherArea"/>
                 </div>
+              </div>
             </div>
 
+            <!-- Arrival Date -->
             <div class="col-sm-6 col-6 col-md-4 d-flex flex-column">
-                <div class="w-100 lbl title-color">Babies Under 3 Years</div>
-                <div class="w-100">
-                    <div class="mb-3">
-                        <input type="number" class="form-control"/>
-                    </div>
+              <div class="w-100 lbl title-color">
+                Arrival Date <span>*</span>
+              </div>
+              <div class="w-100">
+                <div class="mb-3">
+                  <div class="input-group">
+                    <input
+                      type="text"
+                      placeholder="MM/DD/YYYY"
+                      class="form-control"
+                      formControlName="arrival"
+                      bsDatepicker
+                      [bsConfig]="bsConfig"
+                      [bsValue]="contactForm.get('arrival')?.value"
+                      (bsValueChange)="onArrivalDateChange($event)"
+                      (blur)="onArrivalBlur(); contactForm.get('arrival')?.markAsTouched()"
+                      [class.is-invalid]="isFieldInvalid('arrival')"/>
+                      <span class="input-group-text"><i class="fas fa-calendar-alt"></i></span>
+                  </div>
+                  <div
+                    class="invalid-feedback"
+                    *ngIf="isFieldInvalid('arrival')">
+                    {{ getFieldError('arrival') }}
+                  </div>
                 </div>
+              </div>
             </div>
 
+            <!-- Departure Date -->
             <div class="col-sm-6 col-6 col-md-4 d-flex flex-column">
-                <div class="w-100 lbl title-color">Minimum Bedrooms</div>
-                <div class="w-100">
-                    <div class="mb-3">
-                        <select class="form-control d-block w-100" aria-label="Select number of rooms">
-                            <option value="1">1+</option>
-                            <option value="2">2+</option>
-                            <option value="3">3+</option>
-                            <option value="4">4+</option>
-                            <option value="5">5+</option>
-                            <option value="6">6+</option>
-                            <option value="7">7+</option>
-                            <option value="8">8+</option>
-                            <option value="9">9+</option>
-                            <option value="10">10+</option>
-                            <option value="11">11+</option>
-                            <option value="12">12+</option>
-                            <option value="13">13+</option>
-                            <option value="14">14+</option>
-                            <option value="15">15+</option>
-                            <option value="16">16+</option>
-                            <option value="17">17+</option>
-                            <option value="19">18+</option>
-                            <option value="19">19+</option>
-                            <option value="20">20+</option>
-                        </select>
-                    </div>
+              <div class="w-100 lbl title-color">
+                Departure Date <span>*</span>
+              </div>
+              <div class="w-100">
+                <div class="mb-3">
+                  <div class="input-group">
+                    <input
+                      type="text"
+                      placeholder="MM/DD/YYYY"
+                      class="form-control"
+                      formControlName="departure"
+                      bsDatepicker
+                      [bsConfig]="departureConfig"
+                      [minDate]="departureMinDate || undefined"
+                      [bsValue]="contactForm.get('departure')?.value"
+                      (blur)="markFieldAsTouched('departure')"
+                      [class.is-invalid]="isFieldInvalid('departure')"/>
+                    <span class="input-group-text"><i class="fas fa-calendar-alt"></i></span>
+                  </div>
+                  <div
+                    class="invalid-feedback"
+                    *ngIf="isFieldInvalid('departure')">
+                    {{ getFieldError('departure') }}
+                  </div>
+                  <!-- Custom error for date range -->
+                  <div
+                    class="invalid-feedback d-block"
+                    *ngIf="contactForm.get('departure')?.errors?.['dateRange']">
+                    {{ contactForm.get('departure')?.errors?.['dateRange'] }}
+                  </div>
                 </div>
-            </div>
-            <div class="col-sm-6 col-6 col-md-4 d-flex flex-column">
-                <div class="w-100 lbl title-color">
-                    Total MAX Budget
-                    <span>*</span>
-                </div>
-                <div class="w-100">
-                    <input type="number" placeholder="Budget" class="form-control"/>
-                </div>
-            </div>
-            <div class="col-sm-6 col-6 col-md-4 d-flex flex-column">
-                <div class="w-100 lbl title-color">Proximity to Beach</div>
-                <div class="w-100">
-                    <div class="mb-3">
-                        <select class="form-control d-block w-100" id="proximity" name="proximity">
-                            <option value="Not applicable">Not applicable</option>
-                            <option value="Short walk to the beach">Short walk to the beach</option>
-                            <option value="Ocean Front">Ocean Front</option>
-                        </select>
-                    </div>
-                </div>
-            </div>
-            <div class="col-12 d-flex flex-column">
-                <div class="w-100 lbl title-color">
-                    Accommodation Type Preference?
-                    <span>*</span>
-                </div>
-                <div class="w-100">
-                    <div class="mb-3">
-                        <select class="form-select" id="accommodation" name="accommodation">
-                            <option>Private Home</option>
-                            <option>Condo</option>
-                            <option>Resort</option>
-                            <option>Villa</option>
-                        </select>
-                        <div class="invalid-feedback">
-                            Accommodation Type Preference is required.
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-12 d-flex flex-column">
-                <div class="w-100 lbl title-color">Views?</div>
-                <div class="w-100">
-                    <div class="mb-3">
-                        <div class="row no-border">
-                            <div class="col-md-3">
-                                <label><input type="checkbox"/> Ocean View</label>
-                            </div>
-                            <div class="col-md-3">
-                                <label><input type="checkbox"/> Oceanfront View</label>
-                            </div>
-                            <div class="col-md-3">
-                                <label><input type="checkbox"/> Partial Ocean View</label>
-                            </div>
-                            <div class="col-md-3">
-                                <label><input type="checkbox"/> Golf Course View</label>
-                            </div>
-                            <div class="col-md-3">
-                                <label><input type="checkbox"/> Mountain View</label>
-                            </div>
-                            <div class="col-md-3">
-                                <label><input type="checkbox"/> Lake View</label>
-                            </div>
-                            <div class="col-md-3">
-                                <label><input type="checkbox"/> Wood/Forest
-                                </label>
-                            </div>
-                            <div class="col-md-3">
-                                <label><input type="checkbox"/> Not Applicable</label>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-12 d-flex flex-column">
-                <div class="w-100 lbl title-color"> Amenities?</div>
-                <div class="w-100">
-                    <div class="mb-3">
-                        <div class="row no-border">
-                            <div class="col-md-4">
-                                <label><input type="checkbox"/> Boat Slip Available</label>
-                            </div>
-                            <div class="col-md-4">
-                                <label><input type="checkbox"/> Pet Friendly (For a Fee)</label>
-                            </div>
-                            <div class="col-md-4">
-                                <label><input type="checkbox"/> Pool - Community</label>
-                            </div>
-                            <div class="col-md-4">
-                                <label><input type="checkbox"/> Pool - Private</label>
-                            </div>
-                            <div class="col-md-4">
-                                <label><input type="checkbox"/> Snowbird Rentals Accepted</label>
-                            </div>
-                            <div class="col-md-4">
-                                <label><input type="checkbox"/> Tennis Courts</label>
-                            </div>
-                            <div class="col-md-4">
-                                <label><input type="checkbox"/> Elevator in Unit</label>
-                            </div>
-                            <div class="col-md-4">
-                                <label><input type="checkbox"/> Ground Floor</label>
-                            </div>
-                            <div class="col-md-4">
-                                <label><input type="checkbox"/> Pool - Heated</label>
-                            </div>
-                            <div class="col-md-4">
-                                <label><input type="checkbox"/> Pickleball Courts</label>
-                            </div>
-                            <div class="col-md-4">
-                                <label><input type="checkbox"/> Golf on Site</label>
-                            </div>
-                            <div class="col-md-4">
-                                <label><input type="checkbox"/> Electric Vehicle Charger</label>
-                            </div>
-                            <div class="col-md-4">
-                                <label><input type="checkbox"/> Washer/Dryer</label>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-12 d-flex flex-column">
-                <div class="w-100 lbl title-color"> Additional Notes</div>
-                <div class="w-100">
-                    <div class="mb-3">
-                        <textarea class="form-control" rows="6" placeholder="Let us know if there is anything else you require for your upcoming stay."></textarea>
-                    </div>
-                </div>
+              </div>
             </div>
 
+            <!-- Total Guests -->
+            <div class="col-sm-6 col-6 col-md-4 d-flex flex-column">
+              <div class="w-100 lbl title-color">
+                Total Guests <span>*</span>
+              </div>
+              <div class="w-100">
+                <div class="mb-3 bg-white">
+                  <input
+                    type="number"
+                    class="form-control"
+                    formControlName="totalGuests"
+                    (blur)="markFieldAsTouched('totalGuests')"
+                    min="1"
+                    [class.is-invalid]="isFieldInvalid('totalGuests')"/>
+                  <div
+                    class="invalid-feedback"
+                    *ngIf="isFieldInvalid('totalGuests')">
+                    {{ getFieldError('totalGuests') }}
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Alternate Dates -->
+            <div class="col-12 d-flex flex-column">
+              <div class="w-100 lbl title-color">
+                If your dates are flexible, enter the alternate dates here.
+              </div>
+              <div class="w-100">
+                <div class="mb-3">
+                  <input
+                    type="text"
+                    id="altDates"
+                    class="form-control"
+                    formControlName="altDates"/>
+                </div>
+              </div>
+            </div>
+
+            <!-- Adults -->
+            <div class="col-sm-6 col-6 col-md-4 d-flex flex-column">
+              <div class="w-100 lbl title-color">Adults</div>
+              <div class="w-100">
+                <div class="mb-3">
+                  <input
+                    type="number"
+                    class="form-control"
+                    formControlName="adults"
+                    min="0"/>
+                </div>
+              </div>
+            </div>
+
+            <!-- Kids -->
+            <div class="col-sm-6 col-6 col-md-4 d-flex flex-column">
+              <div class="w-100 lbl title-color">Kids 3 - 16 years</div>
+              <div class="w-100">
+                <div class="mb-3">
+                  <input
+                    type="number"
+                    class="form-control"
+                    formControlName="kids"
+                    min="0"/>
+                </div>
+              </div>
+            </div>
+
+            <!-- Babies -->
+            <div class="col-sm-6 col-6 col-md-4 d-flex flex-column">
+              <div class="w-100 lbl title-color">Babies Under 3 Years</div>
+              <div class="w-100">
+                <div class="mb-3">
+                  <input
+                    type="number"
+                    class="form-control"
+                    formControlName="babies"
+                    min="0"/>
+                </div>
+              </div>
+            </div>
+
+            <!-- Minimum Bedrooms -->
+            <div class="col-sm-6 col-6 col-md-4 d-flex flex-column">
+              <div class="w-100 lbl title-color">Minimum Bedrooms</div>
+              <div class="w-100">
+                <div class="mb-3">
+                  <select
+                    class="form-control d-block w-100"
+                    aria-label="Select number of rooms"
+                    formControlName="rooms">
+                    <option value="1">1+</option>
+                    <option value="2">2+</option>
+                    <option value="3">3+</option>
+                    <option value="4">4+</option>
+                    <option value="5">5+</option>
+                    <option value="6">6+</option>
+                    <option value="7">7+</option>
+                    <option value="8">8+</option>
+                    <option value="9">9+</option>
+                    <option value="10">10+</option>
+                    <option value="11">11+</option>
+                    <option value="12">12+</option>
+                    <option value="13">13+</option>
+                    <option value="14">14+</option>
+                    <option value="15">15+</option>
+                    <option value="16">16+</option>
+                    <option value="17">17+</option>
+                    <option value="18">18+</option>
+                    <option value="19">19+</option>
+                    <option value="20">20+</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            <!-- Total MAX Budget -->
+            <div class="col-sm-6 col-6 col-md-4 d-flex flex-column">
+              <div class="w-100 lbl title-color">
+                Total MAX Budget
+                <span>*</span>
+              </div>
+              <div class="w-100">
+                <input
+                  type="text"
+                  placeholder="Budget"
+                  class="form-control"
+                  formControlName="budgets"
+                  (blur)="markFieldAsTouched('budgets')"
+                  [class.is-invalid]="isFieldInvalid('budgets')"/>
+                <div
+                  class="invalid-feedback"
+                  *ngIf="isFieldInvalid('budgets')">
+                  {{ getFieldError('budgets') }}
+                </div>
+              </div>
+            </div>
+
+            <!-- Proximity to Beach -->
+            <div class="col-sm-6 col-6 col-md-4 d-flex flex-column">
+              <div class="w-100 lbl title-color">Proximity to Beach</div>
+              <div class="w-100">
+                <div class="mb-3">
+                  <select
+                    class="form-control d-block w-100"
+                    id="proximity"
+                    formControlName="proximity">
+                    <option value="Not applicable">Not applicable</option>
+                    <option value="Short walk to the beach">Short walk to the beach</option>
+                    <option value="Ocean Front">Ocean Front</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            <!-- Accommodation Type Preference -->
+            <div class="col-12 d-flex flex-column">
+              <div class="w-100 lbl title-color">
+                Accommodation Type Preference?
+                <span>*</span>
+              </div>
+              <div class="w-100">
+                <div class="mb-3">
+                  <select
+                    class="form-select"
+                    id="accommodation"
+                    formControlName="accomTypeSelect"
+                    (blur)="markFieldAsTouched('accomTypeSelect')"
+                    [class.is-invalid]="isFieldInvalid('accomTypeSelect')">
+                    <option value="">Select accommodation type</option>
+                    <option value="Private Home">Private Home</option>
+                    <option value="Condo">Condo</option>
+                    <option value="Resort">Resort</option>
+                    <option value="Villa">Villa</option>
+                  </select>
+                  <div
+                    class="invalid-feedback"
+                    *ngIf="isFieldInvalid('accomTypeSelect')">
+                    {{ getFieldError('accomTypeSelect') }}
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Views (Checkboxes) -->
+            <div class="col-12 d-flex flex-column">
+              <div class="w-100 lbl title-color">Views?</div>
+              <div class="w-100">
+                <div class="mb-3">
+                  <div class="row no-border" formArrayName="checkArray">
+                    <div class="col-md-3" *ngFor="let view of viewOptions; let i = index">
+                      <label class="checkbox-label">
+                        <input
+                          type="checkbox"
+                          [value]="view.value"
+                          [checked]="isCheckboxChecked('checkArray', view.value)"
+                          (change)="onCheckboxChange($event, 'checkArray', view.value)"/>
+                        {{ view.label }}
+                      </label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Amenities (Checkboxes) -->
+            <div class="col-12 d-flex flex-column">
+              <div class="w-100 lbl title-color"> Amenities?</div>
+              <div class="w-100">
+                <div class="mb-3">
+                  <div class="row no-border" formArrayName="checkArray2">
+                    <div class="col-md-4" *ngFor="let amenity of amenityOptions; let i = index">
+                      <label class="checkbox-label">
+                        <input
+                          type="checkbox"
+                          [value]="amenity.value"
+                          [checked]="isCheckboxChecked('checkArray2', amenity.value)"
+                          (change)="onCheckboxChange($event, 'checkArray2', amenity.value)"/>
+                        {{ amenity.label }}
+                      </label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Additional Notes -->
+            <div class="col-12 d-flex flex-column">
+              <div class="w-100 lbl title-color"> Additional Notes</div>
+              <div class="w-100">
+                <div class="mb-3">
+                  <textarea
+                    class="form-control"
+                    rows="6"
+                    placeholder="Let us know if there is anything else you require for your upcoming stay."
+                    formControlName="addNotes"></textarea>
+                </div>
+              </div>
+            </div>
 
             <div class="row">
-                <div class="col-12 opt-in-text-s">
-                    <label for="SMS_MMS_Consent">
-                        <div class="sms-mms-consent">
-                            <div class="collapse" id="sms-mms-consent">
-                                <input type="checkbox" id="SMS_MMS_Consent" name="SMS_MMS_Consent" value="Bike" checked><span class="fw-bold"> SMS/MMS Consent: </span>
-                                "I agree to receive text (SMS/MMS) messages from Destinique at the number provided. Messages will primarily be one-on-one conversations related to vacation rental inquiries, property availability, and notifications about quote updates. Occasional promotional messages may also be sent. Some messages may include images or videos. We do not share mobile opt-in information with third parties unrelated to Destinique. Message & data rates may apply. Message frequency varies. Text reply STOP to cancel. Reply HELP to get help."
-                            </div>
-                            <a class="collapsed" data-bs-toggle="collapse" href="#sms-mms-consent" aria-expanded="false" aria-controls="sms-mms-consent"></a>
-                        </div>
-                    </label>
-                </div>
-            </div>
+                  <div class="col-12 opt-in-text-s">
+                      <label for="SMS_MMS_Consent">
+                          <div class="sms-mms-consent">
+                              <div [ngbCollapse]="isSmsConsentCollapsed" class="collapse" id="sms-mms-consent">
+                                  <input type="checkbox" id="SMS_MMS_Consent" name="SMS_MMS_Consent" value="Bike" checked><span class="fw-bold"> SMS/MMS Consent: </span>
+                                  "I agree to receive text (SMS/MMS) messages from Destinique at the number provided. Messages will primarily be one-on-one conversations related to vacation rental inquiries, property availability, and notifications about quote updates. Occasional promotional messages may also be sent. Some messages may include images or videos. We do not share mobile opt-in information with third parties unrelated to Destinique. Message & data rates may apply. Message frequency varies. Text reply STOP to cancel. Reply HELP to get help."
+                              </div>
+                              <!-- Toggle link - REPLACED -->
+                              <a href="javascript:void(0)"
+                                   class="collapsed toggle-link"
+                                   (click)="isSmsConsentCollapsed = !isSmsConsentCollapsed"
+                                   [attr.aria-expanded]="!isSmsConsentCollapsed"
+                                   aria-controls="sms-mms-consent">
+                                  {{ isSmsConsentCollapsed ? '+ Read More' : '- Read Less' }}
+                              </a>
+                          </div>
+                      </label>
+                  </div>
+              </div>
             <div class="row">
                 <div class="col-12 opt-in-text-s">
                     <label for="Email_Consent">
                         <div class="email-consent">
-                            <div class="collapse" id="email-consent">
-                                <input type="checkbox" id="Email_Consent" name="Email_Consent" value="Bike" checked><span class="fw-bold"> Email Consent:</span>
+                            <div [ngbCollapse]="isEmailConsentCollapsed" class="collapse" id="my_profile_email_consent-mms-consent">
+                                <input  (click)="$event.stopPropagation()" type="checkbox" id="Email_Consent" name="Email_Consent" value="Bike" checked><span class="fw-bold"> Email Consent: </span>
                                 "I agree to receive emails from Destinique. Email Frequency varies and will include vacation rental updates, responses to questions, quotes, booking information, exclusive travel deals, and property recommendations. I understand I can unsubscribe at any time via the unsubscribe link in any email."
                             </div>
-                            <a class="collapsed" data-bs-toggle="collapse" href="#email-consent" aria-expanded="false" aria-controls="email-consent"></a>
+                            <!-- Toggle link - REPLACED -->
+                            <a href="javascript:void(0)"
+                                 class="collapsed toggle-link"
+                                 (click)="isEmailConsentCollapsed = !isEmailConsentCollapsed"
+                                 [attr.aria-expanded]="!isEmailConsentCollapsed"
+                                 aria-controls="sms-mms-my_profile_email_consent">
+                                {{ isEmailConsentCollapsed ? '+ Read More' : '- Read Less' }}
+                            </a>
                         </div>
                     </label>
                 </div>
             </div>
             <div class="row">
                 <div class="col-12 opt-in-text-s">
-                    View our [<a class="link-primary" [routerLink]="['/terms&conditions']">Terms of Service</a>] and [<a class="link-primary" [routerLink]="['/privacypolicies']">Privacy Policy</a>].
+                    View our [<a class="link-primary" [routerLink]="['/terms-and-conditions']">Terms of Service</a>] and [<a class="link-primary" [routerLink]="['/privacypolicies']">Privacy Policy</a>].
                 </div>
             </div>
 
             <div class="col-12 d-flex contact-btn-right">
-                <button class="btn btn-secondary mr-2" type="reset">
+              <!-- Add this button to your form template -->
+              <!--
+              <div class="mt-3">
+                <button
+                  type="button"
+                  class="btn btn-secondary btn-sm"
+                  (click)="testSubmit()"
+                  [disabled]="isSpinnerVisible">
+                  <i class="fas fa-vial"></i> Test API Submit
+                </button>
+                <small class="text-muted ml-2">
+                  This will submit sample data to test the API
+                </small>
+              </div>
+              -->
+
+                <button class="btn btn-secondary mr-2" type="reset"
+                        [disabled]="isLoading"
+                        (click)="resetForm()">
                     Reset
                 </button>
 
-                <button class="btn btn-secondary contact-submit-btn">
-                    <!--<span class="spinner-border spinner-border-sm"></span>-->
-                    Submit
+                <button class="btn btn-secondary contact-submit-btn"
+                        type="submit"
+                        [disabled]="isLoading"
+                >
+                    <span *ngIf="isLoading" class="spinner-border spinner-border-sm"></span>
+                    <span *ngIf="!isLoading">Submit</span>
                 </button>
             </div>
         </div>

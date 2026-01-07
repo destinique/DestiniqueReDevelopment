@@ -9,8 +9,6 @@ import { BsLocaleService } from 'ngx-bootstrap/datepicker';
 // Interfaces
 import { ContactUSFormData, ContactUSApiResponse } from 'src/app/shared/interfaces/contact-form.interface';
 
-// import { IDropdownSettings } from "ng-multiselect-dropdown";
-
 @Component({
   selector: 'app-contact-us',
   templateUrl: './contact-us.component.html',
@@ -19,11 +17,6 @@ import { ContactUSFormData, ContactUSApiResponse } from 'src/app/shared/interfac
 export class ContactUsComponent implements OnInit, AfterViewInit {
   contactForm: FormGroup;
 
-  // Form options (if using select/checkbox)
-  accommodationTypes = ['Hotel', 'Villa', 'Resort', 'Apartment', 'Guest House'];
-  amenities = ['Pool', 'Spa', 'WiFi', 'Gym', 'Parking', 'Restaurant'];
-  services = ['Airport Transfer', 'Breakfast Included', 'All Inclusive', 'Room Service'];
-
   isSmsConsentCollapsed = true;
   isEmailConsentCollapsed = true;
 
@@ -31,7 +24,6 @@ export class ContactUsComponent implements OnInit, AfterViewInit {
   hasError = false;
   errorMessage = '';
   isSubmitting = false;
-  // Add a flag to track spinner visibility
   isSpinnerVisible = false;
 
   // View options for checkboxes
@@ -63,10 +55,10 @@ export class ContactUsComponent implements OnInit, AfterViewInit {
     { value: 'Washer/Dryer', label: 'Washer/Dryer' }
   ];
 
-  // Datepicker configurations for US format
+  // Datepicker configurations - CHANGED theme-blue to theme-default
   bsConfig = {
-    dateInputFormat: 'MM/DD/YYYY', // US format
-    containerClass: 'theme-blue', // Changed from theme-blue
+    dateInputFormat: 'MM/DD/YYYY',
+    containerClass: 'theme-default', // Changed from theme-blue
     showWeekNumbers: false,
     isAnimated: true,
     adaptivePosition: true,
@@ -76,8 +68,8 @@ export class ContactUsComponent implements OnInit, AfterViewInit {
   };
 
   departureConfig = {
-    dateInputFormat: 'MM/DD/YYYY', // US format
-    containerClass: 'theme-blue', // Changed from theme-blue
+    dateInputFormat: 'MM/DD/YYYY',
+    containerClass: 'theme-default', // Changed from theme-blue
     showWeekNumbers: false,
     isAnimated: true,
     adaptivePosition: true,
@@ -86,9 +78,8 @@ export class ContactUsComponent implements OnInit, AfterViewInit {
     displayMonths: 1
   };
 
-  // Track arrival date separately for minDate logic
+  // Track arrival date for minDate logic
   arrivalDate: Date | null = null;
-  // Option 1: Use minDate as a separate property in the template
   departureMinDate: Date | undefined = undefined;
 
   constructor(
@@ -100,25 +91,10 @@ export class ContactUsComponent implements OnInit, AfterViewInit {
     private localeService: BsLocaleService
   ) {
     this.contactForm = this.createForm();
-    // Set locale
     this.localeService.use('en-gb');
   }
 
   ngOnInit(): void {
-    // this.dropdownList = [
-    //   { item_id: 1, item_text: "Private Home" },
-    //   { item_id: 2, item_text: "Condo" },
-    //   { item_id: 3, item_text: "Hotel/Resort" },
-    //   { item_id: 4, item_text: "Town Home" },
-    //   { item_id: 5, item_text: "Guest House" },
-    //   { item_id: 6, item_text: "Mobile Home" },
-    //   { item_id: 7, item_text: "Ski-in" },
-    // ];
-    // this.dropdownSettings = {
-    //   idField: "item_id",
-    //   textField: "item_text",
-    // };
-
     this.isLoading = true;
     this.spinner.show();
   }
@@ -162,22 +138,22 @@ export class ContactUsComponent implements OnInit, AfterViewInit {
 
   // Handle arrival date change
   onArrivalDateChange(date: Date): void {
-    if (date){
+    if (date) {
       this.arrivalDate = date;
       this.departureMinDate = date;
+
       // Clear departure if invalid
       const departureDate = this.contactForm.get('departure')?.value;
       if (departureDate && new Date(departureDate) < date) {
         this.contactForm.patchValue({ departure: null });
       }
-    }
-    else {
-      // If arrival date is cleared, also clear minDate
+    } else {
       this.departureMinDate = undefined;
+      this.arrivalDate = null;
     }
   }
 
-  // Optional: Also handle when user types date manually
+  // Handle manual date input
   onArrivalBlur(): void {
     const arrivalDate = this.contactForm.get('arrival')?.value;
     if (arrivalDate) {
@@ -185,7 +161,7 @@ export class ContactUsComponent implements OnInit, AfterViewInit {
     }
   }
 
-  // Custom validator for departure date
+  // Validate departure date
   validateDepartureDate(): void {
     const arrival = this.contactForm.get('arrival')?.value;
     const departure = this.contactForm.get('departure')?.value;
@@ -201,9 +177,7 @@ export class ContactUsComponent implements OnInit, AfterViewInit {
 
   clearArrivalDate(): void {
     this.contactForm.patchValue({ arrival: null });
-    // Reset departure minDate
     this.departureMinDate = undefined;
-    // Also update the arrival date tracker
     this.arrivalDate = null;
   }
 
@@ -211,32 +185,19 @@ export class ContactUsComponent implements OnInit, AfterViewInit {
     this.contactForm.patchValue({ departure: null });
   }
 
-  /*
-  // Helper to format date for display
-  formatDateForDisplay(date: Date | string): string {
-    if (!date) return '';
-    const d = new Date(date);
-    return d.toLocaleDateString('en-US', {
-      month: '2-digit',
-      day: '2-digit',
-      year: 'numeric'
-    });
-  }
-  */
-
   onSubmit(): void {
-    // Add date validation before submission
     this.validateDepartureDate();
 
     if (this.contactForm.invalid) {
-      this.showErrorToast('Please enter valid value for all the fields highlighted in red', 'Missing Required Fields/Invalid Data');
+      this.showErrorToast('Please enter valid values for all required fields', 'Missing Required Fields');
       this.markFormGroupTouched(this.contactForm);
       return;
     }
 
-    // Set spinner flag and show spinner
     this.isSpinnerVisible = true;
-    // Show spinner with custom message
+    this.isLoading = true;
+    this.isSubmitting = true;
+
     this.spinner.show(undefined, {
       type: 'ball-spin-clockwise',
       size: 'medium',
@@ -245,16 +206,11 @@ export class ContactUsComponent implements OnInit, AfterViewInit {
       fullScreen: true
     });
 
-    // You can also show a loading toast if needed
     const loadingToast = this.toast.info('Submitting contact form data...', '', {
       disableTimeOut: true,
       closeButton: false
     });
 
-    this.isLoading = true;
-    this.isSubmitting = true;
-
-    // Prepare form data for API
     const formData: ContactUSFormData = {
       firstName: this.contactForm.value.firstName,
       lastName: this.contactForm.value.lastName,
@@ -278,23 +234,14 @@ export class ContactUsComponent implements OnInit, AfterViewInit {
       checkArray2: this.contactForm.value.checkArray2 || []
     };
 
-    // Call the API
     this.crudService.submitContactForm(formData).subscribe({
       next: (response: ContactUSApiResponse) => {
-        // Hide spinner and loading toast
-        this.isSubmitting = false;
-        this.isLoading = false;
-        this.isSpinnerVisible = false;
-        this.spinner.hide();
+        this.handleSubmissionComplete();
         this.toast.clear(loadingToast.toastId);
         this.handleApiResponse(response);
       },
       error: (error: Error) => {
-        // Hide spinner and loading toast
-        this.isSubmitting = false;
-        this.isSpinnerVisible = false;
-        this.isLoading = false;
-        this.spinner.hide();
+        this.handleSubmissionComplete();
         this.toast.clear(loadingToast.toastId);
         this.handleError(error);
       }
@@ -302,11 +249,8 @@ export class ContactUsComponent implements OnInit, AfterViewInit {
   }
 
   resetForm(showToast: boolean = true): void {
-    // Reset the form to initial state
-    this.contactForm.reset();
-
-    // Set default values for required fields
-    this.contactForm.patchValue({
+    // Reset form values
+    this.contactForm.reset({
       totalGuests: '1',
       adults: '1',
       kids: '0',
@@ -315,36 +259,26 @@ export class ContactUsComponent implements OnInit, AfterViewInit {
       proximity: 'Not applicable'
     });
 
-    // Clear FormArrays (checkboxes)
-    const checkArray = this.contactForm.get('checkArray') as FormArray;
-    const checkArray2 = this.contactForm.get('checkArray2') as FormArray;
-
-    while (checkArray.length > 0) {
-      checkArray.removeAt(0);
-    }
-
-    while (checkArray2.length > 0) {
-      checkArray2.removeAt(0);
-    }
+    // Clear checkbox arrays
+    this.clearFormArray(this.contactForm.get('checkArray') as FormArray);
+    this.clearFormArray(this.contactForm.get('checkArray2') as FormArray);
 
     // Reset component state
     this.isLoading = false;
     this.hasError = false;
     this.errorMessage = '';
     this.isSpinnerVisible = false;
-    // this.apiResponse = null;
-    // this.isSubmitted = false;
+    this.isSubmitting = false;
 
-    // Mark form as pristine and untouched
+    // Reset form state
     this.contactForm.markAsPristine();
     this.contactForm.markAsUntouched();
 
-    // Reset datepicker related properties
+    // Reset datepicker state
     this.arrivalDate = null;
     this.departureMinDate = undefined;
 
     if (showToast) {
-      // Show success message (optional)
       this.toast.info('Form has been reset', 'Reset Complete', {
         timeOut: 2000,
         progressBar: true,
@@ -353,14 +287,27 @@ export class ContactUsComponent implements OnInit, AfterViewInit {
     }
   }
 
-  // Helper to format date from input
+  // Helper methods
   private formatDate(dateString: string): string {
     if (!dateString) return '';
     const date = new Date(dateString);
-    return date.toISOString().split('T')[0]; // Returns YYYY-MM-DD format
+    return date.toISOString().split('T')[0];
   }
 
-  // Handle checkbox changes
+  private clearFormArray(formArray: FormArray): void {
+    while (formArray.length !== 0) {
+      formArray.removeAt(0);
+    }
+  }
+
+  private handleSubmissionComplete(): void {
+    this.isSubmitting = false;
+    this.isLoading = false;
+    this.isSpinnerVisible = false;
+    this.spinner.hide();
+  }
+
+  // Checkbox handling
   onCheckboxChange(event: any, controlName: string, value: string): void {
     const formArray = this.contactForm.get(controlName) as FormArray;
 
@@ -374,16 +321,12 @@ export class ContactUsComponent implements OnInit, AfterViewInit {
     }
   }
 
-  // Check if checkbox is checked
   isCheckboxChecked(controlName: string, value: string): boolean {
     const formArray = this.contactForm.get(controlName) as FormArray;
-    return formArray.controls.some(control => control.value === value);
+    return formArray?.controls.some(control => control.value === value) || false;
   }
 
-  getSelectedOptions(controlName: string): string[] {
-    return this.contactForm.get(controlName)?.value || [];
-  }
-
+  // Form validation
   private markFormGroupTouched(formGroup: FormGroup): void {
     Object.values(formGroup.controls).forEach(control => {
       control.markAsTouched();
@@ -393,18 +336,15 @@ export class ContactUsComponent implements OnInit, AfterViewInit {
     });
   }
 
-  // In component
   markFieldAsTouched(fieldName: string): void {
     this.contactForm.get(fieldName)?.markAsTouched();
   }
 
-  // Validation helpers
   isFieldInvalid(fieldName: string): boolean {
     const field = this.contactForm.get(fieldName);
     return field ? (field.invalid && (field.dirty || field.touched)) : false;
   }
 
-  // Update getFieldError to provide more specific messages
   getFieldError(fieldName: string): string {
     const field = this.contactForm.get(fieldName);
     if (!field || !field.errors) return '';
@@ -426,29 +366,23 @@ export class ContactUsComponent implements OnInit, AfterViewInit {
     }
 
     if (field.errors['email']) return 'Please enter a valid email address';
+    if (field.errors['minlength']) return `Minimum ${field.errors['minlength'].requiredLength} characters required`;
+    if (field.errors['min']) return `Minimum value is ${field.errors['min'].min}`;
 
-    if (field.errors['minlength']) {
-      const requiredLength = field.errors['minlength'].requiredLength;
-      return `Minimum ${requiredLength} characters required`;
+    if (field.errors['pattern'] && fieldName === 'phone') {
+      return 'Phone number must be 10-12 digits (numbers only)';
     }
 
-    if (field.errors['min']) {
-      const minValue = field.errors['min'].min;
-      return `Minimum value is ${minValue}`;
-    }
-
-    if (field.errors['pattern']) {
-      if (fieldName === 'phone') return 'Phone number must be 10-12 digits (numbers only)';
-      return 'Invalid format';
+    if (field.errors['dateRange']) {
+      return field.errors['dateRange'];
     }
 
     return '';
   }
 
+  // Test submission
   testSubmit(): void {
-    // Set spinner flag and show spinner
     this.isSpinnerVisible = true;
-    // Show spinner with custom message
     this.spinner.show(undefined, {
       type: 'ball-spin-clockwise',
       size: 'medium',
@@ -457,18 +391,16 @@ export class ContactUsComponent implements OnInit, AfterViewInit {
       fullScreen: true
     });
 
-    // You can also show a loading toast if needed
-    const loadingToast = this.toast.info('Submitting contact form data...', '', {
+    const loadingToast = this.toast.info('Submitting test data...', '', {
       disableTimeOut: true,
       closeButton: false
     });
 
-    // Prepare static test data
     const testData: ContactUSFormData = {
       firstName: "Jane",
       lastName: "Smith",
       email: "jane.smith@example.com",
-      phone: "+1 (555) 123-4567",
+      phone: "5551234567",
       otherArea: "Additional area details",
       desDestination: "Maldives",
       arrival: "2024-06-15",
@@ -484,37 +416,29 @@ export class ContactUsComponent implements OnInit, AfterViewInit {
       proximity: "Beachfront",
       checkArray: ["Pool", "Spa", "WiFi"],
       checkArray2: ["Airport Transfer", "Breakfast Included"],
-      addNotes: "We are celebrating our anniversary and would like a room with ocean view. Please include any special offers for honeymoon packages."
+      addNotes: "We are celebrating our anniversary and would like a room with ocean view."
     };
 
-    // Call the API
     this.crudService.submitContactForm(testData).subscribe({
       next: (response: ContactUSApiResponse) => {
-        // Hide spinner and loading toast
         this.spinner.hide();
         this.isSpinnerVisible = false;
         this.toast.clear(loadingToast.toastId);
-
         this.handleApiResponse(response);
       },
       error: (error: Error) => {
-        // Hide spinner and loading toast
         this.spinner.hide();
         this.isSpinnerVisible = false;
         this.toast.clear(loadingToast.toastId);
-
         this.handleError(error);
       }
     });
   }
 
-  /**
-   * Handle API success/error response
-   */
+  // API response handling
   private handleApiResponse(response: ContactUSApiResponse): void {
     if (response.status === 'success') {
       this.showSuccessToast(response);
-      // Reset form after 2 seconds, but don't show "reset" toast
       setTimeout(() => {
         this.resetForm(false);
       }, 2000);
@@ -524,14 +448,8 @@ export class ContactUsComponent implements OnInit, AfterViewInit {
         'Submission Failed'
       );
     }
-
-    // Log response for debugging
-    console.log('API Response:', response);
   }
 
-  /**
-   * Handle HTTP/network errors
-   */
   private handleError(error: Error): void {
     let errorMessage = 'An unknown error occurred';
 
@@ -544,35 +462,27 @@ export class ContactUsComponent implements OnInit, AfterViewInit {
     }
 
     this.showErrorToast(errorMessage, 'Connection Error');
-    console.error('Error details:', error);
   }
 
-  /**
-   * Show success toast with formatted message
-   */
   private showSuccessToast(response: ContactUSApiResponse): void {
-    // Create detailed success message
-    let title = 'Success! ✓';
     let message = `<strong>${response.message}</strong>`;
 
-    // Add inquiry ID if available
     if (response.inquiry_id) {
       message += `<br><small>Reference ID: ${response.inquiry_id}</small>`;
     }
 
-    // Add email status
     if (response.emails_sent) {
-      const emailIcons = [];
-      if (response.emails_sent.user) emailIcons.push('✓ User email');
-      else emailIcons.push('✗ User email');
+      const emailStatus = [];
+      if (response.emails_sent.user) emailStatus.push('✓ User email');
+      else emailStatus.push('✗ User email');
 
-      if (response.emails_sent.admin) emailIcons.push('✓ Admin email');
-      else emailIcons.push('✗ Admin email');
+      if (response.emails_sent.admin) emailStatus.push('✓ Admin email');
+      else emailStatus.push('✗ Admin email');
 
-      message += `<br><small>${emailIcons.join(' | ')}</small>`;
+      message += `<br><small>${emailStatus.join(' | ')}</small>`;
     }
 
-    this.toast.success(message, title, {
+    this.toast.success(message, 'Success! ✓', {
       timeOut: 5000,
       progressBar: true,
       closeButton: true,
@@ -582,33 +492,20 @@ export class ContactUsComponent implements OnInit, AfterViewInit {
     });
   }
 
-  /**
-   * Show error toast
-   */
   private showErrorToast(message: string, title: string = 'Error'): void {
     this.toast.error(message, title, {
       timeOut: 5000,
       progressBar: true,
       closeButton: true,
       positionClass: 'toast-top-right',
-      enableHtml: false,
       tapToDismiss: true
     });
   }
 
-  // Get loading text based on state
   get loadingText(): string {
-    if (this.hasError) {
-      return 'Failed to load Contactus Form';
-    }
-    else if (this.isSubmitting) {
-      return 'Please wait while the form is being submitted...';
-    }
-    else if (this.isLoading) {
-      return 'Loading contactus form, please wait...';
-    }
-    else{
-      return 'Contactus Form';
-    }
+    if (this.hasError) return 'Failed to load Contact Form';
+    if (this.isSubmitting) return 'Please wait while the form is being submitted...';
+    if (this.isLoading) return 'Loading contact form, please wait...';
+    return 'Contact Form';
   }
 }

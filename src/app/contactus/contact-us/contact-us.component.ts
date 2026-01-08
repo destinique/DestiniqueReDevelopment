@@ -9,6 +9,9 @@ import { BsLocaleService } from 'ngx-bootstrap/datepicker';
 // Interfaces
 import { ContactUSFormData, ContactUSApiResponse } from 'src/app/shared/interfaces/contact-form.interface';
 
+// Add this import if not already imported
+// import { NgbDropdown } from '@ng-bootstrap/ng-bootstrap';
+
 @Component({
   selector: 'app-contact-us',
   templateUrl: './contact-us.component.html',
@@ -25,6 +28,14 @@ export class ContactUsComponent implements OnInit, AfterViewInit {
   errorMessage = '';
   isSubmitting = false;
   isSpinnerVisible = false;
+
+  //accommodation type options array
+  accommodationOptions = [
+    { value: 'Private Home', label: 'Private Home' },
+    { value: 'Condo', label: 'Condo' },
+    { value: 'Resort', label: 'Resort' },
+    { value: 'Villa', label: 'Villa' }
+  ];
 
   // View options for checkboxes
   viewOptions = [
@@ -118,7 +129,8 @@ export class ContactUsComponent implements OnInit, AfterViewInit {
       departure: ['', Validators.required],
       totalGuests: ['1', [Validators.required, Validators.min(1)]],
       budgets: ['', Validators.required],
-      accomTypeSelect: ['', Validators.required],
+      // accomTypeSelect: ['', Validators.required],
+      accomTypeSelect: this.fb.array([], Validators.required),
 
       // Optional fields
       otherArea: [''],
@@ -185,6 +197,59 @@ export class ContactUsComponent implements OnInit, AfterViewInit {
     this.contactForm.patchValue({ departure: null });
   }
 
+// Add method to handle accommodation type selection
+  onAccommodationTypeChange(event: any, value: string): void {
+    const accomArray = this.contactForm.get('accomTypeSelect') as FormArray;
+
+    if (event.target.checked) {
+      // Add the value to the array
+      accomArray.push(this.fb.control(value));
+    } else {
+      // Remove the value from the array
+      const index = accomArray.controls.findIndex(x => x.value === value);
+      if (index >= 0) {
+        accomArray.removeAt(index);
+      }
+    }
+  }
+
+  // Check if an accommodation type is selected
+  isAccommodationSelected(value: string): boolean {
+    const accomArray = this.contactForm.get('accomTypeSelect') as FormArray;
+    return accomArray.controls.some(control => control.value === value);
+  }
+
+  // Get selected accommodation types as a string for display
+  getSelectedAccommodations(): string {
+    const accomArray = this.contactForm.get('accomTypeSelect') as FormArray;
+    return accomArray.value.join(', ');
+  }
+
+  // Clear all accommodation selections
+  clearAccommodationSelections(): void {
+    const accomArray = this.contactForm.get('accomTypeSelect') as FormArray;
+    while (accomArray.length !== 0) {
+      accomArray.removeAt(0);
+    }
+  }
+
+  // Update the validation for accommodation type
+  isAccommodationTypeInvalid(): boolean {
+    const field = this.contactForm.get('accomTypeSelect');
+    return field ? (field.invalid && (field.dirty || field.touched)) : false;
+  }
+
+  getAccommodationTypeError(): string {
+    const field = this.contactForm.get('accomTypeSelect');
+    if (!field || !field.errors) return '';
+
+    if (field.errors['required']) {
+      return 'Please select at least one accommodation type';
+    }
+    return '';
+  }
+
+
   onSubmit(): void {
     this.validateDepartureDate();
 
@@ -229,7 +294,8 @@ export class ContactUsComponent implements OnInit, AfterViewInit {
       rooms: parseInt(this.contactForm.value.rooms) || undefined,
       proximity: this.contactForm.value.proximity || undefined,
       addNotes: this.contactForm.value.addNotes || undefined,
-      accomType: [this.contactForm.value.accomTypeSelect],
+      // accomType: [this.contactForm.value.accomTypeSelect],
+      accomType: this.contactForm.value.accomTypeSelect || [],
       checkArray: this.contactForm.value.checkArray || [],
       checkArray2: this.contactForm.value.checkArray2 || []
     };
@@ -262,6 +328,9 @@ export class ContactUsComponent implements OnInit, AfterViewInit {
     // Clear checkbox arrays
     this.clearFormArray(this.contactForm.get('checkArray') as FormArray);
     this.clearFormArray(this.contactForm.get('checkArray2') as FormArray);
+
+    // NEW: Clear accommodation type array
+    this.clearFormArray(this.contactForm.get('accomTypeSelect') as FormArray);
 
     // Reset component state
     this.isLoading = false;

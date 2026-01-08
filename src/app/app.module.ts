@@ -11,6 +11,11 @@ import { HeaderModule } from './header/header.module';
 import { HttpClientModule } from '@angular/common/http'; // <-- import here
 import { FooterModule } from "./footer/footer.module";
 import { TopScrollModule } from "./top-scroll/top-scroll.module";
+import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
+import { defineLocale } from 'ngx-bootstrap/chronos';
+import { enGbLocale } from 'ngx-bootstrap/locale'; // Use enGbLocale but configure for US format
+// Define locale
+defineLocale('en-gb', enGbLocale);
 
 @NgModule({
   declarations: [
@@ -41,7 +46,8 @@ import { TopScrollModule } from "./top-scroll/top-scroll.module";
     HeaderModule,
     HttpClientModule,
     FooterModule,
-    TopScrollModule
+    TopScrollModule,
+    BsDatepickerModule.forRoot()
   ],
   providers: [],
   bootstrap: [AppComponent]

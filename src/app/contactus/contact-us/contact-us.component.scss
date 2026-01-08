@@ -459,3 +459,172 @@ input[type="date"]::-webkit-calendar-picker-indicator:hover {
 
   i { color: #378f86; }
 }
+
+
+/* Multiselect Dropdown Fixes */
+.multiselect-dropdown {
+  .form-select {
+    cursor: pointer;
+    background-color: #fff !important;
+    border: 1px solid #E0E0E0 !important;
+    border-radius: 0 !important;
+    padding: 0.75rem !important;
+    font-size: 1rem !important;
+    line-height: 1.5 !important;
+    min-height: 50px;
+    display: flex;
+    align-items: center;
+
+    &:focus {
+      box-shadow: 0 0 0 0.2rem rgba(55, 143, 134, 0.25) !important;
+      border-color: #378f86 !important;
+    }
+
+    &.is-invalid {
+      border-color: #e63946 !important;
+
+      &:focus {
+        box-shadow: 0 0 0 0.2rem rgba(230, 57, 70, 0.25) !important;
+      }
+    }
+
+    i {
+      color: #378f86;
+      transition: transform 0.3s ease;
+    }
+  }
+}
+
+/* Dropdown Menu Fixes */
+.dropdown-menu {
+  border: 1px solid #002245 !important;
+  border-radius: 0 !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+  padding: 0.5rem 0 !important;
+
+  .dropdown-item {
+    padding: 0.5rem 1rem !important;
+
+    &:hover, &:focus {
+      background-color: rgba(55, 143, 134, 0.1) !important;
+    }
+
+    /* Form Check Fixes */
+    .form-check {
+      margin: 0 !important;
+      padding: 0 !important;
+      display: flex !important;
+      align-items: center !important;
+      width: 100% !important;
+
+      .form-check-input {
+        width: 18px !important;
+        height: 18px !important;
+        margin: 0 !important;
+        cursor: pointer !important;
+        border: 1px solid #002245 !important;
+
+        &:checked {
+          background-color: #378f86 !important;
+          border-color: #378f86 !important;
+        }
+
+        &:focus {
+          box-shadow: 0 0 0 0.2rem rgba(55, 143, 134, 0.25) !important;
+        }
+      }
+
+      .form-check-label {
+        cursor: pointer !important;
+        user-select: none !important;
+        color: #002245 !important;
+        font-size: 0.95rem !important;
+        font-weight: 400 !important;
+        margin-left: 0.5rem !important;
+        flex: 1 !important;
+      }
+    }
+  }
+
+  .dropdown-divider {
+    margin: 0.5rem 0 !important;
+    border-top: 1px solid #dee2e6 !important;
+  }
+}
+
+/* Selected Items Preview */
+.selected-items-preview {
+  small {
+    font-size: 0.85rem !important;
+
+    i {
+      font-size: 0.8rem !important;
+    }
+
+    strong {
+      color: #002245 !important;
+      font-weight: 600 !important;
+    }
+  }
+}
+
+/* Clear Button */
+.btn-outline-secondary {
+  border-color: #6c757d !important;
+  color: #6c757d !important;
+  font-size: 0.85rem !important;
+  padding: 0.375rem 0.75rem !important;
+
+  &:hover {
+    background-color: #6c757d !important;
+    color: white !important;
+    border-color: #6c757d !important;
+  }
+}
+
+/* Fix for checkbox visibility */
+.form-check-input {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background-color: #fff;
+  border: 1px solid #002245;
+  width: 18px;
+  height: 18px;
+  position: relative;
+
+  &:checked {
+    background-color: #378f86;
+    border-color: #378f86;
+
+    &::after {
+      content: '';
+      position: absolute;
+      display: block;
+      left: 6px;
+      top: 2px;
+      width: 4px;
+      height: 8px;
+      border: solid white;
+      border-width: 0 2px 2px 0;
+      transform: rotate(45deg);
+    }
+  }
+}
+
+/* Alternative: Use Bootstrap 5 checkboxes if available */
+@media (max-width: 768px) {
+  .multiselect-dropdown {
+    .form-select {
+      font-size: 0.9rem !important;
+    }
+  }
+
+  .dropdown-menu {
+    .dropdown-item {
+      .form-check-label {
+        font-size: 0.9rem !important;
+      }
+    }
+  }
+}

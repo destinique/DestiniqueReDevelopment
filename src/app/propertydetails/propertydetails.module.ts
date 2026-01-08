@@ -1,17 +1,17 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-
 import { PropertydetailsRoutingModule } from './propertydetails-routing.module';
 import { PropertydetailsComponent } from './propertydetails/propertydetails.component';
-
+import { TabsModule } from 'ngx-bootstrap/tabs';
 
 @NgModule({
   declarations: [
     PropertydetailsComponent
   ],
-  imports: [
-    CommonModule,
-    PropertydetailsRoutingModule
-  ]
+    imports: [
+        CommonModule,
+        PropertydetailsRoutingModule,
+        TabsModule.forRoot()
+    ]
 })
 export class PropertydetailsModule { }

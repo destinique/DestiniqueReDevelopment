@@ -1,3 +1,90 @@
+<ngx-spinner
+  bdColor="rgba(0, 0, 0, 0.8)"
+  size="medium"
+  color="#fff"
+  type="ball-circus"
+  [fullScreen]="true"
+>
+  <p id="spinner" style="color: white">Please Wait...</p>
+</ngx-spinner>
+
+<div class="property-gallery">
+  <div class="gallery-container">
+    <!-- Main Gallery Section -->
+    <div class="main-image-section">
+      <div class="image-counter">
+        <span class="current-slide">{{ currentSlide + 1 }}</span> /
+        <span class="total-slides">{{ images.length }}</span>
+      </div>
+
+      <!-- Main Swiper Container -->
+      <div class="swiper main-swiper" #mainSwiper>
+        <div class="swiper-wrapper">
+          <div class="swiper-slide" *ngFor="let image of images; let i = index">
+            <div class="main-image-wrapper">
+              <img [src]="image.URLTxt"
+                   [alt]="image.alt || image.Caption"
+                   loading="lazy"
+                   decoding="async"
+                   class="main-image img-fluid">
+              <div class="image-number">
+                {{ getImageDisplayNumber(image, i) }}
+              </div>
+              <div *ngIf="image.Caption" class="image-caption">
+                {{ image.Caption }}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Navigation buttons -->
+        <div class="swiper-button-next"></div>
+        <div class="swiper-button-prev"></div>
+
+        <!-- Pagination dots -->
+        <div class="swiper-pagination"></div>
+      </div>
+    </div>
+
+    <!-- Thumbnail Gallery Section -->
+    <div class="thumbnail-section">
+      <div class="swiper thumb-swiper" #thumbSwiper>
+        <div class="swiper-wrapper">
+          <div class="swiper-slide thumbnail-wrapper"
+               *ngFor="let image of images; let i = index"
+               [class.active]="currentSlide === i"
+               (click)="goToSlide(i)">
+            <img [src]="image.thumbnailUrl || image.URLTxt"
+                 [alt]="image.alt || image.Caption"
+                 class="thumbnail img-fluid"
+                 loading="lazy"
+                 decoding="async"
+                 [attr.data-src]="image.thumbnailUrl || image.URLTxt"
+            >
+            <div class="thumbnail-number">
+              {{ getImageDisplayNumber(image, i) }}
+            </div>
+          </div>
+        </div>
+
+        <!-- MARK: Updated - Arrows positioned over thumbnails -->
+        <div class="swiper-button-prev-thumb custom-arrow thumb-nav-arrow thumb-nav-prev">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M15 18l-6-6 6-6"/>
+          </svg>
+        </div>
+
+        <div class="swiper-button-next-thumb custom-arrow thumb-nav-arrow thumb-nav-next">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M9 18l6-6-6-6"/>
+          </svg>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
 <div class="container-fluid">
   <div class="row mb-2">
     <div class="col-md-8">

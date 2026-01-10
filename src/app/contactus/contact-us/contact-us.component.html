@@ -1,19 +1,19 @@
 <div class="contact-header-container">
     <!-- Loading Spinner -->
     <ngx-spinner
-      bdColor="rgba(0, 0, 0, 0.8)"
-      size="medium"
-      color="#fff"
-      type="ball-circus"
-      [fullScreen]="true"
-      *ngIf="isLoading">
-      <p style="color: white">{{ loadingText }}</p>
+        bdColor="rgba(0, 0, 0, 0.8)"
+        size="medium"
+        color="#fff"
+        type="ball-circus"
+        [fullScreen]="true"
+        *ngIf="isLoading">
+        <p style="color: white">{{ loadingText }}</p>
     </ngx-spinner>
 
     <div class="overlay-effect h-100 w-100"></div>
     <img src="assets/website_images/contact/contact-banner.webp" alt="contact-banner"
          loading="lazy" decoding="async" class="img-fluid"
-    />
+         />
     <div class="centered">
         <h2 class="text-center contact-banner-header">Destinique <br> Travel Request Form</h2>
     </div>
@@ -34,510 +34,511 @@
 
             <!-- First Name -->
             <div class="col-sm-6 col-6 d-flex flex-column">
-              <div class="w-100 lbl title-color">
-                First Name <span>*</span>
-              </div>
-              <div class="w-100">
-                <div class="mb-3">
-                  <input
-                    type="text"
-                    class="form-control"
-                    formControlName="firstName"
-                    (blur)="markFieldAsTouched('firstName')"
-                    [class.is-invalid]="isFieldInvalid('firstName')"/>
-                  <div
-                    class="invalid-feedback"
-                    *ngIf="isFieldInvalid('firstName')">
-                    {{ getFieldError('firstName') }}
-                  </div>
+                <div class="w-100 lbl title-color">
+                    First Name<span>*</span>
                 </div>
-              </div>
+                <div class="w-100">
+                    <div class="mb-3">
+                        <input
+                            type="text"
+                            class="form-control"
+                            formControlName="firstName"
+                            (blur)="markFieldAsTouched('firstName')"
+                            [class.is-invalid]="isFieldInvalid('firstName')"/>
+                        <div
+                            class="invalid-feedback"
+                            *ngIf="isFieldInvalid('firstName')">
+                            {{ getFieldError('firstName') }}
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <!-- Last Name -->
             <div class="col-sm-6 col-6 d-flex flex-column">
-              <div class="w-100 lbl title-color">
-                Last Name <span>*</span>
-              </div>
-              <div class="w-100">
-                <div class="mb-3">
-                  <input
-                    type="text"
-                    class="form-control"
-                    formControlName="lastName"
-                    (blur)="markFieldAsTouched('lastName')"
-                    [class.is-invalid]="isFieldInvalid('lastName')"/>
-                  <div
-                    class="invalid-feedback"
-                    *ngIf="isFieldInvalid('lastName')">
-                    {{ getFieldError('lastName') }}
-                  </div>
+                <div class="w-100 lbl title-color">
+                    Last Name<span>*</span>
                 </div>
-              </div>
+                <div class="w-100">
+                    <div class="mb-3">
+                        <input
+                            type="text"
+                            class="form-control"
+                            formControlName="lastName"
+                            (blur)="markFieldAsTouched('lastName')"
+                            [class.is-invalid]="isFieldInvalid('lastName')"/>
+                        <div
+                            class="invalid-feedback"
+                            *ngIf="isFieldInvalid('lastName')">
+                            {{ getFieldError('lastName') }}
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <!-- Email Address -->
             <div class="col-sm-6 col-6 d-flex flex-column">
-              <div class="w-100 lbl title-color">
-                Email Address <span>*</span>
-              </div>
-              <div class="w-100">
-                <div class="mb-3">
-                  <input
-                    type="email"
-                    class="form-control"
-                    formControlName="email"
-                    (blur)="markFieldAsTouched('email')"
-                    [class.is-invalid]="isFieldInvalid('email')"/>
-                  <div
-                    class="invalid-feedback"
-                    *ngIf="isFieldInvalid('email')">
-                    {{ getFieldError('email') }}
-                  </div>
+                <div class="w-100 lbl title-color">
+                    Email Address<span>*</span>
                 </div>
-              </div>
+                <div class="w-100">
+                    <div class="mb-3">
+                        <input
+                            type="email"
+                            class="form-control"
+                            formControlName="email"
+                            (blur)="markFieldAsTouched('email')"
+                            [class.is-invalid]="isFieldInvalid('email')"/>
+                        <div
+                            class="invalid-feedback"
+                            *ngIf="isFieldInvalid('email')">
+                            {{ getFieldError('email') }}
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <!-- Phone Number -->
             <div class="col-sm-6 col-6 d-flex flex-column">
-              <div class="w-100 lbl title-color">
-                Phone Number <span>*</span>
-              </div>
-              <div class="w-100">
-                <div class="mb-3">
-                  <input
-                    type="text"
-                    class="form-control"
-                    formControlName="phone"
-                    (blur)="markFieldAsTouched('phone')"
-                    [class.is-invalid]="isFieldInvalid('phone')"/>
-                  <div
-                    class="invalid-feedback"
-                    *ngIf="isFieldInvalid('phone')">
-                    {{ getFieldError('phone') }}
-                  </div>
+                <div class="w-100 lbl title-color">
+                    Phone Number<span>*</span>
                 </div>
-              </div>
+                <div class="w-100">
+                    <div class="mb-3">
+                        <input
+                            type="text"
+                            class="form-control"
+                            formControlName="phone"
+                            (blur)="markFieldAsTouched('phone')"
+                            [class.is-invalid]="isFieldInvalid('phone')"/>
+                        <div
+                            class="invalid-feedback"
+                            *ngIf="isFieldInvalid('phone')">
+                            {{ getFieldError('phone') }}
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <!-- Desired Destination -->
             <div class="col-12 d-flex flex-column">
-              <div class="w-100 lbl title-color">
-                Desired Destination <span>*</span>
-              </div>
-              <div class="w-100">
-                <div class="mb-3">
-                  <input
-                    type="text"
-                    id="destin"
-                    class="form-control"
-                    formControlName="desDestination"
-                    (blur)="markFieldAsTouched('desDestination')"
-                    [class.is-invalid]="isFieldInvalid('desDestination')"/>
-                  <div
-                    class="invalid-feedback"
-                    *ngIf="isFieldInvalid('desDestination')">
-                    {{ getFieldError('desDestination') }}
-                  </div>
+                <div class="w-100 lbl title-color">
+                    Desired Destination<span>*</span>
                 </div>
-              </div>
+                <div class="w-100">
+                    <div class="mb-3">
+                        <input
+                            type="text"
+                            id="destin"
+                            class="form-control"
+                            formControlName="desDestination"
+                            (blur)="markFieldAsTouched('desDestination')"
+                            [class.is-invalid]="isFieldInvalid('desDestination')"/>
+                        <div
+                            class="invalid-feedback"
+                            *ngIf="isFieldInvalid('desDestination')">
+                            {{ getFieldError('desDestination') }}
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <!-- Other Areas -->
             <div class="col-12 d-flex flex-column">
-              <div class="w-100 lbl title-color">
-                If you are open to other locations, please list the areas you would like to consider:
-              </div>
-              <div class="w-100">
-                <div class="mb-3">
-                  <input
-                    type="text"
-                    class="form-control"
-                    formControlName="otherArea"/>
+                <div class="w-100 lbl title-color">
+                    If you are open to other locations, please list the areas you would like to consider:
                 </div>
-              </div>
+                <div class="w-100">
+                    <div class="mb-3">
+                        <input
+                            type="text"
+                            class="form-control"
+                            formControlName="otherArea"/>
+                    </div>
+                </div>
             </div>
 
             <!-- Arrival Date -->
             <div class="col-sm-6 col-6 col-md-4 d-flex flex-column">
-              <div class="w-100 lbl title-color">
-                Arrival Date <span>*</span>
-              </div>
-              <div class="w-100">
-                <div class="mb-3">
-                  <div class="input-group">
-                    <input
-                      type="text"
-                      placeholder="MM/DD/YYYY"
-                      class="form-control"
-                      formControlName="arrival"
-                      bsDatepicker
-                      [bsConfig]="bsConfig"
-                      [bsValue]="contactForm.get('arrival')?.value"
-                      (bsValueChange)="onArrivalDateChange($event)"
-                      (blur)="onArrivalBlur(); contactForm.get('arrival')?.markAsTouched()"
-                      [class.is-invalid]="isFieldInvalid('arrival')"/>
-                      <span class="input-group-text"><i class="fas fa-calendar-alt"></i></span>
-                  </div>
-                  <div
-                    class="invalid-feedback"
-                    *ngIf="isFieldInvalid('arrival')">
-                    {{ getFieldError('arrival') }}
-                  </div>
+                <div class="w-100 lbl title-color">
+                    Arrival Date<span>*</span>
                 </div>
-              </div>
+                <div class="w-100">
+                    <div class="mb-3">
+                        <div class="input-group">
+                            <input
+                                type="text"
+                                placeholder="MM/DD/YYYY"
+                                class="form-control"
+                                formControlName="arrival"
+                                bsDatepicker
+                                [bsConfig]="bsConfig"
+                                [bsValue]="contactForm.get('arrival')?.value"
+                                (bsValueChange)="onArrivalDateChange($event)"
+                                (blur)="onArrivalBlur(); contactForm.get('arrival')?.markAsTouched()"
+                                [class.is-invalid]="isFieldInvalid('arrival')"/>
+                            <span class="input-group-text">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"  viewBox="0 0 640 640"><path d="M216 64C229.3 64 240 74.7 240 88L240 128L400 128L400 88C400 74.7 410.7 64 424 64C437.3 64 448 74.7 448 88L448 128L480 128C515.3 128 544 156.7 544 192L544 480C544 515.3 515.3 544 480 544L160 544C124.7 544 96 515.3 96 480L96 192C96 156.7 124.7 128 160 128L192 128L192 88C192 74.7 202.7 64 216 64zM480 496C488.8 496 496 488.8 496 480L496 416L408 416L408 496L480 496zM496 368L496 288L408 288L408 368L496 368zM360 368L360 288L280 288L280 368L360 368zM232 368L232 288L144 288L144 368L232 368zM144 416L144 480C144 488.8 151.2 496 160 496L232 496L232 416L144 416zM280 416L280 496L360 496L360 416L280 416zM216 176L160 176C151.2 176 144 183.2 144 192L144 240L496 240L496 192C496 183.2 488.8 176 480 176L216 176z"/></svg>
+                            </span>
+                        </div>
+                        <div
+                            class="invalid-feedback"
+                            *ngIf="isFieldInvalid('arrival')">
+                            {{ getFieldError('arrival') }}
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <!-- Departure Date -->
             <div class="col-sm-6 col-6 col-md-4 d-flex flex-column">
-              <div class="w-100 lbl title-color">
-                Departure Date <span>*</span>
-              </div>
-              <div class="w-100">
-                <div class="mb-3">
-                  <div class="input-group">
-                    <input
-                      type="text"
-                      placeholder="MM/DD/YYYY"
-                      class="form-control"
-                      formControlName="departure"
-                      bsDatepicker
-                      [bsConfig]="departureConfig"
-                      [minDate]="departureMinDate || undefined"
-                      [bsValue]="contactForm.get('departure')?.value"
-                      (blur)="markFieldAsTouched('departure')"
-                      [class.is-invalid]="isFieldInvalid('departure')"/>
-                    <span class="input-group-text"><i class="fas fa-calendar-alt"></i></span>
-                  </div>
-                  <div
-                    class="invalid-feedback"
-                    *ngIf="isFieldInvalid('departure')">
-                    {{ getFieldError('departure') }}
-                  </div>
-                  <!-- Custom error for date range -->
-                  <div
-                    class="invalid-feedback d-block"
-                    *ngIf="contactForm.get('departure')?.errors?.['dateRange']">
-                    {{ contactForm.get('departure')?.errors?.['dateRange'] }}
-                  </div>
+                <div class="w-100 lbl title-color">
+                    Departure Date<span>*</span>
                 </div>
-              </div>
+                <div class="w-100">
+                    <div class="mb-3">
+                        <div class="input-group">
+                            <input
+                                type="text"
+                                placeholder="MM/DD/YYYY"
+                                class="form-control"
+                                formControlName="departure"
+                                bsDatepicker
+                                [bsConfig]="departureConfig"
+                                [minDate]="departureMinDate || undefined"
+                                [bsValue]="contactForm.get('departure')?.value"
+                                (blur)="markFieldAsTouched('departure')"
+                                [class.is-invalid]="isFieldInvalid('departure')"/>
+                            <span class="input-group-text">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"  viewBox="0 0 640 640"><path d="M216 64C229.3 64 240 74.7 240 88L240 128L400 128L400 88C400 74.7 410.7 64 424 64C437.3 64 448 74.7 448 88L448 128L480 128C515.3 128 544 156.7 544 192L544 480C544 515.3 515.3 544 480 544L160 544C124.7 544 96 515.3 96 480L96 192C96 156.7 124.7 128 160 128L192 128L192 88C192 74.7 202.7 64 216 64zM480 496C488.8 496 496 488.8 496 480L496 416L408 416L408 496L480 496zM496 368L496 288L408 288L408 368L496 368zM360 368L360 288L280 288L280 368L360 368zM232 368L232 288L144 288L144 368L232 368zM144 416L144 480C144 488.8 151.2 496 160 496L232 496L232 416L144 416zM280 416L280 496L360 496L360 416L280 416zM216 176L160 176C151.2 176 144 183.2 144 192L144 240L496 240L496 192C496 183.2 488.8 176 480 176L216 176z"/></svg>
+                            </span>
+                        </div>
+                        <div
+                            class="invalid-feedback"
+                            *ngIf="isFieldInvalid('departure')">
+                            {{ getFieldError('departure') }}
+                        </div>
+                        <!-- Custom error for date range -->
+                        <div
+                            class="invalid-feedback d-block"
+                            *ngIf="contactForm.get('departure')?.errors?.['dateRange']">
+                            {{ contactForm.get('departure')?.errors?.['dateRange'] }}
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <!-- Total Guests -->
             <div class="col-sm-6 col-6 col-md-4 d-flex flex-column">
-              <div class="w-100 lbl title-color">
-                Total Guests <span>*</span>
-              </div>
-              <div class="w-100">
-                <div class="mb-3 bg-white">
-                  <input
-                    type="number"
-                    class="form-control"
-                    formControlName="totalGuests"
-                    (blur)="markFieldAsTouched('totalGuests')"
-                    min="1"
-                    [class.is-invalid]="isFieldInvalid('totalGuests')"/>
-                  <div
-                    class="invalid-feedback"
-                    *ngIf="isFieldInvalid('totalGuests')">
-                    {{ getFieldError('totalGuests') }}
-                  </div>
+                <div class="w-100 lbl title-color">
+                    Total Guests<span>*</span>
                 </div>
-              </div>
+                <div class="w-100">
+                    <div class="mb-3 bg-white">
+                        <input
+                            type="number"
+                            class="form-control"
+                            formControlName="totalGuests"
+                            (blur)="markFieldAsTouched('totalGuests')"
+                            min="1"
+                            [class.is-invalid]="isFieldInvalid('totalGuests')"/>
+                        <div
+                            class="invalid-feedback"
+                            *ngIf="isFieldInvalid('totalGuests')">
+                            {{ getFieldError('totalGuests') }}
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <!-- Alternate Dates -->
             <div class="col-12 d-flex flex-column">
-              <div class="w-100 lbl title-color">
-                If your dates are flexible, enter the alternate dates here.
-              </div>
-              <div class="w-100">
-                <div class="mb-3">
-                  <input
-                    type="text"
-                    id="altDates"
-                    class="form-control"
-                    formControlName="altDates"/>
+                <div class="w-100 lbl title-color">
+                    If your dates are flexible, enter the alternate dates here.
                 </div>
-              </div>
+                <div class="w-100">
+                    <div class="mb-3">
+                        <input
+                            type="text"
+                            id="altDates"
+                            class="form-control"
+                            formControlName="altDates"/>
+                    </div>
+                </div>
             </div>
 
             <!-- Adults -->
             <div class="col-sm-6 col-6 col-md-4 d-flex flex-column">
-              <div class="w-100 lbl title-color">Adults</div>
-              <div class="w-100">
-                <div class="mb-3">
-                  <input
-                    type="number"
-                    class="form-control"
-                    formControlName="adults"
-                    min="0"/>
+                <div class="w-100 lbl title-color">Adults</div>
+                <div class="w-100">
+                    <div class="mb-3">
+                        <input
+                            type="number"
+                            class="form-control"
+                            formControlName="adults"
+                            min="0"/>
+                    </div>
                 </div>
-              </div>
             </div>
 
             <!-- Kids -->
             <div class="col-sm-6 col-6 col-md-4 d-flex flex-column">
-              <div class="w-100 lbl title-color">Kids 3 - 16 years</div>
-              <div class="w-100">
-                <div class="mb-3">
-                  <input
-                    type="number"
-                    class="form-control"
-                    formControlName="kids"
-                    min="0"/>
+                <div class="w-100 lbl title-color">Kids 3 - 16 years</div>
+                <div class="w-100">
+                    <div class="mb-3">
+                        <input
+                            type="number"
+                            class="form-control"
+                            formControlName="kids"
+                            min="0"/>
+                    </div>
                 </div>
-              </div>
             </div>
 
             <!-- Babies -->
             <div class="col-sm-6 col-6 col-md-4 d-flex flex-column">
-              <div class="w-100 lbl title-color">Babies Under 3 Years</div>
-              <div class="w-100">
-                <div class="mb-3">
-                  <input
-                    type="number"
-                    class="form-control"
-                    formControlName="babies"
-                    min="0"/>
+                <div class="w-100 lbl title-color">Babies Under 3 Years</div>
+                <div class="w-100">
+                    <div class="mb-3">
+                        <input
+                            type="number"
+                            class="form-control"
+                            formControlName="babies"
+                            min="0"/>
+                    </div>
                 </div>
-              </div>
             </div>
 
             <!-- Minimum Bedrooms -->
             <div class="col-sm-6 col-6 col-md-4 d-flex flex-column">
-              <div class="w-100 lbl title-color">Minimum Bedrooms</div>
-              <div class="w-100">
-                <div class="mb-3">
-                  <select
-                    class="form-control d-block w-100"
-                    aria-label="Select number of rooms"
-                    formControlName="rooms">
-                    <option value="1">1+</option>
-                    <option value="2">2+</option>
-                    <option value="3">3+</option>
-                    <option value="4">4+</option>
-                    <option value="5">5+</option>
-                    <option value="6">6+</option>
-                    <option value="7">7+</option>
-                    <option value="8">8+</option>
-                    <option value="9">9+</option>
-                    <option value="10">10+</option>
-                    <option value="11">11+</option>
-                    <option value="12">12+</option>
-                    <option value="13">13+</option>
-                    <option value="14">14+</option>
-                    <option value="15">15+</option>
-                    <option value="16">16+</option>
-                    <option value="17">17+</option>
-                    <option value="18">18+</option>
-                    <option value="19">19+</option>
-                    <option value="20">20+</option>
-                  </select>
+                <div class="w-100 lbl title-color">Minimum Bedrooms</div>
+                <div class="w-100">
+                    <div class="mb-3">
+                        <select
+                            class="form-control d-block w-100"
+                            aria-label="Select number of rooms"
+                            formControlName="rooms">
+                            <option value="1">1+</option>
+                            <option value="2">2+</option>
+                            <option value="3">3+</option>
+                            <option value="4">4+</option>
+                            <option value="5">5+</option>
+                            <option value="6">6+</option>
+                            <option value="7">7+</option>
+                            <option value="8">8+</option>
+                            <option value="9">9+</option>
+                            <option value="10">10+</option>
+                            <option value="11">11+</option>
+                            <option value="12">12+</option>
+                            <option value="13">13+</option>
+                            <option value="14">14+</option>
+                            <option value="15">15+</option>
+                            <option value="16">16+</option>
+                            <option value="17">17+</option>
+                            <option value="18">18+</option>
+                            <option value="19">19+</option>
+                            <option value="20">20+</option>
+                        </select>
+                    </div>
                 </div>
-              </div>
             </div>
 
             <!-- Total MAX Budget -->
             <div class="col-sm-6 col-6 col-md-4 d-flex flex-column">
-              <div class="w-100 lbl title-color">
-                Total MAX Budget
-                <span>*</span>
-              </div>
-              <div class="w-100">
-                <input
-                  type="text"
-                  placeholder="Budget"
-                  class="form-control"
-                  formControlName="budgets"
-                  (blur)="markFieldAsTouched('budgets')"
-                  [class.is-invalid]="isFieldInvalid('budgets')"/>
-                <div
-                  class="invalid-feedback"
-                  *ngIf="isFieldInvalid('budgets')">
-                  {{ getFieldError('budgets') }}
+                <div class="w-100 lbl title-color">
+                    Total MAX Budget<span>*</span>
                 </div>
-              </div>
+                <div class="w-100">
+                    <input
+                        type="text"
+                        placeholder="Budget"
+                        class="form-control"
+                        formControlName="budgets"
+                        (blur)="markFieldAsTouched('budgets')"
+                        [class.is-invalid]="isFieldInvalid('budgets')"/>
+                    <div
+                        class="invalid-feedback"
+                        *ngIf="isFieldInvalid('budgets')">
+                        {{ getFieldError('budgets') }}
+                    </div>
+                </div>
             </div>
 
             <!-- Proximity to Beach -->
             <div class="col-sm-6 col-6 col-md-4 d-flex flex-column">
-              <div class="w-100 lbl title-color">Proximity to Beach</div>
-              <div class="w-100">
-                <div class="mb-3">
-                  <select
-                    class="form-control d-block w-100"
-                    id="proximity"
-                    formControlName="proximity">
-                    <option value="Not applicable">Not applicable</option>
-                    <option value="Short walk to the beach">Short walk to the beach</option>
-                    <option value="Ocean Front">Ocean Front</option>
-                  </select>
+                <div class="w-100 lbl title-color">Proximity to Beach</div>
+                <div class="w-100">
+                    <div class="mb-3">
+                        <select
+                            class="form-control d-block w-100"
+                            id="proximity"
+                            formControlName="proximity">
+                            <option value="Not applicable">Not applicable</option>
+                            <option value="Short walk to the beach">Short walk to the beach</option>
+                            <option value="Ocean Front">Ocean Front</option>
+                        </select>
+                    </div>
                 </div>
-              </div>
             </div>
 
             <!-- Accommodation Type Preference - MULTISELECT VERSION -->
             <div class="col-12 d-flex flex-column">
-              <div class="w-100 lbl title-color">
-                Accommodation Type Preference?
-                <span>*</span>
-              </div>
-              <div class="w-100">
-                <div class="mb-3">
-                  <!-- Bootstrap Dropdown for multiselect -->
-                  <div ngbDropdown class="multiselect-dropdown position-relative" #dropdown="ngbDropdown">
-                    <!-- Toggle Button -->
-                    <button
-                      class="form-select d-flex justify-content-between align-items-center w-100"
-                      type="button"
-                      id="accommodationDropdown"
-                      ngbDropdownToggle
-                      [class.is-invalid]="isAccommodationTypeInvalid()"
-                      (blur)="contactForm.get('accomTypeSelect')?.markAsTouched()">
-            <span class="text-truncate">
-              {{ getSelectedAccommodations() || 'Select accommodation type(s)' }}
-            </span>
-                      <i class="fas fa-chevron-down ms-2"></i>
-                    </button>
-
-                    <!-- Error Message -->
-                    <div
-                      class="invalid-feedback d-block"
-                      *ngIf="isAccommodationTypeInvalid()">
-                      {{ getAccommodationTypeError() }}
-                    </div>
-
-                    <!-- Dropdown Menu -->
-                    <div
-                      class="dropdown-menu w-100 mt-1"
-                      aria-labelledby="accommodationDropdown"
-                      ngbDropdownMenu
-                      style="max-height: 300px; overflow-y: auto;">
-
-                      <!-- Accommodation Options -->
-                      <div *ngFor="let option of accommodationOptions" class="dropdown-item">
-                        <div class="form-check m-0">
-                          <input
-                            class="form-check-input"
-                            type="checkbox"
-                            [id]="'accom-' + option.value"
-                            [value]="option.value"
-                            [checked]="isAccommodationSelected(option.value)"
-                            (change)="onAccommodationTypeChange($event, option.value)">
-                          <label
-                            class="form-check-label w-100 ms-2"
-                            [for]="'accom-' + option.value"
-                            style="cursor: pointer;">
-                            {{ option.label }}
-                          </label>
-                        </div>
-                      </div>
-
-                      <!-- Divider -->
-                      <div class="dropdown-divider my-2"></div>
-
-                      <!-- Clear All Button -->
-                      <div class="dropdown-item">
-                        <button
-                          type="button"
-                          class="btn btn-sm btn-outline-secondary w-100"
-                          (click)="clearAccommodationSelections()">
-                          <i class="fas fa-times me-1"></i> Clear All Selections
-                        </button>
-                      </div>
-                    </div>
-
-                    <!-- Selected Items Preview -->
-                    <div *ngIf="contactForm.get('accomTypeSelect')?.value?.length > 0"
-                         class="selected-items-preview mt-2">
-                      <small class="text-muted">
-                        <i class="fas fa-check-circle text-success me-1"></i>
-                        <strong>Selected:</strong> {{ getSelectedAccommodations() }}
-                      </small>
-                    </div>
-                  </div>
+                <div class="w-100 lbl title-color">
+                    Accommodation Type Preference?<span>*</span>
                 </div>
-              </div>
+                <div class="w-100">
+                    <div class="mb-3">
+                        <!-- Bootstrap Dropdown for multiselect -->
+                        <div ngbDropdown class="multiselect-dropdown position-relative" #dropdown="ngbDropdown">
+                            <!-- Toggle Button -->
+                            <button
+                                class="form-select d-flex justify-content-between align-items-center w-100"
+                                type="button"
+                                id="accommodationDropdown"
+                                ngbDropdownToggle
+                                [class.is-invalid]="isAccommodationTypeInvalid()"
+                                (blur)="contactForm.get('accomTypeSelect')?.markAsTouched()">
+                                <span class="text-truncate">
+                                    {{ getSelectedAccommodations() || 'Select accommodation type(s)' }}
+                                </span>
+                            </button>
+
+                            <!-- Error Message -->
+                            <div
+                                class="invalid-feedback d-block"
+                                *ngIf="isAccommodationTypeInvalid()">
+                                {{ getAccommodationTypeError() }}
+                            </div>
+
+                            <!-- Dropdown Menu -->
+                            <div
+                                class="dropdown-menu w-100 mt-1"
+                                aria-labelledby="accommodationDropdown"
+                                ngbDropdownMenu
+                                style="max-height: 300px; overflow-y: auto;">
+
+                                <!-- Accommodation Options -->
+                                <div *ngFor="let option of accommodationOptions" class="dropdown-item">
+                                    <div class="form-check m-0">
+                                        <input
+                                            class="form-check-input"
+                                            type="checkbox"
+                                            [id]="'accom-' + option.value"
+                                            [value]="option.value"
+                                            [checked]="isAccommodationSelected(option.value)"
+                                            (change)="onAccommodationTypeChange($event, option.value)">
+                                        <label
+                                            class="form-check-label w-100 ms-2"
+                                            [for]="'accom-' + option.value"
+                                            style="cursor: pointer;">
+                                            {{ option.label }}
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <!-- Divider -->
+                                <div class="dropdown-divider my-2"></div>
+
+                                <!-- Clear All Button -->
+                                <div class="dropdown-item">
+                                    <button
+                                        type="button"
+                                        class="btn btn-sm btn-outline-secondary w-100"
+                                        (click)="clearAccommodationSelections()">
+                                        <i class="fas fa-times me-1"></i> Clear All Selections
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Selected Items Preview -->
+                            <div *ngIf="contactForm.get('accomTypeSelect')?.value?.length > 0"
+                                 class="selected-items-preview mt-2">
+                                <small class="text-muted">
+                                    <i class="fas fa-check-circle text-success me-1"></i>
+                                    <strong>Selected:</strong> {{ getSelectedAccommodations() }}
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <!-- Views (Checkboxes) -->
             <div class="col-12 d-flex flex-column">
-              <div class="w-100 lbl title-color">Views?</div>
-              <div class="w-100">
-                <div class="mb-3">
-                  <div class="row no-border" formArrayName="checkArray">
-                    <div class="col-md-3" *ngFor="let view of viewOptions; let i = index">
-                      <label class="checkbox-label">
-                        <input
-                          type="checkbox"
-                          [value]="view.value"
-                          [checked]="isCheckboxChecked('checkArray', view.value)"
-                          (change)="onCheckboxChange($event, 'checkArray', view.value)"/>
-                        {{ view.label }}
-                      </label>
+                <div class="w-100 lbl title-color">Views?</div>
+                <div class="w-100">
+                    <div class="mb-3">
+                        <div class="row no-border" formArrayName="checkArray">
+                            <div class="col-md-3" *ngFor="let view of viewOptions; let i = index">
+                                <label class="checkbox-label">
+                                    <input
+                                        type="checkbox"
+                                        [value]="view.value"
+                                        [checked]="isCheckboxChecked('checkArray', view.value)"
+                                        (change)="onCheckboxChange($event, 'checkArray', view.value)"/>
+                                    {{ view.label }}
+                                </label>
+                            </div>
+                        </div>
                     </div>
-                  </div>
                 </div>
-              </div>
             </div>
 
             <!-- Amenities (Checkboxes) -->
             <div class="col-12 d-flex flex-column">
-              <div class="w-100 lbl title-color"> Amenities?</div>
-              <div class="w-100">
-                <div class="mb-3">
-                  <div class="row no-border" formArrayName="checkArray2">
-                    <div class="col-md-4" *ngFor="let amenity of amenityOptions; let i = index">
-                      <label class="checkbox-label">
-                        <input
-                          type="checkbox"
-                          [value]="amenity.value"
-                          [checked]="isCheckboxChecked('checkArray2', amenity.value)"
-                          (change)="onCheckboxChange($event, 'checkArray2', amenity.value)"/>
-                        {{ amenity.label }}
-                      </label>
+                <div class="w-100 lbl title-color"> Amenities?</div>
+                <div class="w-100">
+                    <div class="mb-3">
+                        <div class="row no-border" formArrayName="checkArray2">
+                            <div class="col-md-4" *ngFor="let amenity of amenityOptions; let i = index">
+                                <label class="checkbox-label">
+                                    <input
+                                        type="checkbox"
+                                        [value]="amenity.value"
+                                        [checked]="isCheckboxChecked('checkArray2', amenity.value)"
+                                        (change)="onCheckboxChange($event, 'checkArray2', amenity.value)"/>
+                                    {{ amenity.label }}
+                                </label>
+                            </div>
+                        </div>
                     </div>
-                  </div>
                 </div>
-              </div>
             </div>
 
             <!-- Additional Notes -->
             <div class="col-12 d-flex flex-column">
-              <div class="w-100 lbl title-color"> Additional Notes</div>
-              <div class="w-100">
-                <div class="mb-3">
-                  <textarea
-                    class="form-control"
-                    rows="6"
-                    placeholder="Let us know if there is anything else you require for your upcoming stay."
-                    formControlName="addNotes"></textarea>
+                <div class="w-100 lbl title-color"> Additional Notes</div>
+                <div class="w-100">
+                    <div class="mb-3">
+                        <textarea
+                            class="form-control"
+                            rows="6"
+                            placeholder="Let us know if there is anything else you require for your upcoming stay."
+                            formControlName="addNotes"></textarea>
+                    </div>
                 </div>
-              </div>
             </div>
 
             <div class="row">
-                  <div class="col-12 opt-in-text-s">
-                      <label for="SMS_MMS_Consent">
-                          <div class="sms-mms-consent">
-                              <div [ngbCollapse]="isSmsConsentCollapsed" class="collapse" id="sms-mms-consent">
-                                  <input type="checkbox" id="SMS_MMS_Consent" name="SMS_MMS_Consent" value="Bike" checked><span class="fw-bold"> SMS/MMS Consent: </span>
-                                  "I agree to receive text (SMS/MMS) messages from Destinique at the number provided. Messages will primarily be one-on-one conversations related to vacation rental inquiries, property availability, and notifications about quote updates. Occasional promotional messages may also be sent. Some messages may include images or videos. We do not share mobile opt-in information with third parties unrelated to Destinique. Message & data rates may apply. Message frequency varies. Text reply STOP to cancel. Reply HELP to get help."
-                              </div>
-                              <!-- Toggle link - REPLACED -->
-                              <a href="javascript:void(0)"
-                                   class="collapsed toggle-link"
-                                   (click)="isSmsConsentCollapsed = !isSmsConsentCollapsed"
-                                   [attr.aria-expanded]="!isSmsConsentCollapsed"
-                                   aria-controls="sms-mms-consent">
-                                  {{ isSmsConsentCollapsed ? '+ Read More' : '- Read Less' }}
-                              </a>
-                          </div>
-                      </label>
-                  </div>
-              </div>
+                <div class="col-12 opt-in-text-s">
+                    <label for="SMS_MMS_Consent">
+                        <div class="sms-mms-consent">
+                            <div [ngbCollapse]="isSmsConsentCollapsed" class="collapse" id="sms-mms-consent">
+                                <input type="checkbox" id="SMS_MMS_Consent" name="SMS_MMS_Consent" value="Bike" checked><span class="fw-bold"> SMS/MMS Consent: </span>
+                                "I agree to receive text (SMS/MMS) messages from Destinique at the number provided. Messages will primarily be one-on-one conversations related to vacation rental inquiries, property availability, and notifications about quote updates. Occasional promotional messages may also be sent. Some messages may include images or videos. We do not share mobile opt-in information with third parties unrelated to Destinique. Message & data rates may apply. Message frequency varies. Text reply STOP to cancel. Reply HELP to get help."
+                            </div>
+                            <!-- Toggle link - REPLACED -->
+                            <a href="javascript:void(0)"
+                               class="collapsed toggle-link"
+                               (click)="isSmsConsentCollapsed = !isSmsConsentCollapsed"
+                               [attr.aria-expanded]="!isSmsConsentCollapsed"
+                               aria-controls="sms-mms-consent">
+                                {{ isSmsConsentCollapsed ? '+ Read More' : '- Read Less' }}
+                            </a>
+                        </div>
+                    </label>
+                </div>
+            </div>
             <div class="row">
                 <div class="col-12 opt-in-text-s">
                     <label for="Email_Consent">
@@ -548,10 +549,10 @@
                             </div>
                             <!-- Toggle link - REPLACED -->
                             <a href="javascript:void(0)"
-                                 class="collapsed toggle-link"
-                                 (click)="isEmailConsentCollapsed = !isEmailConsentCollapsed"
-                                 [attr.aria-expanded]="!isEmailConsentCollapsed"
-                                 aria-controls="sms-mms-my_profile_email_consent">
+                               class="collapsed toggle-link"
+                               (click)="isEmailConsentCollapsed = !isEmailConsentCollapsed"
+                               [attr.aria-expanded]="!isEmailConsentCollapsed"
+                               aria-controls="sms-mms-my_profile_email_consent">
                                 {{ isEmailConsentCollapsed ? '+ Read More' : '- Read Less' }}
                             </a>
                         </div>
@@ -565,21 +566,21 @@
             </div>
 
             <div class="col-12 d-flex contact-btn-right">
-              <!-- Add this button to your form template -->
-              <!--
-              <div class="mt-3">
-                <button
-                  type="button"
-                  class="btn btn-secondary btn-sm"
-                  (click)="testSubmit()"
-                  [disabled]="isSpinnerVisible">
-                  <i class="fas fa-vial"></i> Test API Submit
-                </button>
-                <small class="text-muted ml-2">
-                  This will submit sample data to test the API
-                </small>
-              </div>
-              -->
+                <!-- Add this button to your form template -->
+                <!--
+                <div class="mt-3">
+                  <button
+                    type="button"
+                    class="btn btn-secondary btn-sm"
+                    (click)="testSubmit()"
+                    [disabled]="isSpinnerVisible">
+                    <i class="fas fa-vial"></i> Test API Submit
+                  </button>
+                  <small class="text-muted ml-2">
+                    This will submit sample data to test the API
+                  </small>
+                </div>
+                -->
 
                 <button class="btn btn-secondary mr-2" type="reset"
                         [disabled]="isLoading"
@@ -590,7 +591,7 @@
                 <button class="btn btn-secondary contact-submit-btn"
                         type="submit"
                         [disabled]="isLoading"
-                >
+                        >
                     <span *ngIf="isLoading" class="spinner-border spinner-border-sm"></span>
                     <span *ngIf="!isLoading">Submit</span>
                 </button>

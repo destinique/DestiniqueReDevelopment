@@ -104,6 +104,9 @@ h2 {
     accent-color: #378f86;
 
 }
+.dropdown-toggle::after {
+    content: none;
+}
 .contact-form ::placeholder {
     color: #aaa !important;
     font-weight: 400 !important;
@@ -356,7 +359,10 @@ input[type="date"]::-webkit-calendar-picker-indicator:hover {
 /* Enhanced validation styles */
 .is-invalid {
   border-color: #e63946 !important;
-  box-shadow: 0 0 0 0.2rem rgba(230, 57, 70, 0.25) !important;
+  box-shadow: none !important;
+}
+.form-control:focus {
+    box-shadow: none;
 }
 
 .invalid-feedback {
@@ -454,7 +460,6 @@ input[type="date"]::-webkit-calendar-picker-indicator:hover {
 /* Calendar Icon */
 .input-group-text {
   background: #f8f9fa;
-  border: 1px solid #002245;
   border-left: 0;
 
   i { color: #378f86; }
@@ -518,11 +523,13 @@ input[type="date"]::-webkit-calendar-picker-indicator:hover {
       width: 100% !important;
 
       .form-check-input {
-        width: 18px !important;
-        height: 18px !important;
+        width: 16px !important;
+        height: 16px !important;
         margin: 0 !important;
         cursor: pointer !important;
         border: 1px solid #002245 !important;
+        top: -5px;
+        padding: 0px !important;
 
         &:checked {
           background-color: #378f86 !important;
@@ -598,7 +605,6 @@ input[type="date"]::-webkit-calendar-picker-indicator:hover {
     border-color: #378f86;
 
     &::after {
-      content: '';
       position: absolute;
       display: block;
       left: 6px;

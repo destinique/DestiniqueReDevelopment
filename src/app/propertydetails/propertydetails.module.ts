@@ -4,6 +4,7 @@ import { PropertydetailsRoutingModule } from './propertydetails-routing.module';
 import { PropertydetailsComponent } from './propertydetails/propertydetails.component';
 import { TabsModule } from 'ngx-bootstrap/tabs';
 import { NgxSpinnerModule } from "ngx-spinner";
+import { NgbDatepickerModule } from '@ng-bootstrap/ng-bootstrap';
 
 @NgModule({
   declarations: [
@@ -13,7 +14,8 @@ import { NgxSpinnerModule } from "ngx-spinner";
     CommonModule,
     PropertydetailsRoutingModule,
     TabsModule.forRoot(),
-    NgxSpinnerModule
+    NgxSpinnerModule,
+    NgbDatepickerModule
   ]
 })
 export class PropertydetailsModule { }

@@ -1,4 +1,4 @@
-import { Component, ViewChild, ElementRef, OnInit, AfterViewInit } from '@angular/core';
+import { Component, ViewChild, ElementRef, OnInit, AfterViewInit, OnDestroy   } from '@angular/core';
 import { PropertyImage } from 'src/app/shared/interfaces/property-image.interface';
 import { PropertyImageHelper } from 'src/app/shared/helpers/property-image.helper';
 import Swiper, { Navigation, Pagination, Thumbs, FreeMode } from 'swiper';
@@ -8,6 +8,10 @@ Swiper.use([Navigation, Pagination, Thumbs, FreeMode]);
 import { TabsetComponent } from 'ngx-bootstrap/tabs';
 import { ActivatedRoute } from '@angular/router';
 import { NgxSpinnerService } from "ngx-spinner";
+
+import { NgbDate, NgbCalendar, NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
+import { Subscription } from 'rxjs';
+import { AvailabilityService, DateAvailability } from 'src/app/shared/services/availability.service'; // Adjust path as needed
 
 interface TabInfo {
   id: string;
@@ -21,7 +25,7 @@ interface TabInfo {
     '../../../../node_modules/swiper/swiper-bundle.min.css',
     './propertydetails.component.scss']
 })
-export class PropertydetailsComponent implements OnInit, AfterViewInit{
+export class PropertydetailsComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('propertyTabs', { static: false }) propertyTabs?: TabsetComponent;
   @ViewChild('mainSwiper', { static: false }) mainSwiperRef!: ElementRef;
   @ViewChild('thumbSwiper', { static: false }) thumbSwiperRef!: ElementRef;
@@ -62,16 +66,42 @@ export class PropertydetailsComponent implements OnInit, AfterViewInit{
     pets: 'NO'
   };
 
+  // Calendar variables - Change these to NgbDate
+  leftCalendarDate: NgbDate;
+  rightCalendarDate: NgbDate;
+
+  // Selection variables
+  hoveredDate: NgbDate | null = null;
+  fromDate: NgbDate | null = null;
+  toDate: NgbDate | null = null;
+
+  // Availability data
+  unavailableDates: NgbDate[] = [];
+  bookedDates: NgbDate[] = [];
+
+  // 3-letter day headers
+  weekdays = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+
+  // Subscriptions
+  private availabilitySub: Subscription = new Subscription();
+
   constructor(private route: ActivatedRoute,
-              private spinner: NgxSpinnerService
+              private spinner: NgxSpinnerService,
+              private calendar: NgbCalendar,
+              private availabilityService: AvailabilityService
   ) {
     this.propertyId = this.route.snapshot.paramMap.get('id') || '';
+    // Initialize calendar dates
+    const today = this.calendar.getToday();
+    this.leftCalendarDate = today;
+    this.rightCalendarDate = this.calendar.getNext(today, 'm', 1);
   }
 
   ngOnInit (){
     this.spinner.show();
     // Load your images (example data)
     this.loadPropertyImages();
+    this.loadAvailabilityData();
   }
 
   ngAfterViewInit (){
@@ -835,6 +865,9 @@ export class PropertydetailsComponent implements OnInit, AfterViewInit{
     if (this.thumbSwiper) {
       this.thumbSwiper.destroy();
     }
+
+    // ===== CLEANUP =====
+    this.availabilitySub.unsubscribe();
   }
 
   /**
@@ -911,5 +944,178 @@ export class PropertydetailsComponent implements OnInit, AfterViewInit{
    */
   get isPreviousDisabled(): boolean {
     return this.currentTab === 'overview';
+  }
+
+  // Load availability data
+  loadAvailabilityData() {
+    this.availabilitySub = this.availabilityService.getAvailability(this.propertyId)
+      .subscribe(data => {
+        this.unavailableDates = data
+          .filter(item => item.status === 'unavailable')
+          .map(item => item.date);
+
+        this.bookedDates = data
+          .filter(item => item.status === 'booked')
+          .map(item => item.date);
+
+        // Note: In real app, you might want to store all dates with their status
+      });
+  }
+
+  // ===== AVAILABILITY CHECK METHODS =====
+
+  getDateStatus(date: NgbDate): string {
+    if (this.isDateUnavailable(date)) {
+      return 'unavailable';
+    } else if (this.isDateBooked(date)) {
+      return 'booked';
+    } else {
+      return 'available';
+    }
+  }
+
+// Fix date comparison methods
+  isDateAvailable(date: NgbDate): boolean {
+    const isBooked = this.bookedDates.some(d => d.equals(date));
+    const isUnavailable = this.unavailableDates.some(d => d.equals(date));
+    return !isBooked && !isUnavailable;
+  }
+
+  // Correct markDisabled function (arrow function to preserve 'this' context)
+  markDisabled = (date: NgbDate, current?: { year: number; month: number }): boolean => {
+    const isBooked = this.bookedDates.some(d => d.equals(date));
+    const isUnavailable = this.unavailableDates.some(d => d.equals(date));
+    return isBooked || isUnavailable;
+  };
+
+  isDateBooked(date: NgbDate): boolean {
+    return this.bookedDates.some(d => d.equals(date));
+  }
+
+  isDateUnavailable(date: NgbDate): boolean {
+    return this.unavailableDates.some(d => d.equals(date));
+  }
+
+  // ===== DATE SELECTION METHODS =====
+
+  onDateSelection(date: NgbDate) {
+    // Don't select unavailable or booked dates
+    if (!this.isDateAvailable(date)) {
+      return;
+    }
+
+    if (!this.fromDate && !this.toDate) {
+      this.fromDate = date;
+    } else if (this.fromDate && !this.toDate && date.after(this.fromDate)) {
+      this.toDate = date;
+      // You could emit an event or update a form here
+      this.onDatesSelected();
+    } else {
+      this.toDate = null;
+      this.fromDate = date;
+    }
+  }
+
+  onDatesSelected() {
+    // This is called when both dates are selected
+    console.log('Dates selected:', {
+      checkIn: this.fromDate,
+      checkOut: this.toDate
+    });
+
+    // You can emit to parent, update a form, or navigate to booking page
+    // Example: this.bookingService.setDates(this.fromDate, this.toDate);
+  }
+
+  isHovered(date: NgbDate) {
+    return this.fromDate && !this.toDate && this.hoveredDate &&
+      date.after(this.fromDate) && date.before(this.hoveredDate);
+  }
+
+  isInside(date: NgbDate) {
+    return this.toDate && date.after(this.fromDate) && date.before(this.toDate);
+  }
+
+  isRange(date: NgbDate) {
+    return date.equals(this.fromDate) || (this.toDate && date.equals(this.toDate)) ||
+      this.isInside(date) || this.isHovered(date);
+  }
+
+  // ===== CALENDAR NAVIGATION =====
+// Add this method to your component for synchronized navigation
+  navigateBoth(direction: 'prev' | 'next' = 'prev', months: number = 1) {
+    if (direction === 'prev') {
+      // Move both calendars back by 1 month
+      this.leftCalendarDate = this.calendar.getPrev(this.leftCalendarDate, 'm', months);
+      this.rightCalendarDate = this.calendar.getPrev(this.rightCalendarDate, 'm', months);
+    } else {
+      // Move both calendars forward by 1 month
+      this.leftCalendarDate = this.calendar.getNext(this.leftCalendarDate, 'm', months);
+      this.rightCalendarDate = this.calendar.getNext(this.rightCalendarDate, 'm', months);
+    }
+  }
+
+// You can remove or keep your old navigateLeft/navigateRight methods
+// If you want backward compatibility, add these:
+  navigateLeft() {
+    this.navigateBoth('prev');
+  }
+
+  navigateRight() {
+    this.navigateBoth('next');
+  }
+  // ===== HELPER METHODS =====
+
+
+  getDateTooltip(date: NgbDate): string {
+    if (this.isDateBooked(date)) {
+      return 'Already Booked';
+    } else if (this.isDateUnavailable(date)) {
+      return 'Unavailable';
+    } else {
+      return `Available - 250$/night`;
+    }
+  }
+
+  clearSelection() {
+    this.fromDate = null;
+    this.toDate = null;
+  }
+
+  getTotalNights(): number {
+    if (!this.fromDate || !this.toDate) return 0;
+
+    const from = new Date(this.fromDate.year, this.fromDate.month - 1, this.fromDate.day);
+    const to = new Date(this.toDate.year, this.toDate.month - 1, this.toDate.day);
+
+    const diffTime = Math.abs(to.getTime() - from.getTime());
+    return Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+  }
+
+  // Convert NgbDate to NgbDateStruct for datepicker binding
+  getDateStruct(date: NgbDate): NgbDateStruct {
+    return { year: date.year, month: date.month, day: date.day };
+  }
+
+// Navigation handlers for datepicker
+  onNavigateLeft(event: any) {
+    this.leftCalendarDate = new NgbDate(event.next.year, event.next.month, event.next.day);
+    this.rightCalendarDate = this.calendar.getNext(this.leftCalendarDate, 'm', 1);
+  }
+
+  onNavigateRight(event: any) {
+    this.rightCalendarDate = new NgbDate(event.next.year, event.next.month, event.next.day);
+    this.leftCalendarDate = this.calendar.getPrev(this.rightCalendarDate, 'm', 1);
+  }
+
+// Fix the getMonthName method to accept NgbDate
+  getMonthName(date: NgbDate): string {
+    const dateObj = new Date(date.year, date.month - 1);
+    return dateObj.toLocaleString('default', { month: 'long' });
+  }
+
+  getTotalPrice(): number {
+    const nights = this.getTotalNights();
+    return 0;
   }
 }

@@ -965,3 +965,164 @@ a.collapsed {
   }
 }
 
+
+/* ===== AVAILABILITY CALENDAR CSS ===== */
+
+/* Calendar container */
+.calendar-section {
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    padding: 1rem;
+    background: #fff;
+}
+
+/* Calendar header */
+.calendar-header {
+    padding: 0.5rem 0;
+    background: #f8f9fa;
+    border-radius: 6px;
+}
+
+/* Custom ngb-datepicker styling */
+.custom-datepicker {
+    .ngb-dp-header {
+        display: none; /* Hide default header since we have custom one */
+    }
+
+    .ngb-dp-weekdays {
+        border-bottom: 1px solid #dee2e6;
+        margin-bottom: 0.5rem;
+    }
+
+    .ngb-dp-weekday {
+        color: #6c757d;
+        font-weight: 600;
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        padding: 0.5rem 0;
+    }
+
+    .ngb-dp-day {
+        width: 40px;
+        height: 40px;
+        padding: 2px;
+
+        .btn-light {
+            width: 100%;
+            height: 100%;
+            border-radius: 4px;
+            border: 1px solid transparent;
+            transition: all 0.2s;
+            font-weight: 500;
+            font-size: 0.875rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            /* AVAILABLE dates - GREEN */
+            &:not(:disabled) {
+                background-color: rgba(40, 167, 69, 0.1) !important;
+                border-color: rgba(40, 167, 69, 0.2) !important;
+                color: #198754 !important;
+
+                &:hover {
+                    background-color: rgba(40, 167, 69, 0.2) !important;
+                    transform: scale(1.05);
+                }
+            }
+
+            /* UNAVAILABLE/BOOKED dates - RED */
+            &:disabled {
+                background-color: rgba(220, 53, 69, 0.1) !important;
+                border-color: rgba(220, 53, 69, 0.2) !important;
+                color: #dc3545 !important;
+                text-decoration: line-through;
+                opacity: 0.7;
+                cursor: not-allowed;
+            }
+        }
+    }
+
+    /* Today's date highlight */
+    .ngb-dp-today .btn-light:not(:disabled) {
+        background-color: rgba(0, 123, 255, 0.1) !important;
+        border-color: rgba(0, 123, 255, 0.3) !important;
+        color: #0056b3 !important;
+        font-weight: bold;
+    }
+}
+
+/* Legend styles */
+.legend {
+    .legend-dot {
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        display: inline-block;
+
+        &.available {
+            background-color: #28a745;
+        }
+
+        &.unavailable {
+            background-color: #dc3545;
+        }
+    }
+}
+
+/* Responsive adjustments */
+@media (max-width: 992px) {
+    .calendar-section {
+        margin-bottom: 1.5rem;
+    }
+
+    .custom-datepicker .ngb-dp-day {
+        width: 36px;
+        height: 36px;
+    }
+}
+
+@media (max-width: 576px) {
+    .custom-datepicker .ngb-dp-day {
+        width: 32px;
+        height: 32px;
+
+        .btn-light {
+            font-size: 0.75rem;
+        }
+    }
+}
+
+/* Optional: Date tooltip styling */
+.custom-datepicker .ngb-dp-day .btn-light {
+    position: relative;
+
+    &:not(:disabled):hover::after {
+        content: attr(title);
+        position: absolute;
+        bottom: 100%;
+        left: 50%;
+        transform: translateX(-50%);
+        background: #333;
+        color: white;
+        padding: 4px 8px;
+        border-radius: 4px;
+        font-size: 0.75rem;
+        white-space: nowrap;
+        z-index: 100;
+        margin-bottom: 5px;
+    }
+
+    &:not(:disabled):hover::before {
+        content: '';
+        position: absolute;
+        bottom: 100%;
+        left: 50%;
+        transform: translateX(-50%);
+        border: 5px solid transparent;
+        border-top-color: #333;
+        margin-bottom: -5px;
+        z-index: 101;
+    }
+}

@@ -119,7 +119,25 @@ $nav-tab-color: #95979d;
         padding: 8px 15px;
     }
 }
-
+.amenities-content ul li {
+    color: #62646a;
+    float: left;
+    position: relative;
+    width: 33.333333%;
+    padding-right: 20px;
+    font-size: 18px;
+    font-weight: 300 !important;
+}
+@media (max-width: 992px) {
+    .amenities-content ul li {
+        width: 50%;
+    }
+}
+@media (max-width: 460px) {
+    .amenities-content ul li {
+        width: 100%;
+    }
+}
 // ============================================
 // Animations
 // ============================================
@@ -140,7 +158,9 @@ $nav-tab-color: #95979d;
 a:hover {
     cursor: pointer;
 }
-
+h3, h4 {
+    color: #555;
+}
 .card {
     border: 0px solid #ccc;
     font-family: inherit;
@@ -173,21 +193,29 @@ a:hover {
     font-weight: 600;
     font-size: 18px;
     line-height: 26px;
-    color: #222325;
+    color: #555;
 }
 
 .t-text {
     font-weight: 400;
     font-size: 16px;
-    color: #404145;
+    color: #62646a;
     word-break: break-word;
     line-height: 24px;
 }
-
+.p-description {
+    margin-top: 0;
+    margin-bottom: 1rem;
+    font-size: 18px;
+    font-weight: 300 !important;
+    word-wrap: break-word;
+    color: #62646a !important;
+}
 // List styles
 .list-group {
     .fw-normal {
         font-size: 1rem;
+        color: #62646a;
     }
 
     svg {
@@ -708,7 +736,12 @@ a.collapsed {
                     }
                 }
             }
-
+            .swiper-button-next, .swiper-rtl .swiper-button-prev {
+                right: 1.8rem;
+            }
+            .swiper-button-prev, .swiper-rtl .swiper-button-next {
+                left: 1.8rem;
+            }
             .swiper-pagination {
                 bottom: 15px !important;
 
@@ -948,181 +981,187 @@ a.collapsed {
 }
 
 :host ::ng-deep {
-  .custom-tabset  .nav-link {
-    color: #95979d;
-    cursor: pointer;
-    border-bottom: 2px solid transparent;
-    margin-right: 12px;
-    padding: 8px 12px;
-    text-decoration: none;
-    transition: color .2s ease-in-out;
-    display: inline-block;
-    font-weight: 600;
-  }
-  .custom-tabset  .nav-link.active {
-    color: #1dbf73;
+    .custom-tabset  .nav-link {
+        color: #95979d;
+        cursor: pointer;
+        border-bottom: 2px solid transparent;
+        margin-right: 12px;
+        padding: 8px 12px;
+        text-decoration: none;
+        transition: color .2s ease-in-out;
+        display: inline-block;
+        font-weight: 600;
+    }
+    .custom-tabset  .nav-link.active {
+        color: #378f86;
 
-  }
+    }
+    @media (max-width: 1080px) {
+        .custom-tabset  .nav-link {
+            border: 1px solid;
+            margin-bottom: 6px;
+        }
+    }
+
 }
-
 
 /* ===== AVAILABILITY CALENDAR CSS ===== */
 
 /* Calendar container */
 .calendar-section {
-    border: 1px solid #dee2e6;
-    border-radius: 8px;
-    padding: 1rem;
-    background: #fff;
+  border: 1px solid #dee2e6;
+  border-radius: 8px;
+  padding: 1rem;
+  background: #fff;
 }
 
 /* Calendar header */
 .calendar-header {
-    padding: 0.5rem 0;
-    background: #f8f9fa;
-    border-radius: 6px;
+  padding: 0.5rem 0;
+  background: #f8f9fa;
+  border-radius: 6px;
 }
 
 /* Custom ngb-datepicker styling */
 .custom-datepicker {
-    .ngb-dp-header {
-        display: none; /* Hide default header since we have custom one */
-    }
+  .ngb-dp-header {
+    display: none; /* Hide default header since we have custom one */
+  }
 
-    .ngb-dp-weekdays {
-        border-bottom: 1px solid #dee2e6;
-        margin-bottom: 0.5rem;
-    }
+  .ngb-dp-weekdays {
+    border-bottom: 1px solid #dee2e6;
+    margin-bottom: 0.5rem;
+  }
 
-    .ngb-dp-weekday {
-        color: #6c757d;
-        font-weight: 600;
-        font-size: 0.75rem;
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
-        padding: 0.5rem 0;
-    }
+  .ngb-dp-weekday {
+    color: #6c757d;
+    font-weight: 600;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 0.5rem 0;
+  }
 
-    .ngb-dp-day {
-        width: 40px;
-        height: 40px;
-        padding: 2px;
+  .ngb-dp-day {
+    width: 40px;
+    height: 40px;
+    padding: 2px;
 
-        .btn-light {
-            width: 100%;
-            height: 100%;
-            border-radius: 4px;
-            border: 1px solid transparent;
-            transition: all 0.2s;
-            font-weight: 500;
-            font-size: 0.875rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+    .btn-light {
+      width: 100%;
+      height: 100%;
+      border-radius: 4px;
+      border: 1px solid transparent;
+      transition: all 0.2s;
+      font-weight: 500;
+      font-size: 0.875rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
 
-            /* AVAILABLE dates - GREEN */
-            &:not(:disabled) {
-                background-color: rgba(40, 167, 69, 0.1) !important;
-                border-color: rgba(40, 167, 69, 0.2) !important;
-                color: #198754 !important;
+      /* AVAILABLE dates - GREEN */
+      &:not(:disabled) {
+        background-color: rgba(40, 167, 69, 0.1) !important;
+        border-color: rgba(40, 167, 69, 0.2) !important;
+        color: #198754 !important;
 
-                &:hover {
-                    background-color: rgba(40, 167, 69, 0.2) !important;
-                    transform: scale(1.05);
-                }
-            }
-
-            /* UNAVAILABLE/BOOKED dates - RED */
-            &:disabled {
-                background-color: rgba(220, 53, 69, 0.1) !important;
-                border-color: rgba(220, 53, 69, 0.2) !important;
-                color: #dc3545 !important;
-                text-decoration: line-through;
-                opacity: 0.7;
-                cursor: not-allowed;
-            }
+        &:hover {
+          background-color: rgba(40, 167, 69, 0.2) !important;
+          transform: scale(1.05);
         }
-    }
+      }
 
-    /* Today's date highlight */
-    .ngb-dp-today .btn-light:not(:disabled) {
-        background-color: rgba(0, 123, 255, 0.1) !important;
-        border-color: rgba(0, 123, 255, 0.3) !important;
-        color: #0056b3 !important;
-        font-weight: bold;
+      /* UNAVAILABLE/BOOKED dates - RED */
+      &:disabled {
+        background-color: rgba(220, 53, 69, 0.1) !important;
+        border-color: rgba(220, 53, 69, 0.2) !important;
+        color: #dc3545 !important;
+        text-decoration: line-through;
+        opacity: 0.7;
+        cursor: not-allowed;
+      }
     }
+  }
+
+  /* Today's date highlight */
+  .ngb-dp-today .btn-light:not(:disabled) {
+    background-color: rgba(0, 123, 255, 0.1) !important;
+    border-color: rgba(0, 123, 255, 0.3) !important;
+    color: #0056b3 !important;
+    font-weight: bold;
+  }
 }
 
 /* Legend styles */
 .legend {
-    .legend-dot {
-        width: 12px;
-        height: 12px;
-        border-radius: 50%;
-        display: inline-block;
+  .legend-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    display: inline-block;
 
-        &.available {
-            background-color: #28a745;
-        }
-
-        &.unavailable {
-            background-color: #dc3545;
-        }
+    &.available {
+      background-color: #28a745;
     }
+
+    &.unavailable {
+      background-color: #dc3545;
+    }
+  }
 }
 
 /* Responsive adjustments */
 @media (max-width: 992px) {
-    .calendar-section {
-        margin-bottom: 1.5rem;
-    }
+  .calendar-section {
+    margin-bottom: 1.5rem;
+  }
 
-    .custom-datepicker .ngb-dp-day {
-        width: 36px;
-        height: 36px;
-    }
+  .custom-datepicker .ngb-dp-day {
+    width: 36px;
+    height: 36px;
+  }
 }
 
 @media (max-width: 576px) {
-    .custom-datepicker .ngb-dp-day {
-        width: 32px;
-        height: 32px;
+  .custom-datepicker .ngb-dp-day {
+    width: 32px;
+    height: 32px;
 
-        .btn-light {
-            font-size: 0.75rem;
-        }
+    .btn-light {
+      font-size: 0.75rem;
     }
+  }
 }
 
 /* Optional: Date tooltip styling */
 .custom-datepicker .ngb-dp-day .btn-light {
-    position: relative;
+  position: relative;
 
-    &:not(:disabled):hover::after {
-        content: attr(title);
-        position: absolute;
-        bottom: 100%;
-        left: 50%;
-        transform: translateX(-50%);
-        background: #333;
-        color: white;
-        padding: 4px 8px;
-        border-radius: 4px;
-        font-size: 0.75rem;
-        white-space: nowrap;
-        z-index: 100;
-        margin-bottom: 5px;
-    }
+  &:not(:disabled):hover::after {
+    content: attr(title);
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #333;
+    color: white;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    white-space: nowrap;
+    z-index: 100;
+    margin-bottom: 5px;
+  }
 
-    &:not(:disabled):hover::before {
-        content: '';
-        position: absolute;
-        bottom: 100%;
-        left: 50%;
-        transform: translateX(-50%);
-        border: 5px solid transparent;
-        border-top-color: #333;
-        margin-bottom: -5px;
-        z-index: 101;
-    }
+  &:not(:disabled):hover::before {
+    content: '';
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 5px solid transparent;
+    border-top-color: #333;
+    margin-bottom: -5px;
+    z-index: 101;
+  }
 }

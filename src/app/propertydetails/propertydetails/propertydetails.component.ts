@@ -9,7 +9,7 @@ import { TabsetComponent } from 'ngx-bootstrap/tabs';
 import { ActivatedRoute } from '@angular/router';
 import { NgxSpinnerService } from "ngx-spinner";
 
-import { NgbDate, NgbCalendar, NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
+import { NgbDate, NgbCalendar, NgbDateStruct, NgbDateParserFormatter, NgbDatepickerNavigateEvent } from '@ng-bootstrap/ng-bootstrap';
 import { Subscription } from 'rxjs';
 import { AvailabilityService, DateAvailability } from 'src/app/shared/services/availability.service'; // Adjust path as needed
 
@@ -69,18 +69,16 @@ export class PropertydetailsComponent implements OnInit, AfterViewInit, OnDestro
   // Calendar variables - Change these to NgbDate
   leftCalendarDate: NgbDate;
   rightCalendarDate: NgbDate;
-
-  // Selection variables
-  hoveredDate: NgbDate | null = null;
-  fromDate: NgbDate | null = null;
-  toDate: NgbDate | null = null;
-
   // Availability data
   unavailableDates: NgbDate[] = [];
   bookedDates: NgbDate[] = [];
 
-  // 3-letter day headers
-  weekdays = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+  // Update these arrays to track different status types
+  fullyAvailableDates: NgbDate[] = [];      // Condition #1: Fully Green
+  fullyUnavailableDates: NgbDate[] = [];    // Condition #2: Fully Red
+  amOnlyDates: NgbDate[] = [];              // Condition #4: AM Green / PM Red
+  pmOnlyDates: NgbDate[] = [];              // Condition #3: AM Red / PM Green
+  noCheckinDates: NgbDate[] = [];           // Condition #5: Green with red circle
 
   // Subscriptions
   private availabilitySub: Subscription = new Subscription();
@@ -103,6 +101,20 @@ export class PropertydetailsComponent implements OnInit, AfterViewInit, OnDestro
     this.loadPropertyImages();
     this.loadAvailabilityData();
   }
+
+// Temporary test method
+  testFebruaryLogic(): void {
+    console.log('=== TESTING FEBRUARY 2026 LOGIC ===');
+
+    // Manually add some February dates as unavailable
+    for (let day = 1; day <= 5; day++) {
+      this.fullyUnavailableDates.push(new NgbDate(2026, 2, day));
+    }
+
+    console.log('Added 5 February dates to unavailable list');
+    console.log('Test if getDateCustomClass works for Feb 1:', this.getDateCustomClass(new NgbDate(2026, 2, 1)));
+  }
+
 
   ngAfterViewInit (){
     // Initialize swipers after view is ready
@@ -932,190 +944,147 @@ export class PropertydetailsComponent implements OnInit, AfterViewInit, OnDestro
     return activeTab?.title || '';
   }
 
-  /**
-   * Check if next button should be disabled
-   */
-  get isNextDisabled(): boolean {
-    return this.currentTab === 'reviews';
-  }
-
-  /**
-   * Check if previous button should be disabled
-   */
-  get isPreviousDisabled(): boolean {
-    return this.currentTab === 'overview';
-  }
-
-  // Load availability data
-  loadAvailabilityData() {
+  // ===== CALENDAR METHODS (SIMPLIFIED) =====
+// Temporary debugging
+  loadAvailabilityData(): void {
     this.availabilitySub = this.availabilityService.getAvailability(this.propertyId)
       .subscribe(data => {
-        this.unavailableDates = data
-          .filter(item => item.status === 'unavailable')
-          .map(item => item.date);
+        console.log('=== AVAILABILITY DATA (availabilityData only) ===');
+        console.log('Total dates from availabilityData:', data.length);
 
-        this.bookedDates = data
-          .filter(item => item.status === 'booked')
-          .map(item => item.date);
+        // Log first few dates to verify
+        data.slice(0, 5).forEach(item => {
+          console.log(`Date: ${item.date.year}-${item.date.month}-${item.date.day},
+          Status: ${item.status},
+          AvailableYesNo: ${item.availableYesNo},
+          AM: ${item.availableAMYesNo},
+          PM: ${item.availablePMYesNo},
+          CheckIn: ${item.availableCheckInYesNo}`);
+        });
 
-        // Note: In real app, you might want to store all dates with their status
+        // Reset arrays
+        this.fullyAvailableDates = [];
+        this.fullyUnavailableDates = [];
+        this.amOnlyDates = [];
+        this.pmOnlyDates = [];
+        this.noCheckinDates = [];
+
+        // Categorize dates based on status
+        data.forEach(item => {
+          switch (item.status) {
+            case 'available':
+              this.fullyAvailableDates.push(item.date);
+              break;
+            case 'unavailable':
+              this.fullyUnavailableDates.push(item.date);
+              break;
+            case 'am_only':
+              this.amOnlyDates.push(item.date);
+              break;
+            case 'pm_only':
+              this.pmOnlyDates.push(item.date);
+              break;
+            case 'no_checkin':
+              this.noCheckinDates.push(item.date);
+              break;
+            default:
+              console.warn(`Unknown status for date ${item.date.year}-${item.date.month}-${item.date.day}: ${item.status}`);
+          }
+        });
+
+        console.log('=== CATEGORIZATION ===');
+        console.log('Fully available (green):', this.fullyAvailableDates.length);
+        console.log('Fully unavailable (red):', this.fullyUnavailableDates.length);
+        console.log('AM only (top green/bottom red):', this.amOnlyDates.length);
+        console.log('PM only (top red/bottom green):', this.pmOnlyDates.length);
+        console.log('No checkin (green with red dot):', this.noCheckinDates.length);
+
+        // Run test first
+        // setTimeout(() => {this.testFebruaryLogic();}, 5000);
       });
   }
 
-  // ===== AVAILABILITY CHECK METHODS =====
-
-  getDateStatus(date: NgbDate): string {
-    if (this.isDateUnavailable(date)) {
-      return 'unavailable';
-    } else if (this.isDateBooked(date)) {
-      return 'booked';
-    } else {
-      return 'available';
-    }
+  // Single check method used by both templates and markDisabled
+  isDateUnavailable(date: NgbDate): boolean {
+    return this.bookedDates.some(d => d.equals(date)) ||
+      this.unavailableDates.some(d => d.equals(date));
   }
 
-// Fix date comparison methods
-  isDateAvailable(date: NgbDate): boolean {
-    const isBooked = this.bookedDates.some(d => d.equals(date));
-    const isUnavailable = this.unavailableDates.some(d => d.equals(date));
-    return !isBooked && !isUnavailable;
-  }
-
-  // Correct markDisabled function (arrow function to preserve 'this' context)
-  markDisabled = (date: NgbDate, current?: { year: number; month: number }): boolean => {
-    const isBooked = this.bookedDates.some(d => d.equals(date));
-    const isUnavailable = this.unavailableDates.some(d => d.equals(date));
-    return isBooked || isUnavailable;
+  // Update markDisabled to handle different statuses
+  markDisabled = (date: NgbDate): boolean => {
+    // Dates that are fully unavailable should be disabled
+    return this.fullyUnavailableDates.some(d => d.equals(date));
   };
 
-  isDateBooked(date: NgbDate): boolean {
-    return this.bookedDates.some(d => d.equals(date));
-  }
+  // Method to get custom CSS classes for each date
+// Update getDateCustomClass to add debugging
+  getDateCustomClass(date: NgbDate): string {
+    const isUnavailable = this.fullyUnavailableDates.some(d => d.equals(date));
+    const isAvailable = this.fullyAvailableDates.some(d => d.equals(date));
+    const isAmOnly = this.amOnlyDates.some(d => d.equals(date));
+    const isPmOnly = this.pmOnlyDates.some(d => d.equals(date));
+    const isNoCheckin = this.noCheckinDates.some(d => d.equals(date));
 
-  isDateUnavailable(date: NgbDate): boolean {
-    return this.unavailableDates.some(d => d.equals(date));
-  }
-
-  // ===== DATE SELECTION METHODS =====
-
-  onDateSelection(date: NgbDate) {
-    // Don't select unavailable or booked dates
-    if (!this.isDateAvailable(date)) {
-      return;
+    // Debug: log February dates
+    if (date.year === 2026 && date.month === 2 && date.day <= 5) {
+      console.log(`Feb ${date.day}, 2026 - Status:`, {
+        unavailable: isUnavailable,
+        available: isAvailable,
+        amOnly: isAmOnly,
+        pmOnly: isPmOnly,
+        noCheckin: isNoCheckin
+      });
     }
 
-    if (!this.fromDate && !this.toDate) {
-      this.fromDate = date;
-    } else if (this.fromDate && !this.toDate && date.after(this.fromDate)) {
-      this.toDate = date;
-      // You could emit an event or update a form here
-      this.onDatesSelected();
-    } else {
-      this.toDate = null;
-      this.fromDate = date;
+    if (isUnavailable) {
+      return 'date-fully-unavailable';
+    } else if (isAmOnly) {
+      return 'date-am-only';
+    } else if (isPmOnly) {
+      return 'date-pm-only';
+    } else if (isNoCheckin) {
+      return 'date-no-checkin';
+    } else if (isAvailable) {
+      return 'date-fully-available';
     }
+    return '';
   }
 
-  onDatesSelected() {
-    // This is called when both dates are selected
-    console.log('Dates selected:', {
-      checkIn: this.fromDate,
-      checkOut: this.toDate
-    });
-
-    // You can emit to parent, update a form, or navigate to booking page
-    // Example: this.bookingService.setDates(this.fromDate, this.toDate);
-  }
-
-  isHovered(date: NgbDate) {
-    return this.fromDate && !this.toDate && this.hoveredDate &&
-      date.after(this.fromDate) && date.before(this.hoveredDate);
-  }
-
-  isInside(date: NgbDate) {
-    return this.toDate && date.after(this.fromDate) && date.before(this.toDate);
-  }
-
-  isRange(date: NgbDate) {
-    return date.equals(this.fromDate) || (this.toDate && date.equals(this.toDate)) ||
-      this.isInside(date) || this.isHovered(date);
-  }
-
-  // ===== CALENDAR NAVIGATION =====
-// Add this method to your component for synchronized navigation
-  navigateBoth(direction: 'prev' | 'next' = 'prev', months: number = 1) {
-    if (direction === 'prev') {
-      // Move both calendars back by 1 month
-      this.leftCalendarDate = this.calendar.getPrev(this.leftCalendarDate, 'm', months);
-      this.rightCalendarDate = this.calendar.getPrev(this.rightCalendarDate, 'm', months);
-    } else {
-      // Move both calendars forward by 1 month
-      this.leftCalendarDate = this.calendar.getNext(this.leftCalendarDate, 'm', months);
-      this.rightCalendarDate = this.calendar.getNext(this.rightCalendarDate, 'm', months);
+  // Helper method to check date status for tooltips
+  getDateStatusText(date: NgbDate): string {
+    if (this.fullyUnavailableDates.some(d => d.equals(date))) {
+      return 'Not Available';
+    } else if (this.amOnlyDates.some(d => d.equals(date))) {
+      return 'Available AM only';
+    } else if (this.pmOnlyDates.some(d => d.equals(date))) {
+      return 'Available PM only';
+    } else if (this.noCheckinDates.some(d => d.equals(date))) {
+      return 'Available (No Check-in)';
+    } else if (this.fullyAvailableDates.some(d => d.equals(date))) {
+      return 'Available';
     }
+    return 'Unknown';
   }
 
-// You can remove or keep your old navigateLeft/navigateRight methods
-// If you want backward compatibility, add these:
-  navigateLeft() {
-    this.navigateBoth('prev');
-  }
+  // Synchronized navigation handlers
+  onLeftCalendarNavigate(event: NgbDatepickerNavigateEvent) {
+    // Update left calendar
+    this.leftCalendarDate = new NgbDate(event.next.year, event.next.month, 1);
 
-  navigateRight() {
-    this.navigateBoth('next');
-  }
-  // ===== HELPER METHODS =====
-
-
-  getDateTooltip(date: NgbDate): string {
-    if (this.isDateBooked(date)) {
-      return 'Already Booked';
-    } else if (this.isDateUnavailable(date)) {
-      return 'Unavailable';
-    } else {
-      return `Available - 250$/night`;
-    }
-  }
-
-  clearSelection() {
-    this.fromDate = null;
-    this.toDate = null;
-  }
-
-  getTotalNights(): number {
-    if (!this.fromDate || !this.toDate) return 0;
-
-    const from = new Date(this.fromDate.year, this.fromDate.month - 1, this.fromDate.day);
-    const to = new Date(this.toDate.year, this.toDate.month - 1, this.toDate.day);
-
-    const diffTime = Math.abs(to.getTime() - from.getTime());
-    return Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-  }
-
-  // Convert NgbDate to NgbDateStruct for datepicker binding
-  getDateStruct(date: NgbDate): NgbDateStruct {
-    return { year: date.year, month: date.month, day: date.day };
-  }
-
-// Navigation handlers for datepicker
-  onNavigateLeft(event: any) {
-    this.leftCalendarDate = new NgbDate(event.next.year, event.next.month, event.next.day);
+    // Synchronize right calendar (1 month ahead)
     this.rightCalendarDate = this.calendar.getNext(this.leftCalendarDate, 'm', 1);
   }
 
-  onNavigateRight(event: any) {
-    this.rightCalendarDate = new NgbDate(event.next.year, event.next.month, event.next.day);
+  onRightCalendarNavigate(event: NgbDatepickerNavigateEvent) {
+    // Update right calendar
+    this.rightCalendarDate = new NgbDate(event.next.year, event.next.month, 1);
+
+    // Synchronize left calendar (1 month behind)
     this.leftCalendarDate = this.calendar.getPrev(this.rightCalendarDate, 'm', 1);
   }
 
-// Fix the getMonthName method to accept NgbDate
-  getMonthName(date: NgbDate): string {
-    const dateObj = new Date(date.year, date.month - 1);
-    return dateObj.toLocaleString('default', { month: 'long' });
-  }
-
-  getTotalPrice(): number {
-    const nights = this.getTotalNights();
-    return 0;
+  // Helper methods
+  getDateStruct(date: NgbDate): NgbDateStruct {
+    return { year: date.year, month: date.month, day: date.day };
   }
 }

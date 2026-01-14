@@ -1005,36 +1005,23 @@ a.collapsed {
 
 }
 
+
 /* ===== CALENDAR OPTIMIZATIONS ===== */
 .calendar-section {
-  border: 1px solid #dee2e6;
-  border-radius: 8px;
-  padding: 1rem;
-  background: #fff;
-  min-height: 320px;
-  display: flex;
-  flex-direction: column;
+    border-radius: 8px;
+    background: #fff;
+    min-height: 320px;
+    display: flex;
+    flex-direction: column;
 }
 
-/* ===== CUSTOM DATE STYLES - TARGETING custom-day-wrapper ===== */
+/* ===== CUSTOM DATE STYLES - TARGETING custom-day-wrapper IN BOTH CALENDAR TYPES ===== */
 :host ::ng-deep {
-  .custom-datepicker {
-    /* Ensure proper sizing of date cells */
-    .ngb-dp-day {
-      width: 40px;
-      height: 40px;
-      padding: 2px;
-
-      /* Center content in the cell */
-      display: flex;
-      align-items: center;
-      justify-content: center;
-
-      /* Target YOUR custom wrapper div */
-      .custom-day-wrapper {
+    /* COMMON BASE STYLES FOR ALL CUSTOM-DAY-WRAPPER ELEMENTS */
+    .custom-day-wrapper {
         width: 100% !important;
         height: 100% !important;
-        border-radius: 4px !important;
+        border-radius: 0px !important;
         border: 1px solid transparent !important;
         font-weight: 500 !important;
         font-size: 0.875rem !important;
@@ -1047,282 +1034,398 @@ a.collapsed {
 
         /* UNAVAILABLE DATES - RED (FULLY RED) */
         &.date-fully-unavailable {
-          background-color: #dc3545 !important;
-          color: white !important;
-          border-color: #dc3545 !important;
-          text-decoration: line-through !important;
-          opacity: 0.8 !important;
-          cursor: not-allowed !important;
-
-          &.disabled {
             background-color: #dc3545 !important;
             color: white !important;
+            border-color: #dc3545 !important;
+            text-decoration: line-through !important;
             opacity: 0.8 !important;
-          }
+            cursor: not-allowed !important;
+
+            &.disabled {
+                background-color: #dc3545 !important;
+                color: white !important;
+                opacity: 0.8 !important;
+            }
+
+            /* Override range selection styles for unavailable dates */
+            &.in-range,
+            &.range-start,
+            &.range-end {
+                background-color: #dc3545 !important;
+                color: white !important;
+                opacity: 0.8 !important;
+                cursor: not-allowed !important;
+            }
         }
 
         /* AVAILABLE DATES - GREEN (FULLY GREEN) */
         &.date-fully-available {
-          background-color: #28a745 !important;
-          color: white !important;
-          border-color: #28a745 !important;
-          cursor: pointer !important;
-
-          &.disabled {
             background-color: #28a745 !important;
             color: white !important;
-            cursor: not-allowed !important;
-          }
+            border-color: #28a745 !important;
+            cursor: pointer !important;
 
-          &:not(.disabled):hover {
-            background-color: #218838 !important;
-            border-color: #1e7e34 !important;
-            transform: scale(1.05) !important;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2) !important;
-          }
+            &.disabled {
+                background-color: #28a745 !important;
+                color: white !important;
+                cursor: not-allowed !important;
+            }
+
+            &:not(.disabled):hover {
+                background-color: #218838 !important;
+                border-color: #1e7e34 !important;
+                transform: scale(1.05) !important;
+                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2) !important;
+            }
         }
 
         /* AM ONLY - Top Green / Bottom Red */
         &.date-am-only {
-          background: linear-gradient(
-              to bottom,
-              #28a745 0%,
-              #28a745 50%,
-              #dc3545 50%,
-              #dc3545 100%
-          ) !important;
-          color: white !important;
-          border-color: #dee2e6 !important;
-          cursor: pointer !important;
-
-          &::after {
-            content: 'AM' !important;
-            font-size: 0.6rem !important;
-            position: absolute !important;
-            top: 2px !important;
-            left: 2px !important;
+            background: linear-gradient(to right bottom,#28a745 50%,#e63946 50%) !important;
             color: white !important;
-            font-weight: bold !important;
-            text-shadow: 0 0 2px rgba(0,0,0,0.5);
-          }
+            border-color: #dee2e6 !important;
+            cursor: pointer !important;
 
-          &.disabled {
-            opacity: 0.8 !important;
-            cursor: not-allowed !important;
-          }
+            &::after {
+                /*content: 'AM' !important;*/
+                font-size: 0.6rem !important;
+                position: absolute !important;
+                top: 2px !important;
+                left: 2px !important;
+                color: white !important;
+                font-weight: bold !important;
+                text-shadow: 0 0 2px rgba(0,0,0,0.5);
+            }
 
-          &:not(.disabled):hover {
-            transform: scale(1.05) !important;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2) !important;
-          }
+            &.disabled {
+                opacity: 0.8 !important;
+                cursor: not-allowed !important;
+            }
+
+            &:not(.disabled):hover {
+                transform: scale(1.05) !important;
+                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2) !important;
+            }
         }
 
         /* PM ONLY - Top Red / Bottom Green */
         &.date-pm-only {
-          background: linear-gradient(
-              to bottom,
-              #dc3545 0%,
-              #dc3545 50%,
-              #28a745 50%,
-              #28a745 100%
-          ) !important;
-          color: white !important;
-          border-color: #dee2e6 !important;
-          cursor: pointer !important;
-
-          &::after {
-            content: 'PM' !important;
-            font-size: 0.6rem !important;
-            position: absolute !important;
-            bottom: 2px !important;
-            right: 2px !important;
+            background: linear-gradient(to right bottom,#e63946 50%,#28a745 50%);
             color: white !important;
-            font-weight: bold !important;
-            text-shadow: 0 0 2px rgba(0,0,0,0.5);
-          }
+            border-color: #dee2e6 !important;
+            cursor: pointer !important;
 
-          &.disabled {
-            opacity: 0.8 !important;
-            cursor: not-allowed !important;
-          }
+            &::after {
+                /*content: 'PM' !important;*/
+                font-size: 0.6rem !important;
+                position: absolute !important;
+                bottom: 2px !important;
+                right: 2px !important;
+                color: white !important;
+                font-weight: bold !important;
+                text-shadow: 0 0 2px rgba(0,0,0,0.5);
+            }
 
-          &:not(.disabled):hover {
-            transform: scale(1.05) !important;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2) !important;
-          }
+            &.disabled {
+                opacity: 0.8 !important;
+                cursor: not-allowed !important;
+            }
+
+            &:not(.disabled):hover {
+                transform: scale(1.05) !important;
+                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2) !important;
+            }
         }
 
         /* NO CHECKIN - Green with red dot */
         &.date-no-checkin {
-          background-color: #28a745 !important;
-          color: white !important;
-          border-color: #28a745 !important;
-          position: relative !important;
-          cursor: pointer !important;
+            background-color: #28a745 !important;
+            color: white !important;
+            border-color: #28a745 !important;
+            position: relative !important;
+            cursor: pointer !important;
 
-          &::before {
-            content: '' !important;
-            position: absolute !important;
-            top: 50% !important;
-            left: 50% !important;
-            transform: translate(-50%, -50%) !important;
-            width: 8px !important;
-            height: 8px !important;
-            background-color: #dc3545 !important;
-            border-radius: 50% !important;
-            border: 1px solid white !important;
-            box-shadow: 0 0 2px rgba(0,0,0,0.5);
-          }
+            &::before {
+                content: '' !important;
+                position: absolute !important;
+                top: 50% !important;
+                left: 50% !important;
+                transform: translate(-50%, -50%) !important;
+                width: 8px !important;
+                height: 8px !important;
+                background-color: #dc3545 !important;
+                border-radius: 50% !important;
+                border: 1px solid white !important;
+                box-shadow: 0 0 2px rgba(0,0,0,0.5);
+            }
 
-          &.disabled {
-            opacity: 0.8 !important;
-            cursor: not-allowed !important;
-          }
+            &.disabled {
+                opacity: 0.8 !important;
+                cursor: not-allowed !important;
+            }
 
-          &:not(.disabled):hover {
-            background-color: #218838 !important;
-            border-color: #1e7e34 !important;
-            transform: scale(1.05) !important;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2) !important;
-          }
+            &:not(.disabled):hover {
+                background-color: #218838 !important;
+                border-color: #1e7e34 !important;
+                transform: scale(1.05) !important;
+                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2) !important;
+            }
         }
 
         /* Default styling for dates without custom status */
         &:not(.date-fully-unavailable):not(.date-fully-available):not(.date-am-only):not(.date-pm-only):not(.date-no-checkin) {
-          background-color: #f8f9fa !important;
-          color: #212529 !important;
-          border-color: #dee2e6 !important;
-          cursor: default !important;
+            background-color: #f8f9fa !important;
+            color: #212529 !important;
+            border-color: #dee2e6 !important;
+            cursor: default !important;
 
-          &.disabled {
-            background-color: #6c757d !important;
-            color: white !important;
-            opacity: 0.5 !important;
-            cursor: not-allowed !important;
-          }
+            &.disabled {
+                background-color: #6c757d !important;
+                color: white !important;
+                opacity: 0.5 !important;
+                cursor: not-allowed !important;
+            }
 
-          &:not(.disabled):hover {
-            background-color: #e2e6ea !important;
-            border-color: #dae0e5 !important;
-          }
+            &:not(.disabled):hover {
+                background-color: #e2e6ea !important;
+                border-color: #dae0e5 !important;
+            }
         }
-      }
+
+        /* Range selection styles for date picker */
+        &.in-range {
+            background-color: rgba(40, 167, 69, 0.2) !important;
+            color: #198754 !important;
+            border-radius: 0 !important;
+
+            &:hover {
+                background-color: rgba(40, 167, 69, 0.3) !important;
+                color: #fff !important;
+            }
+        }
+
+        &.range-start,
+        &.range-end {
+            background-color: #28a745 !important;
+            color: white !important;
+            border-radius: 50% !important;
+            z-index: 1;
+
+            &:hover {
+                background-color: #218838 !important;
+            }
+        }
+
+        &.blocked-range {
+            background-color: rgba(220, 53, 69, 0.15) !important;
+            color: #dc3545 !important;
+            cursor: not-allowed !important;
+        }
     }
 
-    /* Ensure week rows have proper height */
-    .ngb-dp-week {
-      min-height: 40px;
+    /* Style for DUAL CALENDAR (availability tab) */
+    .custom-datepicker {
+        /* Ensure proper sizing of date cells */
+        .ngb-dp-day {
+            width: 40px;
+            height: 40px;
+            padding: 2px;
+
+            /* Center content in the cell */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Ensure week rows have proper height */
+        .ngb-dp-week {
+            min-height: 40px;
+            min-width: 40px;
+        }
+
+        /* Override Bootstrap's default datepicker styles */
+        .btn-light {
+            background-color: transparent !important;
+            border-color: transparent !important;
+        }
+        .ngb-dp-day, .ngb-dp-weekday, .ngb-dp-week-number {
+            width: 40px;
+            height: 40px;
+            font-style: normal;
+            color: #555;
+        }
+        .ngb-dp-weekdays {
+            background-color: #fff;
+            border: 0px;
+        }
+        .ngb-dp-header, .ngb-dp-month-name {
+            background-color: #378f86;
+            color: #fff !important;
+            font-weight: 300;
+            height: 42px;
+            font-size: 18px;
+        }
+        .ngb-dp-header {
+            padding-top: .35rem;
+        }
+        .ngb-dp-navigation-chevron {
+            color: #fff !important;
+            font-weight: 300;
+        }
+        .ngb-dp-arrow {
+            width: 40px;
+            height: 40px;
+            top: -5px;
+            position: relative;
+        }
     }
 
-    /* Override Bootstrap's default datepicker styles */
-    .btn-light {
-      background-color: transparent !important;
-      border-color: transparent !important;
+    /* Style for POPUP DATEPICKER (date range picker) */
+    ngb-datepicker {
+        /* Target the popup datepicker */
+        .ngb-dp-day {
+            width: 40px;
+            height: 40px;
+            padding: 2px;
+
+            /* Center content in the cell */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
     }
-  }
+
+    .ngb-dp-day, .ngb-dp-weekday, .ngb-dp-week-number {
+        width: 40px;
+        height: 40px;
+        font-style: normal;
+        color: #555;
+    }
+    .ngb-dp-weekdays {
+        background-color: #fff;
+        border: 0px;
+    }
+    .ngb-dp-header, .ngb-dp-month-name {
+        background-color: #378f86;
+        color: #fff !important;
+        font-weight: 300;
+        height: 42px;
+    }
+    .ngb-dp-navigation-chevron {
+        color: #fff !important;
+        font-weight: 300;
+    }
+    .ngb-dp-arrow {
+        width: 40px;
+        height: 40px;
+        top: -5px;
+        position: relative;
+    }
 }
 
 /* LEGEND STYLES */
 .legend-dot {
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
-  display: inline-block;
-  flex-shrink: 0;
+    width: 16px;
+    height: 16px;
+    display: inline-block;
+    flex-shrink: 0;
 
-  &.fully-available {
-    background-color: #28a745;
-  }
-
-  &.fully-unavailable {
-    background-color: #dc3545;
-  }
-
-  &.am-only {
-    background: linear-gradient(to right, #28a745 50%, #dc3545 50%);
-  }
-
-  &.pm-only {
-    background: linear-gradient(to right, #dc3545 50%, #28a745 50%);
-  }
-
-  &.no-checkin {
-    background-color: #28a745;
-    position: relative;
-
-    &::before {
-      content: '';
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      width: 6px;
-      height: 6px;
-      border-radius: 50%;
-      background: #dc3545;
+    &.fully-available {
+        background-color: #28a745;
     }
-  }
+
+    &.fully-unavailable {
+        background-color: #dc3545;
+    }
+
+    &.am-only {
+        background: linear-gradient(to right bottom, #28a745 50%, #e63946 50%) !important;
+    }
+
+    &.pm-only {
+        background: linear-gradient(to right bottom, #e63946 50%, #28a745 50%);
+    }
+
+    &.no-checkin {
+        background-color: #28a745;
+        position: relative;
+
+        &::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: #dc3545;
+        }
+    }
 }
 
 /* Responsive adjustments */
 @media (max-width: 992px) {
-  :host ::ng-deep {
-    .custom-datepicker {
-      .ngb-dp-day {
-        width: 36px;
-        height: 36px;
+    :host ::ng-deep {
+        .custom-datepicker,
+        ngb-datepicker {
+            .ngb-dp-day {
+                width: 36px;
+                height: 36px;
+            }
 
-        .custom-day-wrapper {
-          font-size: 0.8125rem !important;
+            .custom-day-wrapper {
+                font-size: 0.8125rem !important;
 
-          &::after {
-            font-size: 0.5rem !important;
-          }
+                &::after {
+                    font-size: 0.5rem !important;
+                }
+            }
         }
-      }
     }
-  }
 }
 
 @media (max-width: 768px) {
-  :host ::ng-deep {
-    .custom-datepicker {
-      .ngb-dp-day {
-        width: 32px;
-        height: 32px;
+    :host ::ng-deep {
+        .custom-datepicker,
+        ngb-datepicker {
+            .ngb-dp-day {
+                width: 32px;
+                height: 32px;
+            }
 
-        .custom-day-wrapper {
-          font-size: 0.75rem !important;
+            .custom-day-wrapper {
+                font-size: 0.75rem !important;
 
-          &::after {
-            font-size: 0.45rem !important;
-          }
+                &::after {
+                    font-size: 0.45rem !important;
+                }
+            }
         }
-      }
     }
-  }
 }
 
 @media (max-width: 576px) {
-  .calendar-section {
-    min-height: 280px;
-    padding: 0.75rem;
-  }
-
-  :host ::ng-deep {
-    .custom-datepicker {
-      .ngb-dp-day {
-        width: 28px;
-        height: 28px;
-
-        .custom-day-wrapper {
-          font-size: 0.7rem !important;
-
-          &::after {
-            font-size: 0.4rem !important;
-          }
-        }
-      }
+    .calendar-section {
+        min-height: 280px;
+        padding: 0.75rem;
     }
-  }
+
+    :host ::ng-deep {
+        .custom-datepicker,
+        ngb-datepicker {
+            .ngb-dp-day {
+                width: 28px;
+                height: 28px;
+            }
+
+            .custom-day-wrapper {
+                font-size: 0.7rem !important;
+
+                &::after {
+                    font-size: 0.4rem !important;
+                }
+            }
+        }
+    }
 }

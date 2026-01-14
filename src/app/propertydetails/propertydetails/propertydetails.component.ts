@@ -9,7 +9,7 @@ import { TabsetComponent } from 'ngx-bootstrap/tabs';
 import { ActivatedRoute } from '@angular/router';
 import { NgxSpinnerService } from "ngx-spinner";
 
-import { NgbDate, NgbCalendar, NgbDateStruct, NgbDateParserFormatter, NgbDatepickerNavigateEvent } from '@ng-bootstrap/ng-bootstrap';
+import { NgbDate, NgbInputDatepicker, NgbCalendar, NgbDateStruct, NgbDateParserFormatter, NgbDatepickerNavigateEvent } from '@ng-bootstrap/ng-bootstrap';
 import { Subscription } from 'rxjs';
 import { AvailabilityService, DateAvailability } from 'src/app/shared/services/availability.service'; // Adjust path as needed
 
@@ -79,6 +79,10 @@ export class PropertydetailsComponent implements OnInit, AfterViewInit, OnDestro
   amOnlyDates: NgbDate[] = [];              // Condition #4: AM Green / PM Red
   pmOnlyDates: NgbDate[] = [];              // Condition #3: AM Red / PM Green
   noCheckinDates: NgbDate[] = [];           // Condition #5: Green with red circle
+  //for date-range-picker
+  fromDate: NgbDate | null = null;
+  toDate: NgbDate | null = null;
+  selectedDateRange: string = '';
 
   // Subscriptions
   private availabilitySub: Subscription = new Subscription();
@@ -104,17 +108,12 @@ export class PropertydetailsComponent implements OnInit, AfterViewInit, OnDestro
 
 // Temporary test method
   testFebruaryLogic(): void {
-    console.log('=== TESTING FEBRUARY 2026 LOGIC ===');
 
     // Manually add some February dates as unavailable
     for (let day = 1; day <= 5; day++) {
       this.fullyUnavailableDates.push(new NgbDate(2026, 2, day));
     }
-
-    console.log('Added 5 February dates to unavailable list');
-    console.log('Test if getDateCustomClass works for Feb 1:', this.getDateCustomClass(new NgbDate(2026, 2, 1)));
   }
-
 
   ngAfterViewInit (){
     // Initialize swipers after view is ready
@@ -897,13 +896,16 @@ export class PropertydetailsComponent implements OnInit, AfterViewInit, OnDestro
    */
   selectTab(tabId: string, event?: Event): void {
     event?.preventDefault();
+    alert  (tabId);
 
     if (!this.propertyTabs) return;
 
     const tabIndex = this.tabs.findIndex(tab => tab.id === tabId);
+    alert  (tabId);
     if (tabIndex !== -1 && this.propertyTabs.tabs[tabIndex]) {
       this.propertyTabs.tabs[tabIndex].active = true;
       this.currentTab = tabId;
+      alert  (this.currentTab);
     }
   }
 
@@ -945,14 +947,12 @@ export class PropertydetailsComponent implements OnInit, AfterViewInit, OnDestro
   }
 
   // ===== CALENDAR METHODS (SIMPLIFIED) =====
-// Temporary debugging
+  // Temporary debugging
   loadAvailabilityData(): void {
     this.availabilitySub = this.availabilityService.getAvailability(this.propertyId)
       .subscribe(data => {
-        console.log('=== AVAILABILITY DATA (availabilityData only) ===');
-        console.log('Total dates from availabilityData:', data.length);
-
         // Log first few dates to verify
+        /*
         data.slice(0, 5).forEach(item => {
           console.log(`Date: ${item.date.year}-${item.date.month}-${item.date.day},
           Status: ${item.status},
@@ -961,6 +961,7 @@ export class PropertydetailsComponent implements OnInit, AfterViewInit, OnDestro
           PM: ${item.availablePMYesNo},
           CheckIn: ${item.availableCheckInYesNo}`);
         });
+        */
 
         // Reset arrays
         this.fullyAvailableDates = [];
@@ -992,12 +993,14 @@ export class PropertydetailsComponent implements OnInit, AfterViewInit, OnDestro
           }
         });
 
+        /*
         console.log('=== CATEGORIZATION ===');
         console.log('Fully available (green):', this.fullyAvailableDates.length);
         console.log('Fully unavailable (red):', this.fullyUnavailableDates.length);
         console.log('AM only (top green/bottom red):', this.amOnlyDates.length);
         console.log('PM only (top red/bottom green):', this.pmOnlyDates.length);
         console.log('No checkin (green with red dot):', this.noCheckinDates.length);
+        */
 
         // Run test first
         // setTimeout(() => {this.testFebruaryLogic();}, 5000);
@@ -1025,6 +1028,7 @@ export class PropertydetailsComponent implements OnInit, AfterViewInit, OnDestro
     const isPmOnly = this.pmOnlyDates.some(d => d.equals(date));
     const isNoCheckin = this.noCheckinDates.some(d => d.equals(date));
 
+    /*
     // Debug: log February dates
     if (date.year === 2026 && date.month === 2 && date.day <= 5) {
       console.log(`Feb ${date.day}, 2026 - Status:`, {
@@ -1035,6 +1039,7 @@ export class PropertydetailsComponent implements OnInit, AfterViewInit, OnDestro
         noCheckin: isNoCheckin
       });
     }
+    */
 
     if (isUnavailable) {
       return 'date-fully-unavailable';
@@ -1086,5 +1091,135 @@ export class PropertydetailsComponent implements OnInit, AfterViewInit, OnDestro
   // Helper methods
   getDateStruct(date: NgbDate): NgbDateStruct {
     return { year: date.year, month: date.month, day: date.day };
+  }
+
+  //date-range-picker
+  onDateSelection(date: NgbDate, dp: NgbInputDatepicker) {
+    // 🚫 Block selecting unavailable start date
+    if (this.isDateUnavailable(date)) {
+      return;
+    }
+
+    // 1️⃣ If no range yet, set check-in
+    if (!this.fromDate && !this.toDate) {
+      this.fromDate = date;
+      this.updateDateRangeText();
+      // Keep calendar open for checkout selection
+      return;
+    }
+
+    // 2️⃣ If check-in exists, but no checkout yet
+    if (this.fromDate && !this.toDate) {
+      // If user clicked a date before check-in, reset check-in
+      if (date.before(this.fromDate)) {
+        this.fromDate = date;
+        this.updateDateRangeText();
+        return;
+      }
+
+      // 🚫 Block checkout if any unavailable date exists in between
+      if (!this.isRangeValid(this.fromDate, date)) {
+        return;
+      }
+
+      // ✅ Valid checkout selected
+      this.toDate = date;
+      this.updateDateRangeText();
+
+      // 🔥 Auto-scroll to checkout month
+      dp.navigateTo({
+        year: date.year,
+        month: date.month
+      });
+
+      // ✅ Auto-close calendar after a brief delay (for better UX)
+      setTimeout(() => {
+        dp.close();
+      }, 100); // Small delay to show the selection visually
+
+      return;
+    }
+
+    // 3️⃣ If both check-in and checkout exist, reset range
+    if (this.fromDate && this.toDate) {
+      this.fromDate = date;
+      this.toDate = null;
+      this.updateDateRangeText();
+    }
+  }
+
+  updateDateRangeText(): void {
+    if (this.fromDate && this.toDate) {
+      // Format with leading zeros: "MM/DD/YYYY - MM/DD/YYYY"
+      const fromStr = this.formatDateWithLeadingZeros(this.fromDate);
+      const toStr = this.formatDateWithLeadingZeros(this.toDate);
+      this.selectedDateRange = `${fromStr} - ${toStr}`;
+    } else if (this.fromDate) {
+      // Only check-in selected
+      const fromStr = this.formatDateWithLeadingZeros(this.fromDate);
+      this.selectedDateRange = `${fromStr} - Select checkout`;
+    } else {
+      this.selectedDateRange = '';
+    }
+  }
+
+  formatDateRange(): string {
+    return this.selectedDateRange;
+  }
+
+  getPlaceholderText(): string {
+    if (this.fromDate && !this.toDate) {
+      const fromStr = this.formatDateWithLeadingZeros(this.fromDate);
+      return `${fromStr} - Choose checkout date`;
+    }
+    return "Please choose checkin-checkout date";
+  }
+
+  isRangeStart(date: NgbDate): boolean {
+    return !!this.fromDate && date.equals(this.fromDate);
+  }
+
+  isRangeEnd(date: NgbDate): boolean {
+    return !!this.toDate && date.equals(this.toDate);
+  }
+
+  isInsideRange(date: NgbDate): boolean {
+    if (!this.fromDate || !this.toDate) {
+      return false;
+    }
+
+    // Check if date is strictly between fromDate and toDate
+    return date.after(this.fromDate) && date.before(this.toDate);
+  }
+
+  closeDatepicker(dp: NgbInputDatepicker): void {
+    dp.close();
+  }
+
+  clearSelection(): void {
+    this.fromDate = null;
+    this.toDate = null;
+    this.selectedDateRange = '';
+  }
+
+  isRangeValid(from: NgbDate, to: NgbDate): boolean {
+    let current = from;
+
+    while (current.before(to)) {
+      if (this.isDateUnavailable(current)) {
+        return false;
+      }
+
+      current = this.calendar.getNext(current, 'd', 1); // ✅ correct
+    }
+
+    return true;
+  }
+
+  formatDateWithLeadingZeros(date: NgbDate): string {
+    // Add leading zeros to month and day
+    const month = date.month.toString().padStart(2, '0');
+    const day = date.day.toString().padStart(2, '0');
+    return `${month}/${day}/${date.year}`;
   }
 }

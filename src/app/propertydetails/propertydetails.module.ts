@@ -6,6 +6,7 @@ import { TabsModule } from 'ngx-bootstrap/tabs';
 import { NgxSpinnerModule } from "ngx-spinner";
 import {NgbDatepickerI18n, NgbDatepickerModule} from '@ng-bootstrap/ng-bootstrap';
 import {CustomDatepickerI18n} from "src/app/shared/datepicker-i18n.service";
+// import { FormsModule, ReactiveFormsModule  } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -13,6 +14,8 @@ import {CustomDatepickerI18n} from "src/app/shared/datepicker-i18n.service";
   ],
   imports: [
     CommonModule,
+    // FormsModule,
+    // ReactiveFormsModule,
     PropertydetailsRoutingModule,
     TabsModule.forRoot(),
     NgxSpinnerModule,

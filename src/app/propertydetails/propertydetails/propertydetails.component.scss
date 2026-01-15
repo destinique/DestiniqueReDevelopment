@@ -591,6 +591,9 @@ a.collapsed {
     text-overflow: ellipsis;
 }
 //css for image gallery
+.swiper-button-next, .swiper-button-prev {
+    top: 45%;
+}
 .property-gallery {
     width: 100%;
     // Full viewport width
@@ -644,7 +647,7 @@ a.collapsed {
 
         .main-swiper {
             width: 100%;
-            height: 600px;
+            height: calc(100vh - 96px);
             // Slightly taller for full-width experience
             border-radius: 0;
             // Remove border radius
@@ -1428,4 +1431,10 @@ a.collapsed {
             }
         }
     }
+}
+
+//for google map
+.map-container {
+  width: 100%;
+  height: 250px;
 }

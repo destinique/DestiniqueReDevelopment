@@ -12,6 +12,8 @@ import { NgxSpinnerService } from "ngx-spinner";
 import { NgbDate, NgbInputDatepicker, NgbCalendar, NgbDateStruct, NgbDateParserFormatter, NgbDatepickerNavigateEvent } from '@ng-bootstrap/ng-bootstrap';
 import { Subscription } from 'rxjs';
 import { AvailabilityService, DateAvailability } from 'src/app/shared/services/availability.service'; // Adjust path as needed
+import { environment } from 'src/environments/environment';
+import { GoogleMapsService } from 'src/app/shared/services/google-maps.service';
 
 interface TabInfo {
   id: string;
@@ -87,10 +89,15 @@ export class PropertydetailsComponent implements OnInit, AfterViewInit, OnDestro
   // Subscriptions
   private availabilitySub: Subscription = new Subscription();
 
+  // Track loading states
+  private gmapScriptLoaded= false;
+  private map!: google.maps.Map;
+
   constructor(private route: ActivatedRoute,
               private spinner: NgxSpinnerService,
               private calendar: NgbCalendar,
-              private availabilityService: AvailabilityService
+              private availabilityService: AvailabilityService,
+              private googleMapsService: GoogleMapsService
   ) {
     this.propertyId = this.route.snapshot.paramMap.get('id') || '';
     // Initialize calendar dates
@@ -106,9 +113,8 @@ export class PropertydetailsComponent implements OnInit, AfterViewInit, OnDestro
     this.loadAvailabilityData();
   }
 
-// Temporary test method
+  // Temporary test method
   testFebruaryLogic(): void {
-
     // Manually add some February dates as unavailable
     for (let day = 1; day <= 5; day++) {
       this.fullyUnavailableDates.push(new NgbDate(2026, 2, day));
@@ -120,8 +126,78 @@ export class PropertydetailsComponent implements OnInit, AfterViewInit, OnDestro
     setTimeout(() => {
       this.initSwipers();
     }, 100);
-    this.spinner.hide();
+
+    if (!this.gmapScriptLoaded) {
+      if ('requestIdleCallback' in window) {
+        (window as any).requestIdleCallback(() => {
+          this.loadGoogleMapsScript();
+        });
+      }
+      else {
+        // Fallback for Safari
+        setTimeout(() => this.loadGoogleMapsScript(), 2000);
+      }
+    }
+
+    setTimeout(() => {this.spinner.hide();}, 2000);
   }
+
+  private async loadGoogleMapsScript() {
+    // Prevent multiple loads
+    if (this.gmapScriptLoaded ) {
+    // || this.googleMapsService.isApiLoaded()
+      return;
+    }
+
+    try {
+      await this.googleMapsService.loadGoogleMaps();
+      this.gmapScriptLoaded = true;
+      // ✅ SAFE POINT — API + DOM both ready
+      this.initMap();
+      console.log('Google Maps script loaded');
+    }
+    catch (error) {
+      console.error('Failed to load Google Maps:', error);
+    }
+    finally {
+
+    }
+  }
+
+  private initMap(): void {
+    const mapEl = document.getElementById('property-map');
+
+    if (!mapEl) {
+      console.warn('Map element not found');
+      return;
+    }
+
+    const lat = 30.381992;
+    const lng = -86.422883;
+
+    this.map = new google.maps.Map(mapEl, {
+      center: { lat: lat, lng: lng },
+      zoom: 10,
+      mapId: environment.googleMapsMapId,
+      fullscreenControl: false,
+      streetViewControl: false,
+      disableDefaultUI: false,
+      zoomControl: true,
+      mapTypeControl: false,
+      draggable: false
+    });
+    this.addMarker(lat, lng);
+  }
+
+  private addMarker(lat: number, lng: number): void {
+    const position = { lat, lng };
+
+    new google.maps.marker.AdvancedMarkerElement({
+      map: this.map,
+      position
+    });
+  }
+
 
   loadPropertyImages() {
     // Your image loading logic

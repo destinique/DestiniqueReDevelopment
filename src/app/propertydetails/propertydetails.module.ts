@@ -7,6 +7,7 @@ import { NgxSpinnerModule } from "ngx-spinner";
 import {NgbDatepickerI18n, NgbDatepickerModule} from '@ng-bootstrap/ng-bootstrap';
 import {CustomDatepickerI18n} from "src/app/shared/datepicker-i18n.service";
 // import { FormsModule, ReactiveFormsModule  } from '@angular/forms';
+import { GoogleMapsModule } from '@angular/google-maps'; // Import GoogleMapsModule
 
 @NgModule({
   declarations: [
@@ -19,7 +20,8 @@ import {CustomDatepickerI18n} from "src/app/shared/datepicker-i18n.service";
     PropertydetailsRoutingModule,
     TabsModule.forRoot(),
     NgxSpinnerModule,
-    NgbDatepickerModule
+    NgbDatepickerModule,
+    GoogleMapsModule
   ],
   providers: [
     { provide: NgbDatepickerI18n, useClass: CustomDatepickerI18n }

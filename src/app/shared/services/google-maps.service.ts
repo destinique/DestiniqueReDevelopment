@@ -58,7 +58,7 @@ export class GoogleMapsService {
 
     this.loadPromise = new Promise((resolve, reject) => {
       const script = document.createElement('script');
-      script.src = `https://maps.googleapis.com/maps/api/js?key=${environment.googleMapsApiKey}&libraries=places`;
+      script.src = `https://maps.googleapis.com/maps/api/js?key=${environment.googleMapsApiKey}&libraries=places,marker`;
       script.async = true;
       script.defer = true;
 

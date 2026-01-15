@@ -46,8 +46,8 @@ export interface ApiAvailabilityResponse {
   providedIn: 'root'
 })
 export class AvailabilityService {
-
-  private apiUrl = 'https://destinique.com/ratesapp4website/';
+  // private apiUrl = 'https://destinique.com/ratesapp4website/';
+  private apiUrl= 'https://api.destinique.com/ratesapp4website/';
 
   constructor(private http: HttpClient) {}
 

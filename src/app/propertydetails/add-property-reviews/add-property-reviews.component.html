@@ -1,0 +1,119 @@
+<div class="row pb-4 review-form">
+    <div class="card">
+        <div class="card-body">
+            <form>
+                <div class="row">
+                    <div class="col-12">
+                        <h5 class="testimonials-Review">Submit A Review</h5>
+                    </div>
+                </div>
+                <div class="row">
+          <div class="mb-3 col-sm-12 col-md-6 col-lg-6">
+            <div class="w-100 lbl"> Your name<span style="color: red;">*</span></div>
+            <input class="form-control" type="text" formControlName="name">
+            <div class="invalid-feedback">
+              Name is required
+            </div>
+          </div>
+
+          <div class="mb-3 col-sm-12 col-md-6 col-lg-6">
+            <div class="w-100 lbl"> Email address<span style="color: red;">*</span></div>
+            <input class="form-control" type="text" formControlName="email">
+            <div class="invalid-feedback">
+              Email must be a valid email address
+            </div>
+          </div>
+
+          <div class="mb-3 col-sm-12 col-md-6 col-lg-6">
+            <div class="w-100 lbl"> Phone number (optional)</div>
+            <input class="form-control" type="number" formControlName="phone">
+            <div class="invalid-feedback">
+              Enter a valid phone number.
+            </div>
+          </div>
+
+          <div class="mb-3 col-12">
+            <div class="w-100 lbl">Message<span style="color: red;">*</span></div>
+            <textarea class="form-control" id="message" rows="3" name="message" formControlName="message"></textarea>
+            <div class="invalid-feedback">
+              Message is required
+            </div>
+          </div>
+        </div>
+
+
+              <div class="row">
+                <div class="col-12 opt-in-text-s">
+                  <label for="SMS_MMS_Consent">
+                    <div class="sms-mms-consent">
+                      <div [ngbCollapse]="isSmsConsentCollapsed" class="collapse" id="sms-mms-consent">
+                        <input type="checkbox" id="SMS_MMS_Consent" name="SMS_MMS_Consent" value="Bike" checked><span class="fw-bold"> SMS/MMS Consent: </span>
+                        "I agree to receive text (SMS/MMS) messages from Destinique at the number provided. Messages will primarily be one-on-one conversations related to vacation rental inquiries, property availability, and notifications about quote updates. Occasional promotional messages may also be sent. Some messages may include images or videos. We do not share mobile opt-in information with third parties unrelated to Destinique. Message & data rates may apply. Message frequency varies. Text reply STOP to cancel. Reply HELP to get help."
+                      </div>
+                      <!-- Toggle link - REPLACED -->
+                      <a href="javascript:void(0)"
+                         class="collapsed toggle-link"
+                         (click)="isSmsConsentCollapsed = !isSmsConsentCollapsed"
+                         [attr.aria-expanded]="!isSmsConsentCollapsed"
+                         aria-controls="sms-mms-consent">
+                        {{ isSmsConsentCollapsed ? '+ Read More' : '- Read Less' }}
+                      </a>
+                    </div>
+                  </label>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-12 opt-in-text-s">
+                  <label for="Email_Consent">
+                    <div class="email-consent">
+                      <div [ngbCollapse]="isEmailConsentCollapsed" class="collapse" id="email-consent">
+                        <input type="checkbox" id="Email_Consent" name="Email_Consent" value="Bike" checked><span class="fw-bold"> Email Consent:</span>
+                        "I agree to receive emails from Destinique. Email Frequency varies and will include vacation rental updates, responses to questions, quotes, booking information, exclusive travel deals, and property recommendations. I understand I can unsubscribe at any time via the unsubscribe link in any email."
+                      </div>
+                      <!-- Toggle link - REPLACED -->
+                      <a href="javascript:void(0)"
+                         class="collapsed toggle-link"
+                         (click)="isEmailConsentCollapsed = !isEmailConsentCollapsed"
+                         [attr.aria-expanded]="!isEmailConsentCollapsed"
+                         aria-controls="email-consent">
+                        {{ isEmailConsentCollapsed ? '+ Read More' : '- Read Less' }}
+                      </a>
+                    </div>
+                  </label>
+                </div>
+              </div>
+
+                <div class="row">
+          <div class="col-12 opt-in-text-s">
+            View our [<a class="link-primary" target="_blank" [routerLink]="'/terms-and-conditions'">Terms of Service</a>] and [<a class="link-primary" target="_blank" [routerLink]="'/privacypolicies'">Privacy Policy</a>].
+          </div>
+        </div>
+
+                <div class="row">
+          <div class="col-12">
+            <div class="opt-in-text-s">
+              <label  for="testim-thank-fb">
+                Thank you for your feedback. We value your privacy and will adhere to your selected option.
+                <br>
+              </label>
+            </div>
+          </div>
+        </div>
+                <hr/>
+
+                <div class="row">
+          <div class="mb-3 col-12 btn-al-r">
+            <button class="btn btn-primary mr-1">
+              <!--<span class="spinner-border spinner-border-sm mr-1"></span>-->
+              SEND MESSAGE
+            </button>
+            <button class="btn btn-secondary mr-1" type="reset">
+              RESET
+            </button>
+          </div>
+        </div>
+            </form>
+        </div>
+    </div>
+</div>

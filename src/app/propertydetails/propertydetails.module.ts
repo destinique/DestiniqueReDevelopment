@@ -10,6 +10,7 @@ import {CustomDatepickerI18n} from "src/app/shared/datepicker-i18n.service";
 // import { FormsModule, ReactiveFormsModule  } from '@angular/forms';
 import { GoogleMapsModule } from '@angular/google-maps';
 import { AddPropertyReviewsComponent } from './add-property-reviews/add-property-reviews.component'; // Import GoogleMapsModule
+import { ToastrModule } from 'ngx-toastr';
 
 @NgModule({
   declarations: [
@@ -25,7 +26,8 @@ import { AddPropertyReviewsComponent } from './add-property-reviews/add-property
     NgxSpinnerModule,
     NgbCollapseModule,
     NgbDatepickerModule,
-    GoogleMapsModule
+    GoogleMapsModule,
+    ToastrModule
   ],
   providers: [
     { provide: NgbDatepickerI18n, useClass: CustomDatepickerI18n }

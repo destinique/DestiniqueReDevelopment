@@ -6,7 +6,7 @@ import Swiper, { Navigation, Pagination, Thumbs, FreeMode } from 'swiper';
 Swiper.use([Navigation, Pagination, Thumbs, FreeMode]);
 
 import { TabsetComponent } from 'ngx-bootstrap/tabs';
-import { ActivatedRoute } from '@angular/router';
+import { Router, ActivatedRoute } from "@angular/router";
 import { NgxSpinnerService } from "ngx-spinner";
 
 import { NgbDate, NgbInputDatepicker, NgbCalendar, NgbDateStruct, NgbDateParserFormatter, NgbDatepickerNavigateEvent } from '@ng-bootstrap/ng-bootstrap';
@@ -14,6 +14,11 @@ import { Subscription } from 'rxjs';
 import { AvailabilityService, DateAvailability } from 'src/app/shared/services/availability.service'; // Adjust path as needed
 import { environment } from 'src/environments/environment';
 import { GoogleMapsService } from 'src/app/shared/services/google-maps.service';
+
+import { StorageService } from 'src/app/shared/services/storage.service';
+import { AuthService } from 'src/app/shared/services/auth.service';
+import { CrudService } from "src/app/shared/services/crud.service";
+import { ToastrService } from "ngx-toastr";
 
 interface TabInfo {
   id: string;
@@ -37,7 +42,14 @@ export class PropertydetailsComponent implements OnInit, AfterViewInit, OnDestro
   images: PropertyImage[] = [];
   currentSlide: number = 0;
 
+  propertyDetailData: any;
+  listId: any; //Getting Product id from URL
   propertyId: string;
+  bedroomCt: any;
+  bathroomCt: any;
+  sleepsCt: any;
+  amenity: any;
+
   currentTab = 'overview';
 
   // Tab configuration
@@ -86,20 +98,31 @@ export class PropertydetailsComponent implements OnInit, AfterViewInit, OnDestro
   toDate: NgbDate | null = null;
   selectedDateRange: string = '';
 
+  private latitude!: number;
+  private longitude!: number;
+
   // Subscriptions
   private availabilitySub: Subscription = new Subscription();
 
   // Track loading states
   private gmapScriptLoaded= false;
+  private mapInitialized = false;
   private map!: google.maps.Map;
 
-  constructor(private route: ActivatedRoute,
+  constructor(
+              private router: Router,
+              private route: ActivatedRoute,
               private spinner: NgxSpinnerService,
               private calendar: NgbCalendar,
               private availabilityService: AvailabilityService,
-              private googleMapsService: GoogleMapsService
+              private googleMapsService: GoogleMapsService,
+              private storageService: StorageService,
+              private authService: AuthService,
+              private crudService: CrudService,
+              private toast: ToastrService
   ) {
     this.propertyId = this.route.snapshot.paramMap.get('id') || '';
+    this.listId = Number(this.propertyId);
     // Initialize calendar dates
     const today = this.calendar.getToday();
     this.leftCalendarDate = today;
@@ -107,10 +130,13 @@ export class PropertydetailsComponent implements OnInit, AfterViewInit, OnDestro
   }
 
   ngOnInit (){
-    this.spinner.show();
-    // Load your images (example data)
-    this.loadPropertyImages();
-    this.loadAvailabilityData();
+      this.spinner.show();
+      if (this.storageService.isBrowser()){
+          this.loadPropertyDetails(this.listId);
+          // Load your images (example data)
+          // this.loadPropertyImages();
+          this.loadAvailabilityData();
+      }
   }
 
   // Temporary test method
@@ -139,7 +165,75 @@ export class PropertydetailsComponent implements OnInit, AfterViewInit, OnDestro
       }
     }
 
-    setTimeout(() => {this.spinner.hide();}, 2000);
+    setTimeout(() => {this.spinner.hide();}, 1000);
+  }
+
+  private tryInitMap(): void {
+    if (this.mapInitialized) {
+      return;
+    }
+
+    if (!this.gmapScriptLoaded) {
+      return;
+    }
+
+    if (this.latitude == null || this.longitude == null) {
+      return;
+    }
+
+    this.initMap(this.latitude, this.longitude);
+    this.mapInitialized = true;
+  }
+
+  loadPropertyDetails(listId:any){
+    this.crudService.getPropertyDetails(listId).subscribe({
+      next: (resp: any) => {
+        this.spinner.hide();
+
+        if (resp?.length > 0) {
+          if (parseInt(resp[0]["status"]) == 0) {
+            this.router.navigate(["/"]);
+            return;
+          }
+          this.propertyDetailData = resp[0];
+          // console.log(this.propertyDetailData);
+
+          const listId = resp[0].list_id;
+          this.latitude = Number(resp[0].Lat);
+          this.longitude = Number(resp[0].Lon);
+
+          this.bedroomCt = Math.round(resp[0]["Bedrooms"] * 100) / 100;
+          this.bathroomCt = Math.round(resp[0]["Bathrooms"] * 100) / 100;
+          this.sleepsCt = Math.round(resp[0]["Sleeps"] * 100) / 100;
+          this.amenity = resp[0]["Amenity"];
+
+          // Try initializing map after data arrives
+          this.tryInitMap();
+          this.images = PropertyImageHelper.sortImages(
+                          PropertyImageHelper.transformApiData(resp[0]["images"])
+          );
+        }
+        else {
+          this.showPropertyError();
+        }
+      },
+      error: () => {
+        this.spinner.hide();
+        this.showPropertyError();
+      }
+    });
+  }
+
+  private showPropertyError() {
+    this.toast.error(
+      'This property is no longer online. Please call 850-312-5400 for further assistance',
+      'Property Not Found',
+      {
+        tapToDismiss: true,
+        timeOut: 0,
+        positionClass: 'toast-top-center'
+      }
+    );
   }
 
   private async loadGoogleMapsScript() {
@@ -153,7 +247,7 @@ export class PropertydetailsComponent implements OnInit, AfterViewInit, OnDestro
       await this.googleMapsService.loadGoogleMaps();
       this.gmapScriptLoaded = true;
       // ✅ SAFE POINT — API + DOM both ready
-      this.initMap();
+      // this.tryInitMap();
       console.log('Google Maps script loaded');
     }
     catch (error) {
@@ -164,16 +258,13 @@ export class PropertydetailsComponent implements OnInit, AfterViewInit, OnDestro
     }
   }
 
-  private initMap(): void {
+  private initMap(lat: number, lng: number): void {
     const mapEl = document.getElementById('property-map');
 
     if (!mapEl) {
       console.warn('Map element not found');
       return;
     }
-
-    const lat = 30.381992;
-    const lng = -86.422883;
 
     this.map = new google.maps.Map(mapEl, {
       center: { lat: lat, lng: lng },
@@ -196,692 +287,6 @@ export class PropertydetailsComponent implements OnInit, AfterViewInit, OnDestro
       map: this.map,
       position
     });
-  }
-
-
-  loadPropertyImages() {
-    // Your image loading logic
-    const apiData = [
-      {
-        "images_id":"936969",
-        "list_id":"19010",
-        "Type":"image/jpeg",
-        "URLTxt":"https://quote.destinique.com/destin/dashboard/../images/uploads/list/19010/535251-h.jpg",
-        "Caption":"",
-        "sort":"1",
-        "created_at":"2025-10-06 23:26:04"
-      },
-      {
-        "images_id":"936970",
-        "list_id":"19010",
-        "Type":"image/jpeg",
-        "URLTxt":"https://quote.destinique.com/destin/dashboard/../images/uploads/list/19010/317321-h.jpg",
-        "Caption":"",
-        "sort":"2",
-        "created_at":"2025-10-06 23:24:05"
-      },
-      {
-        "images_id":"936971",
-        "list_id":"19010",
-        "Type":"image/jpeg",
-        "URLTxt":"https://quote.destinique.com/destin/dashboard/../images/uploads/list/19010/317322-h.jpg",
-        "Caption":"",
-        "sort":"3",
-        "created_at":"2025-10-06 23:24:07"
-      },
-      {
-        "images_id":"936972",
-        "list_id":"19010",
-        "Type":"image/jpeg",
-        "URLTxt":"https://quote.destinique.com/destin/dashboard/../images/uploads/list/19010/317325-h.jpg",
-        "Caption":"",
-        "sort":"4",
-        "created_at":"2025-10-06 23:24:09"
-      },
-      {
-        "images_id":"936973",
-        "list_id":"19010",
-        "Type":"image/jpeg",
-        "URLTxt":"https://quote.destinique.com/destin/dashboard/../images/uploads/list/19010/317327-h.jpg",
-        "Caption":"",
-        "sort":"5",
-        "created_at":"2025-10-06 23:24:11"
-      },
-      {
-        "images_id":"936974",
-        "list_id":"19010",
-        "Type":"image/jpeg",
-        "URLTxt":"https://quote.destinique.com/destin/dashboard/../images/uploads/list/19010/317328-h.jpg",
-        "Caption":"",
-        "sort":"6",
-        "created_at":"2025-10-06 23:24:13"
-      },
-      {
-        "images_id":"936975",
-        "list_id":"19010",
-        "Type":"image/jpeg",
-        "URLTxt":"https://quote.destinique.com/destin/dashboard/../images/uploads/list/19010/317326-h.jpg",
-        "Caption":"",
-        "sort":"7",
-        "created_at":"2025-10-06 23:24:15"
-      },
-      {
-        "images_id":"936976",
-        "list_id":"19010",
-        "Type":"image/jpeg",
-        "URLTxt":"https://quote.destinique.com/destin/dashboard/../images/uploads/list/19010/317330-h.jpg",
-        "Caption":"",
-        "sort":"8",
-        "created_at":"2025-10-06 23:24:17"
-      },
-      {
-        "images_id":"936977",
-        "list_id":"19010",
-        "Type":"image/jpeg",
-        "URLTxt":"https://quote.destinique.com/destin/dashboard/../images/uploads/list/19010/317323-h.jpg",
-        "Caption":"",
-        "sort":"9",
-        "created_at":"2025-10-06 23:24:19"
-      },
-      {
-        "images_id":"936978",
-        "list_id":"19010",
-        "Type":"image/jpeg",
-        "URLTxt":"https://quote.destinique.com/destin/dashboard/../images/uploads/list/19010/317331-h.jpg",
-        "Caption":"",
-        "sort":"10",
-        "created_at":"2025-10-06 23:24:21"
-      },
-      {
-        "images_id":"936979",
-        "list_id":"19010",
-        "Type":"image/jpeg",
-        "URLTxt":"https://quote.destinique.com/destin/dashboard/../images/uploads/list/19010/317329-h.jpg",
-        "Caption":"",
-        "sort":"11",
-        "created_at":"2025-10-06 23:24:23"
-      },
-      {
-        "images_id":"936980",
-        "list_id":"19010",
-        "Type":"image/jpeg",
-        "URLTxt":"https://quote.destinique.com/destin/dashboard/../images/uploads/list/19010/317333-h.jpg",
-        "Caption":"",
-        "sort":"12",
-        "created_at":"2025-10-06 23:24:25"
-      },
-      {
-        "images_id":"936981",
-        "list_id":"19010",
-        "Type":"image/jpeg",
-        "URLTxt":"https://quote.destinique.com/destin/dashboard/../images/uploads/list/19010/317335-h.jpg",
-        "Caption":"",
-        "sort":"13",
-        "created_at":"2025-10-06 23:24:27"
-      },
-      {
-        "images_id":"936982",
-        "list_id":"19010",
-        "Type":"image/jpeg",
-        "URLTxt":"https://quote.destinique.com/destin/dashboard/../images/uploads/list/19010/317332-h.jpg",
-        "Caption":"",
-        "sort":"14",
-        "created_at":"2025-10-06 23:24:29"
-      },
-      {
-        "images_id":"936983",
-        "list_id":"19010",
-        "Type":"image/jpeg",
-        "URLTxt":"https://quote.destinique.com/destin/dashboard/../images/uploads/list/19010/317324-h.jpg",
-        "Caption":"",
-        "sort":"15",
-        "created_at":"2025-10-06 23:24:31"
-      },
-      {
-        "images_id":"936984",
-        "list_id":"19010",
-        "Type":"image/jpeg",
-        "URLTxt":"https://quote.destinique.com/destin/dashboard/../images/uploads/list/19010/317338-h.jpg",
-        "Caption":"",
-        "sort":"16",
-        "created_at":"2025-10-06 23:24:33"
-      },
-      {
-        "images_id":"936985",
-        "list_id":"19010",
-        "Type":"image/jpeg",
-        "URLTxt":"https://quote.destinique.com/destin/dashboard/../images/uploads/list/19010/317339-h.jpg",
-        "Caption":"",
-        "sort":"17",
-        "created_at":"2025-10-06 23:24:35"
-      },
-      {
-        "images_id":"936986",
-        "list_id":"19010",
-        "Type":"image/jpeg",
-        "URLTxt":"https://quote.destinique.com/destin/dashboard/../images/uploads/list/19010/317334-h.jpg",
-        "Caption":"",
-        "sort":"18",
-        "created_at":"2025-10-06 23:24:37"
-      },
-      {
-        "images_id":"936987",
-        "list_id":"19010",
-        "Type":"image/jpeg",
-        "URLTxt":"https://quote.destinique.com/destin/dashboard/../images/uploads/list/19010/317340-h.jpg",
-        "Caption":"",
-        "sort":"19",
-        "created_at":"2025-10-06 23:24:39"
-      },
-      {
-        "images_id":"936988",
-        "list_id":"19010",
-        "Type":"image/jpeg",
-        "URLTxt":"https://quote.destinique.com/destin/dashboard/../images/uploads/list/19010/317342-h.jpg",
-        "Caption":"",
-        "sort":"20",
-        "created_at":"2025-10-06 23:24:41"
-      },
-      {
-        "images_id":"936989",
-        "list_id":"19010",
-        "Type":"image/jpeg",
-        "URLTxt":"https://quote.destinique.com/destin/dashboard/../images/uploads/list/19010/317343-h.jpg",
-        "Caption":"",
-        "sort":"21",
-        "created_at":"2025-10-06 23:24:43"
-      },
-      {
-        "images_id":"936990",
-        "list_id":"19010",
-        "Type":"image/jpeg",
-        "URLTxt":"https://quote.destinique.com/destin/dashboard/../images/uploads/list/19010/317341-h.jpg",
-        "Caption":"",
-        "sort":"22",
-        "created_at":"2025-10-06 23:24:45"
-      },
-      {
-        "images_id":"936991",
-        "list_id":"19010",
-        "Type":"image/jpeg",
-        "URLTxt":"https://quote.destinique.com/destin/dashboard/../images/uploads/list/19010/317346-h.jpg",
-        "Caption":"",
-        "sort":"23",
-        "created_at":"2025-10-06 23:24:47"
-      },
-      {
-        "images_id":"936992",
-        "list_id":"19010",
-        "Type":"image/jpeg",
-        "URLTxt":"https://quote.destinique.com/destin/dashboard/../images/uploads/list/19010/317344-h.jpg",
-        "Caption":"",
-        "sort":"24",
-        "created_at":"2025-10-06 23:24:49"
-      },
-      {
-        "images_id":"936993",
-        "list_id":"19010",
-        "Type":"image/jpeg",
-        "URLTxt":"https://quote.destinique.com/destin/dashboard/../images/uploads/list/19010/317337-h.jpg",
-        "Caption":"",
-        "sort":"25",
-        "created_at":"2025-10-06 23:24:50"
-      },
-      {
-        "images_id":"936994",
-        "list_id":"19010",
-        "Type":"image/jpeg",
-        "URLTxt":"https://quote.destinique.com/destin/dashboard/../images/uploads/list/19010/317336-h.jpg",
-        "Caption":"",
-        "sort":"26",
-        "created_at":"2025-10-06 23:24:52"
-      },
-      {
-        "images_id":"936995",
-        "list_id":"19010",
-        "Type":"image/jpeg",
-        "URLTxt":"https://quote.destinique.com/destin/dashboard/../images/uploads/list/19010/317347-h.jpg",
-        "Caption":"",
-        "sort":"27",
-        "created_at":"2025-10-06 23:24:54"
-      },
-      {
-        "images_id":"936996",
-        "list_id":"19010",
-        "Type":"image/jpeg",
-        "URLTxt":"https://quote.destinique.com/destin/dashboard/../images/uploads/list/19010/317349-h.jpg",
-        "Caption":"",
-        "sort":"28",
-        "created_at":"2025-10-06 23:24:56"
-      },
-      {
-        "images_id":"936997",
-        "list_id":"19010",
-        "Type":"image/jpeg",
-        "URLTxt":"https://quote.destinique.com/destin/dashboard/../images/uploads/list/19010/317350-h.jpg",
-        "Caption":"",
-        "sort":"29",
-        "created_at":"2025-10-06 23:24:58"
-      },
-      {
-        "images_id":"936998",
-        "list_id":"19010",
-        "Type":"image/jpeg",
-        "URLTxt":"https://quote.destinique.com/destin/dashboard/../images/uploads/list/19010/317345-h.jpg",
-        "Caption":"",
-        "sort":"30",
-        "created_at":"2025-10-06 23:25:01"
-      },
-      {
-        "images_id":"936999",
-        "list_id":"19010",
-        "Type":"image/jpeg",
-        "URLTxt":"https://quote.destinique.com/destin/dashboard/../images/uploads/list/19010/317351-h.jpg",
-        "Caption":"",
-        "sort":"31",
-        "created_at":"2025-10-06 23:25:03"
-      },
-      {
-        "images_id":"937000",
-        "list_id":"19010",
-        "Type":"image/jpeg",
-        "URLTxt":"https://quote.destinique.com/destin/dashboard/../images/uploads/list/19010/317353-h.jpg",
-        "Caption":"",
-        "sort":"32",
-        "created_at":"2025-10-06 23:25:05"
-      },
-      {
-        "images_id":"937001",
-        "list_id":"19010",
-        "Type":"image/jpeg",
-        "URLTxt":"https://quote.destinique.com/destin/dashboard/../images/uploads/list/19010/317354-h.jpg",
-        "Caption":"",
-        "sort":"33",
-        "created_at":"2025-10-06 23:25:07"
-      },
-      {
-        "images_id":"937002",
-        "list_id":"19010",
-        "Type":"image/jpeg",
-        "URLTxt":"https://quote.destinique.com/destin/dashboard/../images/uploads/list/19010/317355-h.jpg",
-        "Caption":"",
-        "sort":"34",
-        "created_at":"2025-10-06 23:25:09"
-      },
-      {
-        "images_id":"937003",
-        "list_id":"19010",
-        "Type":"image/jpeg",
-        "URLTxt":"https://quote.destinique.com/destin/dashboard/../images/uploads/list/19010/317348-h.jpg",
-        "Caption":"",
-        "sort":"35",
-        "created_at":"2025-10-06 23:25:11"
-      },
-      {
-        "images_id":"937004",
-        "list_id":"19010",
-        "Type":"image/jpeg",
-        "URLTxt":"https://quote.destinique.com/destin/dashboard/../images/uploads/list/19010/317357-h.jpg",
-        "Caption":"",
-        "sort":"36",
-        "created_at":"2025-10-06 23:25:13"
-      },
-      {
-        "images_id":"937005",
-        "list_id":"19010",
-        "Type":"image/jpeg",
-        "URLTxt":"https://quote.destinique.com/destin/dashboard/../images/uploads/list/19010/317358-h.jpg",
-        "Caption":"",
-        "sort":"37",
-        "created_at":"2025-10-06 23:25:15"
-      },
-      {
-        "images_id":"937006",
-        "list_id":"19010",
-        "Type":"image/jpeg",
-        "URLTxt":"https://quote.destinique.com/destin/dashboard/../images/uploads/list/19010/317360-h.jpg",
-        "Caption":"",
-        "sort":"38",
-        "created_at":"2025-10-06 23:25:17"
-      },
-      {
-        "images_id":"937007",
-        "list_id":"19010",
-        "Type":"image/jpeg",
-        "URLTxt":"https://quote.destinique.com/destin/dashboard/../images/uploads/list/19010/317361-h.jpg",
-        "Caption":"",
-        "sort":"39",
-        "created_at":"2025-10-06 23:25:19"
-      },
-      {
-        "images_id":"937008",
-        "list_id":"19010",
-        "Type":"image/jpeg",
-        "URLTxt":"https://quote.destinique.com/destin/dashboard/../images/uploads/list/19010/317352-h.jpg",
-        "Caption":"",
-        "sort":"40",
-        "created_at":"2025-10-06 23:25:21"
-      },
-      {
-        "images_id":"937009",
-        "list_id":"19010",
-        "Type":"image/jpeg",
-        "URLTxt":"https://quote.destinique.com/destin/dashboard/../images/uploads/list/19010/317356-h.jpg",
-        "Caption":"",
-        "sort":"41",
-        "created_at":"2025-10-06 23:25:23"
-      },
-      {
-        "images_id":"937010",
-        "list_id":"19010",
-        "Type":"image/jpeg",
-        "URLTxt":"https://quote.destinique.com/destin/dashboard/../images/uploads/list/19010/317362-h.jpg",
-        "Caption":"",
-        "sort":"42",
-        "created_at":"2025-10-06 23:25:25"
-      },
-      {
-        "images_id":"937011",
-        "list_id":"19010",
-        "Type":"image/jpeg",
-        "URLTxt":"https://quote.destinique.com/destin/dashboard/../images/uploads/list/19010/317363-h.jpg",
-        "Caption":"",
-        "sort":"43",
-        "created_at":"2025-10-06 23:25:27"
-      },
-      {
-        "images_id":"937012",
-        "list_id":"19010",
-        "Type":"image/jpeg",
-        "URLTxt":"https://quote.destinique.com/destin/dashboard/../images/uploads/list/19010/317365-h.jpg",
-        "Caption":"",
-        "sort":"44",
-        "created_at":"2025-10-06 23:25:29"
-      },
-      {
-        "images_id":"937013",
-        "list_id":"19010",
-        "Type":"image/jpeg",
-        "URLTxt":"https://quote.destinique.com/destin/dashboard/../images/uploads/list/19010/317366-h.jpg",
-        "Caption":"",
-        "sort":"45",
-        "created_at":"2025-10-06 23:25:31"
-      },
-      {
-        "images_id":"937014",
-        "list_id":"19010",
-        "Type":"image/jpeg",
-        "URLTxt":"https://quote.destinique.com/destin/dashboard/../images/uploads/list/19010/317359-h.jpg",
-        "Caption":"",
-        "sort":"46",
-        "created_at":"2025-10-06 23:25:33"
-      },
-      {
-        "images_id":"937015",
-        "list_id":"19010",
-        "Type":"image/jpeg",
-        "URLTxt":"https://quote.destinique.com/destin/dashboard/../images/uploads/list/19010/317368-h.jpg",
-        "Caption":"",
-        "sort":"47",
-        "created_at":"2025-10-06 23:25:35"
-      },
-      {
-        "images_id":"937016",
-        "list_id":"19010",
-        "Type":"image/jpeg",
-        "URLTxt":"https://quote.destinique.com/destin/dashboard/../images/uploads/list/19010/317370-h.jpg",
-        "Caption":"",
-        "sort":"48",
-        "created_at":"2025-10-06 23:25:37"
-      },
-      {
-        "images_id":"937017",
-        "list_id":"19010",
-        "Type":"image/jpeg",
-        "URLTxt":"https://quote.destinique.com/destin/dashboard/../images/uploads/list/19010/317371-h.jpg",
-        "Caption":"",
-        "sort":"49",
-        "created_at":"2025-10-06 23:25:39"
-      },
-      {
-        "images_id":"937018",
-        "list_id":"19010",
-        "Type":"image/jpeg",
-        "URLTxt":"https://quote.destinique.com/destin/dashboard/../images/uploads/list/19010/317369-h.jpg",
-        "Caption":"",
-        "sort":"50",
-        "created_at":"2025-10-06 23:25:41"
-      },
-      {
-        "images_id":"937019",
-        "list_id":"19010",
-        "Type":"image/jpeg",
-        "URLTxt":"https://quote.destinique.com/destin/dashboard/../images/uploads/list/19010/317367-h.jpg",
-        "Caption":"",
-        "sort":"51",
-        "created_at":"2025-10-06 23:25:43"
-      },
-      {
-        "images_id":"937020",
-        "list_id":"19010",
-        "Type":"image/jpeg",
-        "URLTxt":"https://quote.destinique.com/destin/dashboard/../images/uploads/list/19010/317373-h.jpg",
-        "Caption":"",
-        "sort":"52",
-        "created_at":"2025-10-06 23:25:45"
-      },
-      {
-        "images_id":"937021",
-        "list_id":"19010",
-        "Type":"image/jpeg",
-        "URLTxt":"https://quote.destinique.com/destin/dashboard/../images/uploads/list/19010/317374-h.jpg",
-        "Caption":"",
-        "sort":"53",
-        "created_at":"2025-10-06 23:25:47"
-      },
-      {
-        "images_id":"937022",
-        "list_id":"19010",
-        "Type":"image/jpeg",
-        "URLTxt":"https://quote.destinique.com/destin/dashboard/../images/uploads/list/19010/317364-h.jpg",
-        "Caption":"",
-        "sort":"54",
-        "created_at":"2025-10-06 23:25:49"
-      },
-      {
-        "images_id":"937023",
-        "list_id":"19010",
-        "Type":"image/jpeg",
-        "URLTxt":"https://quote.destinique.com/destin/dashboard/../images/uploads/list/19010/317372-h.jpg",
-        "Caption":"",
-        "sort":"55",
-        "created_at":"2025-10-06 23:25:51"
-      },
-      {
-        "images_id":"937024",
-        "list_id":"19010",
-        "Type":"image/jpeg",
-        "URLTxt":"https://quote.destinique.com/destin/dashboard/../images/uploads/list/19010/317375-h.jpg",
-        "Caption":"",
-        "sort":"56",
-        "created_at":"2025-10-06 23:25:53"
-      },
-      {
-        "images_id":"937025",
-        "list_id":"19010",
-        "Type":"image/jpeg",
-        "URLTxt":"https://quote.destinique.com/destin/dashboard/../images/uploads/list/19010/317376-h.jpg",
-        "Caption":"",
-        "sort":"57",
-        "created_at":"2025-10-06 23:25:55"
-      },
-      {
-        "images_id":"937026",
-        "list_id":"19010",
-        "Type":"image/jpeg",
-        "URLTxt":"https://quote.destinique.com/destin/dashboard/../images/uploads/list/19010/317377-h.jpg",
-        "Caption":"",
-        "sort":"58",
-        "created_at":"2025-10-06 23:25:57"
-      },
-      {
-        "images_id":"937027",
-        "list_id":"19010",
-        "Type":"image/jpeg",
-        "URLTxt":"https://quote.destinique.com/destin/dashboard/../images/uploads/list/19010/317379-h.jpg",
-        "Caption":"",
-        "sort":"59",
-        "created_at":"2025-10-06 23:25:58"
-      },
-      {
-        "images_id":"937028",
-        "list_id":"19010",
-        "Type":"image/jpeg",
-        "URLTxt":"https://quote.destinique.com/destin/dashboard/../images/uploads/list/19010/317380-h.jpg",
-        "Caption":"",
-        "sort":"60",
-        "created_at":"2025-10-06 23:26:00"
-      },
-      {
-        "images_id":"937029",
-        "list_id":"19010",
-        "Type":"image/jpeg",
-        "URLTxt":"https://quote.destinique.com/destin/dashboard/../images/uploads/list/19010/535252-h.jpg",
-        "Caption":"",
-        "sort":"61",
-        "created_at":"2025-10-06 23:26:02"
-      },
-      {
-        "images_id":"937030",
-        "list_id":"19010",
-        "Type":"image/jpeg",
-        "URLTxt":"https://quote.destinique.com/destin/dashboard/../images/uploads/list/19010/865053-h.jpg",
-        "Caption":"",
-        "sort":"62",
-        "created_at":"2025-10-06 23:26:06"
-      },
-      {
-        "images_id":"937031",
-        "list_id":"19010",
-        "Type":"image/jpeg",
-        "URLTxt":"https://quote.destinique.com/destin/dashboard/../images/uploads/list/19010/317381-h.jpg",
-        "Caption":"",
-        "sort":"63",
-        "created_at":"2025-10-06 23:26:10"
-      },
-      {
-        "images_id":"937032",
-        "list_id":"19010",
-        "Type":"image/jpeg",
-        "URLTxt":"https://quote.destinique.com/destin/dashboard/../images/uploads/list/19010/865055-h.jpg",
-        "Caption":"",
-        "sort":"64",
-        "created_at":"2025-10-06 23:26:13"
-      },
-      {
-        "images_id":"937033",
-        "list_id":"19010",
-        "Type":"image/jpeg",
-        "URLTxt":"https://quote.destinique.com/destin/dashboard/../images/uploads/list/19010/865057-h.jpg",
-        "Caption":"",
-        "sort":"65",
-        "created_at":"2025-10-06 23:26:15"
-      },
-      {
-        "images_id":"937034",
-        "list_id":"19010",
-        "Type":"image/jpeg",
-        "URLTxt":"https://quote.destinique.com/destin/dashboard/../images/uploads/list/19010/865058-h.jpg",
-        "Caption":"",
-        "sort":"66",
-        "created_at":"2025-10-06 23:26:17"
-      },
-      {
-        "images_id":"937035",
-        "list_id":"19010",
-        "Type":"image/jpeg",
-        "URLTxt":"https://quote.destinique.com/destin/dashboard/../images/uploads/list/19010/865056-h.jpg",
-        "Caption":"",
-        "sort":"67",
-        "created_at":"2025-10-06 23:26:18"
-      },
-      {
-        "images_id":"937036",
-        "list_id":"19010",
-        "Type":"image/jpeg",
-        "URLTxt":"https://quote.destinique.com/destin/dashboard/../images/uploads/list/19010/865054-h.jpg",
-        "Caption":"",
-        "sort":"68",
-        "created_at":"2025-10-06 23:26:21"
-      },
-      {
-        "images_id":"937037",
-        "list_id":"19010",
-        "Type":"image/jpeg",
-        "URLTxt":"https://quote.destinique.com/destin/dashboard/../images/uploads/list/19010/865062-h.jpg",
-        "Caption":"",
-        "sort":"69",
-        "created_at":"2025-10-06 23:26:23"
-      },
-      {
-        "images_id":"937038",
-        "list_id":"19010",
-        "Type":"image/jpeg",
-        "URLTxt":"https://quote.destinique.com/destin/dashboard/../images/uploads/list/19010/865063-h.jpg",
-        "Caption":"",
-        "sort":"70",
-        "created_at":"2025-10-06 23:26:25"
-      },
-      {
-        "images_id":"937039",
-        "list_id":"19010",
-        "Type":"image/jpeg",
-        "URLTxt":"https://quote.destinique.com/destin/dashboard/../images/uploads/list/19010/906710-h.jpg",
-        "Caption":"",
-        "sort":"71",
-        "created_at":"2025-10-06 23:26:26"
-      },
-      {
-        "images_id":"937040",
-        "list_id":"19010",
-        "Type":"image/jpeg",
-        "URLTxt":"https://quote.destinique.com/destin/dashboard/../images/uploads/list/19010/317378-h.jpg",
-        "Caption":"",
-        "sort":"72",
-        "created_at":"2025-10-06 23:26:28"
-      },
-      {
-        "images_id":"937041",
-        "list_id":"19010",
-        "Type":"image/jpeg",
-        "URLTxt":"https://quote.destinique.com/destin/dashboard/../images/uploads/list/19010/865061-h.jpg",
-        "Caption":"",
-        "sort":"73",
-        "created_at":"2025-10-06 23:26:30"
-      },
-      {
-        "images_id":"937042",
-        "list_id":"19010",
-        "Type":"image/jpeg",
-        "URLTxt":"https://quote.destinique.com/destin/dashboard/../images/uploads/list/19010/865064-h.jpg",
-        "Caption":"",
-        "sort":"74",
-        "created_at":"2025-10-06 23:26:32"
-      },
-      {
-        "images_id":"937043",
-        "list_id":"19010",
-        "Type":"image/jpeg",
-        "URLTxt":"https://quote.destinique.com/destin/dashboard/../images/uploads/list/19010/865059-h.jpg",
-        "Caption":"",
-        "sort":"75",
-        "created_at":"2025-10-06 23:26:34"
-      }
-    ];
-
-    this.images = PropertyImageHelper.sortImages(
-      PropertyImageHelper.transformApiData(apiData)
-    );
   }
 
   initSwipers() {
@@ -1298,4 +703,69 @@ export class PropertydetailsComponent implements OnInit, AfterViewInit, OnDestro
     const day = date.day.toString().padStart(2, '0');
     return `${month}/${day}/${date.year}`;
   }
+
+  sendManagersiteURL() {
+    // const checkInDate = localStorage.getItem("checkInDate");
+    // const checkOutDate = localStorage.getItem("checkOutDate");
+
+    // Check if checkInDate or checkOutDate is null
+    // const formattedCheckInDate = checkInDate ? checkInDate : "";
+    // const formattedCheckOutDate = checkOutDate ? checkOutDate : "";
+    // this.managersiteURL = `http://quote.destinique.com/destin/dashboard/?v=list&view_list_id=${this.listId}&checkin=${formattedCheckInDate}&checkout=${formattedCheckOutDate}`;
+    const managersiteURL = `http://quote.destinique.com/destin/dashboard/?v=list&view_list_id=${this.listId}`;
+    window.open(managersiteURL, "_blank");
+  }
+
+  getRatesAndShowPopup() {
+    /*
+    const checkInDate = localStorage.getItem("checkInDate");
+    const checkOutDate = localStorage.getItem("checkOutDate");
+    // const scrapingURL = `https://destinique.org/ratesapp4website/?task=get_rate&list_id=${this.listId}&SDATE=${checkInDate}&EDATE=${checkOutDate}&rateScraped=1`;
+    const scrapingURL = `https://destinique.org/ratesapp4website/index-debug.php?task=get_rate&list_id=${this.listId}&SDATE=${checkInDate}&EDATE=${checkOutDate}&rateScraped=1`;
+
+    // Make an HTTP GET request to the scrapingURL
+    this.http.get(scrapingURL).subscribe(
+      (resp) => {
+        if (resp && resp["Price"]) {
+          const basePrice = parseFloat(resp["base_price"]).toFixed(2);
+          const commission = parseFloat(resp["commission"]).toFixed(2);
+          const price = parseFloat(resp["Price"]).toFixed(2);
+          const sourceRateDetails	= resp["sourceRateDetails"];
+          const satisfiedRule	= resp["satisfiedRule"];
+          this.openPopup(`${price}`, `${basePrice}`, `${commission}`, sourceRateDetails, satisfiedRule);
+        } else {
+          // Handle the case where no price is found
+          this.openErrorPopup("Unable to fetch the price");
+        }
+      },
+      (error) => {
+        // Handle the error case
+        this.openErrorPopup("An error occurred while fetching the price");
+      }
+    );
+    */
+  }
+
+
+  getPropertyId() {
+    const property_id = localStorage.getItem("PropertyunitId");
+
+    this.openPopupForPropId(`${property_id}`);
+  }
+
+  openPopupForPropId(property_id: any) {
+    this.toast.success(`${property_id}`, "Property Id", {
+      tapToDismiss: true,
+      closeButton: true,
+      timeOut: 0,
+      positionClass: "toast-top-center",
+    });
+  }
+
+  sendDestiniqueManageIamgeURL() {
+    let manageImgURL  = `https://quote.destinique.com/destin/dashboard/?v=upload&list_id=${this.listId}`;
+    window.open(manageImgURL, "_blank");
+  }
+
+
 }

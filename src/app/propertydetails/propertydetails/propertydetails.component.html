@@ -113,103 +113,106 @@
                                                 <div class="row w-100">
                                                     <div class="col-lg-8 col-md-12">
                                                         <div class="property-header-provider-name">
-                                                            <div class="t-header">Provider: &nbsp;<span class="t-text">{{ propertyData.provider }}</span></div>
-                                                            <div class="t-header">Headline: &nbsp;<span class="t-text">{{ propertyData.headline }}</span></div>
+                                                            <div *ngIf="propertyDetailData?.originalLink" class="t-header">Provider: &nbsp;<span class="t-text">{{ propertyDetailData?.Provider }}</span></div>
+                                                            <div *ngIf="propertyDetailData?.originalLink" class="t-header">Headline: &nbsp;<span class="t-text">{{ propertyDetailData?.Headline }}</span></div>
                                                         </div>
                                                         <h3 class="mb-0 pb-1">
                                                             <span class="mr-2 t-header">Property ID:
-                                                                <span class="t-text">{{ propertyData.propertyId }}</span>
+                                                                <span class="t-text">{{ propertyDetailData?.list_id }}</span>
                                                             </span>
                                                         </h3>
 
                                                         <h3 class="mb-0 pb-1">
                                                             <span class="mr-2 t-header">Property Manager ID:
-                                                                <span class="t-text">{{ propertyData.propertyManagerId }}</span>
+                                                                <span class="t-text">
+                                                                  {{ propertyDetailData?.APC === 'wander' ? (propertyDetailData?.slug || 'N/A') :
+                                                                    (propertyDetailData?.remote_product_id || 'N/A') }}
+                                                                </span>
                                                             </span>
                                                         </h3>
 
                                                         <ul class="list-group p-0 list-inline">
                                                             <hr/>
                                                             <li>
-                                                                Destination: <span class="fw-normal">{{ propertyData.destination }}</span>
+                                                                Destination: <span class="fw-normal">{{ propertyDetailData.RegionContinent }}</span>
                                                             </li>
                                                             <li class="pt-2">
                                                                 Country/Island:
-                                                                <span class="fw-normal">{{ propertyData.country }}</span>
+                                                                <span class="fw-normal">{{ propertyDetailData.CountryIsland }}</span>
                                                             </li>
                                                             <li class="pt-2">
-                                                                State/Region/Province:<span class="fw-normal">{{ propertyData.state }}</span>
+                                                                State/Region/Province:<span class="fw-normal">{{ propertyDetailData.StateNme }}</span>
                                                             </li>
                                                             <li class="pt-2">
-                                                                City/Area: <span class="fw-normal">{{ propertyData.city }}</span>
+                                                                City/Area: <span class="fw-normal">{{ propertyDetailData.City }}</span>
                                                             </li>
                                                             <li class="py-2">
                                                                 Neighborhood/Community:
-                                                                <span class="fw-normal">{{ propertyData.neighborhood }}</span>
+                                                                <span class="fw-normal">{{ propertyDetailData.Neighborhood }}</span>
                                                             </li>
                                                         </ul>
                                                         <ul class="list-group pt-3 property-sub-details">
                                                             <li class="list-group-item">
                                                                 <span>
                                                                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640"><path d="M298.2 72.6C310.5 61.2 329.5 61.2 341.7 72.6L432 156.3L432 144C432 126.3 446.3 112 464 112L496 112C513.7 112 528 126.3 528 144L528 245.5L565.8 280.6C575.4 289.6 578.6 303.5 573.8 315.7C569 327.9 557.2 336 544 336L528 336L528 512C528 547.3 499.3 576 464 576L176 576C140.7 576 112 547.3 112 512L112 336L96 336C82.8 336 71 327.9 66.2 315.7C61.4 303.5 64.6 289.5 74.2 280.6L298.2 72.6zM304 384C277.5 384 256 405.5 256 432L256 528L384 528L384 432C384 405.5 362.5 384 336 384L304 384z"/></svg>
-                                                                    &nbsp;Property Type :<span class="fw-normal">{{ propertyData.propertyType }}</span>
+                                                                    &nbsp;Property Type :<span class="fw-normal">{{ propertyDetailData.Category }}</span>
                                                                 </span>
                                                             </li>
                                                             <li class="list-group-item">
                                                                 <span>
                                                                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640"><path d="M320 80C377.4 80 424 126.6 424 184C424 241.4 377.4 288 320 288C262.6 288 216 241.4 216 184C216 126.6 262.6 80 320 80zM96 152C135.8 152 168 184.2 168 224C168 263.8 135.8 296 96 296C56.2 296 24 263.8 24 224C24 184.2 56.2 152 96 152zM0 480C0 409.3 57.3 352 128 352C140.8 352 153.2 353.9 164.9 357.4C132 394.2 112 442.8 112 496L112 512C112 523.4 114.4 534.2 118.7 544L32 544C14.3 544 0 529.7 0 512L0 480zM521.3 544C525.6 534.2 528 523.4 528 512L528 496C528 442.8 508 394.2 475.1 357.4C486.8 353.9 499.2 352 512 352C582.7 352 640 409.3 640 480L640 512C640 529.7 625.7 544 608 544L521.3 544zM472 224C472 184.2 504.2 152 544 152C583.8 152 616 184.2 616 224C616 263.8 583.8 296 544 296C504.2 296 472 263.8 472 224zM160 496C160 407.6 231.6 336 320 336C408.4 336 480 407.6 480 496L480 512C480 529.7 465.7 544 448 544L192 544C174.3 544 160 529.7 160 512L160 496z"/></svg>
-                                                                    &nbsp;Max Guests :<span class="fw-normal">{{ propertyData.maxGuests }}</span>
+                                                                    &nbsp;Max Guests :<span class="fw-normal">{{ sleepsCt }}</span>
                                                                 </span>
                                                             </li>
                                                             <li class="list-group-item">
                                                                 <span>
                                                                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640"><path d="M64 96C81.7 96 96 110.3 96 128L96 352L320 352L320 224C320 206.3 334.3 192 352 192L512 192C565 192 608 235 608 288L608 512C608 529.7 593.7 544 576 544C558.3 544 544 529.7 544 512L544 448L96 448L96 512C96 529.7 81.7 544 64 544C46.3 544 32 529.7 32 512L32 128C32 110.3 46.3 96 64 96zM144 256C144 220.7 172.7 192 208 192C243.3 192 272 220.7 272 256C272 291.3 243.3 320 208 320C172.7 320 144 291.3 144 256z"/></svg>
                                                                     &nbsp; Bedrooms :
-                                                                    <span class="fw-normal">{{ propertyData.bedrooms }}</span>
+                                                                    <span class="fw-normal">{{ bedroomCt }}</span>
                                                                 </span>
                                                             </li>
                                                             <li class="list-group-item">
                                                                 <span>
                                                                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640"><path d="M160 141.3C160 134 165.9 128 173.3 128C176.8 128 180.2 129.4 182.7 131.9L197.6 146.8C194 155.9 192.1 165.7 192.1 176C192.1 195.9 199.3 214 211.3 228C206 237.2 207.3 249.1 215.1 257C224.5 266.4 239.7 266.4 249 257L353 153C362.4 143.6 362.4 128.4 353 119.1C345.2 111.2 333.2 110 324 115.3C310 103.3 291.9 96.1 272 96.1C261.7 96.1 251.8 98.1 242.8 101.6L227.9 86.6C213.4 72.1 193.7 64 173.3 64C130.6 64 96 98.6 96 141.3L96 320C78.3 320 64 334.3 64 352C64 369.7 78.3 384 96 384L96 432C96 460.4 108.4 486 128 503.6L128 544C128 561.7 142.3 576 160 576C177.7 576 192 561.7 192 544L192 528L448 528L448 544C448 561.7 462.3 576 480 576C497.7 576 512 561.7 512 544L512 503.6C531.6 486 544 460.5 544 432L544 384C561.7 384 576 369.7 576 352C576 334.3 561.7 320 544 320L160 320L160 141.3z"/></svg>
                                                                     &nbsp; Bathrooms :
-                                                                    <span class="fw-normal">{{ propertyData.bathrooms }}</span>
+                                                                    <span class="fw-normal">{{ bathroomCt }}</span>
                                                                 </span>
                                                             </li>
                                                             <li class="list-group-item">
                                                                 <span>
                                                                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640"><path d="M320 96C239.2 96 174.5 132.8 127.4 176.6C80.6 220.1 49.3 272 34.4 307.7C31.1 315.6 31.1 324.4 34.4 332.3C49.3 368 80.6 420 127.4 463.4C174.5 507.1 239.2 544 320 544C400.8 544 465.5 507.2 512.6 463.4C559.4 419.9 590.7 368 605.6 332.3C608.9 324.4 608.9 315.6 605.6 307.7C590.7 272 559.4 220 512.6 176.6C465.5 132.9 400.8 96 320 96zM176 320C176 240.5 240.5 176 320 176C399.5 176 464 240.5 464 320C464 399.5 399.5 464 320 464C240.5 464 176 399.5 176 320zM320 256C320 291.3 291.3 320 256 320C244.5 320 233.7 317 224.3 311.6C223.3 322.5 224.2 333.7 227.2 344.8C240.9 396 293.6 426.4 344.8 412.7C396 399 426.4 346.3 412.7 295.1C400.5 249.4 357.2 220.3 311.6 224.3C316.9 233.6 320 244.4 320 256z"/></svg>
-                                                                    &nbsp; View Type :<span class="fw-normal">{{ propertyData.viewType }}</span>
+                                                                    &nbsp; View Type :<span class="fw-normal">{{ propertyDetailData.ViewType }}</span>
                                                                 </span>
                                                             </li>
                                                             <li class="list-group-item">
                                                                 <span>
                                                                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640"><path d="M298.5 156.9C312.8 199.8 298.2 243.1 265.9 253.7C233.6 264.3 195.8 238.1 181.5 195.2C167.2 152.3 181.8 109 214.1 98.4C246.4 87.8 284.2 114 298.5 156.9zM164.4 262.6C183.3 295 178.7 332.7 154.2 346.7C129.7 360.7 94.5 345.8 75.7 313.4C56.9 281 61.4 243.3 85.9 229.3C110.4 215.3 145.6 230.2 164.4 262.6zM133.2 465.2C185.6 323.9 278.7 288 320 288C361.3 288 454.4 323.9 506.8 465.2C510.4 474.9 512 485.3 512 495.7L512 497.3C512 523.1 491.1 544 465.3 544C453.8 544 442.4 542.6 431.3 539.8L343.3 517.8C328 514 312 514 296.7 517.8L208.7 539.8C197.6 542.6 186.2 544 174.7 544C148.9 544 128 523.1 128 497.3L128 495.7C128 485.3 129.6 474.9 133.2 465.2zM485.8 346.7C461.3 332.7 456.7 295 475.6 262.6C494.5 230.2 529.6 215.3 554.1 229.3C578.6 243.3 583.2 281 564.3 313.4C545.4 345.8 510.3 360.7 485.8 346.7zM374.1 253.7C341.8 243.1 327.2 199.8 341.5 156.9C355.8 114 393.6 87.8 425.9 98.4C458.2 109 472.8 152.3 458.5 195.2C444.2 238.1 406.4 264.3 374.1 253.7z"/></svg>
                                                                     &nbsp; Pets :
-                                                                    <span class="fw-normal">{{ propertyData.pets }}</span>
+                                                                    <span class="fw-normal">{{ propertyDetailData.PetFriendly }}</span>
                                                                 </span>
                                                             </li>
                                                         </ul>
                                                     </div>
 
                                                     <div class="col-lg-4 col-md-12">
-                                                        <div class="text-end">
-                                                            <a href="#" class="btn btn-primary mb-2" target="_blank">PROPERTY MANAGER SITE</a>
+                                                        <div *ngIf="propertyDetailData.originalLink" class="text-end">
+                                                            <a href="{{ propertyDetailData.originalLink }}" class="btn btn-primary mb-2" target="_blank">PROPERTY MANAGER SITE</a>
                                                         </div>
 
-                                                        <div class="text-end">
-                                                            <a href="#" class="btn btn-primary mb-2">DESTINIQUE PROPERTY PAGE</a>
+                                                        <div class="text-end" *ngIf="propertyDetailData.originalLink">
+                                                            <a (click)="sendManagersiteURL()" class="btn btn-primary mb-2">DESTINIQUE PROPERTY PAGE</a>
                                                         </div>
 
-                                                        <div class="text-end">
-                                                            <a href="#" class="btn btn-primary mb-2">Get Rates</a>
+                                                        <div class="text-end" *ngIf="propertyDetailData.originalLink">
+                                                            <a (click)="getRatesAndShowPopup()" class="btn btn-primary mb-2">Get Rates</a>
                                                         </div>
 
-                                                        <div class="text-end">
-                                                            <a href="#" class="btn btn-primary mb-2">PROPERTY Id</a>
+                                                        <div class="text-end" *ngIf="propertyDetailData.originalLink">
+                                                            <a (click)="getPropertyId()" class="btn btn-primary mb-2">PROPERTY Id</a>
                                                         </div>
 
-                                                        <div class="text-end">
-                                                            <a href="#" class="btn btn-primary mb-2">DESTINIQUE MANAGE IMAGE PAGE</a>
+                                                        <div class="text-end" *ngIf="propertyDetailData.originalLink">
+                                                            <a target="_blank" *ngIf="propertyDetailData.originalLink" (click)="sendDestiniqueManageIamgeURL()" class="btn btn-primary mb-2">DESTINIQUE MANAGE IMAGE PAGE</a>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -221,17 +224,27 @@
                                     <div *ngSwitchCase="'amenities'" class="container tab-pane">
                                         <div class="card mb-4 shadow-lg h-md-250">
                                             <div class="card-body d-flex flex-column">
-                                                <div class="row">
-                                                    <div class="col-md-12 amenities-content">
-                                                        <h4>Category Name</h4>
-                                                        <ul>
-                                                            <li>Amenity Item</li>
-                                                            <li>Amenity Item 1</li>
-                                                            <li>Amenity Item 2</li>
-                                                            <li>Amenity Item 3</li>
-                                                        </ul>
-                                                    </div>
+                                              <div class="row">
+                                                <div
+                                                  *ngFor="let category of amenity; let catIndex = index"
+                                                  class="col-md-12 amenities-content"
+                                                >
+                                                  <h4 [ngClass]="'fontfa-montserrat'">
+                                                    {{ category.categoryName }}
+                                                  </h4>
+                                                  <ul>
+                                                    <li
+                                                      [ngClass]="'fontfa-montserrat'"
+                                                      *ngFor="
+                                                    let amenityItem of category.amenity;
+                                                    let amenIndex = index
+                                                    "
+                                                    >
+                                                      {{ amenityItem.name }}
+                                                    </li>
+                                                  </ul>
                                                 </div>
+                                              </div>
                                             </div>
                                         </div>
                                     </div>
@@ -241,9 +254,9 @@
                                         <div class="card flex-md-row mb-4 shadow-lg h-md-250">
                                             <div class="card-body d-flex flex-column align-items-start">
                                                 <h3 class="mb-3">Property Description</h3>
-                                                <p class="card-text mb-auto p-description">
-                                                    This moment is yours. As you sit back on your private balcony, gaze out at the blue-green water of the Gulf of Mexico and breathe in relief and relaxation. You have arrived! Both living rooms have separate balconies that are fully furnished with tables and chairs for everyone to enjoy the rejuvenating salty air. This lavish 2,727 sq. ft. 5-bedroom, 4-bath, 5th floor lockout condo SLEEPS up to 16 guests comfortably and is ideal for a family reunion or get together with a large group of friends.
-                                                </p>
+                                                <p class="card-text mb-auto p-description"
+                                                  [ngClass]="'fontfa-montserrat'"
+                                                  [innerHTML]="propertyDetailData.Description"></p>
                                             </div>
                                         </div>
                                     </div>

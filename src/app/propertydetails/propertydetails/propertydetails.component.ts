@@ -148,10 +148,10 @@ export class PropertydetailsComponent implements OnInit, AfterViewInit, OnDestro
   }
 
   ngAfterViewInit (){
-    // Initialize swipers after view is ready
-    setTimeout(() => {
-      this.initSwipers();
-    }, 100);
+    // // Initialize swipers after view is ready
+    // setTimeout(() => {
+    //   this.initSwipers();
+    // }, 100);
 
     if (!this.gmapScriptLoaded) {
       if ('requestIdleCallback' in window) {
@@ -212,6 +212,10 @@ export class PropertydetailsComponent implements OnInit, AfterViewInit, OnDestro
           this.images = PropertyImageHelper.sortImages(
                           PropertyImageHelper.transformApiData(resp[0]["images"])
           );
+          // Initialize swipers after view is ready
+          setTimeout(() => {
+            this.initSwipers();
+          }, 500);
         }
         else {
           this.showPropertyError();

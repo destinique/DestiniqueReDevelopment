@@ -134,28 +134,28 @@
                                                         <ul class="list-group p-0 list-inline">
                                                             <hr/>
                                                             <li>
-                                                                Destination: <span class="fw-normal">{{ propertyDetailData.RegionContinent }}</span>
+                                                                Destination: <span class="fw-normal">{{ propertyDetailData?.RegionContinent }}</span>
                                                             </li>
                                                             <li class="pt-2">
                                                                 Country/Island:
-                                                                <span class="fw-normal">{{ propertyDetailData.CountryIsland }}</span>
+                                                                <span class="fw-normal">{{ propertyDetailData?.CountryIsland }}</span>
                                                             </li>
                                                             <li class="pt-2">
-                                                                State/Region/Province:<span class="fw-normal">{{ propertyDetailData.StateNme }}</span>
+                                                                State/Region/Province:<span class="fw-normal">{{ propertyDetailData?.StateNme }}</span>
                                                             </li>
                                                             <li class="pt-2">
-                                                                City/Area: <span class="fw-normal">{{ propertyDetailData.City }}</span>
+                                                                City/Area: <span class="fw-normal">{{ propertyDetailData?.City }}</span>
                                                             </li>
                                                             <li class="py-2">
                                                                 Neighborhood/Community:
-                                                                <span class="fw-normal">{{ propertyDetailData.Neighborhood }}</span>
+                                                                <span class="fw-normal">{{ propertyDetailData?.Neighborhood }}</span>
                                                             </li>
                                                         </ul>
                                                         <ul class="list-group pt-3 property-sub-details">
                                                             <li class="list-group-item">
                                                                 <span>
                                                                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640"><path d="M298.2 72.6C310.5 61.2 329.5 61.2 341.7 72.6L432 156.3L432 144C432 126.3 446.3 112 464 112L496 112C513.7 112 528 126.3 528 144L528 245.5L565.8 280.6C575.4 289.6 578.6 303.5 573.8 315.7C569 327.9 557.2 336 544 336L528 336L528 512C528 547.3 499.3 576 464 576L176 576C140.7 576 112 547.3 112 512L112 336L96 336C82.8 336 71 327.9 66.2 315.7C61.4 303.5 64.6 289.5 74.2 280.6L298.2 72.6zM304 384C277.5 384 256 405.5 256 432L256 528L384 528L384 432C384 405.5 362.5 384 336 384L304 384z"/></svg>
-                                                                    &nbsp;Property Type :<span class="fw-normal">{{ propertyDetailData.Category }}</span>
+                                                                    &nbsp;Property Type :<span class="fw-normal">{{ propertyDetailData?.Category }}</span>
                                                                 </span>
                                                             </li>
                                                             <li class="list-group-item">
@@ -181,38 +181,38 @@
                                                             <li class="list-group-item">
                                                                 <span>
                                                                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640"><path d="M320 96C239.2 96 174.5 132.8 127.4 176.6C80.6 220.1 49.3 272 34.4 307.7C31.1 315.6 31.1 324.4 34.4 332.3C49.3 368 80.6 420 127.4 463.4C174.5 507.1 239.2 544 320 544C400.8 544 465.5 507.2 512.6 463.4C559.4 419.9 590.7 368 605.6 332.3C608.9 324.4 608.9 315.6 605.6 307.7C590.7 272 559.4 220 512.6 176.6C465.5 132.9 400.8 96 320 96zM176 320C176 240.5 240.5 176 320 176C399.5 176 464 240.5 464 320C464 399.5 399.5 464 320 464C240.5 464 176 399.5 176 320zM320 256C320 291.3 291.3 320 256 320C244.5 320 233.7 317 224.3 311.6C223.3 322.5 224.2 333.7 227.2 344.8C240.9 396 293.6 426.4 344.8 412.7C396 399 426.4 346.3 412.7 295.1C400.5 249.4 357.2 220.3 311.6 224.3C316.9 233.6 320 244.4 320 256z"/></svg>
-                                                                    &nbsp; View Type :<span class="fw-normal">{{ propertyDetailData.ViewType }}</span>
+                                                                    &nbsp; View Type :<span class="fw-normal">{{ propertyDetailData?.ViewType }}</span>
                                                                 </span>
                                                             </li>
                                                             <li class="list-group-item">
                                                                 <span>
                                                                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640"><path d="M298.5 156.9C312.8 199.8 298.2 243.1 265.9 253.7C233.6 264.3 195.8 238.1 181.5 195.2C167.2 152.3 181.8 109 214.1 98.4C246.4 87.8 284.2 114 298.5 156.9zM164.4 262.6C183.3 295 178.7 332.7 154.2 346.7C129.7 360.7 94.5 345.8 75.7 313.4C56.9 281 61.4 243.3 85.9 229.3C110.4 215.3 145.6 230.2 164.4 262.6zM133.2 465.2C185.6 323.9 278.7 288 320 288C361.3 288 454.4 323.9 506.8 465.2C510.4 474.9 512 485.3 512 495.7L512 497.3C512 523.1 491.1 544 465.3 544C453.8 544 442.4 542.6 431.3 539.8L343.3 517.8C328 514 312 514 296.7 517.8L208.7 539.8C197.6 542.6 186.2 544 174.7 544C148.9 544 128 523.1 128 497.3L128 495.7C128 485.3 129.6 474.9 133.2 465.2zM485.8 346.7C461.3 332.7 456.7 295 475.6 262.6C494.5 230.2 529.6 215.3 554.1 229.3C578.6 243.3 583.2 281 564.3 313.4C545.4 345.8 510.3 360.7 485.8 346.7zM374.1 253.7C341.8 243.1 327.2 199.8 341.5 156.9C355.8 114 393.6 87.8 425.9 98.4C458.2 109 472.8 152.3 458.5 195.2C444.2 238.1 406.4 264.3 374.1 253.7z"/></svg>
                                                                     &nbsp; Pets :
-                                                                    <span class="fw-normal">{{ propertyDetailData.PetFriendly }}</span>
+                                                                    <span class="fw-normal">{{ propertyDetailData?.PetFriendly }}</span>
                                                                 </span>
                                                             </li>
                                                         </ul>
                                                     </div>
 
                                                     <div class="col-lg-4 col-md-12">
-                                                        <div *ngIf="propertyDetailData.originalLink" class="text-end">
-                                                            <a href="{{ propertyDetailData.originalLink }}" class="btn btn-primary mb-2" target="_blank">PROPERTY MANAGER SITE</a>
+                                                        <div *ngIf="propertyDetailData?.originalLink" class="text-end">
+                                                            <a href="{{ propertyDetailData?.originalLink }}" class="btn btn-primary mb-2" target="_blank">PROPERTY MANAGER SITE</a>
                                                         </div>
 
-                                                        <div class="text-end" *ngIf="propertyDetailData.originalLink">
+                                                        <div class="text-end" *ngIf="propertyDetailData?.originalLink">
                                                             <a (click)="sendManagersiteURL()" class="btn btn-primary mb-2">DESTINIQUE PROPERTY PAGE</a>
                                                         </div>
 
-                                                        <div class="text-end" *ngIf="propertyDetailData.originalLink">
+                                                        <div class="text-end" *ngIf="propertyDetailData?.originalLink">
                                                             <a (click)="getRatesAndShowPopup()" class="btn btn-primary mb-2">Get Rates</a>
                                                         </div>
 
-                                                        <div class="text-end" *ngIf="propertyDetailData.originalLink">
+                                                        <div class="text-end" *ngIf="propertyDetailData?.originalLink">
                                                             <a (click)="getPropertyId()" class="btn btn-primary mb-2">PROPERTY Id</a>
                                                         </div>
 
-                                                        <div class="text-end" *ngIf="propertyDetailData.originalLink">
-                                                            <a target="_blank" *ngIf="propertyDetailData.originalLink" (click)="sendDestiniqueManageIamgeURL()" class="btn btn-primary mb-2">DESTINIQUE MANAGE IMAGE PAGE</a>
+                                                        <div class="text-end" *ngIf="propertyDetailData?.originalLink">
+                                                            <a target="_blank" *ngIf="propertyDetailData?.originalLink" (click)="sendDestiniqueManageIamgeURL()" class="btn btn-primary mb-2">DESTINIQUE MANAGE IMAGE PAGE</a>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -256,7 +256,7 @@
                                                 <h3 class="mb-3">Property Description</h3>
                                                 <p class="card-text mb-auto p-description"
                                                   [ngClass]="'fontfa-montserrat'"
-                                                  [innerHTML]="propertyDetailData.Description"></p>
+                                                  [innerHTML]="propertyDetailData?.Description"></p>
                                             </div>
                                         </div>
                                     </div>

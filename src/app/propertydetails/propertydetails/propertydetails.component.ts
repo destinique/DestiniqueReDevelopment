@@ -19,6 +19,8 @@ import { StorageService } from 'src/app/shared/services/storage.service';
 import { AuthService } from 'src/app/shared/services/auth.service';
 import { CrudService } from "src/app/shared/services/crud.service";
 import { ToastrService } from "ngx-toastr";
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+
 
 interface TabInfo {
   id: string;
@@ -61,25 +63,6 @@ export class PropertydetailsComponent implements OnInit, AfterViewInit, OnDestro
     { id: 'reviews', title: 'REVIEWS' }
   ];
 
-  // Static property data
-  readonly propertyData = {
-    provider: 'Salt Water Vacay',
-    headline: 'The Inn At Crystal Beach #508',
-    propertyId: '19010',
-    propertyManagerId: '1089',
-    destination: 'North America',
-    country: 'United States',
-    state: 'Florida',
-    city: 'Destin',
-    neighborhood: 'Crystal Beach of Destin',
-    propertyType: 'Condo',
-    maxGuests: '16',
-    bedrooms: '5',
-    bathrooms: '4',
-    viewType: 'Gulf-Front/Ocean-Front View',
-    pets: 'NO'
-  };
-
   // Calendar variables - Change these to NgbDate
   leftCalendarDate: NgbDate;
   rightCalendarDate: NgbDate;
@@ -109,7 +92,11 @@ export class PropertydetailsComponent implements OnInit, AfterViewInit, OnDestro
   private mapInitialized = false;
   private map!: google.maps.Map;
 
+  datesForm!: FormGroup;   // 👈 REQUIRED
+  isDatesFormSubmitting = false;
+
   constructor(
+              private fb: FormBuilder,
               private router: Router,
               private route: ActivatedRoute,
               private spinner: NgxSpinnerService,
@@ -121,12 +108,26 @@ export class PropertydetailsComponent implements OnInit, AfterViewInit, OnDestro
               private crudService: CrudService,
               private toast: ToastrService
   ) {
+    this.datesForm = this.fb.group({
+      searchCalender: ['', Validators.required],
+      sleeps: [1, Validators.min(1)]
+    });
+
     this.propertyId = this.route.snapshot.paramMap.get('id') || '';
     this.listId = Number(this.propertyId);
     // Initialize calendar dates
     const today = this.calendar.getToday();
     this.leftCalendarDate = today;
     this.rightCalendarDate = this.calendar.getNext(today, 'm', 1);
+  }
+
+  // Getters for form controls
+  get searchCalenderControl() {
+    return this.datesForm?.get('searchCalender');
+  }
+
+  get sleepsControl() {
+    return this.datesForm?.get('sleeps');
   }
 
   ngOnInit (){
@@ -148,11 +149,6 @@ export class PropertydetailsComponent implements OnInit, AfterViewInit, OnDestro
   }
 
   ngAfterViewInit (){
-    // // Initialize swipers after view is ready
-    // setTimeout(() => {
-    //   this.initSwipers();
-    // }, 100);
-
     if (!this.gmapScriptLoaded) {
       if ('requestIdleCallback' in window) {
         (window as any).requestIdleCallback(() => {
@@ -706,6 +702,133 @@ export class PropertydetailsComponent implements OnInit, AfterViewInit, OnDestro
     const month = date.month.toString().padStart(2, '0');
     const day = date.day.toString().padStart(2, '0');
     return `${month}/${day}/${date.year}`;
+  }
+
+  onDatesFormSubmit(): void {
+    this.datesForm.markAllAsTouched();
+
+    if (this.datesForm.invalid) {
+      console.error('Form is invalid');
+      if (this.searchCalenderControl?.hasError('required')) {
+        this.showToast('Please select check-in and check-out dates', 'error');
+      }
+      if (this.sleepsControl?.hasError('min')) {
+        this.showToast('Number of guests must be at least 1', 'error');
+      }
+      return;
+    }
+
+    this.isDatesFormSubmitting = true;
+
+    try {
+      // Get the value directly from formatDateRange() since that's what shows in the UI
+      const dateRangeString = this.formatDateRange();
+      console.log('Date range string from formatDateRange():', dateRangeString);
+
+      if (!dateRangeString || !dateRangeString.includes(' - ')) {
+        throw new Error('Please select both check-in and check-out dates');
+      }
+
+      const dates = dateRangeString.split(' - ').map(d => d.trim());
+      console.log('Dates after split:', dates);
+
+      if (dates.length !== 2) {
+        throw new Error('Please select both check-in and check-out dates.');
+      }
+
+      // Validate that we don't have "Select checkout" in the string
+      if (dates[1].toLowerCase().includes('select')) {
+        throw new Error('Please select a check-out date');
+      }
+
+      const SDATE = this.formatDateForAPI(dates[0]);
+      const EDATE = this.formatDateForAPI(dates[1]);
+
+      // Validate dates are in correct order
+      const startDate = new Date(SDATE);
+      const endDate = new Date(EDATE);
+
+      if (startDate >= endDate) {
+        throw new Error('Check-out date must be after check-in date');
+      }
+
+      const formValue = this.datesForm.value;
+
+      // Call API
+      this.crudService.getRates(
+        this.listId.toString(),
+        SDATE,
+        EDATE,
+        formValue.sleeps || 1
+      ).subscribe({
+        next: (response) => {
+          this.isDatesFormSubmitting = false;
+
+          if (response.error === false && response.available) {
+            // this.ratesData = response;
+            this.showToast('Rates loaded successfully!', 'success');
+          } else {
+            this.showToast(response.message || 'Dates not available', 'warning');
+          }
+        },
+        error: (error) => {
+          this.isDatesFormSubmitting = false;
+          this.showToast('Error loading rates. Please try again.', 'error');
+          console.error('API Error:', error);
+        }
+      });
+
+    } catch (error: any) {
+      this.isDatesFormSubmitting = false;
+      this.showToast(error.message || 'Invalid date selection', 'error');
+      console.error('Error:', error);
+    }
+  }
+
+// Also update formatDateForAPI to be more robust
+  private formatDateForAPI(dateString: string): string {
+    // Clean the string
+    const cleanString = dateString.trim();
+
+    // Remove any non-numeric characters except slash
+    const numericString = cleanString.replace(/[^0-9/]/g, '');
+
+    // Split by slash
+    const parts = numericString.split('/');
+
+    if (parts.length !== 3) {
+      throw new Error(`Invalid date format: ${dateString}. Expected MM/DD/YYYY`);
+    }
+
+    const [month, day, year] = parts;
+
+    // Pad month and day with leading zeros
+    const paddedMonth = month.padStart(2, '0');
+    const paddedDay = day.padStart(2, '0');
+
+    // Return in YYYY-MM-DD format
+    return `${year}-${paddedMonth}-${paddedDay}`;
+  }
+
+  // Simple toast method
+  private showToast(message: string, type: 'success' | 'error' | 'warning'): void {
+    // Using alert for now, but you should replace with a proper toast service
+    const alertMessage = `${type.toUpperCase()}: ${message}`;
+
+    // You can customize the alert style based on type
+    switch (type) {
+      case 'success':
+        alert(alertMessage);
+        break;
+      case 'error':
+        alert(alertMessage);
+        break;
+      case 'warning':
+        alert(alertMessage);
+        break;
+    }
+
+    console.log(`${type.toUpperCase()}: ${message}`);
   }
 
   sendManagersiteURL() {

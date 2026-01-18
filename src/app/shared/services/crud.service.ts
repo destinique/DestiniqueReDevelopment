@@ -45,7 +45,8 @@ import { ContactUSFormData, ContactUSApiResponse } from 'src/app/shared/interfac
   providedIn: 'root'
 })
 export class CrudService {
-  private readonly baseUrl = 'https://api.destinique.com/api-user/';
+  private readonly baseUrl= 'https://api.destinique.com/api-user/';
+  private readonly rateAppBaseUrl= 'https://api.destinique.com/ratesapp4website/';
   private destinationAPIUrl = "https://api.destinique.com/api-user/get_destination_data.php";
 
   constructor(private http: HttpClient) {}
@@ -257,6 +258,33 @@ export class CrudService {
       .pipe(
         catchError(this.handleError)
       );
+  }
+
+  getRates(listId: string, sdate: string, edate: string, sleeps?: number): Observable<any> {
+    // Build the URL with parameters
+    let url = `${this.rateAppBaseUrl}?task=get_rate&list_id=${listId}&SDATE=${sdate}&EDATE=${edate}`;
+
+    // Add sleeps parameter if provided
+    if (sleeps && sleeps > 0) {
+      url += `&sleeps=${sleeps}`;
+    }
+
+    console.log('Fetching rates from URL:', url);
+
+    return this.http.get<any>(url).pipe(
+      catchError((error: HttpErrorResponse) => {
+        let errorMessage = 'Failed to fetch rates.';
+
+        if (error.error instanceof ErrorEvent) {
+          errorMessage = `Client error: ${error.error.message}`;
+        } else {
+          errorMessage = `Server error: ${error.status} - ${error.message}`;
+        }
+
+        console.error('Rates API error:', errorMessage);
+        return throwError(() => new Error(errorMessage));
+      })
+    );
   }
 
   /**

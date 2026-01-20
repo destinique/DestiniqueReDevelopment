@@ -21,6 +21,7 @@ import { CrudService } from "src/app/shared/services/crud.service";
 import { ToastrService } from "ngx-toastr";
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { EnvService } from "src/app/env.service";
 
 interface TabInfo {
   id: string;
@@ -108,6 +109,18 @@ export class PropertydetailsComponent implements OnInit, AfterViewInit, OnDestro
   isDatesFormSubmitting = false;
   isCalendarLoading = false;
 
+  isMobile = false;
+  isIOS = false;
+
+  host!: any;
+  postTitle!: any;
+  facebookURL!: any;
+  twitterURL!: any;
+  pinterestURL?: any;
+  whatsappURL!: any;
+  encodePageURL!: any;
+  defaultImg!: any;
+
   constructor(
               private fb: FormBuilder,
               private router: Router,
@@ -120,7 +133,8 @@ export class PropertydetailsComponent implements OnInit, AfterViewInit, OnDestro
               private authService: AuthService,
               private crudService: CrudService,
               private toast: ToastrService,
-              private modalService: NgbModal
+              private modalService: NgbModal,
+              private envService: EnvService
   ) {
     this.datesForm = this.fb.group({
       searchCalender: ['', Validators.required],
@@ -133,6 +147,11 @@ export class PropertydetailsComponent implements OnInit, AfterViewInit, OnDestro
     const today = this.calendar.getToday();
     this.leftCalendarDate = today;
     this.rightCalendarDate = this.calendar.getNext(today, 'm', 1);
+
+    this.postTitle = encodeURI("Hello, please check this out: ");
+    this.host = encodeURI(this.envService.hostnName);
+    this.encodePageURL = encodeURI(this.envService.hostnName + this.router.url);
+    this.defaultImg = this.envService.defaultImagesURL;
   }
 
   // Getters for form controls
@@ -147,6 +166,10 @@ export class PropertydetailsComponent implements OnInit, AfterViewInit, OnDestro
   ngOnInit (){
       this.spinner.show();
       if (this.storageService.isBrowser()){
+          const userAgent = navigator.userAgent || navigator.vendor || (window as any)['opera'];
+          this.isMobile = /android|iphone|ipad|ipod|opera mini|iemobile|wpdesktop/i.test(userAgent);
+          this.isIOS = /iPad|iPhone|iPod/.test(userAgent) && !(window as any).MSStream;
+
           this.loadPropertyDetails(this.listId);
           // Load your images (example data)
           // this.loadPropertyImages();
@@ -175,7 +198,10 @@ export class PropertydetailsComponent implements OnInit, AfterViewInit, OnDestro
       }
     }
 
-    setTimeout(() => {this.spinner.hide();}, 1000);
+    setTimeout(() => {this.spinner.hide();}, 1400);
+    this.facebookURL = `https://www.facebook.com/sharer.php?u=${this.encodePageURL}`;
+    this.twitterURL = `https://twitter.com/share?url=${this.encodePageURL}&text=${this.postTitle}`;
+    this.whatsappURL = `https://wa.me/?text=${this.postTitle}${this.encodePageURL}`;
   }
 
   private tryInitMap(): void {
@@ -981,5 +1007,15 @@ please call 850-312-5400. Thank you.`.trim();
       backdrop: 'static',
       keyboard: false
     });
+  }
+
+  gotoRateAvailSection() {
+    document.getElementById("prop_details_rates_avail_sec")?.scrollIntoView({
+      behavior: "smooth",
+      block: "start",
+      inline: "nearest"
+    });
+
+    // document.getElementById("bsdaterangepicker").click();
   }
 }

@@ -1,4 +1,4 @@
-import { Component, ViewChild, ElementRef, OnInit, AfterViewInit, OnDestroy   } from '@angular/core';
+import { Component, ViewChild, TemplateRef, ElementRef, OnInit, AfterViewInit, OnDestroy   } from '@angular/core';
 import { PropertyImage } from 'src/app/shared/interfaces/property-image.interface';
 import { PropertyImageHelper } from 'src/app/shared/helpers/property-image.helper';
 import Swiper, { Navigation, Pagination, Thumbs, FreeMode } from 'swiper';
@@ -20,7 +20,7 @@ import { AuthService } from 'src/app/shared/services/auth.service';
 import { CrudService } from "src/app/shared/services/crud.service";
 import { ToastrService } from "ngx-toastr";
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 interface TabInfo {
   id: string;
@@ -38,6 +38,7 @@ export class PropertydetailsComponent implements OnInit, AfterViewInit, OnDestro
   @ViewChild('propertyTabs', { static: false }) propertyTabs?: TabsetComponent;
   @ViewChild('mainSwiper', { static: false }) mainSwiperRef!: ElementRef;
   @ViewChild('thumbSwiper', { static: false }) thumbSwiperRef!: ElementRef;
+  @ViewChild('ratesShow') ratesShowTpl!: TemplateRef<any>;
 
   mainSwiper: any;
   thumbSwiper: any;
@@ -80,6 +81,10 @@ export class PropertydetailsComponent implements OnInit, AfterViewInit, OnDestro
   fromDate: NgbDate | null = null;
   toDate: NgbDate | null = null;
   selectedDateRange: string = '';
+  scheckin: any;
+  scheckout: any;
+  rates: any;
+  securityDeposit: any;
 
   private latitude!: number;
   private longitude!: number;
@@ -106,7 +111,8 @@ export class PropertydetailsComponent implements OnInit, AfterViewInit, OnDestro
               private storageService: StorageService,
               private authService: AuthService,
               private crudService: CrudService,
-              private toast: ToastrService
+              private toast: ToastrService,
+              private modalService: NgbModal
   ) {
     this.datesForm = this.fb.group({
       searchCalender: ['', Validators.required],
@@ -753,6 +759,9 @@ export class PropertydetailsComponent implements OnInit, AfterViewInit, OnDestro
       }
 
       const formValue = this.datesForm.value;
+      this.spinner.show();
+      this.scheckin = SDATE;
+      this.scheckout = EDATE;
 
       // Call API
       this.crudService.getRates(
@@ -765,16 +774,19 @@ export class PropertydetailsComponent implements OnInit, AfterViewInit, OnDestro
           this.isDatesFormSubmitting = false;
 
           if (response.error === false && response.available) {
-            // this.ratesData = response;
-            this.showToast('Rates loaded successfully!', 'success');
+            this.showRatesInfoModal(response);
+            // this.showToast('Rates loaded successfully!', 'success');
           } else {
             this.showToast(response.message || 'Dates not available', 'warning');
           }
+
+          this.spinner.hide();
         },
         error: (error) => {
           this.isDatesFormSubmitting = false;
           this.showToast('Error loading rates. Please try again.', 'error');
           console.error('API Error:', error);
+          this.spinner.hide();
         }
       });
 
@@ -894,5 +906,18 @@ export class PropertydetailsComponent implements OnInit, AfterViewInit, OnDestro
     window.open(manageImgURL, "_blank");
   }
 
+  showRatesInfoModal(rateInfo?: any) {
+    if (rateInfo){
+      this.securityDeposit = parseFloat(rateInfo["securityDeposit"]).toFixed(2);
+      this.rates = parseFloat(rateInfo["Price"]).toFixed(2);
+    }
 
+    this.modalService.open(this.ratesShowTpl, {
+      size: 'lg',
+      centered: true,
+      scrollable: false,
+      backdrop: 'static',
+      keyboard: false
+    });
+  }
 }

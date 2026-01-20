@@ -11,6 +11,7 @@ import { FormsModule, ReactiveFormsModule  } from '@angular/forms';
 import { GoogleMapsModule } from '@angular/google-maps';
 import { AddPropertyReviewsComponent } from './add-property-reviews/add-property-reviews.component'; // Import GoogleMapsModule
 import { ToastrModule } from 'ngx-toastr';
+import { NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
 
 @NgModule({
   declarations: [
@@ -20,6 +21,7 @@ import { ToastrModule } from 'ngx-toastr';
   imports: [
     CommonModule,
     FormsModule,
+    NgbModalModule,
     ReactiveFormsModule,
     PropertydetailsRoutingModule,
     TabsModule.forRoot(),

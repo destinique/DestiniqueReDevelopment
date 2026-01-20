@@ -39,6 +39,8 @@ export class PropertydetailsComponent implements OnInit, AfterViewInit, OnDestro
   @ViewChild('mainSwiper', { static: false }) mainSwiperRef!: ElementRef;
   @ViewChild('thumbSwiper', { static: false }) thumbSwiperRef!: ElementRef;
   @ViewChild('ratesShow') ratesShowTpl!: TemplateRef<any>;
+  @ViewChild('rateNotAvailable') rateNotAvailableTpl!: TemplateRef<any>;
+  @ViewChild('zeroRate') zeroRateTpl!: TemplateRef<any>;
 
   mainSwiper: any;
   thumbSwiper: any;
@@ -81,6 +83,11 @@ export class PropertydetailsComponent implements OnInit, AfterViewInit, OnDestro
   fromDate: NgbDate | null = null;
   toDate: NgbDate | null = null;
   selectedDateRange: string = '';
+
+  //For RatesAPP
+  dataSourceCode!: string;
+  providerMessages: any = [];
+  RATE_AVAILABLE=1;
   scheckin: any;
   scheckout: any;
   rates: any;
@@ -99,6 +106,7 @@ export class PropertydetailsComponent implements OnInit, AfterViewInit, OnDestro
 
   datesForm!: FormGroup;   // 👈 REQUIRED
   isDatesFormSubmitting = false;
+  isCalendarLoading = false;
 
   constructor(
               private fb: FormBuilder,
@@ -198,7 +206,8 @@ export class PropertydetailsComponent implements OnInit, AfterViewInit, OnDestro
             return;
           }
           this.propertyDetailData = resp[0];
-          // console.log(this.propertyDetailData);
+          this.RATE_AVAILABLE = resp[0]["RATE_AVAILABLE"];
+          this.dataSourceCode = resp[0]["DataSourceCde"];
 
           const listId = resp[0].list_id;
           this.latitude = Number(resp[0].Lat);
@@ -436,19 +445,9 @@ export class PropertydetailsComponent implements OnInit, AfterViewInit, OnDestro
   // ===== CALENDAR METHODS (SIMPLIFIED) =====
   // Temporary debugging
   loadAvailabilityData(): void {
+    this.isCalendarLoading = true;
     this.availabilitySub = this.availabilityService.getAvailability(this.propertyId)
       .subscribe(data => {
-        // Log first few dates to verify
-        /*
-        data.slice(0, 5).forEach(item => {
-          console.log(`Date: ${item.date.year}-${item.date.month}-${item.date.day},
-          Status: ${item.status},
-          AvailableYesNo: ${item.availableYesNo},
-          AM: ${item.availableAMYesNo},
-          PM: ${item.availablePMYesNo},
-          CheckIn: ${item.availableCheckInYesNo}`);
-        });
-        */
 
         // Reset arrays
         this.fullyAvailableDates = [];
@@ -479,7 +478,7 @@ export class PropertydetailsComponent implements OnInit, AfterViewInit, OnDestro
               console.warn(`Unknown status for date ${item.date.year}-${item.date.month}-${item.date.day}: ${item.status}`);
           }
         });
-
+        this.isCalendarLoading = false;
         /*
         console.log('=== CATEGORIZATION ===');
         console.log('Fully available (green):', this.fullyAvailableDates.length);
@@ -763,6 +762,26 @@ export class PropertydetailsComponent implements OnInit, AfterViewInit, OnDestro
       this.scheckin = SDATE;
       this.scheckout = EDATE;
 
+      if (this.RATE_AVAILABLE == 0){
+        this.isDatesFormSubmitting = false;
+        this.spinner.hide();
+        this.openRateNotAvailableModal();
+        return;
+      }
+
+      if (this.dataSourceCode !== "AK") {
+        this.isDatesFormSubmitting = false;
+        this.spinner.hide();
+
+        const message = `Unfortunately, this property requires that we call for rates. Please
+			submit your inquiry and one of our travel advisors will send you a
+			quote with rates as soon as possible.`.trim();
+        this.providerMessages.push(message);
+        this.showZeroRateModal();
+
+        return;
+      }
+
       // Call API
       this.crudService.getRates(
         this.listId.toString(),
@@ -774,10 +793,29 @@ export class PropertydetailsComponent implements OnInit, AfterViewInit, OnDestro
           this.isDatesFormSubmitting = false;
 
           if (response.error === false && response.available) {
-            this.showRatesInfoModal(response);
-            // this.showToast('Rates loaded successfully!', 'success');
-          } else {
-            this.showToast(response.message || 'Dates not available', 'warning');
+            if (parseFloat(response["Price"]) == 0) {
+              this.providerMessages = response["providerMessages"];
+              this.showZeroRateModal();
+            }
+            else {
+              this.showRatesInfoModal(response);
+              // this.showToast('Rates loaded successfully!', 'success');
+            }
+          }
+          else if (! response.available){
+            //Dates not available
+            // this.showToast(response.message || 'Dates not available', 'warning');
+            // this.providerMessages = response["providerMessages"];
+            const checkin = this.scheckin;
+            const checkout = this.scheckout;
+
+            const message = `Unfortunately, your dates from ${checkin} to ${checkout} are not available.
+Please check the Availability Section for alternate dates or click on the
+button below to request alternate options. For immediate assistance,
+please call 850-312-5400. Thank you.`.trim();
+            this.providerMessages.push(message);
+
+            this.showZeroRateModal();
           }
 
           this.spinner.hide();
@@ -885,7 +923,6 @@ export class PropertydetailsComponent implements OnInit, AfterViewInit, OnDestro
     */
   }
 
-
   getPropertyId() {
     const property_id = localStorage.getItem("PropertyunitId");
 
@@ -904,6 +941,31 @@ export class PropertydetailsComponent implements OnInit, AfterViewInit, OnDestro
   sendDestiniqueManageIamgeURL() {
     let manageImgURL  = `https://quote.destinique.com/destin/dashboard/?v=upload&list_id=${this.listId}`;
     window.open(manageImgURL, "_blank");
+  }
+
+  openRateNotAvailableModal(){
+    this.modalService.open(this.rateNotAvailableTpl, {
+      size: 'lg',
+      centered: true,
+      scrollable: false,
+      backdrop: 'static',
+      keyboard: false
+    });
+  }
+
+  showZeroRateModal(){
+    this.modalService.open(this.zeroRateTpl, {
+      size: 'lg',
+      centered: true,
+      scrollable: false,
+      backdrop: 'static',
+      keyboard: false
+    });
+  }
+
+  closeModalAndNavigate(routePath:any) {
+    this.modalService.dismissAll();
+    this.router.navigateByUrl('/' + routePath);
   }
 
   showRatesInfoModal(rateInfo?: any) {

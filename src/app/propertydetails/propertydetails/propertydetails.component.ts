@@ -93,6 +93,7 @@ export class PropertydetailsComponent implements OnInit, AfterViewInit, OnDestro
   scheckout: any;
   rates: any;
   securityDeposit: any;
+  getCheckinCheckout = false;
 
   private latitude!: number;
   private longitude!: number;
@@ -174,6 +175,10 @@ export class PropertydetailsComponent implements OnInit, AfterViewInit, OnDestro
           // Load your images (example data)
           // this.loadPropertyImages();
           this.loadAvailabilityData();
+
+          this.facebookURL = `https://www.facebook.com/sharer.php?u=${this.encodePageURL}`;
+          this.twitterURL = `https://twitter.com/share?url=${this.encodePageURL}&text=${this.postTitle}`;
+          this.whatsappURL = `https://wa.me/?text=${this.postTitle}${this.encodePageURL}`;
       }
   }
 
@@ -199,9 +204,6 @@ export class PropertydetailsComponent implements OnInit, AfterViewInit, OnDestro
     }
 
     setTimeout(() => {this.spinner.hide();}, 1400);
-    this.facebookURL = `https://www.facebook.com/sharer.php?u=${this.encodePageURL}`;
-    this.twitterURL = `https://twitter.com/share?url=${this.encodePageURL}&text=${this.postTitle}`;
-    this.whatsappURL = `https://wa.me/?text=${this.postTitle}${this.encodePageURL}`;
   }
 
   private tryInitMap(): void {
@@ -799,8 +801,8 @@ export class PropertydetailsComponent implements OnInit, AfterViewInit, OnDestro
         this.isDatesFormSubmitting = false;
         this.spinner.hide();
 
-        const message = `Unfortunately, this property requires that we call for rates. Please
-			submit your inquiry and one of our travel advisors will send you a
+        const message = `Unfortunately, this property requires that we call for rates.
+        <br>Please submit your inquiry and one of our travel advisors will send you a
 			quote with rates as soon as possible.`.trim();
         this.providerMessages.push(message);
         this.showZeroRateModal();
@@ -824,6 +826,7 @@ export class PropertydetailsComponent implements OnInit, AfterViewInit, OnDestro
               this.showZeroRateModal();
             }
             else {
+              this.getCheckinCheckout = true;
               this.showRatesInfoModal(response);
               // this.showToast('Rates loaded successfully!', 'success');
             }
@@ -836,7 +839,7 @@ export class PropertydetailsComponent implements OnInit, AfterViewInit, OnDestro
             const checkout = this.scheckout;
 
             const message = `Unfortunately, your dates from ${checkin} to ${checkout} are not available.
-Please check the Availability Section for alternate dates or click on the
+\nPlease check the Availability Section for alternate dates or click on the
 button below to request alternate options. For immediate assistance,
 please call 850-312-5400. Thank you.`.trim();
             this.providerMessages.push(message);
@@ -919,40 +922,59 @@ please call 850-312-5400. Thank you.`.trim();
     window.open(managersiteURL, "_blank");
   }
 
-  getRatesAndShowPopup() {
-    /*
-    const checkInDate = localStorage.getItem("checkInDate");
-    const checkOutDate = localStorage.getItem("checkOutDate");
-    // const scrapingURL = `https://destinique.org/ratesapp4website/?task=get_rate&list_id=${this.listId}&SDATE=${checkInDate}&EDATE=${checkOutDate}&rateScraped=1`;
-    const scrapingURL = `https://destinique.org/ratesapp4website/index-debug.php?task=get_rate&list_id=${this.listId}&SDATE=${checkInDate}&EDATE=${checkOutDate}&rateScraped=1`;
+  openErrorPopup(errorMessage: string) {
+    this.toast.error(errorMessage, "Error", {
+      tapToDismiss: true,
+      closeButton: true,
+      timeOut: 0,
+      positionClass: "toast-top-center",
+    });
+  }
 
-    // Make an HTTP GET request to the scrapingURL
-    this.http.get(scrapingURL).subscribe(
-      (resp) => {
-        if (resp && resp["Price"]) {
-          const basePrice = parseFloat(resp["base_price"]).toFixed(2);
-          const commission = parseFloat(resp["commission"]).toFixed(2);
-          const price = parseFloat(resp["Price"]).toFixed(2);
-          const sourceRateDetails	= resp["sourceRateDetails"];
-          const satisfiedRule	= resp["satisfiedRule"];
-          this.openPopup(`${price}`, `${basePrice}`, `${commission}`, sourceRateDetails, satisfiedRule);
-        } else {
-          // Handle the case where no price is found
-          this.openErrorPopup("Unable to fetch the price");
+  getRatesAndShowPopup() {
+    try {
+      const SDATE = this.scheckin;
+      const EDATE = this.scheckout;
+      this.spinner.show();
+
+      // Call API
+      this.crudService.getRatesWithDetails(
+        this.listId.toString(),
+        SDATE,
+        EDATE,
+        1
+      ).subscribe({
+        next: (response) => {
+          console.log (response);
+          if (response && response["Price"]) {
+            const basePrice = parseFloat(response["base_price"]).toFixed(2);
+            const commission = parseFloat(response["commission"]).toFixed(2);
+            const price = parseFloat(response["Price"]).toFixed(2);
+            const sourceRateDetails	= response["sourceRateDetails"];
+            const satisfiedRule	= response["satisfiedRule"];
+            // this.openPopup(`${price}`, `${basePrice}`, `${commission}`, sourceRateDetails, satisfiedRule);
+          }
+          else {
+            // Handle the case where no price is found
+            this.openErrorPopup("Unable to fetch the price");
+          }
+
+          this.spinner.hide();
+        },
+        error: (error) => {
+          this.spinner.hide();
+          this.openErrorPopup('Error loading rates. Please try again.');
         }
-      },
-      (error) => {
-        // Handle the error case
-        this.openErrorPopup("An error occurred while fetching the price");
-      }
-    );
-    */
+      });
+    }
+    catch (error: any) {
+      this.spinner.hide();
+      this.openErrorPopup('Invalid date selection');
+    }
   }
 
   getPropertyId() {
-    const property_id = localStorage.getItem("PropertyunitId");
-
-    this.openPopupForPropId(`${property_id}`);
+    this.openPopupForPropId(this.listId);
   }
 
   openPopupForPropId(property_id: any) {

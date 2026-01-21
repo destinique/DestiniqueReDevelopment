@@ -43,7 +43,7 @@
   </div>
   <div class="modal-body">
     <div class="checkout-summary">
-      <h6 class="p-2">
+      <h6 class="p-2 message-text">
         <p *ngFor="let message of providerMessages"><i class="fa fa-info-circle" style="color: rgb(250, 69, 3); font-size: large"></i> {{ message }}</p>
       </h6>
       <p class="pl-2 pr-2">
@@ -76,7 +76,7 @@
           <h6 class="pr-2">
             Total Price (including Rent, Cleaning, Tax and Fees) :
             <b>$ {{ rates | number : "1.0" : "en-US" }}</b>
-          </h6><br>
+          </h6>
           <h6 class="pr-2" *ngIf=" securityDeposit > 0">
             ***Please NOTE***<br/>This Property Requires An Additional Refundable Deposit Of <b>${{securityDeposit}}</b>
           </h6><br>
@@ -309,7 +309,7 @@
                                                             <a (click)="sendManagersiteURL()" class="btn btn-primary mb-2">DESTINIQUE PROPERTY PAGE</a>
                                                         </div>
 
-                                                        <div class="text-end" *ngIf="propertyDetailData?.originalLink">
+                                                        <div class="text-end" *ngIf="getCheckinCheckout && propertyDetailData?.originalLink">
                                                             <a (click)="getRatesAndShowPopup()" class="btn btn-primary mb-2">Get Rates</a>
                                                         </div>
 

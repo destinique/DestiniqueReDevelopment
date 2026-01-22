@@ -952,7 +952,7 @@ please call 850-312-5400. Thank you.`.trim();
             const price = parseFloat(response["Price"]).toFixed(2);
             const sourceRateDetails	= response["sourceRateDetails"];
             const satisfiedRule	= response["satisfiedRule"];
-            // this.openPopup(`${price}`, `${basePrice}`, `${commission}`, sourceRateDetails, satisfiedRule);
+            this.openPopup(`${price}`, `${basePrice}`, `${commission}`, sourceRateDetails, satisfiedRule);
           }
           else {
             // Handle the case where no price is found
@@ -971,6 +971,23 @@ please call 850-312-5400. Thank you.`.trim();
       this.spinner.hide();
       this.openErrorPopup('Invalid date selection');
     }
+  }
+
+  openPopup(price: any, basePrice: any, commission: any, sourceRateDetails: any, satisfiedRule:any) {
+    const commissionRulesJSON= JSON.stringify(satisfiedRule);
+    const sourcePricBreakDownJSON= JSON.stringify(sourceRateDetails);
+
+    this.toast.success(
+      `BasePrice: $${basePrice} \n Commission: $${commission} \n\n\n Total: $${price} \n\n\n SourcePriceBreakDown: $${sourcePricBreakDownJSON} \n\n\n CommissionRules: $${commissionRulesJSON}`,
+      "Price Information",
+      {
+        tapToDismiss: true,
+        closeButton: true,
+        timeOut: 0,
+        extendedTimeOut: 0,
+        positionClass: "toast-top-center",
+      }
+    );
   }
 
   getPropertyId() {

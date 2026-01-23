@@ -12,11 +12,13 @@ import { GoogleMapsModule } from '@angular/google-maps';
 import { AddPropertyReviewsComponent } from './add-property-reviews/add-property-reviews.component'; // Import GoogleMapsModule
 import { ToastrModule } from 'ngx-toastr';
 import { NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
+import { PropertyInquiryComponent } from './property-inquiry/property-inquiry.component';
 
 @NgModule({
   declarations: [
     PropertydetailsComponent,
-    AddPropertyReviewsComponent
+    AddPropertyReviewsComponent,
+    PropertyInquiryComponent
   ],
   imports: [
     CommonModule,

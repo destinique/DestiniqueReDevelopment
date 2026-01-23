@@ -23,7 +23,7 @@
     </div>
 
     <div class="text-center">
-      <button class="btn t-btn">
+      <button class="btn t-btn" (click)="openInquiryModal('PROPERTY INQUIRY')">
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 640 640"><path d="M568.4 37.7C578.2 34.2 589 36.7 596.4 44C603.8 51.3 606.2 62.2 602.7 72L424.7 568.9C419.7 582.8 406.6 592 391.9 592C377.7 592 364.9 583.4 359.6 570.3L295.4 412.3C290.9 401.3 292.9 388.7 300.6 379.7L395.1 267.3C400.2 261.2 399.8 252.3 394.2 246.7C388.6 241.1 379.6 240.7 373.6 245.8L261.2 340.1C252.1 347.7 239.6 349.7 228.6 345.3L70.1 280.8C57 275.5 48.4 262.7 48.4 248.5C48.4 233.8 57.6 220.7 71.5 215.7L568.4 37.7z"/></svg>
         Inquire or Book Now "No Obligation"
       </button>
@@ -87,7 +87,7 @@
       </div>
     </div>
     <div class="text-center">
-      <button class="btn t-btn">
+      <button class="btn t-btn" (click)="openInquiryModal('PROPERTY INQUIRY')">
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 640 640"><path d="M568.4 37.7C578.2 34.2 589 36.7 596.4 44C603.8 51.3 606.2 62.2 602.7 72L424.7 568.9C419.7 582.8 406.6 592 391.9 592C377.7 592 364.9 583.4 359.6 570.3L295.4 412.3C290.9 401.3 292.9 388.7 300.6 379.7L395.1 267.3C400.2 261.2 399.8 252.3 394.2 246.7C388.6 241.1 379.6 240.7 373.6 245.8L261.2 340.1C252.1 347.7 239.6 349.7 228.6 345.3L70.1 280.8C57 275.5 48.4 262.7 48.4 248.5C48.4 233.8 57.6 220.7 71.5 215.7L568.4 37.7z"/></svg>
         Inquire or Book Now "No Obligation"
       </button>
@@ -607,142 +607,19 @@
                         </div>
                     </div>
                     <div class="mb-2">
-                        <button type="button" class="btn property-inquiry-btn">
-                            PROPERTY INQUIRY
+                        <button type="button"
+                                class="btn property-inquiry-btn"
+                                (click)="openInquiryModal('PROPERTY INQUIRY')">
+                          PROPERTY INQUIRY
                         </button>
 
-                        <button type="button" class="btn book-now-btn" data-bs-toggle="modal" data-bs-target="#request-to-book">
-                            REQUEST TO BOOK
+                        <button type="button"
+                                class="btn book-now-btn"
+                                (click)="openInquiryModal('REQUEST TO BOOK')">
+                          REQUEST TO BOOK
                         </button>
-
-                        <div class="modal" id="request-to-book">
-                            <div class="modal-dialog">
-                                <div class="modal-content propupdate-modal-content">
-                                    <div class="modal-header">
-                                        <strong style="text-transform: uppercase">Property ID - 19010 : Booking Form</strong>
-                                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                                    </div>
-                                    <div class="modal-body">
-                                        <form>
-                                            <div class="row">
-                                                <div class="col-sm-12 col-md-6 col-lg-4 mb-3">
-                                                    <label class="required">Your name</label>
-                                                    <input type="text" class="form-control"/>
-                                                    <div class="invalid-feedback">
-                                                        Name is required
-                                                    </div>
-                                                </div>
-
-                                                <div class="col-sm-12 col-md-6 col-lg-4 mb-3">
-                                                    <label class="lbl">Phone number</label>
-                                                    <input type="text" class="form-control"/>
-                                                </div>
-
-                                                <div class="col-sm-12 col-md-6 col-lg-4 mb-3">
-                                                    <label class="required">Email address</label>
-                                                    <input type="text" class="form-control"/>
-                                                    <div class="invalid-feedback">Email is required</div>
-                                                </div>
-
-                                                <div class="col-sm-12 col-md-6 col-lg-4 mb-3">
-
-                                                    <label class="required">Checkin-Checkout dates</label>
-                                                    <input type="text" class="form-control" placeholder="Enter Checkin-Checkout dates"/>
-                                                    <div class="invalid-feedback">
-                                                        Checkin-Checkout dates are required
-                                                    </div>
-
-                                                    <div class="datesCheck">
-                                                        <label>
-                                                            <input type="checkbox"/>
-                                                            Please click on this checkbox button if the dates are not
-                                                            provided.
-                                                        </label>
-                                                    </div>
-                                                </div>
-
-                                                <div class="col-sm-12 col-md-6 col-lg-4 mb-3">
-                                                    <label>Total Budget</label>
-                                                    <input type="number" class="form-control"/>
-                                                </div>
-
-                                                <div class="col-sm-12 col-md-6 col-lg-4 mb-3">
-                                                    <label class="required">Total guests</label>
-                                                    <input type="number" class="form-control"/>
-                                                    <div class="invalid-feedback">
-                                                        Total guests count is required
-                                                    </div>
-                                                </div>
-
-                                                <div class="col-sm-12 col-md-6 col-lg-4 mb-3">
-                                                    <label>Adults</label>
-                                                    <input type="number" class="form-control"/>
-                                                </div>
-
-                                                <div class="col-sm-12 col-md-6 col-lg-4 mb-3">
-                                                    <label>Kids 3 years and over</label>
-                                                    <input type="number" class="form-control"/>
-                                                </div>
-
-                                                <div class="col-sm-12 col-md-6 col-lg-4 mb-3">
-                                                    <label>Babies under 3 year</label>
-                                                    <input type="number" class="form-control"/>
-                                                </div>
-
-                                                <div class="col-sm-12 mb-3">
-                                                    <label class="required">Message</label>
-                                                    <textarea name="message" id="message" rows="3" class="form-control"></textarea>
-                                                    <div class="invalid-feedback">
-                                                        Message is required
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <div class="row">
-                                                <div class="col-12 opt-in-text-s">
-
-                                                </div>
-                                            </div>
-
-                                            <div class="row">
-                                                <div class="col-12 opt-in-text-s">
-
-                                                </div>
-                                            </div>
-
-
-                                            <div class="row">
-                                                <div class="col-12 opt-in-text-s">
-
-                                                </div>
-                                            </div>
-
-                                            <div class="row">
-                                                <div class="mb-3 col-12">
-                                                    <div class="justify-content-center mx-auto text-center">
-                                                        <button class="mr-1 btn btn-secondary">Submit</button>
-                                                        <button class="btn btn-secondary mr-1" type="reset">Reset</button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </form>
-                                        <div class="form-row">
-                                            <div class="mb-3 col-12 mt-3">
-                                                <p class="details_form_note">
-                                                    <b>PLEASE NOTE!!</b> Rates are not guaranteed until the time of
-                                                    booking. Rates can fluctuate at any time as Property Managers now
-                                                    utilize software programs that use algorithms to automatically set
-                                                    rates (based on supply/demand). For the quickest response, please
-                                                    call 850-312-5400, and a Travel Advisor will assist you with your
-                                                    booking.<br><br>
-                                                </p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
                     </div>
+
                     <div class="card mb-1 shadow-lg">
                       <div class="card-body p-0">
                         <div id="property-map" class="map-container"></div>

@@ -1,0 +1,40 @@
+<div class="modal-header">
+  <h5 class="modal-title">{{ inquiryModalLabel }}</h5>
+  <button type="button"
+          class="btn-close"
+          aria-label="Close"
+          (click)="close()">
+  </button>
+</div>
+
+<div class="modal-body">
+  <p>
+    Please fill out the form below and our team will get back to you shortly.
+  </p>
+
+  <!-- Example fields -->
+  <div class="mb-3">
+    <label class="form-label">Full Name</label>
+    <input type="text" class="form-control">
+  </div>
+
+  <div class="mb-3">
+    <label class="form-label">Email</label>
+    <input type="email" class="form-control">
+  </div>
+
+  <div class="mb-3">
+    <label class="form-label">Message</label>
+    <textarea class="form-control" rows="3"></textarea>
+  </div>
+</div>
+
+<div class="modal-footer">
+  <button class="btn btn-secondary" (click)="close()">
+    Cancel
+  </button>
+
+  <button class="btn btn-primary">
+    Submit
+  </button>
+</div>

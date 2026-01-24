@@ -22,6 +22,7 @@ import { ToastrService } from "ngx-toastr";
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { EnvService } from "src/app/env.service";
+import { InquiryBookingFormLabelData  } from "src/app/shared/interfaces/inquiry-booking-form-label-data-interface";
 import { PropertyInquiryComponent } from 'src/app/propertydetails/property-inquiry/property-inquiry.component';
 
 interface TabInfo {
@@ -1064,6 +1065,11 @@ please call 850-312-5400. Thank you.`.trim();
     this.modalService.dismissAll();
     //this.closeMobileMenu(); // Close mobile menu if open
 
+    const inquiryLabelData: InquiryBookingFormLabelData = {
+      listId: this.listId,
+      formLabel: inquiryModalLabel
+    };
+
     setTimeout(() => {
         const modalRef = this.modalService.open(PropertyInquiryComponent,
           {
@@ -1073,7 +1079,8 @@ please call 850-312-5400. Thank you.`.trim();
             keyboard: false,
             windowClass: 'promotion-modal-window'
           });
-        modalRef.componentInstance.inquiryModalLabel = inquiryModalLabel;
+
+        modalRef.componentInstance.inquiryBookingFormLabelData = inquiryLabelData;
         //this.cdr.detectChanges();  // Trigger change detection
     });
   }

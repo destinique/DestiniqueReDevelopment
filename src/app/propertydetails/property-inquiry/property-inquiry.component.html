@@ -1,5 +1,7 @@
 <div class="modal-header">
-  <h5 class="modal-title">{{ inquiryModalLabel }}</h5>
+  <strong style="text-transform: uppercase">
+    Property ID - {{ inquiryBookingFormLabelData.listId }} : {{ inquiryBookingFormLabelData.formLabel }} Form
+  </strong>
   <button type="button"
           class="btn-close"
           aria-label="Close"
@@ -8,33 +10,186 @@
 </div>
 
 <div class="modal-body">
-  <p>
-    Please fill out the form below and our team will get back to you shortly.
-  </p>
+  <form [formGroup]="inquiryForm" (ngSubmit)="submit()">
 
-  <!-- Example fields -->
-  <div class="mb-3">
-    <label class="form-label">Full Name</label>
-    <input type="text" class="form-control">
-  </div>
+    <div class="row">
 
-  <div class="mb-3">
-    <label class="form-label">Email</label>
-    <input type="email" class="form-control">
-  </div>
+      <!-- Name -->
+      <div class="col-sm-12 col-md-6 col-lg-4 mb-3">
+        <label class="required" for="inquiryForm_name">Your name</label>
+        <input type="text"
+               id="inquiryForm_name"
+               class="form-control"
+               formControlName="name"
+               [class.is-invalid]="inquiryForm.get('name')?.touched && inquiryForm.get('name')?.invalid"/>
+        <div *ngIf="inquiryFormSubmitted && inquiryForm.get('name')?.errors" class="invalid-feedback">
+          <div *ngIf="inquiryForm.get('name')?.hasError('required')">Name is required</div>
+          <div *ngIf="inquiryForm.get('name')?.hasError('maxlength')">Maximum 200 characters allowed</div>
+        </div>
+      </div>
 
-  <div class="mb-3">
-    <label class="form-label">Message</label>
-    <textarea class="form-control" rows="3"></textarea>
+      <!-- Phone -->
+      <div class="col-sm-12 col-md-6 col-lg-4 mb-3">
+        <label for="inquiryForm_phone">Phone number</label>
+        <input id="inquiryForm_phone" type="text" class="form-control" formControlName="phone"/>
+        <div *ngIf="inquiryFormSubmitted && inquiryForm.get('phone')?.hasError('maxlength')"
+             class="invalid-feedback">Phone number cannot exceed 15 digits</div>
+      </div>
+
+      <!-- Email -->
+      <div class="col-sm-12 col-md-6 col-lg-4 mb-3">
+        <label class="required" for="inquiryForm_email">Email address</label>
+        <input type="email"
+               id="inquiryForm_email"
+               class="form-control"
+               formControlName="email"
+               [class.is-invalid]="inquiryForm.get('email')?.touched && inquiryForm.get('email')?.invalid"/>
+        <div *ngIf="inquiryFormSubmitted && inquiryForm.get('email')?.errors" class="invalid-feedback">
+          <div *ngIf="inquiryForm.get('email')?.hasError('required')">Email is required</div>
+          <div *ngIf="inquiryForm.get('email')?.hasError('email')">Enter a valid email</div>
+          <div *ngIf="inquiryForm.get('email')?.hasError('maxlength')">Maximum 200 characters allowed</div>
+        </div>
+      </div>
+
+      <!-- Date Range Picker -->
+      <div class="col-sm-12 col-md-6 col-lg-4 mb-3">
+        <label class="required" for="dateRange">Check-in & Check-out</label>
+
+        <input
+          id="dateRange"
+          class="form-control"
+          [class.is-invalid]="inquiryFormSubmitted && inquiryForm.errors?.['dateRangeRequired']"
+          placeholder="Select date range"
+          readonly
+          [value]="inquiryForm.get('dateRange')?.value"
+          ngbDatepicker
+          #dpr="ngbDatepicker"
+          [firstDayOfWeek]="7"
+          [displayMonths]="2"
+          [navigation]="'arrows'"
+          [outsideDays]="'hidden'"
+          [autoClose]="'outside'"
+          (dateSelect)="onDateSelection($event)"
+          (click)="!inquiryForm.get('datesNotProvided')?.value && dpr.toggle()"
+        />
+
+        <!-- Hidden form control for actual form binding -->
+        <input type="hidden" formControlName="dateRange" />
+
+        <div class="form-check mt-2">
+          <input
+            type="checkbox"
+            class="form-check-input"
+            formControlName="datesNotProvided"
+            id="datesNotProvided"
+          />
+          <label class="form-check-label" for="datesNotProvided">
+            Dates not provided
+          </label>
+        </div>
+
+        <div
+          *ngIf="inquiryFormSubmitted && inquiryForm.errors?.['dateRangeRequired']"
+          class="invalid-feedback d-block"
+        >
+          Please select a check-in and check-out date range
+        </div>
+      </div>
+
+      <!-- Total Budget -->
+      <div class="col-sm-12 col-md-6 col-lg-4 mb-3">
+        <label for="inquiryForm_totalBudget">Total Budget</label>
+        <input id="inquiryForm_totalBudget"
+               type="text"
+               class="form-control"
+               formControlName="totalBudget"
+               [class.is-invalid]="inquiryForm.get('totalBudget')?.touched && inquiryForm.get('totalBudget')?.invalid"/>
+        <div *ngIf="inquiryFormSubmitted && inquiryForm.get('totalBudget')?.errors" class="invalid-feedback">
+          <div *ngIf="inquiryForm.get('totalBudget')?.hasError('required')">Total budget is required</div>
+          <div *ngIf="inquiryForm.get('totalBudget')?.hasError('pattern')">Total budget must be a number (up to 2 decimals)</div>
+          <div *ngIf="inquiryForm.get('totalBudget')?.hasError('min')">Total budget cannot be negative</div>
+          <div *ngIf="inquiryForm.get('totalBudget')?.hasError('max')">Total budget exceeds the allowed limit</div>
+        </div>
+      </div>
+
+      <!-- Total Guests -->
+      <div class="col-sm-12 col-md-6 col-lg-4 mb-3">
+        <label for="inquiryForm_totalGuests" class="required">Total guests</label>
+        <input type="number"
+               id="inquiryForm_totalGuests"
+               class="form-control"
+               formControlName="totalGuests"
+               readonly
+               [class.is-invalid]="inquiryForm.get('totalGuests')?.touched && inquiryForm.get('totalGuests')?.invalid"/>
+        <div *ngIf="inquiryFormSubmitted && inquiryForm.get('totalGuests')?.errors" class="invalid-feedback">
+          <div *ngIf="inquiryForm.get('totalGuests')?.hasError('required')">Total guests count is required</div>
+          <div *ngIf="inquiryForm.get('totalGuests')?.hasError('max')">Guest count is too high</div>
+        </div>
+        <div *ngIf="inquiryFormSubmitted && inquiryForm.errors?.['guestCountMismatch']" class="invalid-feedback d-block">
+          Total guests must equal Adults + Kids + Babies
+        </div>
+      </div>
+
+      <!-- Adults -->
+      <div class="col-sm-12 col-md-6 col-lg-4 mb-3">
+        <label for="inquiryForm_adults">Adults</label>
+        <input min="0" max="100" type="number" id="inquiryForm_adults" class="form-control" formControlName="adults"/>
+      </div>
+
+      <!-- Kids -->
+      <div class="col-sm-12 col-md-6 col-lg-4 mb-3">
+        <label for="inquiryForm_kids">Kids 3 years and over</label>
+        <input min="0" max="100" type="number" id="inquiryForm_kids" class="form-control" formControlName="kids"/>
+      </div>
+
+      <!-- Babies -->
+      <div class="col-sm-12 col-md-6 col-lg-4 mb-3">
+        <label for="inquiryForm_babies">Babies under 3 years</label>
+        <input min="0" max="100" type="number" id="inquiryForm_babies" class="form-control" formControlName="babies"/>
+      </div>
+
+      <!-- Message -->
+      <div class="col-sm-12 mb-3">
+        <label for="inquiryForm_message" class="required">Message</label>
+        <textarea id="inquiryForm_message"
+                  rows="3"
+                  class="form-control"
+                  formControlName="message"
+                  [class.is-invalid]="inquiryForm.get('message')?.touched && inquiryForm.get('message')?.invalid">
+        </textarea>
+        <div *ngIf="inquiryFormSubmitted && inquiryForm.get('message')?.errors" class="invalid-feedback">
+          <div *ngIf="inquiryForm.get('message')?.hasError('required')">Message is required</div>
+          <div *ngIf="inquiryForm.get('message')?.hasError('maxlength')">Maximum 2000 characters allowed</div>
+        </div>
+      </div>
+
+    </div> <!-- row -->
+
+    <!-- Submit / Reset buttons -->
+    <div class="row">
+      <div class="col-12 text-center mb-3">
+        <button type="submit" class="btn btn-secondary" >Submit</button>
+        &nbsp;&nbsp;
+        <button type="reset" class="btn btn-secondary" (click)="inquiryForm.reset()">Reset</button>
+      </div>
+    </div>
+
+  </form>
+
+  <!-- Note / Info -->
+  <div class="row">
+    <div class="col-12 mt-3">
+      <p class="details_form_note">
+        <b>PLEASE NOTE!!</b> Rates are not guaranteed until the time of
+        booking. Rates can fluctuate at any time as Property Managers now
+        utilize software programs that use algorithms to automatically set
+        rates (based on supply/demand). For the quickest response, please
+        call 850-312-5400, and a Travel Advisor will assist you with your booking.
+      </p>
+    </div>
   </div>
 </div>
 
 <div class="modal-footer">
-  <button class="btn btn-secondary" (click)="close()">
-    Cancel
-  </button>
-
-  <button class="btn btn-primary">
-    Submit
-  </button>
+  <button class="btn btn-secondary" (click)="close()">Close</button>
 </div>

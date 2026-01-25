@@ -89,3 +89,274 @@ $border-color: #dee2e6;
     letter-spacing: .1em;
   }
 }
+
+
+/* ===== CALENDAR OPTIMIZATIONS ===== */
+.calendar-section {
+  border-radius: 8px;
+  background: #fff;
+  min-height: 320px;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ===== CUSTOM DATE STYLES - TARGETING custom-day-wrapper IN BOTH CALENDAR TYPES ===== */
+:host ::ng-deep {
+  /* COMMON BASE STYLES FOR ALL CUSTOM-DAY-WRAPPER ELEMENTS */
+  .custom-day-wrapper {
+    width: 100% !important;
+    height: 100% !important;
+    border-radius: 0px !important;
+    border: 1px solid transparent !important;
+    font-weight: 500 !important;
+    font-size: 0.875rem !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    position: relative !important;
+    overflow: hidden !important;
+    cursor: default !important;
+
+    /* AVAILABLE DATES - GREEN (FULLY GREEN) */
+    &.date-fully-available {
+      background-color: #28a745 !important;
+      color: white !important;
+      border-color: #28a745 !important;
+      cursor: pointer !important;
+
+      &.disabled {
+        background-color: #28a745 !important;
+        color: white !important;
+        cursor: not-allowed !important;
+      }
+
+      &:not(.disabled):hover {
+        background-color: #218838 !important;
+        border-color: #1e7e34 !important;
+        transform: scale(1.05) !important;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2) !important;
+      }
+    }
+
+    &.in-range {
+      background-color: rgba(40, 167, 69, 0.3) !important;
+    }
+
+    &.range-edge {
+      background-color: #28a745 !important;
+      color: white !important;
+      border-radius: 50% !important;
+    }
+
+    &.prefilled-date {
+      border: 2px solid #ffc107 !important; // Yellow border for pre-filled dates
+      box-shadow: 0 0 5px rgba(255, 193, 7, 0.5) !important;
+    }
+  }
+
+  /* Style for DUAL CALENDAR (availability tab) */
+  .custom-datepicker {
+    /* Ensure proper sizing of date cells */
+    .ngb-dp-day {
+      width: 40px;
+      height: 40px;
+      padding: 2px;
+
+      /* Center content in the cell */
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Ensure week rows have proper height */
+    .ngb-dp-week {
+      min-height: 40px;
+      min-width: 40px;
+    }
+
+    /* Override Bootstrap's default datepicker styles */
+    .btn-light {
+      background-color: transparent !important;
+      border-color: transparent !important;
+    }
+    .ngb-dp-day, .ngb-dp-weekday, .ngb-dp-week-number {
+      width: 40px;
+      height: 40px;
+      font-style: normal;
+      color: #555;
+    }
+    .ngb-dp-weekdays {
+      background-color: #fff;
+      border: 0px;
+    }
+    .ngb-dp-header, .ngb-dp-month-name {
+      background-color: #378f86;
+      color: #fff !important;
+      font-weight: 300;
+      height: 42px;
+      font-size: 18px;
+    }
+    .ngb-dp-header {
+      padding-top: .35rem;
+    }
+    .ngb-dp-navigation-chevron {
+      color: #fff !important;
+      font-weight: 300;
+    }
+    .ngb-dp-arrow {
+      width: 40px;
+      height: 40px;
+      top: -5px;
+      position: relative;
+    }
+  }
+
+  /* Style for POPUP DATEPICKER (date range picker) */
+  ngb-datepicker {
+    /* Target the popup datepicker */
+    .ngb-dp-day {
+      width: 40px;
+      height: 40px;
+      padding: 2px;
+
+      /* Center content in the cell */
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+  }
+
+  .ngb-dp-day, .ngb-dp-weekday, .ngb-dp-week-number {
+    width: 40px;
+    height: 40px;
+    font-style: normal;
+    color: #555;
+  }
+  .ngb-dp-weekdays {
+    background-color: #fff;
+    border: 0px;
+  }
+  .ngb-dp-header, .ngb-dp-month-name {
+    background-color: #378f86;
+    color: #fff !important;
+    font-weight: 300;
+    height: 42px;
+  }
+  .ngb-dp-navigation-chevron {
+    color: #fff !important;
+    font-weight: 300;
+  }
+  .ngb-dp-arrow {
+    width: 40px;
+    height: 40px;
+    top: -5px;
+    position: relative;
+  }
+}
+
+/* LEGEND STYLES */
+.legend-dot {
+  width: 16px;
+  height: 16px;
+  display: inline-block;
+  flex-shrink: 0;
+
+  &.fully-available {
+    background-color: #28a745;
+  }
+
+  &.fully-unavailable {
+    background-color: #dc3545;
+  }
+
+  &.am-only {
+    background: linear-gradient(to right bottom, #28a745 50%, #e63946 50%) !important;
+  }
+
+  &.pm-only {
+    background: linear-gradient(to right bottom, #e63946 50%, #28a745 50%);
+  }
+
+  &.no-checkin {
+    background-color: #28a745;
+    position: relative;
+
+    &::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #dc3545;
+    }
+  }
+}
+
+/* Responsive adjustments */
+@media (max-width: 992px) {
+  :host ::ng-deep {
+    .custom-datepicker,
+    ngb-datepicker {
+      .ngb-dp-day {
+        width: 36px;
+        height: 36px;
+      }
+
+      .custom-day-wrapper {
+        font-size: 0.8125rem !important;
+
+        &::after {
+          font-size: 0.5rem !important;
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  :host ::ng-deep {
+    .custom-datepicker,
+    ngb-datepicker {
+      .ngb-dp-day {
+        width: 32px;
+        height: 32px;
+      }
+
+      .custom-day-wrapper {
+        font-size: 0.75rem !important;
+
+        &::after {
+          font-size: 0.45rem !important;
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 576px) {
+  .calendar-section {
+    min-height: 280px;
+    padding: 0.75rem;
+  }
+
+  :host ::ng-deep {
+    .custom-datepicker,
+    ngb-datepicker {
+      .ngb-dp-day {
+        width: 28px;
+        height: 28px;
+      }
+
+      .custom-day-wrapper {
+        font-size: 0.7rem !important;
+
+        &::after {
+          font-size: 0.4rem !important;
+        }
+      }
+    }
+  }
+}

@@ -1067,7 +1067,10 @@ please call 850-312-5400. Thank you.`.trim();
 
     const inquiryLabelData: InquiryBookingFormLabelData = {
       listId: this.listId,
-      formLabel: inquiryModalLabel
+      formLabel: inquiryModalLabel,
+      scheckin: this.scheckin,
+      scheckout: this.scheckin,
+      totalBudget: this.rates ? this.rates.toString() : "0.00"
     };
 
     setTimeout(() => {

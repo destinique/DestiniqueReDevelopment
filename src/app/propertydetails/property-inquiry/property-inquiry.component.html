@@ -1,3 +1,14 @@
+<ngx-spinner
+  bdColor="rgba(0, 0, 0, 0.8)"
+  size="medium"
+  color="#fff"
+  type="ball-circus"
+  [fullScreen]="true"
+  name="propertyInquirySpinner"
+>
+  <p id="spinner" style="color: white">Submitting your inquiry...</p>
+</ngx-spinner>
+
 <div class="modal-header">
   <strong style="text-transform: uppercase">
     Property ID - {{ inquiryBookingFormLabelData.listId }} : {{ inquiryBookingFormLabelData.formLabel }} Form
@@ -71,7 +82,22 @@
           [autoClose]="'outside'"
           (dateSelect)="onDateSelection($event)"
           (click)="!inquiryForm.get('datesNotProvided')?.value && dpr.toggle()"
+          [dayTemplate]="inquiryDayTemplate"
         />
+        <ng-template #inquiryDayTemplate let-date="date"
+                     let-selected="selected"
+                     let-disabled="disabled"
+                     let-focused="focused">
+          <div class="custom-day-wrapper date-fully-available"
+               [class.focused]="focused"
+               [class.selected]="selected"
+               [class.range-edge]="isRangeEdge(date)"
+               [class.in-range]="isInRange(date)"
+               [class.prefilled-date]="isPrefilledDate(date)"
+          >
+               {{ date.day }}
+          </div>
+        </ng-template>
 
         <!-- Hidden form control for actual form binding -->
         <input type="hidden" formControlName="dateRange" />
@@ -168,12 +194,27 @@
     <!-- Submit / Reset buttons -->
     <div class="row">
       <div class="col-12 text-center mb-3">
-        <button type="submit" class="btn btn-secondary" >Submit</button>
+        <button
+          type="submit"
+          class="btn btn-secondary"
+          [disabled]="isSubmitting || inquiryForm.invalid"
+        >
+          <span *ngIf="!isSubmitting">Submit</span>
+          <span *ngIf="isSubmitting">
+        <i class="fas fa-spinner fa-spin me-1"></i> Submitting...
+      </span>
+        </button>
         &nbsp;&nbsp;
-        <button type="reset" class="btn btn-secondary" (click)="inquiryForm.reset()">Reset</button>
+        <button
+          type="reset"
+          class="btn btn-secondary"
+          (click)="inquiryForm.reset()"
+          [disabled]="isSubmitting"
+        >
+          Reset
+        </button>
       </div>
     </div>
-
   </form>
 
   <!-- Note / Info -->

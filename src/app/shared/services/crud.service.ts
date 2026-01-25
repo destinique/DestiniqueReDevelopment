@@ -40,6 +40,7 @@ interface loadProfileApiResponse {
 
 // Interfaces
 import { ContactUSFormData, ContactUSApiResponse } from 'src/app/shared/interfaces/contact-form.interface';
+import { InquiryApiRequest, InquiryApiResponse } from 'src/app/shared/interfaces/inquiry-form.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -313,6 +314,70 @@ export class CrudService {
         return throwError(() => new Error(errorMessage));
       })
     );
+  }
+
+  /**
+   * Submit property inquiry form data to the API
+   * @param formData Property inquiry form data
+   * @returns Observable with API response
+   */
+  submitPropertyInquiryData(formData: InquiryApiRequest): Observable<InquiryApiResponse> {
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Accept': 'application/json'
+    });
+
+    // Clean up the data before sending
+    const cleanedData = this.cleanInquiryData(formData);
+
+    return this.http.post<InquiryApiResponse>(
+      `${this.baseUrl}register_property_inquiry.php`,
+      cleanedData,
+      { headers }
+    ).pipe(
+      catchError(this.handleError)
+    );
+  }
+
+  /**
+   * Clean and format inquiry data before sending to API
+   * @param data Raw inquiry data
+   * @returns Cleaned data
+   */
+  private cleanInquiryData(data: InquiryApiRequest): Partial<InquiryApiRequest> {
+    const cleanedData: Partial<InquiryApiRequest> = { ...data };
+
+    // Remove empty optional fields
+    if (!data.phone || data.phone.trim() === '') {
+      delete cleanedData.phone;
+    }
+
+    if (!data.totalBudget || data.totalBudget.trim() === '') {
+      delete cleanedData.totalBudget;
+    }
+
+    // Handle date logic
+    if (data.datesNotProvided) {
+      delete cleanedData.dateRange;
+      delete cleanedData.checkin;
+      delete cleanedData.checkout;
+    } else {
+      // If datesNotProvided is false but no dates are selected
+      if (!data.dateRange || data.dateRange.trim() === '') {
+        delete cleanedData.dateRange;
+        delete cleanedData.checkin;
+        delete cleanedData.checkout;
+      }
+    }
+
+    // Ensure numeric fields are numbers
+    cleanedData.totalGuests = Number(data.totalGuests) || 0;
+    cleanedData.adults = Number(data.adults) || 0;
+    cleanedData.kids = Number(data.kids) || 0;
+    cleanedData.babies = Number(data.babies) || 0;
+    cleanedData.listId = Number(data.listId) || 0;
+
+    return cleanedData;
   }
 
   /**

@@ -1,10 +1,14 @@
-import { Component, OnInit, AfterViewInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit, OnDestroy, ViewChild, ElementRef } from '@angular/core';
 import { NgxSpinnerService } from "ngx-spinner";
 import { StorageService } from 'src/app/shared/services/storage.service';
 import { CrudService } from "src/app/shared/services/crud.service";
 import { ToastrService } from 'ngx-toastr';
 import { FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
 import { BsLocaleService } from 'ngx-bootstrap/datepicker';
+import { GoogleMapsService, PlacePrediction } from 'src/app/shared/services/google-maps.service';
+import { Subject, from } from 'rxjs';
+import { debounceTime, filter, switchMap, takeUntil, catchError, tap } from 'rxjs/operators';
+import { of } from 'rxjs';
 
 // Interfaces
 import { ContactUSFormData, ContactUSApiResponse } from 'src/app/shared/interfaces/contact-form.interface';
@@ -17,7 +21,7 @@ import { ContactUSFormData, ContactUSApiResponse } from 'src/app/shared/interfac
   templateUrl: './contact-us.component.html',
   styleUrls: ['./contact-us.component.scss']
 })
-export class ContactUsComponent implements OnInit, AfterViewInit {
+export class ContactUsComponent implements OnInit, AfterViewInit, OnDestroy {
   contactForm: FormGroup;
 
   isSmsConsentCollapsed = true;
@@ -93,13 +97,21 @@ export class ContactUsComponent implements OnInit, AfterViewInit {
   arrivalDate: Date | null = null;
   departureMinDate: Date | undefined = undefined;
 
+  // Google Places Autocomplete
+  @ViewChild('destinationInput', { static: false }) destinationInput!: ElementRef<HTMLInputElement>;
+  placePredictions: PlacePrediction[] = [];
+  showPredictions = false;
+  selectedPredictionIndex = -1;
+  private destroy$ = new Subject<void>();
+
   constructor(
     private fb: FormBuilder,
     private crudService: CrudService,
     private storageService: StorageService,
     private toast: ToastrService,
     public spinner: NgxSpinnerService,
-    private localeService: BsLocaleService
+    private localeService: BsLocaleService,
+    private googleMapsService: GoogleMapsService
   ) {
     this.contactForm = this.createForm();
     this.localeService.use('en-gb');
@@ -108,6 +120,7 @@ export class ContactUsComponent implements OnInit, AfterViewInit {
   ngOnInit(): void {
     this.isLoading = true;
     this.spinner.show();
+    this.setupDestinationInputSubscription();
   }
 
   ngAfterViewInit(): void {
@@ -117,18 +130,147 @@ export class ContactUsComponent implements OnInit, AfterViewInit {
     }, 200);
   }
 
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
+  private setupDestinationInputSubscription(): void {
+    const destinationControl = this.contactForm.get('desDestination');
+    if (!destinationControl) {
+      return;
+    }
+
+    destinationControl.valueChanges
+      .pipe(
+        debounceTime(300),
+        tap(() => this.selectedPredictionIndex = -1),
+        filter((value: string | null): value is string => {
+          if (!value || value.trim().length < 2) {
+            this.placePredictions = [];
+            this.showPredictions = false;
+            return false;
+          }
+          return true;
+        }),
+        switchMap((value: string) => {
+          return from(this.getPlacePredictions(value.trim())).pipe(
+            catchError((error) => {
+              console.error('Error getting place predictions:', error);
+              this.placePredictions = [];
+              this.showPredictions = false;
+              return of(null);
+            })
+          );
+        }),
+        takeUntil(this.destroy$)
+      )
+      .subscribe();
+  }
+
+  // ========== GOOGLE PLACES AUTCOMPLETE METHODS ==========
+
+  // Load Google Maps API on demand when user focuses/clicks on input
+  async onDestinationFocus(): Promise<void> {
+    if (!this.googleMapsService.isApiLoaded()) {
+      try {
+        await this.googleMapsService.loadGoogleMaps();
+      } catch (error) {
+        console.error('Failed to load Google Maps API:', error);
+      }
+    }
+  }
+
+  // Get place predictions from Google Places API
+  private async getPlacePredictions(input: string): Promise<void> {
+    if (!this.googleMapsService.isApiLoaded()) {
+      await this.onDestinationFocus();
+    }
+
+    try {
+      const predictions = await this.googleMapsService.getPlacePredictions(input);
+      this.placePredictions = predictions;
+      this.showPredictions = predictions.length > 0;
+    } catch (error) {
+      console.error('Error getting place predictions:', error);
+      this.placePredictions = [];
+      this.showPredictions = false;
+    }
+  }
+
+  // Handle selection of a place from predictions
+  async onPlaceSelected(prediction: PlacePrediction): Promise<void> {
+    // Hide predictions immediately
+    this.hidePredictions();
+    
+    try {
+      const placeDetails = await this.googleMapsService.getPlaceDetails(prediction.place_id);
+      // Set value without emitting event to prevent dropdown from reappearing
+      this.contactForm.get('desDestination')?.setValue(placeDetails.formatted_address, { emitEvent: false });
+      this.contactForm.get('desDestination')?.markAsTouched();
+    } catch (error) {
+      console.error('Error getting place details:', error);
+      this.contactForm.get('desDestination')?.setValue(prediction.description, { emitEvent: false });
+    }
+  }
+
+  // Hide predictions dropdown (reusable method)
+  private hidePredictions(): void {
+    this.showPredictions = false;
+    this.placePredictions = [];
+    this.selectedPredictionIndex = -1;
+  }
+
+  // Handle keyboard navigation
+  onDestinationKeyDown(event: KeyboardEvent): void {
+    if (!this.showPredictions || this.placePredictions.length === 0) {
+      return;
+    }
+
+    switch (event.key) {
+      case 'ArrowDown':
+        event.preventDefault();
+        this.selectedPredictionIndex = Math.min(
+          this.selectedPredictionIndex + 1,
+          this.placePredictions.length - 1
+        );
+        break;
+      case 'ArrowUp':
+        event.preventDefault();
+        this.selectedPredictionIndex = Math.max(this.selectedPredictionIndex - 1, -1);
+        break;
+      case 'Enter':
+        event.preventDefault();
+        if (this.selectedPredictionIndex >= 0 && this.selectedPredictionIndex < this.placePredictions.length) {
+          this.onPlaceSelected(this.placePredictions[this.selectedPredictionIndex]);
+        }
+        break;
+      case 'Escape':
+        this.hidePredictions();
+        break;
+    }
+  }
+
+  // Handle click outside to close predictions
+  onDestinationBlur(): void {
+    setTimeout(() => {
+      this.hidePredictions();
+      this.markFieldAsTouched('desDestination');
+    }, 200);
+  }
+
   private createForm(): FormGroup {
     return this.fb.group({
       // Required fields
       firstName: ['', [Validators.required, Validators.minLength(2)]],
       lastName: ['', [Validators.required, Validators.minLength(2)]],
       email: ['', [Validators.required, Validators.email]],
-      phone: ['', [Validators.required, Validators.pattern(/^[0-9]{10,12}$/)]],
-      desDestination: ['', Validators.required],
-      arrival: ['', Validators.required],
-      departure: ['', Validators.required],
+      phone: ['', [Validators.pattern(/^[0-9]{10,12}$/)]],
+      desDestination: [''],
+      arrival: [''],
+      departure: [''],
       totalGuests: ['1', [Validators.required, Validators.min(1)]],
-      budgets: ['', Validators.required],
+      budgets: [''],
       // accomTypeSelect: ['', Validators.required],
       accomTypeSelect: this.fb.array([], Validators.required),
 
@@ -423,12 +565,7 @@ export class ContactUsComponent implements OnInit, AfterViewInit {
         case 'firstName': return 'First name is required';
         case 'lastName': return 'Last name is required';
         case 'email': return 'Email address is required';
-        case 'phone': return 'Phone number is required';
-        case 'desDestination': return 'Desired destination is required';
-        case 'arrival': return 'Arrival date is required';
-        case 'departure': return 'Departure date is required';
         case 'totalGuests': return 'Total guests is required';
-        case 'budgets': return 'Budget is required';
         case 'accomTypeSelect': return 'Accommodation type preference is required';
         default: return 'This field is required';
       }

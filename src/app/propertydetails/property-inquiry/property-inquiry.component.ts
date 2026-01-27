@@ -17,6 +17,7 @@ import { environment } from 'src/environments/environment';
 import { NgxSpinnerService } from "ngx-spinner";
 import { ToastrService } from "ngx-toastr";
 import { CrudService } from "src/app/shared/services/crud.service";
+import { StorageService } from 'src/app/shared/services/storage.service';
 
 const MAX_GUEST_COUNT = 500;
 const MAX_BUDGET = 999999999;
@@ -44,6 +45,8 @@ export const guestCountValidator: ValidatorFn = (
 export class PropertyInquiryComponent implements OnInit {
   @Input() inquiryBookingFormLabelData!: InquiryBookingFormLabelData;
   @ViewChild('dpr') dpr!: NgbInputDatepicker;
+  isMobile = false;
+  isIOS = false;
 
   inquiryForm!: FormGroup;
   inquiryFormSubmitted = false;
@@ -57,10 +60,17 @@ export class PropertyInquiryComponent implements OnInit {
     private fb: FormBuilder,
     private crudService: CrudService,
     private toast: ToastrService,
-    private spinner: NgxSpinnerService
+    private spinner: NgxSpinnerService,
+    private storageService: StorageService
   ) {}
 
   ngOnInit(): void {
+    if (this.storageService.isBrowser()){
+      const userAgent = navigator.userAgent || navigator.vendor || (window as any)['opera'];
+      this.isMobile = /android|iphone|ipad|ipod|opera mini|iemobile|wpdesktop/i.test(userAgent);
+      this.isIOS = /iPad|iPhone|iPod/.test(userAgent) && !(window as any).MSStream;
+    }
+
     this.buildForm();
     this.setupGuestAutoCalculation();
     this.setupAdultDependentControls();
@@ -239,6 +249,10 @@ export class PropertyInquiryComponent implements OnInit {
         babiesCtrl?.setValue(0, { emitEvent: false });
       }
     });
+  }
+
+  get calendarMonths(): number {
+    return (this.isMobile || this.isIOS) ? 1 : 2;
   }
 
   /* ---------- Dates not provided checkbox ---------- */

@@ -101,7 +101,7 @@
             <!-- Phone Number -->
             <div class="col-sm-6 col-6 d-flex flex-column">
                 <div class="w-100 lbl title-color">
-                    Phone Number<span>*</span>
+                    Phone Number
                 </div>
                 <div class="w-100">
                     <div class="mb-3">
@@ -109,13 +109,7 @@
                             type="text"
                             class="form-control"
                             formControlName="phone"
-                            (blur)="markFieldAsTouched('phone')"
-                            [class.is-invalid]="isFieldInvalid('phone')"/>
-                        <div
-                            class="invalid-feedback"
-                            *ngIf="isFieldInvalid('phone')">
-                            {{ getFieldError('phone') }}
-                        </div>
+                            (blur)="markFieldAsTouched('phone')"/>
                     </div>
                 </div>
             </div>
@@ -123,21 +117,37 @@
             <!-- Desired Destination -->
             <div class="col-12 d-flex flex-column">
                 <div class="w-100 lbl title-color">
-                    Desired Destination<span>*</span>
+                    Desired Destination
                 </div>
                 <div class="w-100">
-                    <div class="mb-3">
+                    <div class="mb-3 position-relative">
                         <input
+                            #destinationInput
                             type="text"
                             id="destin"
                             class="form-control"
                             formControlName="desDestination"
-                            (blur)="markFieldAsTouched('desDestination')"
-                            [class.is-invalid]="isFieldInvalid('desDestination')"/>
-                        <div
-                            class="invalid-feedback"
-                            *ngIf="isFieldInvalid('desDestination')">
-                            {{ getFieldError('desDestination') }}
+                            (focus)="onDestinationFocus()"
+                            (keydown)="onDestinationKeyDown($event)"
+                            (blur)="onDestinationBlur()"
+                            (keydown.escape)="showPredictions = false"
+                            autocomplete="off"/>
+
+                        <!-- Autocomplete Predictions Dropdown -->
+                        <div 
+                            *ngIf="showPredictions && placePredictions.length > 0" 
+                            class="autocomplete-dropdown position-absolute w-100 bg-white rounded-bottom shadow-sm">
+                            <div 
+                                *ngFor="let prediction of placePredictions; let i = index" 
+                                class="autocomplete-item px-3 py-2 cursor-pointer"
+                                [class.selected]="selectedPredictionIndex === i"
+                                (mousedown)="onPlaceSelected(prediction)"
+                                (mouseenter)="selectedPredictionIndex = i">
+                                 <div class="flex-grow-1">
+                                        <div class="fw-semibold text-dark">{{ prediction.structured_formatting.main_text }}</div>
+                                        <div class="text-muted small">{{ prediction.structured_formatting.secondary_text }}</div>
+                                    </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -161,7 +171,7 @@
             <!-- Arrival Date -->
             <div class="col-sm-6 col-6 col-md-4 d-flex flex-column">
                 <div class="w-100 lbl title-color">
-                    Arrival Date<span>*</span>
+                    Arrival Date
                 </div>
                 <div class="w-100">
                     <div class="mb-3">
@@ -193,7 +203,7 @@
             <!-- Departure Date -->
             <div class="col-sm-6 col-6 col-md-4 d-flex flex-column">
                 <div class="w-100 lbl title-color">
-                    Departure Date<span>*</span>
+                    Departure Date
                 </div>
                 <div class="w-100">
                     <div class="mb-3">
@@ -346,7 +356,7 @@
             <!-- Total MAX Budget -->
             <div class="col-sm-6 col-6 col-md-4 d-flex flex-column">
                 <div class="w-100 lbl title-color">
-                    Total MAX Budget<span>*</span>
+                    Total MAX Budget
                 </div>
                 <div class="w-100">
                     <input
@@ -354,13 +364,7 @@
                         placeholder="Budget"
                         class="form-control"
                         formControlName="budgets"
-                        (blur)="markFieldAsTouched('budgets')"
-                        [class.is-invalid]="isFieldInvalid('budgets')"/>
-                    <div
-                        class="invalid-feedback"
-                        *ngIf="isFieldInvalid('budgets')">
-                        {{ getFieldError('budgets') }}
-                    </div>
+                        (blur)="markFieldAsTouched('budgets')"/>
                 </div>
             </div>
 
@@ -389,7 +393,7 @@
                 <div class="w-100">
                     <div class="mb-3">
                         <!-- Bootstrap Dropdown for multiselect -->
-                        <div ngbDropdown class="multiselect-dropdown position-relative" #dropdown="ngbDropdown">
+                        <div ngbDropdown [autoClose]="'outside'" class="multiselect-dropdown position-relative" #dropdown="ngbDropdown">
                             <!-- Toggle Button -->
                             <button
                                 class="form-select d-flex justify-content-between align-items-center w-100"
@@ -426,7 +430,8 @@
                                             [id]="'accom-' + option.value"
                                             [value]="option.value"
                                             [checked]="isAccommodationSelected(option.value)"
-                                            (change)="onAccommodationTypeChange($event, option.value)">
+                                            (change)="onAccommodationTypeChange($event, option.value)"
+                                            (click)="$event.stopPropagation()">
                                         <label
                                             class="form-check-label w-100 ms-2"
                                             [for]="'accom-' + option.value"
@@ -444,7 +449,7 @@
                                     <button
                                         type="button"
                                         class="btn btn-sm btn-outline-secondary w-100"
-                                        (click)="clearAccommodationSelections()">
+                                        (click)="clearAccommodationSelections(); $event.stopPropagation()">
                                         <i class="fas fa-times me-1"></i> Clear All Selections
                                     </button>
                                 </div>

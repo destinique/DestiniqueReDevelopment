@@ -10,9 +10,9 @@
 </ngx-spinner>
 
 <div class="modal-header">
-  <strong style="text-transform: uppercase">
+  <h5 class="modal-title">
     Property ID - {{ inquiryBookingFormLabelData.listId }} : {{ inquiryBookingFormLabelData.formLabel }} Form
-  </strong>
+  </h5>
   <button type="button"
           class="btn-close"
           aria-label="Close"
@@ -76,7 +76,7 @@
           ngbDatepicker
           #dpr="ngbDatepicker"
           [firstDayOfWeek]="7"
-          [displayMonths]="2"
+          [displayMonths]="calendarMonths"
           [navigation]="'arrows'"
           [outsideDays]="'hidden'"
           [autoClose]="'outside'"

@@ -118,6 +118,8 @@ $border-color: #dee2e6;
     position: relative !important;
     overflow: hidden !important;
     cursor: default !important;
+    z-index: 1;
+    transition: background-color 0.15s ease, color 0.15s ease;
 
     /* AVAILABLE DATES - GREEN (FULLY GREEN) */
     &.date-fully-available {
@@ -322,17 +324,45 @@ $border-color: #dee2e6;
   :host ::ng-deep {
     .custom-datepicker,
     ngb-datepicker {
+
+      /* Slightly tighter but readable cells */
       .ngb-dp-day {
         width: 32px;
         height: 32px;
+        padding: 1px;
       }
 
+      /* Base day styling */
       .custom-day-wrapper {
         font-size: 0.75rem !important;
+        font-weight: 600 !important;
+        line-height: 1;
+        transition: background-color 0.15s ease, box-shadow 0.15s ease;
 
         &::after {
           font-size: 0.45rem !important;
         }
+      }
+
+      /* ===== RANGE BACKGROUND ===== */
+      .custom-day-wrapper.in-range {
+        background-color: rgba(40, 167, 69, 0.4) !important;
+      }
+
+      /* ===== RANGE START / END ===== */
+      .custom-day-wrapper.range-start,
+      .custom-day-wrapper.range-end {
+        background-color: #28a745 !important;
+        color: #fff !important;
+        border-radius: 50% !important;
+        font-weight: 700 !important;
+        box-shadow: 0 0 0 3px rgba(40, 167, 69, 0.35);
+      }
+
+      /* ===== ACTIVE TAP FEEDBACK ===== */
+      .custom-day-wrapper:active {
+        transform: scale(0.95);
+        box-shadow: 0 0 0 4px rgba(40, 167, 69, 0.45);
       }
     }
   }
@@ -415,3 +445,41 @@ p {
     color: #62646a;
     font-weight: 400;
 }
+
+
+/* ===== RANGE BACKGROUND ===== */
+.custom-day-wrapper.in-range {
+  background-color: rgba(40, 167, 69, 0.35) !important;
+  color: #000 !important;
+}
+
+/* ===== RANGE START & END ===== */
+.custom-day-wrapper.range-start,
+.custom-day-wrapper.range-end {
+  background-color: #28a745 !important;
+  color: #fff !important;
+  font-weight: 700 !important;
+  border-radius: 50% !important;
+  z-index: 2;
+}
+
+/* ===== CONNECT RANGE VISUALLY ===== */
+.custom-day-wrapper.in-range::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-color: rgba(40, 167, 69, 0.25);
+  z-index: -1;
+}
+
+/* ===== REMOVE HOVER CONFUSION ===== */
+.custom-day-wrapper.in-range:hover {
+  background-color: rgba(40, 167, 69, 0.45) !important;
+}
+
+/* ===== PREFILLED DATES ===== */
+.custom-day-wrapper.prefilled-date {
+  border: 2px dashed #ffc107 !important;
+}
+
+

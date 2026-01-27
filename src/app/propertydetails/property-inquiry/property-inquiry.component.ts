@@ -55,6 +55,9 @@ export class PropertyInquiryComponent implements OnInit {
   toDate: NgbDateStruct | null = null;
   isSubmitting = false;
 
+  isSmsConsentCollapsed = true;
+  isEmailConsentCollapsed = true;
+
   constructor(
     public activeModal: NgbActiveModal,
     private fb: FormBuilder,

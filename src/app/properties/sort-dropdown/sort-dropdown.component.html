@@ -1,0 +1,8 @@
+<!-- sort-dropdown.component.html -->
+<div class="sort-dropdown">
+  <select class="form-select sort-by-opt" [value]="selectedSort" (change)="onSortChange($event)">
+    <option *ngFor="let option of sortOptions" [value]="option.value">
+      {{option.label}}
+    </option>
+  </select>
+</div>

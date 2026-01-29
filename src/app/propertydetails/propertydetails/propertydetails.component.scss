@@ -916,6 +916,9 @@ h3, h4 {
                 opacity: 0.8 !important;
                 cursor: not-allowed !important;
             }
+            &:hover {
+                cursor: not-allowed;
+            }
         }
 
         /* AVAILABLE DATES - GREEN (FULLY GREEN) */
@@ -1049,6 +1052,9 @@ h3, h4 {
             &:not(.disabled):hover {
                 background-color: #e2e6ea !important;
                 border-color: #dae0e5 !important;
+            }
+            &:hover {
+                cursor: not-allowed;
             }
         }
 
@@ -1250,8 +1256,8 @@ h3, h4 {
         .custom-datepicker,
         ngb-datepicker {
             .ngb-dp-day {
-                width: 32px;
-                height: 32px;
+                width: 40px;
+                height: 40px;
             }
 
             .custom-day-wrapper {
@@ -1275,8 +1281,8 @@ h3, h4 {
         .custom-datepicker,
         ngb-datepicker {
             .ngb-dp-day {
-                width: 28px;
-                height: 28px;
+                width: 40px;
+                height: 40px;
             }
 
             .custom-day-wrapper {

@@ -1,4 +1,3 @@
-// search-state.service.ts
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, distinctUntilChanged, map } from 'rxjs';
 import { SearchState, LocationData, SearchParams } from '../interfaces/search-state.interface';
@@ -7,16 +6,11 @@ import { SearchState, LocationData, SearchParams } from '../interfaces/search-st
   providedIn: 'root'
 })
 export class SearchStateService {
-  // Default initial state
+  // Default initial state - ALL optional fields should be undefined
   private defaultState: SearchState = {
     location: null,
-    checkIn: null,
-    checkOut: null,
-    minBedrooms: null,
-    minBathrooms: null,
-    minGuests: null,
-    minPrice: null,
-    maxPrice: null,
+    // REMOVE ALL null values for optional fields
+    // They will be undefined by default
     amenities: [],
     providers: [],
     propertyTypes: [],
@@ -26,6 +20,8 @@ export class SearchStateService {
     page: 1,
     pageSize: 12,
     sortBy: 'newest'
+    // minBedrooms, minBathrooms, minGuests, minPrice, maxPrice, checkIn, checkOut
+    // are automatically undefined (optional fields)
   };
 
   // Main state observable
@@ -66,27 +62,27 @@ export class SearchStateService {
    * Update location from Google Places
    */
   updateLocation(location: LocationData | null): void {
-    this.updateState({ location, page: 1 }); // Reset to page 1 on new search
+    this.updateState({ location, page: 1 });
   }
 
   /**
-   * Update date range
+   * Update date range - CHANGE: Accept undefined, not null
    */
-  updateDates(checkIn: Date | null, checkOut: Date | null): void {
+  updateDates(checkIn?: Date, checkOut?: Date): void {
     this.updateState({ checkIn, checkOut, page: 1 });
   }
 
   /**
-   * Update numeric filters (bedrooms, bathrooms, guests)
+   * Update numeric filters - CHANGE: Accept undefined, not null
    */
-  updateNumericFilter(field: 'minBedrooms' | 'minBathrooms' | 'minGuests', value: number | null): void {
+  updateNumericFilter(field: 'minBedrooms' | 'minBathrooms' | 'minGuests', value?: number): void {
     this.updateState({ [field]: value, page: 1 });
   }
 
   /**
-   * Update price range
+   * Update price range - CHANGE: Accept undefined, not null
    */
-  updatePriceRange(minPrice: number | null, maxPrice: number | null): void {
+  updatePriceRange(minPrice?: number, maxPrice?: number): void {
     this.updateState({ minPrice, maxPrice, page: 1 });
   }
 
@@ -125,19 +121,19 @@ export class SearchStateService {
   }
 
   /**
-   * Check if any search filters are active (excluding pagination/sort)
+   * Check if any search filters are active - CHANGE: Check for undefined
    */
   hasActiveFilters(): boolean {
     const state = this.currentState;
     return !!(
       state.location ||
-      state.checkIn ||
-      state.checkOut ||
-      state.minBedrooms ||
-      state.minBathrooms ||
-      state.minGuests ||
-      state.minPrice ||
-      state.maxPrice ||
+      state.checkIn !== undefined ||
+      state.checkOut !== undefined ||
+      state.minBedrooms !== undefined ||
+      state.minBathrooms !== undefined ||
+      state.minGuests !== undefined ||
+      state.minPrice !== undefined ||
+      state.maxPrice !== undefined ||
       state.amenities.length > 0 ||
       state.providers.length > 0 ||
       state.propertyTypes.length > 0 ||
@@ -148,18 +144,19 @@ export class SearchStateService {
   }
 
   /**
-   * Get active filters count
+   * Get active filters count - CHANGE: Check for undefined, not truthy
    */
   getActiveFiltersCount(): number {
     const state = this.currentState;
     let count = 0;
 
     if (state.location) count++;
-    if (state.checkIn) count++;
-    if (state.minBedrooms) count++;
-    if (state.minBathrooms) count++;
-    if (state.minGuests) count++;
-    if (state.minPrice || state.maxPrice) count++;
+    if (state.checkIn !== undefined) count++;  // Changed from if (state.checkIn)
+    if (state.checkOut !== undefined) count++; // Changed from if (state.checkOut)
+    if (state.minBedrooms !== undefined) count++;
+    if (state.minBathrooms !== undefined) count++;
+    if (state.minGuests !== undefined) count++;
+    if (state.minPrice !== undefined || state.maxPrice !== undefined) count++;
     if (state.amenities.length) count++;
     if (state.providers.length) count++;
     if (state.propertyTypes.length) count++;
@@ -176,33 +173,43 @@ export class SearchStateService {
   getSearchParams(): SearchParams {
     const state = this.currentState;
 
-    return {
-      // Flatten location data
-      city: state.location?.city || undefined,
-      state: state.location?.state || undefined,
-      country: state.location?.country || undefined,
-      latitude: state.location?.latitude || undefined,
-      longitude: state.location?.longitude || undefined,
-      locationText: state.location?.text || undefined,
+    const params: SearchParams = {
+      // Flatten location (convert null to undefined)
+      city: state.location?.city,
+      state: state.location?.state,
+      country: state.location?.country,
+      latitude: state.location?.latitude,  // No need for || undefined
+      longitude: state.location?.longitude, // No need for || undefined
+      locationText: state.location?.text,
 
-      // Copy other properties
+      // Dates - already undefined if not set
       checkIn: state.checkIn,
       checkOut: state.checkOut,
+
+      // Numeric filters - no conversion needed since they're already undefined
       minBedrooms: state.minBedrooms,
       minBathrooms: state.minBathrooms,
       minGuests: state.minGuests,
       minPrice: state.minPrice,
       maxPrice: state.maxPrice,
-      amenities: state.amenities,
-      providers: state.providers,
-      propertyTypes: state.propertyTypes,
-      viewTypes: state.viewTypes,
-      searchExact: state.searchExact,
-      petFriendly: state.petFriendly,
+
+      // Arrays (only include if non-empty)
+      amenities: state.amenities.length > 0 ? state.amenities : undefined,
+      providers: state.providers.length > 0 ? state.providers : undefined,
+      propertyTypes: state.propertyTypes.length > 0 ? state.propertyTypes : undefined,
+      viewTypes: state.viewTypes.length > 0 ? state.viewTypes : undefined,
+
+      // Booleans (only include if true)
+      searchExact: state.searchExact || undefined,
+      petFriendly: state.petFriendly || undefined,
+
+      // Pagination
       page: state.page,
       pageSize: state.pageSize,
       sortBy: state.sortBy
     };
+
+    return params;
   }
 
   /**
@@ -242,10 +249,7 @@ export class SearchStateService {
    * Initialize from URL parameters (for bookmarking/sharing searches)
    */
   initializeFromUrlParams(params: any): void {
-    // Parse URL params and update state
-    // You would implement this based on your routing strategy
     console.log('Initialize from URL params:', params);
-    // Example: this.updateLocation(params.location ? JSON.parse(params.location) : null);
   }
 
   /**
@@ -273,7 +277,6 @@ export class SearchStateService {
       sortBy: state.sortBy
     });
 
-    // Also show API-ready params
     console.log('📤 API Params:', this.getSearchParams());
   }
 

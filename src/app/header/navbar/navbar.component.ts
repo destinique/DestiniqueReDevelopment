@@ -275,6 +275,6 @@ export class NavbarComponent implements OnInit, OnDestroy {
   }
 
   isAdmin(): boolean {
-    return this.userRole === 1 || this.userRole === 3;
+    return this.userRole === 1 || this.userRole === 2;
   }
 }

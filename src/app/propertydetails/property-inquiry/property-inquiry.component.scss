@@ -129,7 +129,7 @@ $border-color: #dee2e6;
       cursor: pointer !important;
 
       &.disabled {
-        background-color: #28a745 !important;
+        background-color: #dc3545 !important;
         color: white !important;
         cursor: not-allowed !important;
       }
@@ -158,9 +158,9 @@ $border-color: #dee2e6;
     }
 
     &.past-date {
-      background-color: #dc3545 !important;
-      color: #fff !important;
-      border-color: #dc3545 !important;
+      background-color: #f8f9fa !important;
+      color: #212529 !important;
+      border-color: #f8f9fa !important;
       cursor: not-allowed !important;
       opacity: 0.75;
       pointer-events: none;
@@ -320,8 +320,8 @@ $border-color: #dee2e6;
     .custom-datepicker,
     ngb-datepicker {
       .ngb-dp-day {
-        width: 36px;
-        height: 36px;
+        width: 40px;
+        height: 40px;
       }
 
       .custom-day-wrapper {
@@ -342,8 +342,8 @@ $border-color: #dee2e6;
 
       /* Slightly tighter but readable cells */
       .ngb-dp-day {
-        width: 32px;
-        height: 32px;
+        width: 40px;
+        height: 40px;
         padding: 1px;
       }
 
@@ -393,8 +393,8 @@ $border-color: #dee2e6;
     .custom-datepicker,
     ngb-datepicker {
       .ngb-dp-day {
-        width: 28px;
-        height: 28px;
+        width: 40px;
+        height: 40px;
       }
 
       .custom-day-wrapper {

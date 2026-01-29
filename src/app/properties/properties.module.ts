@@ -10,11 +10,21 @@ import { HttpClientModule } from '@angular/common/http';
 import { PropertiesRoutingModule } from './properties-routing.module';
 import { PropertyListComponent } from './property-list/property-list.component';
 import { SearchPropertyComponent } from './search-property/search-property.component';
+import { PropertyCardComponent } from './property-card/property-card.component';
+import { PaginationComponent } from './pagination/pagination.component';
+import { PageSizeComponent } from './page-size/page-size.component';
+import { SortDropdownComponent } from './sort-dropdown/sort-dropdown.component';
+import { ListIdSearchComponent } from './list-id-search/list-id-search.component';
 
 @NgModule({
   declarations: [
     PropertyListComponent,
-    SearchPropertyComponent
+    SearchPropertyComponent,
+    PropertyCardComponent,
+    PaginationComponent,
+    PageSizeComponent,
+    SortDropdownComponent,
+    ListIdSearchComponent
   ],
   imports: [
     CommonModule,

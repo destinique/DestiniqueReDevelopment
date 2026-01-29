@@ -1,0 +1,175 @@
+<!-- property-card.component.html -->
+<div class="cardcustomcss card">
+  <!-- Carousel -->
+  <div id="carousel-{{property.list_id}}" class="carousel slide" data-bs-ride="carousel">
+    <!-- Indicators/dots -->
+    <div class="carousel-indicators">
+      <button *ngFor="let image of propertyImages; let i = index"
+              type="button"
+              [attr.data-bs-target]="'#carousel-' + property.list_id"
+              [attr.data-bs-slide-to]="i"
+              [class.active]="i === 0"></button>
+    </div>
+
+    <!-- The slideshow/carousel -->
+    <div class="carousel-inner">
+      <div *ngFor="let image of propertyImages; let i = index"
+           class="carousel-item"
+           [class.active]="i === 0">
+        <img [src]="image" [alt]="property.headline" class="d-block w-100">
+      </div>
+    </div>
+
+    <!-- Left and right controls/icons -->
+    <button class="carousel-control-prev" type="button" [attr.data-bs-target]="'#carousel-' + property.list_id" data-bs-slide="prev">
+      <span class="carousel-control-prev-icon"></span>
+    </button>
+    <button class="carousel-control-next" type="button" [attr.data-bs-target]="'#carousel-' + property.list_id" data-bs-slide="next">
+      <span class="carousel-control-next-icon"></span>
+    </button>
+
+    <!-- Favorite Icon -->
+    <span class="matIcon">
+      <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-heart" viewBox="0 0 16 16">
+        <path d="m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143q.09.083.176.171a3 3 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15"/>
+      </svg>
+    </span>
+
+    <!-- Location Badges -->
+    <div class="absolute bottom-6 left-3 text-white property_CountryName">
+      <span class="fac-values">{{property.country || 'United States'}}</span>
+    </div>
+    <div class="absolute bottom-6 right-3 text-white property_StateNme">
+      <span class="fac-values">{{property.state || 'Florida'}}</span>
+    </div>
+  </div>
+
+  <div class="card-body pt-15">
+    <!-- Property ID -->
+    <div class="propertyidcontai">
+      <div class="innerpropertyidcontai">
+        <div class="form-check">
+          <input type="checkbox" class="form-check-input" [id]="'property-' + property.list_id">
+          <label class="form-check-label propertyidtitle" [for]="'property-' + property.list_id">ID:</label>
+        </div>
+        <a class="property-id-number" href="#">{{property.list_id}}</a>
+      </div>
+    </div>
+
+    <!-- Property Details -->
+    <div class="containers">
+      <h3 class="mt-2">
+        <a class="city-name" href="#">
+          {{property.city || 'Destination'}}
+        </a>
+      </h3>
+
+      <div class="facilities">
+        <!-- Basic Info (Always visible) -->
+        <div class="facilities-inner">
+          <div class="mt-4">
+            <h6 class="fac-h6 mb-3">
+              <span class="fac-title">Type</span><br />
+              <span class="fac-values">
+                {{property.property_type || 'Condo'}}
+              </span>
+            </h6>
+          </div>
+          <div class="sleeps-b mt-4">
+            <h6 class="fac-h6 mb-3">
+              <span class="fac-title">Sleeps</span><br />
+              <span class="fac-values">
+                {{property.sleeps || '6'}}
+              </span>
+            </h6>
+          </div>
+          <div class="mt-4">
+            <h6 class="fac-h6 mb-3">
+              <span class="fac-title">Bedrooms</span><br />
+              <span class="fac-values">
+                {{property.bedrooms || '2'}}
+              </span>
+            </h6>
+          </div>
+        </div>
+
+        <!-- Expand/Collapse Button -->
+        <div class="d-flex justify-content-center">
+          <button class="btn expand-View" type="button" (click)="onToggleExpand()">
+            {{isPropertyExpanded ? 'Less' : 'More Details'}}
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                 [class.bi-chevron-double-up]="isPropertyExpanded"
+                 [class.bi-chevron-double-down]="!isPropertyExpanded"
+                 viewBox="0 0 16 16">
+              <path *ngIf="isPropertyExpanded" fill-rule="evenodd" d="M7.646 2.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1-.708.708L8 3.707 2.354 9.354a.5.5 0 1 1-.708-.708z"/>
+              <path *ngIf="isPropertyExpanded" fill-rule="evenodd" d="M7.646 6.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1-.708.708L8 7.707l-5.646 5.647a.5.5 0 0 1-.708-.708z"/>
+              <path *ngIf="!isPropertyExpanded" fill-rule="evenodd" d="M1.646 6.646a.5.5 0 0 1 .708 0L8 12.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708"/>
+              <path *ngIf="!isPropertyExpanded" fill-rule="evenodd" d="M1.646 2.646a.5.5 0 0 1 .708 0L8 8.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708"/>
+            </svg>
+          </button>
+        </div>
+
+        <!-- Expanded Details (Conditional) -->
+        <div *ngIf="isPropertyExpanded">
+          <div class="viewtypeandprice mt-3">
+            <div>
+              <div class="fac-title">ViewType :</div>
+              <div class="fac-values">
+                {{property.view_type || 'Gulf-Front/Ocean-Front View'}}
+              </div>
+            </div>
+          </div>
+
+          <div class="upperrow facilities-inner mt-3 justify-content-around">
+            <div class="">
+              <h6 class="fac-h6 mt-2 mb-3">
+                <span class="fac-title">Bathrooms</span><br />
+                <span class="fac-values">{{property.bathrooms || '2'}}</span>
+              </h6>
+            </div>
+            <div class="">
+              <h6 class="fac-h6 mt-2 mb-3">
+                <span class="fac-title">Pets</span><br />
+                <span class="fac-values">
+                  {{property.petFriendly ? 'YES' : 'NO'}}
+                </span>
+              </h6>
+            </div>
+            <div class="">
+              <h6 class="fac-h6 mt-2 mb-3">
+                <span class="fac-title">From Price</span><br />
+                <span class="fac-values">
+                  <small></small>&nbsp;
+                  <span class="rate">
+                    <span class="SourceSansPro_font">{{formatPrice(property.price_per_night)}}</span>
+                  </span>&nbsp;
+                  <small class="SourceSansPro_font">/Nt.</small>
+                </span>
+              </h6>
+            </div>
+          </div>
+
+          <div class="upperrow justify-content-between flex-column align-items-center">
+            <div class="">
+              <h6 class="fac-h6 mt-2">
+                <span class="fac-title">Provider</span><br />
+                <span class="fac-values">{{property.provider || 'Unknown'}}</span>
+              </h6>
+            </div>
+          </div>
+
+          <div class="upperrow justify-content-between flex-column align-items-center">
+            <div class="">
+              <h6 class="fac-h6 mt-2">
+                <span class="fac-title">Neighborhood/Community</span><br />
+                <span class="fac-values">
+                  {{property.Neighborhood || property.city || 'Destin'}}
+                </span>
+              </h6>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

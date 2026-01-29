@@ -1,0 +1,8 @@
+<!-- page-size.component.html -->
+<div class="page-size">
+  <select class="form-select sort-by-opt" [value]="selectedPageSize" (change)="onPageSizeChange($event)">
+    <option *ngFor="let option of pageSizeOptions" [value]="option.value">
+      {{option.label}}
+    </option>
+  </select>
+</div>

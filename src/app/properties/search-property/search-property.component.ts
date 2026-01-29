@@ -337,9 +337,9 @@ export class SearchPropertyComponent implements OnInit, OnDestroy {
       city: placeDetails.city || '',
       state: placeDetails.state || '',
       country: placeDetails.country || '',
-      latitude: placeDetails.latitude || null,
-      longitude: placeDetails.longitude || null,
-      placeId: placeDetails.place_id
+      latitude: placeDetails.latitude ?? undefined,
+      longitude: placeDetails.longitude ?? undefined,
+      placeId: placeDetails.place_id || undefined
     };
 
     this.searchState.updateLocation(locationData);
@@ -354,9 +354,9 @@ export class SearchPropertyComponent implements OnInit, OnDestroy {
       city: '',
       state: '',
       country: '',
-      latitude: null,
-      longitude: null,
-      placeId: null
+      latitude: undefined,
+      longitude: undefined,
+      placeId: undefined
     };
 
     this.searchState.updateLocation(locationData);
@@ -380,7 +380,7 @@ export class SearchPropertyComponent implements OnInit, OnDestroy {
 
       this.searchState.updateDates(checkIn, checkOut);
     } else {
-      this.searchState.updateDates(null, null);
+      this.searchState.updateDates(undefined, undefined);
     }
   }
 
@@ -587,9 +587,9 @@ export class SearchPropertyComponent implements OnInit, OnDestroy {
 
     // Reset all filters in search state
     this.searchState.updateLocation(null);
-    this.searchState.updateNumericFilter('minBedrooms', null);
-    this.searchState.updateNumericFilter('minGuests', null);
-    this.searchState.updateDates(null, null);
+    this.searchState.updateNumericFilter('minBedrooms', undefined);
+    this.searchState.updateNumericFilter('minGuests', undefined);
+    this.searchState.updateDates(undefined, undefined);
 
     // Reset to page 1
     this.searchState.updatePagination(1);
@@ -625,7 +625,7 @@ export class SearchPropertyComponent implements OnInit, OnDestroy {
     if (value > 0) {
       this.searchState.updateNumericFilter('minBedrooms', value);
     } else {
-      this.searchState.updateNumericFilter('minBedrooms', null);
+      this.searchState.updateNumericFilter('minBedrooms', undefined);
     }
   }
 
@@ -636,7 +636,7 @@ export class SearchPropertyComponent implements OnInit, OnDestroy {
     if (value > 0) {
       this.searchState.updateNumericFilter('minGuests', value);
     } else {
-      this.searchState.updateNumericFilter('minGuests', null);
+      this.searchState.updateNumericFilter('minGuests', undefined);
     }
   }
 

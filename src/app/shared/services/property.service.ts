@@ -5,7 +5,9 @@ import { Observable } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 
 export interface Property {
+  // Exact field names from API response
   list_id: number;
+  provider: string;           // lowercase
   headline: string;
   bedrooms: number;
   bathrooms: number;
@@ -14,18 +16,39 @@ export interface Property {
   city: string;
   state: string;
   address1: string;
-  provider: string;
   property_type: string;
-  view_type: string;
-  // Add other fields from your master_list table
+  view_type: string;          // Note: sometimes empty string
+  latitude: number;
+  longitude: number;
+  rating: number;
+  seo_url: string | null;
+  description: string;
+  Neighborhood: string;       // Capital N (from API)
+  Zip: number;                // Capital Z (from API)
+  Complex: string;            // Capital C (from API)
+  meta_title: string | null;
+  meta_description: string | null;
+  URL: string;                // Capital URL (from API)
+  created_at: string;
+  petFriendly: boolean;       // lowercase F (from API)
+  amenities: any[];
+
+  // Optional fields that might not always be present
+  country?: string;
 }
 
 export interface PropertyResponse {
-  properties: Property[];
-  total: number;
-  page: number;
-  pageSize: number;
-  totalPages: number;
+  success: boolean;
+  data: Property[];
+  message: string;
+  pagination: {
+    page: number;
+    pageSize: number;
+    total: number;
+    totalPages: number;
+    hasNext: boolean;
+    hasPrev: boolean;
+  };
 }
 
 export interface SearchParams {

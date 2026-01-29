@@ -156,6 +156,21 @@ $border-color: #dee2e6;
       border: 2px solid #ffc107 !important; // Yellow border for pre-filled dates
       box-shadow: 0 0 5px rgba(255, 193, 7, 0.5) !important;
     }
+
+    &.past-date {
+      background-color: #dc3545 !important;
+      color: #fff !important;
+      border-color: #dc3545 !important;
+      cursor: not-allowed !important;
+      opacity: 0.75;
+      pointer-events: none;
+    }
+
+    &.past-date:hover {
+      background-color: #dc3545 !important;
+      transform: none !important;
+      box-shadow: none !important;
+    }
   }
 
   /* Style for DUAL CALENDAR (availability tab) */

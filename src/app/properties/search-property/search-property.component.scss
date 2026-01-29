@@ -1,0 +1,501 @@
+@import url("https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css");
+::placeholder {
+  color: #777;
+  opacity: 1;
+}
+.properties-header {
+  color: #000;
+  text-align: left !important;
+}
+
+.properties-header p{
+  font-weight: 300;
+  font-size: 18px;
+}
+.animate-sub {
+  width: 286px;
+  margin: auto;
+  margin-top: 1rem;
+  font-size: 2.5rem;
+  font-weight: 300;
+}
+.animate-sub .animate-dream, .animate-sub .animate-pic, .animate-sub .animate-stay {
+  font-weight: 300;
+}
+.animate-dream, .animate-pic {
+  position: relative;
+  float: left;
+}
+.reqForm {
+  text-decoration: none;
+  color: #3d85c6;
+  border-bottom: 1px solid #3d85c6;
+  padding: 2px 4px;
+  font-weight: 400;
+  border-radius: 0rem;
+  transition: color 0.3s;
+  letter-spacing: .5px;
+}
+.reqForm:hover {
+  color: #006aca;
+}
+.outterdiv {
+  align-items: center;
+  justify-content: center;
+  display: flex;
+}
+.innerdiv {
+  width: 100%;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.inputs {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.2px;
+}
+
+
+.container .innerdiv .inputs .input:nth-child(1) input,
+.container .innerdiv .inputs .input:nth-child(2) input {
+  width: 300px;
+  margin-right: 3px;
+}
+.container .innerdiv .inputs .input:nth-child(3) input {
+  width: 120px;
+}
+.container .innerdiv .inputs .input:nth-child(4) input {
+  width: 100px;
+}
+button {
+  width: 150px;
+  margin-right: 2px;
+  background: #21e0bd;
+}
+.input input, button, select, button:focus {
+  outline: 0px;
+  border: 1px solid #ced4da;
+}
+.btn-primary.focus, .btn-primary:focus, button {
+  box-shadow: none;
+  outline: none;
+  border: 1px solid #ced4da;
+}
+
+.btn-primary:not(:disabled):not(.disabled).active, .btn-primary:not(:disabled):not(.disabled):active, .show>.btn-primary.dropdown-toggle {
+  box-shadow: none;
+}
+
+input:focus {
+  border-radius: 0px;
+  border: 0px solid;
+  appearance: none;
+}
+button {
+  width: 100% !important;
+  background: #378f86 !important;
+  border: 0;
+  color: #fff;
+  padding: .75rem .75rem .5rem .75rem !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-right: 1px solid #ffffff;
+  text-transform: uppercase;
+  transition: 0.3s;
+  height: 46px;
+}
+button:hover {
+  background-color: #000 !important;
+  color: #33d286 !important;
+  cursor: pointer;
+}
+
+.from-control {
+  border-radius: 0 !important;
+  padding: .75rem .75rem .5rem !important;
+  height: 46px;
+  font-size: 16px !important;
+  display: block;
+  line-height: 1.5;
+  color: #777 !important;
+  background-color: #fff;
+  background-clip: padding-box;
+  text-transform: uppercase;
+  -webkit-appearance: none;
+  appearance: none;
+  transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
+  margin-right: 3px;
+  cursor: pointer;
+}
+.search-destination {
+  cursor: text;
+}
+.buttonsdiv {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.buttons {
+  margin-right: 3px;
+}
+.form-select {
+  height: 46px;
+  border-radius: 0;
+}
+@media (min-width: 1366px) {
+  .container {
+    max-width: 90%;
+  }
+}
+@media (max-width: 1200px) {
+  .container .innerdiv .inputs .input:nth-child(1) input,
+  .container .innerdiv .inputs .input:nth-child(2) input  {
+    width: 223px !important;
+    margin-right: 3px;
+  }
+}
+@media (max-width: 992px) {
+  .container .innerdiv .inputs .input:nth-child(1) input,
+  .container .innerdiv .inputs .input:nth-child(2) input  {
+    width: 210px !important;
+    margin-right: 3px;
+  }
+  .innerdiv {
+    display: grid;
+    grid-template-columns: repeat(1fr);
+  }
+  .animate-sub {
+    font-size: 2rem;
+    width: 229px;
+  }
+  .input {
+    display: flex;
+    gap: 1rem;
+  }
+  .buttonsdiv {
+    margin-top:
+      .5rem;
+  }
+  button {
+    margin-right: 0px;
+  }
+}
+@media all and (max-width: 768px) {
+  .inputs {
+    display: grid;
+    grid-template-columns: repeat(
+            2,
+        1fr
+            ); /* Two columns, each taking up half the width */
+    grid-template-rows: repeat(
+            2,
+        auto
+            ); /* Two rows, with height determined by content */
+  }
+  .container {
+    margin-top: 1.5rem;
+  }
+  .headingProp {
+    display: none;
+  }
+  .headingProp p {
+    padding: 0 12px;
+  }
+  select {
+    width: 100%;
+  }
+  .from-control {
+    margin-top: 3px;
+  }
+}
+@media (max-width: 576px) {
+  .inputs {
+    display: grid;
+    grid-template-columns: repeat(1, 1fr);
+    grid-template-rows: repeat(2, auto);
+    gap: 10px;
+  }
+
+  .container .innerdiv .inputs .input:nth-child(2) input {
+    width: 100% !important;
+  }
+  .container .innerdiv .parent .inputs .input:nth-child(1) input {
+    width: 100% !important;
+  }
+}
+
+@media (max-width: 450px) {
+  .innerdiv {
+    background-color: transparent;
+  }
+}
+
+/* Google Places Predictions Dropdown */
+.places-predictions-dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: white;
+  border: 1px solid #ced4da;
+  border-top: none;
+  z-index: 1000;
+  max-height: 300px;
+  overflow-y: auto;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+
+  .prediction-item {
+    padding: 10px 12px;
+    cursor: pointer;
+    border-bottom: 1px solid #f0f0f0;
+    transition: background-color 0.2s;
+
+    &:last-child {
+      border-bottom: none;
+    }
+
+    &:hover,
+    &.selected {
+      background-color: #f8f9fa;
+    }
+
+    .prediction-main-text {
+      font-weight: 500;
+      color: #333;
+      font-size: 14px;
+    }
+
+    .prediction-secondary-text {
+      font-size: 12px;
+      color: #666;
+      margin-top: 2px;
+    }
+  }
+}
+
+/* Mobile responsiveness for predictions */
+@media (max-width: 768px) {
+  .places-predictions-dropdown {
+    position: relative;
+    margin-top: 5px;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+  }
+}
+
+/* Style for selected prediction */
+.prediction-item.selected {
+  background-color: #e9ecef !important;
+}
+
+/* Ensure form controls maintain consistent height */
+.from-control, .form-select {
+  height: 46px;
+}
+
+/* Date input specific styling */
+input[type="date"] {
+  &::-webkit-calendar-picker-indicator {
+    cursor: pointer;
+    opacity: 0.7;
+    &:hover {
+      opacity: 1;
+    }
+  }
+
+  &::-webkit-datetime-edit {
+    color: #777;
+  }
+}
+
+/* ============================= */
+/* Ngb Datepicker popup position */
+/* ============================= */
+
+.datepicker-wrapper {
+  position: relative;
+}
+
+:host ::ng-deep ngb-datepicker.dropdown-menu {
+  top: 100% !important;       // position below the input
+  bottom: auto !important;     // reset any conflicting bottom
+  transform: translateY(4px) !important; // small gap under input
+  margin-top: 0 !important;
+  z-index: 1050 !important;    // ensures it stays above other elements
+}
+
+
+/* ========================================= */
+/* FINAL DATEPICKER RANGE STYLE              */
+/* ========================================= */
+:host ::ng-deep {
+
+  /* ---------- BASE DAY ---------- */
+  .custom-day-wrapper {
+    width: 40px;
+    height: 40px;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    font-weight: 700 !important;
+    font-size: 0.875rem !important;
+    color: #000 !important;
+    background: transparent !important;
+    border-radius: 0 !important;
+    position: relative !important;
+    cursor: pointer !important;
+    transition: background-color 0.15s ease, color 0.15s ease;
+    z-index: 1;
+  }
+
+  /* ---------- DISABLED DAYS ---------- */
+  .custom-day-wrapper.disabled,
+  .custom-day-wrapper.past-date,
+  .ngb-dp-day.disabled,
+  .ngb-dp-day.ngb-dp-disabled {
+    color: #c7c7c7 !important;
+    pointer-events: none !important;
+    background: transparent !important;
+    font-weight: 600 !important;
+  }
+
+  /* ---------- RANGE CONNECTOR BAR ---------- */
+  .custom-day-wrapper.in-range {
+    background: #b2ebf2 !important; /* light blue fill for range */
+    color: #000 !important;
+    border-radius: 0 !important;
+    position: relative;
+
+    &::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 0;
+      right: 0;
+      height: 6px; /* thickness of connector bar */
+      background-color: #4fc3dc; /* same as start/end circle */
+      border-radius: 3px;
+      transform: translateY(-50%);
+      z-index: -1;
+    }
+  }
+
+  /* ---------- RANGE START & END CIRCLES ---------- */
+  .custom-day-wrapper.range-start,
+  .custom-day-wrapper.range-end {
+    background-color: #4fc3dc !important; /* bright blue */
+    color: #fff !important;
+    border-radius: 50% !important;
+    width: 34px;
+    height: 34px;
+    margin: auto;
+    z-index: 2;
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    animation: rangeDotPop 0.35s cubic-bezier(0.4,0,0.2,1);
+  }
+
+  /* ---------- HOVER RANGE PREVIEW ---------- */
+  .custom-day-wrapper.hover-range {
+    background-color: rgba(79,195,220,0.35) !important; /* soft blue hover */
+    color: #000 !important;
+    position: relative;
+    cursor: pointer !important;
+
+    &::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 0;
+      right: 0;
+      height: 6px;
+      background-color: rgba(79,195,220,0.35);
+      border-radius: 3px;
+      transform: translateY(-50%);
+      z-index: -1;
+    }
+  }
+
+  .custom-day-wrapper.hover-range.start,
+  .custom-day-wrapper.hover-range.end {
+    background-color: #4fc3dc !important; /* blue circle hover */
+    color: #fff !important;
+    border-radius: 50% !important;
+    width: 34px;
+    height: 34px;
+    margin: auto;
+    z-index: 2;
+  }
+
+  /* ---------- WEEKDAY HEADER ---------- */
+  .ngb-dp-weekday {
+    font-weight: 500;
+    color: #000;
+  }
+
+  /* ---------- MONTH HEADER ---------- */
+  .ngb-dp-header,
+  .ngb-dp-month-name {
+    background-color: #378f86;
+    color: #fff !important;
+    font-weight: 400;
+  }
+
+  /* ---------- DAY CELL SIZE ---------- */
+  .ngb-dp-day {
+    width: 40px;
+    height: 40px;
+  }
+}
+
+/* =============================== */
+/* RANGE DOT POP ANIMATION         */
+/* =============================== */
+@keyframes rangeDotPop {
+  0% {
+    transform: scale(0.6);
+    opacity: 0;
+  }
+  70% {
+    transform: scale(1.1);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* =============================== */
+/* MOBILE RESPONSIVENESS           */
+/* =============================== */
+@media (max-width: 768px) {
+  :host ::ng-deep {
+    .custom-day-wrapper {
+      font-size: 0.75rem !important;
+    }
+
+    .ngb-dp-day {
+      width: 32px;
+      height: 32px;
+    }
+
+    .custom-day-wrapper.range-start,
+    .custom-day-wrapper.range-end,
+    .custom-day-wrapper.hover-range.start,
+    .custom-day-wrapper.hover-range.end {
+      width: 28px;
+      height: 28px;
+    }
+
+    .custom-day-wrapper.in-range::before,
+    .custom-day-wrapper.hover-range::before {
+      height: 4px;
+    }
+  }
+}

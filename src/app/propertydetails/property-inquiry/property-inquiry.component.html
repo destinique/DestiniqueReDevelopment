@@ -94,6 +94,8 @@
                [class.range-edge]="isRangeEdge(date)"
                [class.in-range]="isInRange(date)"
                [class.prefilled-date]="isPrefilledDate(date)"
+               [class.past-date]="isPastDate(date)"
+               [class.disabled]="isPastDate(date)"
           >
                {{ date.day }}
           </div>

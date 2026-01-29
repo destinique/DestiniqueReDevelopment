@@ -1,0 +1,147 @@
+<!-- search-property.component.html -->
+<div class="container pt-3 mb-1 properties-header">
+  <!-- Header content remains exactly as you had it -->
+  <div class="text-center animate-sub">
+    <div class="animate-dream animate__animated animate__fadeInLeft">dream</div>
+    <div class="animate-pic animate__animated animate__fadeInUp">.pick</div>
+    <div class="animate-stay animate__animated animate__fadeInRight">.stay</div>
+  </div>
+
+  <p class="">
+    <br>
+    Our curated collection features stunning homes across the USA and private villas abroad. From beachfront escapes to mountain-view retreats and city-chic hideaways, each stay is handpicked for its style, privacy, and exceptional guest experience.
+    <br>
+  </p>
+
+  <p class="">
+    Don't see exactly what you're looking for? Simply complete our <a class="reqForm" href="#">Travel Request Form,</a> share your wish list, and let us find the perfect fit for your journey.
+  </p>
+</div>
+
+<div class="container mt-1">
+  <form [formGroup]="searchForm" (ngSubmit)="onSubmit()">
+    <div class="outterdiv">
+      <div class="innerdiv">
+        <div class="inputs">
+          <!-- Destination with Google Places Autocomplete -->
+          <div class="input" style="position: relative;">
+            <input
+              #destinationInput
+              type="text"
+              class="from-control search-destination"
+              placeholder="Search Destination"
+              formControlName="destination"
+              (focus)="onDestinationFocus()"
+              (blur)="onDestinationBlur()"
+              (keydown)="onDestinationKeyDown($event)"
+              autocomplete="off"
+            />
+
+            <!-- Google Places Predictions Dropdown -->
+            <div
+              class="places-predictions-dropdown"
+              *ngIf="showPredictions && placePredictions.length > 0"
+            >
+              <div
+                *ngFor="let prediction of placePredictions; let index = index; trackBy: trackByPlaceId"
+                class="prediction-item"
+                [class.selected]="selectedPredictionIndex === index"
+                (mousedown)="onPlaceSelected(prediction)"
+              >
+                <div class="prediction-main-text">
+                  {{ prediction.structured_formatting.main_text || prediction.description }}
+                </div>
+                <div class="prediction-secondary-text" *ngIf="prediction.structured_formatting.secondary_text">
+                  {{ prediction.structured_formatting.secondary_text }}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- CHECKIN - CHECKOUT Date -->
+          <div class="input datepicker-wrapper">
+            <input
+              #searchCalendarInput
+              class="from-control"
+              placeholder="CHECKIN - CHECKOUT"
+              readonly
+              formControlName="searchCalender"
+              ngbDatepicker
+              #searchDp="ngbDatepicker"
+              [displayMonths]="1"
+              [navigation]="'arrows'"
+              [outsideDays]="'hidden'"
+              [autoClose]="'outside'"
+              (dateSelect)="onSearchDateSelect($event)"
+              (click)="openCalendar()"
+              [dayTemplate]="searchDayTemplate"
+            />
+
+            <ng-template
+              #searchDayTemplate
+              let-date="date"
+              let-selected="selected"
+              let-focused="focused"
+            >
+              <div
+                class="custom-day-wrapper"
+                [class.in-range]="isSearchInRange(date)"
+                [class.range-edge]="isSearchRangeEdge(date)"
+                [class.past-date]="isPastDate(date)"
+              >
+                {{ date.day }}
+              </div>
+            </ng-template>
+          </div>
+
+          <!-- Bedrooms Dropdown -->
+          <div class="input">
+            <select
+              class="form-select shadow-none"
+              formControlName="bedrooms"
+            >
+              <option *ngFor="let option of bedroomOptions" [value]="option.value">
+                {{ option.label }}
+              </option>
+            </select>
+          </div>
+
+          <!-- Guests Dropdown -->
+          <div class="input">
+            <select
+              class="form-select shadow-none"
+              formControlName="guests"
+            >
+              <option *ngFor="let option of guestOptions" [value]="option.value">
+                {{ option.label }}
+              </option>
+            </select>
+          </div>
+        </div>
+
+        <div class="buttonsdiv">
+          <!-- Search Button -->
+          <div class="buttons">
+            <button type="submit">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+                <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
+              </svg>
+              &nbsp;Search
+            </button>
+          </div>
+
+          <!-- Reset Button -->
+          <div class="buttons">
+            <button
+              class="resetbtn"
+              type="button"
+              (click)="onReset()"
+            >
+              Reset
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>

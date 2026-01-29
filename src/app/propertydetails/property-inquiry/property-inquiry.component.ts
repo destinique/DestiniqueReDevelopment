@@ -10,6 +10,7 @@ import {
 import {
   NgbActiveModal,
   NgbInputDatepicker,
+  NgbDate,
   NgbDateStruct
 } from '@ng-bootstrap/ng-bootstrap';
 import { InquiryBookingFormLabelData } from 'src/app/shared/interfaces/inquiry-booking-form-label-data-interface';
@@ -51,6 +52,7 @@ export class PropertyInquiryComponent implements OnInit {
   inquiryForm!: FormGroup;
   inquiryFormSubmitted = false;
 
+  today!: NgbDateStruct;
   fromDate: NgbDateStruct | null = null;
   toDate: NgbDateStruct | null = null;
   isSubmitting = false;
@@ -68,6 +70,13 @@ export class PropertyInquiryComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    const now = new Date();
+    this.today = {
+      year: now.getFullYear(),
+      month: now.getMonth() + 1,
+      day: now.getDate()
+    };
+
     if (this.storageService.isBrowser()){
       const userAgent = navigator.userAgent || navigator.vendor || (window as any)['opera'];
       this.isMobile = /android|iphone|ipad|ipod|opera mini|iemobile|wpdesktop/i.test(userAgent);
@@ -276,8 +285,23 @@ export class PropertyInquiryComponent implements OnInit {
   }
 
   /* ---------- Datepicker selection ---------- */
+  isPastDate(date: NgbDateStruct): boolean {
+    if (!date || !this.today) return false;
+
+    if (date.year < this.today.year) return true;
+    if (date.year > this.today.year) return false;
+
+    if (date.month < this.today.month) return true;
+    if (date.month > this.today.month) return false;
+
+    return date.day < this.today.day;
+  }
+
   onDateSelection(date: NgbDateStruct) {
-    if (this.inquiryForm.get('dateRange')?.disabled) {
+    if (
+      this.inquiryForm.get('dateRange')?.disabled ||
+      this.isPastDate(date)
+    ) {
       return;
     }
 

@@ -10,8 +10,6 @@ import { of } from 'rxjs';
 import { ActivatedRoute } from '@angular/router'; // Add this import
 import { NgbDateStruct, NgbInputDatepicker } from '@ng-bootstrap/ng-bootstrap';
 
-import { PropertyService, SearchParams } from 'src/app/shared/services/property.service';
-import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-search-property',
@@ -27,6 +25,8 @@ export class SearchPropertyComponent implements OnInit, OnDestroy {
   placePredictions: PlacePrediction[] = [];
   showPredictions = false;
   selectedPredictionIndex = -1;
+  /** Set when user selects from Places dropdown; prevents blur from overwriting with basic location. */
+  private lastSelectedPlaceAddress: string | null = null;
   private destroy$ = new Subject<void>();
 
   // DATEPICKER
@@ -74,15 +74,12 @@ export class SearchPropertyComponent implements OnInit, OnDestroy {
     { value: 15, label: '15+' }
   ];
 
-  private searchSubscription: Subscription | undefined; // Add this line
-
   constructor(
     private fb: FormBuilder,
     private spinner: NgxSpinnerService,
     private searchState: SearchStateService,
     private googleMapsService: GoogleMapsService,
-    private route: ActivatedRoute,
-    private propertyService: PropertyService
+    private route: ActivatedRoute
   ) {
     // Initialize reactive form with default values
     this.searchForm = this.fb.group({
@@ -93,70 +90,12 @@ export class SearchPropertyComponent implements OnInit, OnDestroy {
     });
   }
 
-  /**
-   * Listen to SearchStateService changes and trigger PropertyService searches
-   */
-  private setupSearchTrigger(): void {
-    this.searchSubscription = this.searchState.state$
-      .pipe(
-        debounceTime(500) // Wait 500ms after last change
-      )
-      .subscribe(() => {
-        this.performSearch();
-      });
-  }
-
-  /**
-   * Perform search using PropertyService
-   */
-  private performSearch(): void {
-    const params = this.searchState.getSearchParams() as SearchParams;
-
-    // Don't search if no meaningful filters are set
-    if (!this.shouldSearch(params)) {
-      console.log('⏸️ Skipping search: No meaningful filters');
-      return;
-    }
-
-    this.spinner.show();
-
-    this.propertyService.searchProperties(params).subscribe({
-      next: (response) => {
-        console.log('✅ Search successful:', response);
-        this.spinner.hide();
-        // TODO: Pass results to PropertyListComponent
-      },
-      error: (error) => {
-        console.error('❌ Search failed:', error);
-        this.spinner.hide();
-      }
-    });
-  }
-
-  /**
-   * Determine if we should perform a search with current params
-   */
-  private shouldSearch(params: SearchParams): boolean {
-    // At minimum, we should have either location or some other filter
-    return !!(
-      params.city ||
-      params.state ||
-      params.locationText ||
-      params.checkIn ||
-      params.minBedrooms ||
-      params.minGuests ||
-      params.minPrice ||
-      params.maxPrice ||
-      (params.amenities && params.amenities.length > 0)
-    );
-  }
-
   // ========== LIFECYCLE HOOKS ==========
   ngOnInit(): void {
     // Set up Google Places autocomplete subscription
     this.setupDestinationInputSubscription();
 
-    //NEW: Set up bedrooms/guests change listeners
+    // Set up bedrooms/guests change listeners
     this.setupNumericFiltersSubscription();
 
     // Initialize form with current search state (if any)
@@ -165,8 +104,7 @@ export class SearchPropertyComponent implements OnInit, OnDestroy {
     // Check for URL parameters
     this.initializeFromUrl();
 
-    //Set up search trigger
-    this.setupSearchTrigger();
+    // Note: PropertyListComponent subscribes to state$ and calls the API; no duplicate search here.
   }
 
   /**
@@ -182,14 +120,8 @@ export class SearchPropertyComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    // Clean up subscriptions to prevent memory leaks
     this.destroy$.next();
     this.destroy$.complete();
-
-    // Clean up search subscription
-    if (this.searchSubscription) {
-      this.searchSubscription.unsubscribe();
-    }
   }
 
   // ========== FORM INITIALIZATION ==========
@@ -317,6 +249,9 @@ export class SearchPropertyComponent implements OnInit, OnDestroy {
       // Update form with formatted address (visual only)
       this.searchForm.get('destination')?.setValue(placeDetails.formatted_address, { emitEvent: false });
 
+      // Remember we selected from dropdown so blur does not overwrite with basic location
+      this.lastSelectedPlaceAddress = placeDetails.formatted_address;
+
       // Update search state with structured location data
       this.updateSearchStateWithLocation(placeDetails);
 
@@ -324,6 +259,7 @@ export class SearchPropertyComponent implements OnInit, OnDestroy {
       console.error('Error getting place details:', error);
       // Fallback: use prediction description as text
       this.searchForm.get('destination')?.setValue(prediction.description, { emitEvent: false });
+      this.lastSelectedPlaceAddress = prediction.description;
       this.updateSearchStateWithBasicLocation(prediction.description);
     }
   }
@@ -415,17 +351,26 @@ export class SearchPropertyComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Hides predictions dropdown when user clicks outside
+   * Hides predictions dropdown when user clicks outside.
+   * Only update state with basic location when user typed manually (did not select from dropdown).
+   * If they selected from dropdown, lastSelectedPlaceAddress matches and we skip to avoid overwriting city/state/lat/long.
    */
   onDestinationBlur(): void {
     setTimeout(() => {
       this.hidePredictions();
 
-      // If user typed manually (didn't select from dropdown), update state
-      const destinationValue = this.searchForm.get('destination')?.value;
-      if (destinationValue && !this.placePredictions.some(p => p.description === destinationValue)) {
-        this.updateSearchStateWithBasicLocation(destinationValue);
+      const destinationValue = (this.searchForm.get('destination')?.value ?? '').trim();
+      if (!destinationValue) {
+        this.lastSelectedPlaceAddress = null;
+        return;
       }
+      // Do not overwrite structured location when user just selected from Places dropdown
+      if (destinationValue === this.lastSelectedPlaceAddress) {
+        return;
+      }
+      // User typed manually (or changed the field after selection) — update state with text only
+      this.updateSearchStateWithBasicLocation(destinationValue);
+      this.lastSelectedPlaceAddress = null;
     }, 200);
   }
 
@@ -582,8 +527,9 @@ export class SearchPropertyComponent implements OnInit, OnDestroy {
     this.searchFromDate = null;
     this.searchToDate = null;
 
-    // Clear Google Places predictions
+    // Clear Google Places predictions and "selected from dropdown" flag
     this.hidePredictions();
+    this.lastSelectedPlaceAddress = null;
 
     // Reset all filters in search state
     this.searchState.updateLocation(null);

@@ -1,8 +1,16 @@
 // property.service.ts
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { Observable } from 'rxjs';
-import { catchError } from 'rxjs/operators';
+import { Observable, of } from 'rxjs';
+import { catchError, map, shareReplay } from 'rxjs/operators';
+import { FilterOption } from '../interfaces/advanced-filter-form.interface';
+import { VIEW_TYPES_REMOVE_LIST } from '../constants/view-type-remove-list.constant';
+
+/** API response for getAllViewTypeAndHouseType.php */
+export interface ViewTypeAndHouseTypeResponse {
+  viewtypes: string[];
+  categories: string[] | Array<{ name: string; id?: string }>;
+}
 
 export interface Property {
   // Exact field names from API response
@@ -92,9 +100,59 @@ export interface SearchParams {
 })
 export class PropertyService {
   private apiUrl = 'https://api.destinique.com/api-user/properties.php';
+  private apiUserBase = 'https://api.destinique.com/api-user/';
+
+  /** Cached observable for filter options (property types + view types). */
+  private filterOptions$: Observable<{ propertyTypes: FilterOption[]; viewTypes: FilterOption[] }> | null = null;
 
   constructor(private http: HttpClient) {
     // No dependency on SearchStateService
+  }
+
+  /**
+   * Get property type and view type options from API, filtered and mapped to FilterOption[].
+   * Uses shareReplay(1) so multiple subscribers get the same result and the request is not repeated.
+   */
+  getFilterOptions(): Observable<{ propertyTypes: FilterOption[]; viewTypes: FilterOption[] }> {
+    if (!this.filterOptions$) {
+      this.filterOptions$ = this.http
+        .get<ViewTypeAndHouseTypeResponse>(`${this.apiUserBase}getAllViewTypeAndHouseType.php`)
+        .pipe(
+          map((data) => ({
+            propertyTypes: this.normalizeToFilterOptions(data.categories),
+            viewTypes: this.normalizeToFilterOptions(
+              (data.viewtypes || []).filter((t) => !VIEW_TYPES_REMOVE_LIST.includes(t))
+            )
+          })),
+          shareReplay(1),
+          catchError((err) => {
+            console.error('getFilterOptions failed', err);
+            return of({ propertyTypes: [], viewTypes: [] });
+          })
+        );
+    }
+    return this.filterOptions$;
+  }
+
+  private normalizeToFilterOptions(
+    raw: string[] | Array<{ name: string; id?: string }>
+  ): FilterOption[] {
+    if (!Array.isArray(raw)) return [];
+    return raw.map((item) => {
+      if (typeof item === 'string') {
+        return { name: item, id: this.toSlug(item) };
+      }
+      const name = item?.name ?? '';
+      return { name, id: item?.id ?? this.toSlug(name) };
+    }).filter((opt) => opt.name !== '');
+  }
+
+  private toSlug(value: string): string {
+    return value
+      .toLowerCase()
+      .trim()
+      .replace(/\s+/g, '-')
+      .replace(/[^a-z0-9-]/g, '');
   }
 
   /**

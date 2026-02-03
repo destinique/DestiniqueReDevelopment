@@ -100,7 +100,7 @@
               class="form-select shadow-none"
               formControlName="bedrooms"
             >
-              <option *ngFor="let option of bedroomOptions" [value]="option.value">
+              <option *ngFor="let option of bedroomOptions" [ngValue]="option.value">
                 {{ option.label }}
               </option>
             </select>

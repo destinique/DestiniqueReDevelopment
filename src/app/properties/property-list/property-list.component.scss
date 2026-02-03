@@ -107,12 +107,63 @@
 }
 
 
-/*Advanced search*/
+/*Advanced search – open/close via Angular (Bootstrap JS not required) */
+.dropdown.show .dropdown-menu.show {
+  display: block;
+}
 .dropdown-menu-center {
     width: 990px;
     right: auto !important;
     transform: translate(-25%, 10%) !important;
 }
+.dropdown-menu.advance-search-modal {
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+    background-color: #fff;
+    max-height: 70vh;
+    overflow-y: auto;
+}
+
+/* Advanced Search modal – responsive (mobile / tablet / desktop) */
+@media (max-width: 575.98px) {
+    .dropdown-menu.advance-search-modal {
+        position: fixed !important;
+        left: 50% !important;
+        right: auto !important;
+        margin-left: 0 !important;
+        width: min(360px, calc(100vw - 1.5rem)) !important;
+        max-width: min(360px, calc(100vw - 1.5rem)) !important;
+        top: 6rem !important;
+        transform: translate(-50%, 0) !important;
+        max-height: calc(100vh - 7rem);
+        overflow-x: hidden;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+}
+@media (min-width: 576px) and (max-width: 767.98px) {
+    .dropdown-menu.advance-search-modal {
+        width: min(540px, calc(100vw - 2rem)) !important;
+        left: 50% !important;
+        right: auto !important;
+        transform: translate(-50%, 3%) !important;
+        max-height: 80vh;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+}
+@media (min-width: 768px) and (max-width: 991.98px) {
+    .dropdown-menu.advance-search-modal {
+        width: min(720px, calc(100vw - 2rem)) !important;
+        left: 50% !important;
+        right: auto !important;
+        transform: translate(-50%, 5%) !important;
+        max-height: 75vh;
+        overflow-y: auto;
+    }
+}
+/* Laptop/desktop (992px+): use default .dropdown-menu-center position (width 990px, translate(-25%, 10%)) – no override */
 .advance-search-modal .btn.showMore, .advance-search-modal .float-right .btn {
     background: #378f86;
     background-color: #378f86;

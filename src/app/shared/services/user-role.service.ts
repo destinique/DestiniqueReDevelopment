@@ -54,6 +54,6 @@ export class UserRoleService {
   isAdmin(): boolean {
     const role = this.getRole();
     // Assuming 1 and 3 are admin roles - adjust based on your app logic
-    return role === 1 || role === 3;
+    return role === 1 || role === 2;
   }
 }

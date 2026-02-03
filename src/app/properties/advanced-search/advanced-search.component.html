@@ -1,0 +1,124 @@
+<div class="advanced-search-modal-content">
+  <header class="advanced-search-modal-header">
+    <h2 class="advanced-search-modal-title">Advanced Search</h2>
+    <button type="button" class="advanced-search-close-btn" (click)="onClose()" aria-label="Close modal">
+      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true">
+        <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8 2.146 2.854Z"/>
+      </svg>
+    </button>
+  </header>
+  <form class="advanced-search-form" [formGroup]="advanceFilterForm" (ngSubmit)="onApplyFilter($event)">
+  <div class="row g-2">
+    <!-- Column 1: Bedrooms, Bathrooms, Checkboxes -->
+    <div class="col-12 col-md-6 col-lg-3">
+      <div class="advanced-search-section bedroom-section">
+        <span class="advanced-search-label">Bedrooms</span>
+        <div class="stepper-buttons">
+          <button type="button" class="btn btn-primary btn-circle stepper-btn" aria-label="Decrease bedrooms" (click)="changeBedrooms(-1)">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-dash-circle-fill" viewBox="0 0 16 16">
+              <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M4.5 7.5a.5.5 0 0 0 0 1h7a.5.5 0 0 0 0-1z"/>
+            </svg>
+          </button>
+          <span class="stepper-value">{{ bedroomsLabel }}</span>
+          <button type="button" class="btn btn-primary btn-circle stepper-btn" aria-label="Increase bedrooms" (click)="changeBedrooms(1)">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-circle-fill" viewBox="0 0 16 16">
+              <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3z"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+      <div class="advanced-search-section bathroom-section">
+        <span class="advanced-search-label">Bathrooms</span>
+        <div class="stepper-buttons">
+          <button type="button" class="btn btn-primary btn-circle stepper-btn" aria-label="Decrease bathrooms" (click)="changeBathrooms(-1)">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-dash-circle-fill" viewBox="0 0 16 16">
+              <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M4.5 7.5a.5.5 0 0 0 0 1h7a.5.5 0 0 0 0-1z"/>
+            </svg>
+          </button>
+          <span class="stepper-value">{{ bathroomsLabel }}</span>
+          <button type="button" class="btn btn-primary btn-circle stepper-btn" aria-label="Increase bathrooms" (click)="changeBathrooms(1)">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-circle-fill" viewBox="0 0 16 16">
+              <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3z"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+      <div class="form-check mt-2">
+        <input type="checkbox" class="form-check-input" id="searchExact" formControlName="searchExact"/>
+        <label class="form-check-label" for="searchExact">Search Exact</label>
+      </div>
+      <div class="form-check mt-2">
+        <input type="checkbox" class="form-check-input" id="petFriendly" formControlName="petFriendly"/>
+        <label class="form-check-label" for="petFriendly">Pet Friendly</label>
+      </div>
+    </div>
+
+    <!-- Column 2: Amenity & Providers -->
+    <div class="col-12 col-md-6 col-lg-3">
+      <div class="advanced-search-section">
+        <label class="advanced-search-group-label">Amenity</label>
+        <div class="form-check" *ngFor="let option of amenityOptions">
+          <input type="checkbox" class="form-check-input" [id]="'amenity-' + option.id" [checked]="isSelectedIn(amenityArray, option.name)" (change)="toggleAmenity(option.name)"/>
+          <label class="form-check-label" [for]="'amenity-' + option.id">{{ option.name }}</label>
+        </div>
+      </div>
+      <div class="advanced-search-section mt-2" *ngIf="showProviders">
+        <label class="advanced-search-group-label">Providers</label>
+        <div *ngIf="!showMoreProviders">
+          <div class="form-check" *ngFor="let option of providerOptions.slice(0, 2)">
+            <input type="checkbox" class="form-check-input" [id]="'provider-' + option.id" [checked]="isSelectedIn(providersArray, option.name)" (change)="toggleProvider(option.name)"/>
+            <label class="form-check-label" [for]="'provider-' + option.id">{{ option.name }}</label>
+          </div>
+        </div>
+        <div #providersMoreEl class="providers-more" [class.expanded]="showMoreProviders">
+          <div class="form-check" *ngFor="let option of providerOptions">
+            <input type="checkbox" class="form-check-input" [id]="'provider-' + option.id" [checked]="isSelectedIn(providersArray, option.name)" (change)="toggleProvider(option.name)"/>
+            <label class="form-check-label" [for]="'provider-' + option.id">{{ option.name }}</label>
+          </div>
+        </div>
+        <button type="button" class="btn btn-primary show-more-btn" (click)="toggleShowMoreProviders()">
+          {{ showMoreProviders ? 'SHOW LESS' : 'SHOW MORE' }}
+        </button>
+      </div>
+    </div>
+
+    <!-- Column 3: Property Type -->
+    <div class="col-12 col-md-6 col-lg-3">
+      <div class="advanced-search-section">
+        <label class="advanced-search-group-label">Property Type</label>
+        <div class="form-check" *ngFor="let option of propertyTypeOptions">
+          <input type="checkbox" class="form-check-input" [id]="'type-' + option.id" [checked]="isSelectedIn(propertyTypesArray, option.name)" (change)="togglePropertyType(option.name)"/>
+          <label class="form-check-label" [for]="'type-' + option.id">{{ option.name }}</label>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12 col-md-6 col-lg-3">
+      <div class="advanced-search-section">
+        <label class="advanced-search-group-label">View Type</label>
+        <div *ngIf="!showMoreViewTypes">
+          <div class="form-check" *ngFor="let option of viewTypeOptions.slice(0, 2)">
+            <input type="checkbox" class="form-check-input" [id]="'view-' + option.id" [checked]="isSelectedIn(viewTypesArray, option.name)" (change)="toggleViewType(option.name)"/>
+            <label class="form-check-label" [for]="'view-' + option.id">{{ option.name }}</label>
+          </div>
+        </div>
+        <div #viewTypeMoreEl class="view-type-more" [class.expanded]="showMoreViewTypes">
+          <div class="form-check" *ngFor="let option of viewTypeOptions">
+            <input type="checkbox" class="form-check-input" [id]="'view-' + option.id" [checked]="isSelectedIn(viewTypesArray, option.name)" (change)="toggleViewType(option.name)"/>
+            <label class="form-check-label" [for]="'view-' + option.id">{{ option.name }}</label>
+          </div>
+        </div>
+        <button type="button" class="btn btn-primary show-more-btn" (click)="toggleShowMoreViewTypes()">
+          {{ showMoreViewTypes ? 'SHOW LESS' : 'SHOW MORE' }}
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <hr class="advanced-search-divider"/>
+  <div class="advanced-search-actions">
+    <button type="submit" class="btn btn-primary apply-filter-btn">APPLY FILTER</button>
+    <button type="button" class="btn btn-secondary reset-btn" (click)="onReset()">RESET</button>
+  </div>
+</form>
+</div>

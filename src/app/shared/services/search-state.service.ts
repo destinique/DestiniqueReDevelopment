@@ -94,6 +94,13 @@ export class SearchStateService {
   }
 
   /**
+   * Update all advanced-search filters in one go (single state emission).
+   */
+  updateAdvancedFilters(updates: Partial<Pick<SearchState, 'minBedrooms' | 'minBathrooms' | 'amenities' | 'providers' | 'propertyTypes' | 'viewTypes' | 'searchExact' | 'petFriendly'>>): void {
+    this.updateState({ ...updates, page: 1 });
+  }
+
+  /**
    * Toggle boolean filters
    */
   toggleBooleanFilter(field: 'searchExact' | 'petFriendly', value?: boolean): void {

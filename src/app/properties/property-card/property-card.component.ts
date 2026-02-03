@@ -15,12 +15,12 @@ export class PropertyCardComponent {
 
   // Safe getter methods using EXACT field names from API
   get country(): string {
-    return this.property.country || 'United States';
+    return this.property.country || 'Not specified';
   }
 
   get neighborhood(): string {
     // Note: API returns "Neighborhood" with capital N
-    return this.property.Neighborhood || this.property.city || 'Destin';
+    return this.property.Neighborhood || this.property.city || 'Not specified';
   }
 
   get isPetFriendly(): boolean {

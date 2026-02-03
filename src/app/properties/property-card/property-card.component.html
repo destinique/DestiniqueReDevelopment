@@ -1,4 +1,3 @@
-<!-- property-card.component.html -->
 <div class="cardcustomcss card">
   <!-- Carousel -->
   <div id="carousel-{{property.list_id}}" class="carousel slide" data-bs-ride="carousel">
@@ -37,10 +36,10 @@
 
     <!-- Location Badges -->
     <div class="absolute bottom-6 left-3 text-white property_CountryName">
-      <span class="fac-values">{{property.country || 'United States'}}</span>
+      <span class="fac-values">{{property.country || 'Not specified'}}</span>
     </div>
     <div class="absolute bottom-6 right-3 text-white property_StateNme">
-      <span class="fac-values">{{property.state || 'Florida'}}</span>
+      <span class="fac-values">{{property.state || 'Not specified'}}</span>
     </div>
   </div>
 
@@ -60,7 +59,7 @@
     <div class="containers">
       <h3 class="mt-2">
         <a class="city-name" href="#">
-          {{property.city || 'Destination'}}
+          {{property.city || 'Not specified'}}
         </a>
       </h3>
 
@@ -71,7 +70,7 @@
             <h6 class="fac-h6 mb-3">
               <span class="fac-title">Type</span><br />
               <span class="fac-values">
-                {{property.property_type || 'Condo'}}
+                {{property.property_type || 'Not specified'}}
               </span>
             </h6>
           </div>
@@ -79,7 +78,7 @@
             <h6 class="fac-h6 mb-3">
               <span class="fac-title">Sleeps</span><br />
               <span class="fac-values">
-                {{property.sleeps || '6'}}
+                {{property.sleeps || 'Not specified'}}
               </span>
             </h6>
           </div>
@@ -87,7 +86,7 @@
             <h6 class="fac-h6 mb-3">
               <span class="fac-title">Bedrooms</span><br />
               <span class="fac-values">
-                {{property.bedrooms || '2'}}
+                {{property.bedrooms || 'Not specified'}}
               </span>
             </h6>
           </div>
@@ -113,9 +112,9 @@
         <div *ngIf="isPropertyExpanded">
           <div class="viewtypeandprice mt-3">
             <div>
-              <div class="fac-title">ViewType :</div>
+              <div class="fac-title">ViewType</div>
               <div class="fac-values">
-                {{property.view_type || 'Gulf-Front/Ocean-Front View'}}
+                {{property.view_type || 'Not specified'}}
               </div>
             </div>
           </div>
@@ -124,7 +123,7 @@
             <div class="">
               <h6 class="fac-h6 mt-2 mb-3">
                 <span class="fac-title">Bathrooms</span><br />
-                <span class="fac-values">{{property.bathrooms || '2'}}</span>
+                <span class="fac-values">{{property.bathrooms || 'Not specified'}}</span>
               </h6>
             </div>
             <div class="">
@@ -152,8 +151,8 @@
           <div class="upperrow justify-content-between flex-column align-items-center">
             <div class="">
               <h6 class="fac-h6 mt-2">
-                <span class="fac-title">Provider</span><br />
-                <span class="fac-values">{{property.provider || 'Unknown'}}</span>
+                <span class="fac-title">Destination</span><br />
+                <span class="fac-values">{{property.RegionContinent || 'Not specified'}}</span>
               </h6>
             </div>
           </div>
@@ -163,7 +162,7 @@
               <h6 class="fac-h6 mt-2">
                 <span class="fac-title">Neighborhood/Community</span><br />
                 <span class="fac-values">
-                  {{property.Neighborhood || property.city || 'Destin'}}
+                  {{ property.Neighborhood || 'Not specified'}}
                 </span>
               </h6>
             </div>

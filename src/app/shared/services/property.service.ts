@@ -43,6 +43,7 @@ export interface Property {
 
   // Optional fields that might not always be present
   country?: string;
+  RegionContinent?: string;
 }
 
 export interface PropertyResponse {

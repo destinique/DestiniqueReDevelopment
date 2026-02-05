@@ -69,6 +69,7 @@
               ngbDatepicker
               #searchDp="ngbDatepicker"
               [displayMonths]="1"
+              [firstDayOfWeek]="7"
               [navigation]="'arrows'"
               [outsideDays]="'hidden'"
               [autoClose]="'outside'"
@@ -85,9 +86,15 @@
             >
               <div
                 class="custom-day-wrapper"
-                [class.in-range]="isSearchInRange(date)"
-                [class.range-edge]="isSearchRangeEdge(date)"
                 [class.past-date]="isPastDate(date)"
+                [class.hover-range]="isInHoverRange(date) || isHoverRangeStart(date) || isHoverRangeEnd(date)"
+                [class.start]="isHoverRangeStart(date)"
+                [class.end]="isHoverRangeEnd(date)"
+                [class.range-start]="isRangeStart(date)"
+                [class.range-end]="isRangeEnd(date)"
+                [class.in-range]="isSearchInRange(date)"
+                (mouseenter)="onDayHover(date)"
+                (mouseleave)="onDayHoverLeave()"
               >
                 {{ date.day }}
               </div>

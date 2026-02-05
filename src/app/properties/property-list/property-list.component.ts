@@ -31,7 +31,7 @@ export class PropertyListComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<void>();
   private searchSubscription?: Subscription;
   isLoading = false;
-  expandedPropertyId: number | null = null;
+  expandedPropertyIds: Set<number> = new Set();
   showMoreDetailsGlobal = false;
 
   // ========== FILTER OPTIONS ==========
@@ -147,13 +147,16 @@ export class PropertyListComponent implements OnInit, OnDestroy {
   }
 
   onToggleExpand(propertyId: number): void {
-    this.expandedPropertyId = this.expandedPropertyId === propertyId ? null : propertyId;
+    const next = new Set(this.expandedPropertyIds);
+    if (next.has(propertyId)) next.delete(propertyId);
+    else next.add(propertyId);
+    this.expandedPropertyIds = next;
   }
 
   onToggleGlobalMoreDetails(): void {
-    this.showMoreDetailsGlobal = !this.showMoreDetailsGlobal;
+    // this.showMoreDetailsGlobal = !this.showMoreDetailsGlobal;
     if (!this.showMoreDetailsGlobal) {
-      this.expandedPropertyId = null;
+      this.expandedPropertyIds = new Set();
     }
   }
 

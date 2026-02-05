@@ -125,7 +125,7 @@
          class="col-12 col-md-6 col-lg-4 col-xl-4 properties">
       <app-property-card
         [property]="property"
-        [isExpanded]="expandedPropertyId === property.list_id"
+        [isExpanded]="expandedPropertyIds.has(property.list_id)"
         [showMoreDetailsGlobal]="showMoreDetailsGlobal"
         (toggleExpand)="onToggleExpand($event)">
       </app-property-card>

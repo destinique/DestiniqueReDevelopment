@@ -34,6 +34,7 @@ export class SearchPropertyComponent implements OnInit, OnDestroy {
   @ViewChild('searchDp') searchDp!: NgbInputDatepicker;
   searchFromDate: NgbDateStruct | null = null;
   searchToDate: NgbDateStruct | null = null;
+  hoveredDate: NgbDateStruct | null = null;
 
   // ========== DROPDOWN OPTIONS ==========
   readonly bedroomOptions = [
@@ -427,18 +428,67 @@ export class SearchPropertyComponent implements OnInit, OnDestroy {
       // Start new range
       this.searchFromDate = date;
       this.searchToDate = null;
+      this.hoveredDate = null;
     } else if (this.isAfter(date, this.searchFromDate)) {
       // Complete the range
       this.searchToDate = date;
+      this.hoveredDate = null;
       this.searchDp.close();
       // 🔥 UPDATE SEARCH STATE IMMEDIATELY
       this.updateDateRangeInState();
     } else {
       // Picked earlier date: reset start
       this.searchFromDate = date;
+      this.hoveredDate = null;
     }
 
     this.updateSearchCalendarField();
+  }
+
+  onDayHover(date: NgbDateStruct): void {
+    this.hoveredDate = date;
+  }
+
+  onDayHoverLeave(): void {
+    this.hoveredDate = null;
+  }
+
+  private isBefore(a: NgbDateStruct, b: NgbDateStruct): boolean {
+    return new Date(a.year, a.month - 1, a.day) < new Date(b.year, b.month - 1, b.day);
+  }
+
+  private isInHoverMode(): boolean {
+    return !!(
+      this.searchFromDate &&
+      !this.searchToDate &&
+      this.hoveredDate &&
+      !this.isBefore(this.hoveredDate, this.searchFromDate) &&
+      !this.isSame(this.hoveredDate, this.searchFromDate)
+    );
+  }
+
+  isHoverRangeStart(date: NgbDateStruct): boolean {
+    return this.isInHoverMode() && !!this.searchFromDate && this.isSame(date, this.searchFromDate);
+  }
+
+  isHoverRangeEnd(date: NgbDateStruct): boolean {
+    return this.isInHoverMode() && !!this.hoveredDate && this.isSame(date, this.hoveredDate);
+  }
+
+  isInHoverRange(date: NgbDateStruct): boolean {
+    if (!this.isInHoverMode() || !this.searchFromDate || !this.hoveredDate) return false;
+    const d = new Date(date.year, date.month - 1, date.day);
+    const from = new Date(this.searchFromDate.year, this.searchFromDate.month - 1, this.searchFromDate.day);
+    const to = new Date(this.hoveredDate.year, this.hoveredDate.month - 1, this.hoveredDate.day);
+    return d > from && d < to;
+  }
+
+  isRangeStart(date: NgbDateStruct): boolean {
+    return !!this.searchFromDate && this.isSame(date, this.searchFromDate) && !this.isHoverRangeStart(date);
+  }
+
+  isRangeEnd(date: NgbDateStruct): boolean {
+    return !!this.searchToDate && this.isSame(date, this.searchToDate);
   }
 
   private updateSearchCalendarField(): void {
@@ -477,10 +527,6 @@ export class SearchPropertyComponent implements OnInit, OnDestroy {
     );
   }
 
-  isSearchRangeEdge(date: NgbDateStruct): boolean {
-    return this.isSame(date, this.searchFromDate) || this.isSame(date, this.searchToDate);
-  }
-
   private isSame(a: NgbDateStruct | null, b: NgbDateStruct | null): boolean {
     return !!a && !!b && a.year === b.year && a.month === b.month && a.day === b.day;
   }
@@ -496,55 +542,48 @@ export class SearchPropertyComponent implements OnInit, OnDestroy {
    * Handles form submission - updates search state with all form values
    */
   onSubmit(): void {
-    if (this.searchForm.invalid) return;
-
-    // Ensure date range is updated (in case user didn't complete selection)
+    // Sync dates if both selected
     if (this.searchFromDate && this.searchToDate) {
       this.updateDateRangeInState();
     }
 
-    // Show loading spinner for search feedback
-    this.spinner.show();
+    // Sync destination if user typed and didn't blur
+    const dest = (this.searchForm.get('destination')?.value ?? '').trim();
+    if (dest && dest !== this.lastSelectedPlaceAddress) {
+      this.updateSearchStateWithBasicLocation(dest);
+    }
 
-    // Note: PropertyListComponent will automatically react to state changes
-    // and make the API call via PropertyService
-
-    // Optional: Force update to page 1 when search button is clicked
     this.searchState.updatePagination(1);
+    this.spinner.show();
   }
 
   /**
-   * Resets form and clears all search filters
+   * Resets form and clears all search filters.
+   * Uses resetAll() for a single state emission (one API call).
    */
-// In search-property.component.ts - Update onReset()
   onReset(): void {
-    // Reset form to default values
-    this.searchForm.reset({
-      destination: '',
-      searchCalender: '',  // Updated field name
-      bedrooms: 0,
-      guests: 0
-    });
+    // Reset form with emitEvent: false to prevent valueChanges from firing multiple state updates
+    this.searchForm.reset(
+      {
+        destination: '',
+        searchCalender: '',
+        bedrooms: 0,
+        guests: 0
+      },
+      { emitEvent: false }
+    );
 
-    // Reset date picker values
+    // Reset date picker values (component state)
     this.searchFromDate = null;
     this.searchToDate = null;
+    this.hoveredDate = null;
 
     // Clear Google Places predictions and "selected from dropdown" flag
     this.lastSelectedPlaceAddress = null;
     this.hidePredictions();
 
-    // Reset all filters in search state
-    this.searchState.updateLocation(null);
-    this.searchState.updateNumericFilter('minBedrooms', undefined);
-    this.searchState.updateNumericFilter('minGuests', undefined);
-    this.searchState.updateDates(undefined, undefined);
-
-    // Reset to page 1
-    this.searchState.updatePagination(1);
-
-    // Clear date range state immediately
-    this.updateDateRangeInState();
+    // Single state reset → one API call
+    this.searchState.resetAll();
   }
 
   /**

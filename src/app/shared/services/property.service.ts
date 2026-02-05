@@ -12,6 +12,10 @@ export interface ViewTypeAndHouseTypeResponse {
   categories: string[] | Array<{ name: string; id?: string }>;
 }
 
+export interface Image {
+  URLTxt?: string;
+}
+
 export interface Property {
   // Exact field names from API response
   list_id: number;
@@ -44,6 +48,7 @@ export interface Property {
   // Optional fields that might not always be present
   country?: string;
   RegionContinent?: string;
+  images?: Image[];
 }
 
 export interface PropertyResponse {
@@ -195,10 +200,13 @@ export class PropertyService {
   }
 
   /**
-   * Format date as YYYY-MM-DD for API
+   * Format date as YYYY-MM-DD for API (uses local date to avoid timezone shift)
    */
   private formatDate(date: Date): string {
-    return date.toISOString().split('T')[0];
+    const y = date.getFullYear();
+    const m = String(date.getMonth() + 1).padStart(2, '0');
+    const d = String(date.getDate()).padStart(2, '0');
+    return `${y}-${m}-${d}`;
   }
 
   /**

@@ -432,56 +432,22 @@ img {
 .mr-1, .mx-1 {
     margin-right: .25rem !important;
 }
+/* Page Size & Sort - underline-only style (reference) */
+#filter-properties .form-select,
+#filter-properties .sort-by-opt,
 .sort-by-opt {
-    border: none;
-    border-radius: 0rem;
-    border-bottom: 1px solid #000;
+    border: none !important;
+    border-radius: 0 !important;
+    border-bottom: 1px solid #ced4da !important;
     box-shadow: none !important;
-    color: #555;
+    background-color: transparent !important;
+    color: #777 !important;
     font-size: 1rem;
-    option{
+    option {
         font-weight: 600;
         letter-spacing: 1.5px;
+        color: #333;
     }
-}
-.input-container {
-    width: max-content !important;
-    height: 46px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-color: #fff;
-    overflow: hidden;
-    cursor: pointer;
-    border-bottom: 1px solid #000;
-    form {
-        .input {
-            width: 170px;
-            height: 100%;
-            border: none;
-            outline: none;
-            font-size: .9em;
-            padding: .375rem .75rem;
-            border: none;
-            border-radius: 0rem;
-            box-shadow: none !important;
-            color: #555;
-            font-size: 1rem;
-        }
-        button {
-            background-color: transparent !important;
-            border: none !important;
-            outline: none !important;
-            cursor: pointer;
-        }
-        .svg-color {
-            color: #777;
-        }
-    }
-}
-.search-by-id {
-    width: 155px;
-    border: 0px;
 }
 @media (min-width: 1040px) {
     .viewAll {

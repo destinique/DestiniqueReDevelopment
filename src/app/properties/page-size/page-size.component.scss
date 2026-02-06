@@ -1,0 +1,16 @@
+/* Underline-only style (matches reference) */
+.form-select.sort-by-opt {
+  border: none !important;
+  border-radius: 0 !important;
+  border-bottom: 1px solid #ced4da !important;
+  box-shadow: none !important;
+  background-color: transparent !important;
+  color: #777 !important;
+  font-size: 1rem;
+
+  option {
+    font-weight: 600;
+    letter-spacing: 1.5px;
+    color: #333;
+  }
+}

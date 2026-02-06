@@ -133,12 +133,14 @@
   </div>
 
   <!-- Pagination -->
-  <app-pagination
-    *ngIf="!isLoading && properties.length > 0 && paginationInfo.totalPages > 1"
-    [currentPage]="paginationInfo.page"
-    [totalPages]="paginationInfo.totalPages"
-    [pageSize]="paginationInfo.pageSize"
-    [totalItems]="paginationInfo.total"
-    (pageChange)="onPageChange($event)">
-  </app-pagination>
+  <div class="pagination-wrapper text-center">
+    <app-pagination
+      *ngIf="!isLoading && properties.length > 0 && paginationInfo.totalPages > 1"
+      [currentPage]="paginationInfo.page"
+      [totalPages]="paginationInfo.totalPages"
+      [pageSize]="paginationInfo.pageSize"
+      [totalItems]="paginationInfo.total"
+      (pageChange)="onPageChange($event)">
+    </app-pagination>
+  </div>
 </div>

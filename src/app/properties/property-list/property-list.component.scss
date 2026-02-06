@@ -808,3 +808,10 @@ img {
     width: 25px;
     height: 25px;
 }
+
+/* Pagination wrapper - center pagination below grid */
+.pagination-wrapper {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}

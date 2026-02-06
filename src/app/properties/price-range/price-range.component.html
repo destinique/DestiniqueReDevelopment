@@ -1,0 +1,81 @@
+<div class="price-range-content">
+  <header class="price-range-header">
+    <h2 class="price-range-title">Nightly Rate</h2>
+    <button type="button" class="price-range-close-btn" (click)="onClose()" aria-label="Close">
+      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true">
+        <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8 2.146 2.854Z"/>
+      </svg>
+    </button>
+  </header>
+
+  <form class="price-range-form" [formGroup]="priceForm" (ngSubmit)="onApply($event)">
+    <div class="price-range-inputs">
+      <div class="price-input-wrap">
+        <label class="price-range-label" for="price-min">Min ($)</label>
+        <input
+          id="price-min"
+          type="number"
+          class="form-control price-range-input"
+          formControlName="minPrice"
+          [min]="minPriceLimit"
+          [max]="maxPriceLimit"
+          (input)="onMinInput()"
+        />
+      </div>
+      <div class="price-input-wrap">
+        <label class="price-range-label" for="price-max">Max ($)</label>
+        <input
+          id="price-max"
+          type="number"
+          class="form-control price-range-input"
+          formControlName="maxPrice"
+          [min]="minPriceLimit"
+          [max]="maxPriceLimit"
+          [class.is-invalid]="isMaxPriceInvalid"
+          (input)="onMaxInput()"
+        />
+        <div *ngIf="isMaxPriceInvalid" class="invalid-feedback d-block">
+          Max rate must be greater than min rate
+        </div>
+      </div>
+    </div>
+
+    <div class="price-range-slider-wrap">
+      <span class="price-range-slider-label">${{ minPriceLimit }}</span>
+      <div class="price-range-slider-track" (click)="onTrackClick($event)">
+        <div class="price-range-slider-track-bg" aria-hidden="true"></div>
+        <div
+          class="price-range-slider-fill"
+          [style.left.%]="(minPriceValue / maxPriceLimit) * 100"
+          [style.right.%]="100 - (maxPriceValue / maxPriceLimit) * 100"
+          aria-hidden="true"
+        ></div>
+        <input
+          type="range"
+          class="price-range-slider price-range-slider-min"
+          [min]="minPriceLimit"
+          [max]="maxPriceLimit"
+          [value]="minPriceValue"
+          (input)="onSliderMin($event)"
+          aria-label="Minimum price"
+        />
+        <input
+          type="range"
+          class="price-range-slider price-range-slider-max"
+          [min]="minPriceLimit"
+          [max]="maxPriceLimit"
+          [value]="maxPriceValue"
+          (input)="onSliderMax($event)"
+          aria-label="Maximum price"
+        />
+      </div>
+      <span class="price-range-slider-label">${{ maxPriceLimit }}</span>
+    </div>
+
+    <hr class="price-range-divider"/>
+    <div class="price-range-actions">
+      <button type="submit" class="btn btn-primary price-range-apply-btn" [disabled]="isMaxPriceInvalid">Apply</button>
+      <button type="button" class="btn btn-secondary price-range-reset-btn" (click)="onReset()">Reset</button>
+    </div>
+  </form>
+</div>

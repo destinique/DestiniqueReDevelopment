@@ -17,6 +17,7 @@ export class PropertyListComponent implements OnInit, OnDestroy {
 
   // ========== ADVANCED SEARCH DROPDOWN ==========
   advancedSearchOpen = false;
+  priceRangeOpen = false;
   @ViewChild('advancedSearchDropdown') advancedSearchDropdown?: ElementRef<HTMLDivElement>;
   paginationInfo: any = {
     page: 1,
@@ -170,6 +171,15 @@ export class PropertyListComponent implements OnInit, OnDestroy {
 
   toggleAdvancedSearch(): void {
     this.advancedSearchOpen = !this.advancedSearchOpen;
+  }
+
+  togglePriceRange(): void {
+    this.priceRangeOpen = !this.priceRangeOpen;
+    if (this.priceRangeOpen) this.advancedSearchOpen = false;
+  }
+
+  closePriceRange(): void {
+    this.priceRangeOpen = false;
   }
 
   closeAdvancedSearch(): void {

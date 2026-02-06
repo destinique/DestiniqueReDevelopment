@@ -27,8 +27,8 @@ export interface SearchParams {
   minBedrooms?: number;     // Changed from number | null
   minBathrooms?: number;    // Changed from number | null
   minGuests?: number;       // Changed from number | null
-  minPrice?: number;        // Changed from number | null
-  maxPrice?: number;        // Changed from number | null
+  minPrice?: number;       
+  maxPrice?: number; 
 
   // Array filters
   amenities?: string[];

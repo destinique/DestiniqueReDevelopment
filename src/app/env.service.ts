@@ -34,6 +34,8 @@ export class EnvService {
   private _instagramURL!: string;
   private _youtubeURL!: string;
   private _pinterestURL!: string;
+  private _minPriceLimit!: number;
+  private _maxPriceLimit!: number;
 
   get env(): Environment {
     return this._env;
@@ -57,6 +59,14 @@ export class EnvService {
   }
   get pinterestURL(): string {
     return this._pinterestURL;
+  }
+
+  get minPriceLimit(): number {
+    return this._minPriceLimit;
+  }
+
+  get maxPriceLimit(): number {
+    return this._maxPriceLimit;
   }
 
   get ratesApiUrl(): string {
@@ -154,6 +164,8 @@ export class EnvService {
     this._youtubeURL =
       "https://www.youtube.com/channel/UCm7Z0hfy23Vrvi8v73tcHqw";
     this._pinterestURL = "https://www.pinterest.com/destiniquetravel/";
+    this._minPriceLimit = 0;
+    this._maxPriceLimit = 5000;
 
     this._videoURL =
       "https://www.facebook.com/plugins/video.php?href=https%3A%2F%2Fwww.facebook.com%2FDestiniqueTravelExperience%2Fvideos%2F1918234454895794%2F&width=500&show_text=false&appId=2739481436282241&height=336";

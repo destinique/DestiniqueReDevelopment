@@ -5,18 +5,16 @@
 <div class="container pt-2 pb-2">
   <div class="row adv-btn-row">
     <div class="btn-con">
-      <!-- Price Filter (Placeholder - will be PriceRangeComponent) -->
-      <div class="d-inline-block dropdown" id="bootstrapfirstdropdown">
-        <button type="button" class="btn btn-primary filter-btn dropdown-toggle" data-bs-toggle="dropdown">
+      <!-- Price Filter -->
+      <div class="d-inline-block dropdown" #priceRangeDropdown [class.show]="priceRangeOpen">
+        <button type="button" class="btn btn-primary filter-btn dropdown-toggle" [attr.aria-expanded]="priceRangeOpen" aria-haspopup="true" (click)="togglePriceRange()">
           Price
         </button>
-        <div class="dropdown-menu">
-          <!-- PriceRangeComponent will go here -->
-          <div class="text-center p-3">
-            <small>Price filter component coming soon</small>
-          </div>
+        <div class="dropdown-menu price-range-dropdown bg-white" [class.show]="priceRangeOpen">
+          <app-price-range (applied)="closePriceRange()" (closeRequested)="closePriceRange()"></app-price-range>
         </div>
       </div>
+
 
       <!-- Advanced Search -->
       <div class="d-inline-block dropdown" #advancedSearchDropdown [class.show]="advancedSearchOpen">

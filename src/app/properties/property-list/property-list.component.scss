@@ -781,3 +781,50 @@ img {
   justify-content: center;
   width: 100%;
 }
+
+/* Price range dropdown – match app theme, centered under Price button */
+.dropdown-menu.price-range-dropdown {
+  border: 1px solid #dee2e6;
+  border-radius: 8px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  padding: 0;
+  overflow: hidden;
+  min-width: 400px;
+  left: 50% !important;
+  transform: translate(-50%, 48px) !important;
+}
+
+/* Price range modal – responsive (mobile / tablet / desktop) */
+@media (max-width: 575.98px) {
+  .dropdown-menu.price-range-dropdown {
+    position: fixed !important;
+    left: 50% !important;
+    top: 50% !important;
+    right: auto !important;
+    margin-left: 0 !important;
+    width: min(400px, calc(100vw - 1.5rem)) !important;
+    min-width: unset !important;
+    transform: translate(-50%, -50%) !important;
+    max-height: calc(100vh - 2rem);
+    overflow-x: hidden;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+}
+@media (min-width: 576px) and (max-width: 767.98px) {
+  .dropdown-menu.price-range-dropdown {
+    width: 400px !important;
+    min-width: 400px !important;
+    left: 50% !important;
+    right: auto !important;
+    transform: translate(-50%, 48px) !important;
+  }
+}
+@media (min-width: 768px) {
+  .dropdown-menu.price-range-dropdown {
+    width: 400px !important;
+    min-width: 400px !important;
+    left: 50% !important;
+    transform: translate(-40%, 48px) !important;
+  }
+}

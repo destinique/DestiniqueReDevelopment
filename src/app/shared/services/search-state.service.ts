@@ -82,8 +82,8 @@ export class SearchStateService {
   /**
    * Update price range - CHANGE: Accept undefined, not null
    */
-  updatePriceRange(minPrice?: number, maxPrice?: number): void {
-    this.updateState({ minPrice, maxPrice, page: 1 });
+  updatePriceRange(updates: Partial<Pick<SearchState, 'minPrice' | 'maxPrice'>>): void {
+    this.updateState({ ...updates, page: 1 });
   }
 
   /**

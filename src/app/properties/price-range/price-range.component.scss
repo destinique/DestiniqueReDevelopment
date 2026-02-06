@@ -1,0 +1,339 @@
+// Price range filter – app theme (teal #378f86, black hover, #33d286 accent)
+$price-primary: #378f86;
+$price-primary-hover: #000;
+$price-accent: #33d286;
+$price-text: #333;
+$price-divider: rgba(0, 0, 0, 0.1);
+
+.price-range-content {
+  position: relative;
+  min-width: 280px;
+  width: 100%;
+}
+
+.price-range-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem 1rem;
+}
+
+.price-range-title {
+  margin: 0;
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: $price-text;
+}
+
+.price-range-close-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  background-color: rgba(0, 0, 0, 0.06);
+  color: $price-text;
+  cursor: pointer;
+  transition: background-color 0.2s, color 0.2s;
+
+  &:hover {
+    background-color: rgba(0, 0, 0, 0.12);
+    color: #000;
+  }
+
+  &:focus,
+  &:active {
+    outline: none;
+    border: none;
+    box-shadow: none;
+  }
+}
+
+.price-range-form {
+  padding: 0 1rem 1rem;
+}
+
+.price-range-inputs {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.price-input-wrap {
+  flex: 1;
+}
+
+.price-range-label {
+  display: block;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: $price-text;
+  margin-bottom: 0.35rem;
+}
+
+.price-range-input {
+  width: 100%;
+  padding: 0.5rem 0.75rem;
+  font-size: 1rem;
+  border: 1px solid #ced4da;
+  border-radius: 0.25rem;
+
+  &:focus {
+    border-color: $price-primary;
+    outline: 0;
+    box-shadow: 0 0 0 0.2rem rgba(55, 143, 134, 0.25);
+  }
+}
+
+.price-range-slider-wrap {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.price-range-slider-label {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: $price-text;
+  flex-shrink: 0;
+}
+
+// Single clean track: one grey bar + teal fill; range inputs are thumb-only
+$track-h: 6px;
+$thumb-size: 22px;
+$slider-container-h: 10px;
+// Center track in container; center thumb on track (WebKit often anchors thumb to track top)
+$track-margin-top: ($slider-container-h - $track-h) / 2;
+$thumb-offset: ($track-h - $thumb-size) / 2;
+$thumb-nudge: ($track-h - $thumb-size) / 2;
+
+.price-range-slider-track {
+  position: relative;
+  flex: 1;
+  height: $slider-container-h;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+// Single grey track (no double rendering)
+.price-range-slider-track-bg {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  height: $track-h;
+  background: #e2e6ea;
+  border-radius: $track-h / 2;
+  pointer-events: none;
+}
+
+.price-range-slider-fill {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  height: $track-h;
+  background: $price-primary;
+  border-radius: $track-h / 2;
+  pointer-events: none;
+  z-index: 0;
+  transition: left 0.08s ease-out, right 0.08s ease-out;
+}
+
+.price-range-slider {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: $slider-container-h;
+  margin: 0;
+  padding: 0;
+  pointer-events: none;
+  -webkit-appearance: none;
+  appearance: none;
+  background: transparent;
+
+  // Transparent track same height/position as our visual track so thumb centers on line
+  &::-webkit-slider-runnable-track {
+    height: $track-h;
+    background: transparent;
+    margin-top: $track-margin-top;
+  }
+
+  &::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: $thumb-size;
+    height: $thumb-size;
+    border-radius: 50%;
+    background: $price-primary;
+    border: 1px solid rgba(255, 255, 255, 0.9);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
+    cursor: pointer;
+    pointer-events: auto;
+    margin-top: $thumb-nudge; // center thumb on track (nudge for WebKit)
+    transition: background-color 0.15s, box-shadow 0.15s;
+
+    &:hover {
+      background: $price-primary-hover;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    }
+  }
+
+  &::-moz-range-track {
+    height: $track-h;
+    background: transparent;
+    border: none;
+  }
+
+  &::-moz-range-thumb {
+    width: $thumb-size;
+    height: $thumb-size;
+    border-radius: 50%;
+    background: $price-primary;
+    border: 1px solid rgba(255, 255, 255, 0.9);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
+    cursor: pointer;
+    pointer-events: auto;
+    margin-top: $thumb-nudge;
+    transition: background-color 0.15s, box-shadow 0.15s;
+
+    &:hover {
+      background: $price-primary-hover;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    }
+  }
+}
+
+.price-range-slider-min {
+  z-index: 2;
+}
+
+.price-range-slider-max {
+  z-index: 1;
+
+  &::-webkit-slider-thumb {
+    pointer-events: auto;
+  }
+}
+
+.price-range-divider {
+  margin: 0.75rem 0;
+  border: 0;
+  border-top: 1px solid $price-divider;
+}
+
+.price-range-actions {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+/* Responsive – mobile / tablet */
+@media (max-width: 575.98px) {
+  .price-range-content {
+    min-width: unset;
+    width: 100%;
+  }
+
+  .price-range-header {
+    padding: 0.6rem 0.75rem;
+  }
+
+  .price-range-title {
+    font-size: 1rem;
+  }
+
+  .price-range-close-btn {
+    width: 40px;
+    height: 40px;
+    min-width: 40px;
+    min-height: 40px;
+  }
+
+  .price-range-form {
+    padding: 0 0.75rem 0.75rem;
+  }
+
+  .price-range-inputs {
+    gap: 0.75rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .price-range-input {
+    padding: 0.6rem 0.75rem;
+    font-size: 16px; /* prevents zoom on iOS */
+    min-height: 44px;
+  }
+
+  .price-range-slider-wrap {
+    gap: 0.5rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .price-range-slider-label {
+    font-size: 0.8rem;
+  }
+
+  .price-range-actions {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .price-range-apply-btn,
+  .price-range-reset-btn {
+    width: 100%;
+    min-height: 44px;
+    padding: 10px 20px;
+  }
+}
+
+@media (min-width: 576px) and (max-width: 767.98px) {
+  .price-range-content {
+    min-width: unset;
+    width: 100%;
+  }
+
+  .price-range-apply-btn,
+  .price-range-reset-btn {
+    min-height: 44px;
+  }
+}
+
+.price-range-apply-btn {
+  background-color: $price-primary !important;
+  border-color: $price-primary !important;
+  color: #fff !important;
+  padding: 6px 20px;
+  font-weight: 600;
+  font-size: 14px;
+  border-radius: 0;
+
+  &:hover {
+    background-color: $price-primary-hover !important;
+    border-color: $price-primary-hover !important;
+    color: $price-accent !important;
+  }
+}
+
+.price-range-reset-btn {
+  background-color: #6c757d !important;
+  border-color: #6c757d !important;
+  color: #fff !important;
+  padding: 6px 20px;
+  font-weight: 600;
+  font-size: 14px;
+  border-radius: 0;
+
+  &:hover {
+    background-color: #5a6268 !important;
+    border-color: #545b62 !important;
+    color: #fff !important;
+  }
+}

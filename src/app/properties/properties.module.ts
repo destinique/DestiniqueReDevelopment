@@ -16,6 +16,7 @@ import { PageSizeComponent } from './page-size/page-size.component';
 import { SortDropdownComponent } from './sort-dropdown/sort-dropdown.component';
 import { ListIdSearchComponent } from './list-id-search/list-id-search.component';
 import { AdvancedSearchComponent } from './advanced-search/advanced-search.component';
+import { PriceRangeComponent } from './price-range/price-range.component';
 
 @NgModule({
   declarations: [
@@ -26,7 +27,8 @@ import { AdvancedSearchComponent } from './advanced-search/advanced-search.compo
     PageSizeComponent,
     SortDropdownComponent,
     ListIdSearchComponent,
-    AdvancedSearchComponent
+    AdvancedSearchComponent,
+    PriceRangeComponent
   ],
   imports: [
     CommonModule,

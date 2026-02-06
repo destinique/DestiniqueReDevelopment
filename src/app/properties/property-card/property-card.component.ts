@@ -114,7 +114,7 @@ export class PropertyCardComponent implements OnChanges {
       currency: 'USD',
       minimumFractionDigits: 0,
       maximumFractionDigits: 0
-    }).format(price);
+    }).format(price) + ' /Nt.';
   }
 
   onToggleExpand(): void {

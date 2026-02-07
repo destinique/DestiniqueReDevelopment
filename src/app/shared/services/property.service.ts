@@ -212,8 +212,8 @@ export class PropertyService {
   /**
    * Get a single property by list_id
    */
-  getPropertyById(listId: number): Observable<Property> {
-    return this.http.get<Property>(`${this.apiUrl}/${listId}`);
+  getPropertyById(listId: number): Observable<PropertyResponse> {
+    return this.http.get<PropertyResponse>(`${this.apiUserBase}/properties_by_list_id.php?list_id=${listId}`);
   }
 
   /**

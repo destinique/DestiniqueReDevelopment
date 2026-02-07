@@ -5,7 +5,7 @@
            class="search-input"
            [(ngModel)]="searchTerm"
            name="searchTerm"
-           placeholder="List Id or Headline"
+           [placeholder]="(userRole == 1 || userRole == 2) ? 'List Id or Headline' : 'Search By List Id'"
            (keypress)="onKeyPress($event)"
            [disabled]="isLoading"/>
     <button type="button"

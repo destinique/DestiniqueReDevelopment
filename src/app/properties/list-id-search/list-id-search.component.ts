@@ -1,24 +1,50 @@
 // list-id-search.component.ts
-import { Component, Output, EventEmitter } from '@angular/core';
+import { Component, Output, EventEmitter, OnInit } from '@angular/core';
 import { PropertyService } from 'src/app/shared/services/property.service';
+import { UserRoleService } from 'src/app/shared/services/user-role.service';
+import { Subscription } from 'rxjs';  // ← Add this import
 
 @Component({
   selector: 'app-list-id-search',
   templateUrl: './list-id-search.component.html',
   styleUrls: ['./list-id-search.component.scss']
 })
-export class ListIdSearchComponent {
+export class ListIdSearchComponent implements OnInit {
   searchTerm = '';
   isLoading = false;
   errorMessage = '';
+  userRole: number | null = null;
+  private subscription: Subscription | null = null;
 
   @Output() searchComplete = new EventEmitter<any>(); // You might want to create a specific interface
 
-  constructor(private propertyService: PropertyService) {}
+  constructor(private propertyService: PropertyService,
+              private userRoleService: UserRoleService
+              ) {}
+
+  ngOnInit() {
+    // Subscribe to get the role dynamically
+    this.subscription = this.userRoleService.role$.subscribe(role => {
+      this.userRole = role;
+      console.log('Role changed to:', role);
+    });
+  }
+
+  ngOnDestroy() {
+    if (this.subscription) {
+      this.subscription.unsubscribe();// Prevent memory leaks
+    }
+  }
 
   onSearch(): void {
     if (!this.searchTerm.trim()) {
-      this.errorMessage = 'Please enter a List ID or headline';
+      if (this.userRole == 1 || this.userRole == 2){
+        this.errorMessage = 'Please enter a List ID or headline';
+      }
+      else {
+        this.errorMessage = 'Please enter a List ID';
+      }
+
       return;
     }
 
@@ -31,16 +57,18 @@ export class ListIdSearchComponent {
     if (!isNaN(listId)) {
       // Search by list_id
       this.propertyService.getPropertyById(listId).subscribe({
-        next: (property) => {
+        next: (response) => {
           this.isLoading = false;
-          this.searchComplete.emit([property]); // Wrap in array for consistency
+          this.searchComplete.emit(response.data); // Wrap in array for consistency
         },
         error: (error) => {
           this.isLoading = false;
-          this.errorMessage = 'Property not found with this ID';
+          // Backend message
+          this.errorMessage = error?.error?.message || 'Property not found with this ID';
         }
       });
-    } else {
+    }
+    else {
       // Search by headline/text (you'll need to implement this in your service)
       // For now, we'll just clear the search
       this.searchTerm = '';

@@ -64,16 +64,23 @@ export class ListIdSearchComponent implements OnInit {
         error: (error) => {
           this.isLoading = false;
           // Backend message
-          this.errorMessage = error?.error?.message || 'Property not found with this ID';
+          this.errorMessage = error?.error?.message || 'Sorry, no property found.';
         }
       });
     }
     else {
-      // Search by headline/text (you'll need to implement this in your service)
-      // For now, we'll just clear the search
-      this.searchTerm = '';
-      this.errorMessage = 'Text search not yet implemented';
-      this.isLoading = false;
+      // Search by headline/text
+      this.propertyService.getPropertiesByheadLine(this.searchTerm).subscribe({
+        next: (response) => {
+          this.isLoading = false;
+          this.searchComplete.emit(response.data); // Wrap in array for consistency
+        },
+        error: (error) => {
+          this.isLoading = false;
+          // Backend message
+          this.errorMessage = error?.error?.message || 'Sorry, no property found.';
+        }
+      });
     }
   }
 

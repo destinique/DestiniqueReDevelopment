@@ -15,10 +15,11 @@ export class PropertyListComponent implements OnInit, OnDestroy {
   // ========== PROPERTY DATA ==========
   properties: Property[] = [];
 
-  // ========== ADVANCED SEARCH DROPDOWN ==========
+  // ========== DROPDOWNS ==========
   advancedSearchOpen = false;
   priceRangeOpen = false;
   @ViewChild('advancedSearchDropdown') advancedSearchDropdown?: ElementRef<HTMLDivElement>;
+  @ViewChild('priceRangeDropdown') priceRangeDropdown?: ElementRef<HTMLDivElement>;
   paginationInfo: any = {
     page: 1,
     pageSize: 12,
@@ -171,6 +172,7 @@ export class PropertyListComponent implements OnInit, OnDestroy {
 
   toggleAdvancedSearch(): void {
     this.advancedSearchOpen = !this.advancedSearchOpen;
+    if (this.advancedSearchOpen) this.priceRangeOpen = false;
   }
 
   togglePriceRange(): void {
@@ -191,6 +193,9 @@ export class PropertyListComponent implements OnInit, OnDestroy {
     const target = event.target as Node;
     if (this.advancedSearchOpen && this.advancedSearchDropdown?.nativeElement && !this.advancedSearchDropdown.nativeElement.contains(target)) {
       this.advancedSearchOpen = false;
+    }
+    if (this.priceRangeOpen && this.priceRangeDropdown?.nativeElement && !this.priceRangeDropdown.nativeElement.contains(target)) {
+      this.priceRangeOpen = false;
     }
   }
 }

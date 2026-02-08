@@ -9,7 +9,7 @@ export interface AdvanceFilterSnapshot {
   searchExact: boolean;
   petFriendly: boolean;
   amenity: string[];
-  providers: string[];
+  providers: number[];
   propertyTypes: string[];
   viewTypes: string[];
 }

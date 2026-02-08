@@ -44,7 +44,7 @@ export class AdvancedSearchComponent implements OnInit, OnDestroy {
     { name: 'TheTopVillas', id: '43' },
     { name: 'Vrbo', id: '44' }
   ];
-  
+
   propertyTypeOptions: FilterOption[] = [];
   viewTypeOptions: FilterOption[] = [];
 
@@ -173,7 +173,7 @@ export class AdvancedSearchComponent implements OnInit, OnDestroy {
     values.forEach(val => formArray.push(new FormControl(val)));
   }
 
-  isSelectedIn(formArray: FormArray, name: string): boolean {
+  isSelectedIn(formArray: FormArray, name: any): boolean {
     return this.getSelectedValues(formArray).includes(name);
   }
 
@@ -181,7 +181,7 @@ export class AdvancedSearchComponent implements OnInit, OnDestroy {
     this.toggleInFormArray(this.amenityArray, name);
   }
 
-  toggleProvider(name: string): void {
+  toggleProvider(name: any): void {
     this.toggleInFormArray(this.providersArray, name);
   }
 
@@ -206,7 +206,7 @@ export class AdvancedSearchComponent implements OnInit, OnDestroy {
       minBedrooms: bedrooms != null && bedrooms !== '' && bedrooms > 0 ? Number(bedrooms) : undefined,
       minBathrooms: bathrooms != null && bathrooms !== '' && bathrooms > 0 ? Number(bathrooms) : undefined,
       amenities: (raw.amenity as string[]) || [],
-      providers: (raw.providers as string[]) || [],
+      providers: (raw.providers as number[]) || [],
       propertyTypes: (raw.propertyTypes as string[]) || [],
       viewTypes: (raw.viewTypes as string[]) || [],
       searchExact: !!raw.searchExact,
@@ -234,7 +234,7 @@ export class AdvancedSearchComponent implements OnInit, OnDestroy {
   private isSameSnapshot(a: AdvanceFilterSnapshot, b: AdvanceFilterSnapshot): boolean {
     if (a.bedrooms !== b.bedrooms || a.bathrooms !== b.bathrooms) return false;
     if (a.searchExact !== b.searchExact || a.petFriendly !== b.petFriendly) return false;
-    const eq = (x: string[], y: string[]) => x.length === y.length && x.every((v, i) => v === y[i]);
+    const eq = <T>(x: T[], y: T[]): boolean => x.length === y.length && x.every((v, i) => v === y[i]);
     return eq(a.amenity, b.amenity) && eq(a.providers, b.providers) && eq(a.propertyTypes, b.propertyTypes) && eq(a.viewTypes, b.viewTypes);
   }
 

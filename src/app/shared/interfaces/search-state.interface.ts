@@ -27,12 +27,12 @@ export interface SearchParams {
   minBedrooms?: number;     // Changed from number | null
   minBathrooms?: number;    // Changed from number | null
   minGuests?: number;       // Changed from number | null
-  minPrice?: number;       
-  maxPrice?: number; 
+  minPrice?: number;
+  maxPrice?: number;
 
   // Array filters
   amenities?: string[];
-  providers?: string[];
+  providers?: number[];
   propertyTypes?: string[];
   viewTypes?: string[];
 
@@ -74,7 +74,7 @@ export interface SearchState {
 
   // Keep arrays and booleans with defaults
   amenities: string[];
-  providers: string[];
+  providers: number[];
   propertyTypes: string[];
   viewTypes: string[];
   searchExact: boolean;

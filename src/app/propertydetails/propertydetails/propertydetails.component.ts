@@ -477,49 +477,48 @@ export class PropertydetailsComponent implements OnInit, AfterViewInit, OnDestro
   loadAvailabilityData(): void {
     this.isCalendarLoading = true;
     this.availabilitySub = this.availabilityService.getAvailability(this.propertyId)
-      .subscribe(data => {
+      .subscribe({
+        next: (data) => {
+          // Reset arrays
+          this.fullyAvailableDates = [];
+          this.fullyUnavailableDates = [];
+          this.amOnlyDates = [];
+          this.pmOnlyDates = [];
+          this.noCheckinDates = [];
 
-        // Reset arrays
-        this.fullyAvailableDates = [];
-        this.fullyUnavailableDates = [];
-        this.amOnlyDates = [];
-        this.pmOnlyDates = [];
-        this.noCheckinDates = [];
-
-        // Categorize dates based on status
-        data.forEach(item => {
-          switch (item.status) {
-            case 'available':
-              this.fullyAvailableDates.push(item.date);
-              break;
-            case 'unavailable':
-              this.fullyUnavailableDates.push(item.date);
-              break;
-            case 'am_only':
-              this.amOnlyDates.push(item.date);
-              break;
-            case 'pm_only':
-              this.pmOnlyDates.push(item.date);
-              break;
-            case 'no_checkin':
-              this.noCheckinDates.push(item.date);
-              break;
-            default:
-              console.warn(`Unknown status for date ${item.date.year}-${item.date.month}-${item.date.day}: ${item.status}`);
+          // Categorize dates based on status
+          data.forEach(item => {
+            switch (item.status) {
+              case 'available':
+                this.fullyAvailableDates.push(item.date);
+                break;
+              case 'unavailable':
+                this.fullyUnavailableDates.push(item.date);
+                break;
+              case 'am_only':
+                this.amOnlyDates.push(item.date);
+                break;
+              case 'pm_only':
+                this.pmOnlyDates.push(item.date);
+                break;
+              case 'no_checkin':
+                this.noCheckinDates.push(item.date);
+                break;
+              default:
+                console.warn(`Unknown status for date ${item.date.year}-${item.date.month}-${item.date.day}: ${item.status}`);
+            }
+          });
+          this.isCalendarLoading = false;
+        },
+        error: (err) => {
+          this.isCalendarLoading = false;
+          if (this.RATE_AVAILABLE == 0) {
+            this.toast.warning('Availability data is not available for this property at this moment.', '', {
+              positionClass: 'toast-top-center'
+            });
           }
-        });
-        this.isCalendarLoading = false;
-        /*
-        console.log('=== CATEGORIZATION ===');
-        console.log('Fully available (green):', this.fullyAvailableDates.length);
-        console.log('Fully unavailable (red):', this.fullyUnavailableDates.length);
-        console.log('AM only (top green/bottom red):', this.amOnlyDates.length);
-        console.log('PM only (top red/bottom green):', this.pmOnlyDates.length);
-        console.log('No checkin (green with red dot):', this.noCheckinDates.length);
-        */
-
-        // Run test first
-        // setTimeout(() => {this.testFebruaryLogic();}, 5000);
+          console.error('Failed to load availability:', err);
+        }
       });
   }
 

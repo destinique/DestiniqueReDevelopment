@@ -87,7 +87,7 @@ export interface SearchParams {
 
   // Array filters
   amenities?: string[];
-  providers?: string[];
+  providers?: number[];
   propertyTypes?: string[];
   viewTypes?: string[];
 

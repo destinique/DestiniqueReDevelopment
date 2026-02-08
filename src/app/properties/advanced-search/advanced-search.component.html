@@ -66,13 +66,13 @@
         <label class="advanced-search-group-label">Providers</label>
         <div *ngIf="!showMoreProviders">
           <div class="form-check" *ngFor="let option of providerOptions.slice(0, 2)">
-            <input type="checkbox" class="form-check-input" [id]="'provider-' + option.id" [checked]="isSelectedIn(providersArray, option.name)" (change)="toggleProvider(option.name)"/>
+            <input type="checkbox" class="form-check-input" [id]="'provider-' + option.id" [checked]="isSelectedIn(providersArray, option.id)" (change)="toggleProvider(option.id)"/>
             <label class="form-check-label" [for]="'provider-' + option.id">{{ option.name }}</label>
           </div>
         </div>
         <div #providersMoreEl class="providers-more" [class.expanded]="showMoreProviders">
           <div class="form-check" *ngFor="let option of providerOptions">
-            <input type="checkbox" class="form-check-input" [id]="'provider-' + option.id" [checked]="isSelectedIn(providersArray, option.name)" (change)="toggleProvider(option.name)"/>
+            <input type="checkbox" class="form-check-input" [id]="'provider-' + option.id" [checked]="isSelectedIn(providersArray, option.id)" (change)="toggleProvider(option.id)"/>
             <label class="form-check-label" [for]="'provider-' + option.id">{{ option.name }}</label>
           </div>
         </div>

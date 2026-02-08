@@ -582,8 +582,8 @@ export class SearchPropertyComponent implements OnInit, OnDestroy {
     this.lastSelectedPlaceAddress = null;
     this.hidePredictions();
 
-    // Single state reset → one API call
-    this.searchState.resetAll();
+    // Reset only main search; preserve advanced filters for API
+    this.searchState.resetBasicSearch();
   }
 
   /**

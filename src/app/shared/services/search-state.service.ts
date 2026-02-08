@@ -227,6 +227,23 @@ export class SearchStateService {
   }
 
   /**
+   * Reset only main search fields (destination, dates, bedrooms, guests).
+   * Keeps advanced filters (amenities, providers, propertyTypes, viewTypes, etc.) and pagination.
+   */
+  resetBasicSearch(): void {
+    const current = this.currentState;
+    this.stateSubject.next({
+      ...current,
+      location: null,
+      checkIn: undefined,
+      checkOut: undefined,
+      minBedrooms: undefined,
+      minGuests: undefined,
+      page: 1
+    });
+  }
+
+  /**
    * Reset only search filters (keep pagination/sort)
    */
   resetFilters(): void {

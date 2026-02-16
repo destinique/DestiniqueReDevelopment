@@ -1,10 +1,10 @@
 // search-property.component.ts
-import { Component, OnInit, OnDestroy, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, AfterViewInit, ViewChild, ElementRef } from '@angular/core';
 import { NgxSpinnerService } from "ngx-spinner";
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { SearchStateService } from 'src/app/shared/services/search-state.service';
 import { GoogleMapsService, PlacePrediction, PlaceDetails } from 'src/app/shared/services/google-maps.service';
-import { Subject, from } from 'rxjs';
+import { Subject, from, combineLatest } from 'rxjs';
 import { debounceTime, filter, switchMap, takeUntil, catchError, tap, map, distinctUntilChanged } from 'rxjs/operators';
 import { of } from 'rxjs';
 import { ActivatedRoute } from '@angular/router'; // Add this import
@@ -15,7 +15,7 @@ import { NgbDateStruct, NgbInputDatepicker } from '@ng-bootstrap/ng-bootstrap';
   templateUrl: './search-property.component.html',
   styleUrls: ['./search-property.component.scss']
 })
-export class SearchPropertyComponent implements OnInit, OnDestroy {
+export class SearchPropertyComponent implements OnInit, AfterViewInit, OnDestroy {
   // ========== FORM PROPERTIES ==========
   searchForm: FormGroup;
 
@@ -112,15 +112,44 @@ export class SearchPropertyComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Initialize search from URL parameters (for bookmarking/sharing)
+   * Refresh the calendar input display after view init.
+   * Ensures dates from URL (checkIn/checkOut) are visible - the input ViewChild
+   * and ngbDatepicker need the view to be ready before the displayed value updates.
+   */
+  ngAfterViewInit(): void {
+    if (this.searchFromDate && this.searchToDate) {
+      setTimeout(() => this.updateSearchCalendarField(), 0);
+    }
+  }
+
+  /**
+   * Sync form from URL path and query parameters.
+   * NOTE: State is already initialized by propertiesResolver BEFORE this component loads.
+   * Here we only sync the form UI (destination input, dates, etc.) from the current state
+   * and set lastSelectedPlaceAddress so blur does not overwrite. Do NOT call
+   * initializeFromUrlParams again to avoid duplicate state emission and duplicate API call.
    */
   private initializeFromUrl(): void {
-    this.route.queryParams.subscribe(params => {
-      if (Object.keys(params).length > 0) {
-        console.log('🔍 URL Parameters detected:', params);
-        this.searchState.initializeFromUrlParams(params);
-      }
-    });
+    combineLatest([this.route.params, this.route.queryParams])
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(([pathParams]) => {
+        const pathCity = pathParams['city'];
+        if (pathCity) {
+          const decoded = this.safeDecode(pathCity);
+          this.searchForm.get('destination')?.setValue(decoded, { emitEvent: false });
+          this.lastSelectedPlaceAddress = decoded;
+        }
+        this.initializeFormFromState();
+      });
+  }
+
+  /** Safe URL decode for path/query params */
+  private safeDecode(value: string): string {
+    try {
+      return decodeURIComponent(value);
+    } catch {
+      return value;
+    }
   }
 
   ngOnDestroy(): void {

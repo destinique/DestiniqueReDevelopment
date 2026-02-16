@@ -79,13 +79,49 @@ export class AdvancedSearchComponent implements OnInit, OnDestroy {
     this.propertyService.getFilterOptions().subscribe(({ propertyTypes, viewTypes }) => {
       this.propertyTypeOptions = propertyTypes;
       this.viewTypeOptions = viewTypes;
+      this.syncAllFiltersFromState();
     });
-    this.searchState.state$.pipe(takeUntil(this.destroy$)).subscribe(() => this.syncNumericFiltersFromState());
+    this.searchState.state$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(() => {
+        this.syncNumericFiltersFromState();
+        this.syncArrayFiltersFromState();
+      });
   }
 
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
+  }
+
+  /**
+   * Sync FormArrays (amenities, providers, propertyTypes, viewTypes) from SearchState.
+   * Used when state is initialized from URL params.
+   */
+  private syncArrayFiltersFromState(): void {
+    const state = this.searchState.currentState;
+
+    this.setFormArrayFromValues(this.amenityArray, state.amenities);
+    this.setFormArrayFromValues(this.providersArray, state.providers.map(p => String(p)));
+    this.setFormArrayFromValues(this.propertyTypesArray, state.propertyTypes);
+    this.setFormArrayFromValues(this.viewTypesArray, state.viewTypes);
+
+    this.advanceFilterForm.patchValue({
+      searchExact: state.searchExact,
+      petFriendly: state.petFriendly
+    }, { emitEvent: false });
+  }
+
+  /** Populate FormArray with given values, replacing existing */
+  private setFormArrayFromValues(formArray: FormArray, values: (string | number)[]): void {
+    formArray.clear();
+    values.forEach(v => formArray.push(new FormControl(v)));
+  }
+
+  /** Sync numeric filters and array filters from state (called after filter options load) */
+  private syncAllFiltersFromState(): void {
+    this.syncNumericFiltersFromState();
+    this.syncArrayFiltersFromState();
   }
 
   /**

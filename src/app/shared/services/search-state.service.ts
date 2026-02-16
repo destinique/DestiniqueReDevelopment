@@ -2,6 +2,13 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, distinctUntilChanged, map } from 'rxjs';
 import { SearchState, LocationData, SearchParams } from '../interfaces/search-state.interface';
 
+/** Valid sortBy values for URL param validation */
+const VALID_SORT_BY = new Set([
+  'newest', 'oldest', 'price_low', 'price_high',
+  'bedrooms_asc', 'bedrooms_desc', 'bathrooms_asc', 'bathrooms_desc',
+  'sleeps_asc', 'sleeps_desc', 'city_asc', 'city_desc', 'state_asc', 'state_desc'
+]);
+
 @Injectable({
   providedIn: 'root'
 })
@@ -270,10 +277,140 @@ export class SearchStateService {
   }
 
   /**
-   * Initialize from URL parameters (for bookmarking/sharing searches)
+   * Initialize search state from URL path and query parameters.
+   * Supports bookmarking and sharing of search URLs.
+   *
+   * Path param: city (decoded) - location display text; e.g. "Destin", "Destin, FL 32541, USA"
+   * Query params: latitude, longitude, state, country, checkIn, checkOut, minBedrooms,
+   * minBathrooms, minGuests, minPrice, maxPrice, page, pageSize, sortBy, amenities,
+   * providers, propertyTypes, viewTypes, searchExact, petFriendly.
    */
-  initializeFromUrlParams(params: any): void {
-    console.log('Initialize from URL params:', params);
+  initializeFromUrlParams(params: Record<string, any>): void {
+    if (!params || typeof params !== 'object' || Object.keys(params).length === 0) {
+      return;
+    }
+
+    const updates: Partial<SearchState> = {};
+
+    // --- Location (path :city + query latitude, longitude, state, country) ---
+    const pathCity = this.safeDecodeParam(params['city']);
+    if (pathCity) {
+      const stateParam = this.safeDecodeParam(params['state']) || '';
+      const countryParam = this.safeDecodeParam(params['country']) || '';
+      const lat = this.parseNum(params['latitude']);
+      const lng = this.parseNum(params['longitude']);
+      const placeId = typeof params['placeId'] === 'string' ? params['placeId'].trim() : undefined;
+      const city = this.extractCityFromPath(pathCity);
+
+      updates.location = {
+        text: pathCity,
+        city,
+        state: stateParam,
+        country: countryParam,
+        latitude: lat,
+        longitude: lng,
+        placeId: placeId || undefined
+      };
+    }
+
+    // --- Dates ---
+    const checkIn = this.parseDate(params['checkIn']);
+    const checkOut = this.parseDate(params['checkOut']);
+    if (checkIn) updates.checkIn = checkIn;
+    if (checkOut) updates.checkOut = checkOut;
+
+    // --- Numeric filters ---
+    const minBed = this.parseNum(params['minBedrooms']);
+    const minBath = this.parseNum(params['minBathrooms']);
+    const minGuests = this.parseNum(params['minGuests']);
+    const minP = this.parseNum(params['minPrice']);
+    const maxP = this.parseNum(params['maxPrice']);
+    if (minBed !== undefined) updates.minBedrooms = minBed;
+    if (minBath !== undefined) updates.minBathrooms = minBath;
+    if (minGuests !== undefined) updates.minGuests = minGuests;
+    if (minP !== undefined) updates.minPrice = minP;
+    if (maxP !== undefined) updates.maxPrice = maxP;
+
+    // --- Pagination ---
+    const page = this.parseNum(params['page']);
+    const pageSize = this.parseNum(params['pageSize']);
+    if (page !== undefined && page >= 1) updates.page = Math.floor(page);
+    if (pageSize !== undefined && pageSize >= 1 && pageSize <= 60) {
+      updates.pageSize = Math.min(60, Math.max(1, Math.floor(pageSize)));
+    }
+
+    // --- Sort ---
+    const sortBy = typeof params['sortBy'] === 'string' ? params['sortBy'].trim() : '';
+    if (sortBy && VALID_SORT_BY.has(sortBy)) {
+      updates.sortBy = sortBy;
+    }
+
+    // --- Array filters (comma-separated) ---
+    updates.amenities = this.parseStringArray(params['amenities']);
+    updates.providers = this.parseNumberArray(params['providers']);
+    updates.propertyTypes = this.parseStringArray(params['propertyTypes']);
+    updates.viewTypes = this.parseStringArray(params['viewTypes']);
+
+    // --- Booleans ---
+    updates.searchExact = this.parseBool(params['searchExact']);
+    updates.petFriendly = this.parseBool(params['petFriendly']);
+
+    if (Object.keys(updates).length > 0) {
+      const current = this.currentState;
+      this.stateSubject.next({ ...current, ...updates });
+    }
+  }
+
+  /** Decode URL-encoded param safely */
+  private safeDecodeParam(value: any): string {
+    if (value == null || value === '') return '';
+    try {
+      return decodeURIComponent(String(value).trim());
+    } catch {
+      return String(value).trim();
+    }
+  }
+
+  /** Extract city segment from path like "Destin, FL 32541, USA" -> "Destin" */
+  private extractCityFromPath(pathText: string): string {
+    const trimmed = pathText.trim();
+    const firstComma = trimmed.indexOf(',');
+    return firstComma > 0 ? trimmed.slice(0, firstComma).trim() : trimmed;
+  }
+
+  /** Parse string to number; return undefined if invalid */
+  private parseNum(value: any): number | undefined {
+    if (value == null || value === '') return undefined;
+    const n = Number(value);
+    return Number.isFinite(n) ? n : undefined;
+  }
+
+  /** Parse ISO date string to Date */
+  private parseDate(value: any): Date | undefined {
+    if (value == null || value === '') return undefined;
+    const d = new Date(String(value));
+    return isNaN(d.getTime()) ? undefined : d;
+  }
+
+  /** Parse comma-separated string to string[] */
+  private parseStringArray(value: any): string[] {
+    if (value == null || value === '') return [];
+    const str = String(value).trim();
+    if (!str) return [];
+    return str.split(',').map(s => this.safeDecodeParam(s.trim())).filter(Boolean);
+  }
+
+  /** Parse comma-separated string to number[] */
+  private parseNumberArray(value: any): number[] {
+    const arr = this.parseStringArray(value);
+    return arr.map(s => Number(s)).filter(n => Number.isFinite(n));
+  }
+
+  /** Parse boolean param (true, 1, yes) */
+  private parseBool(value: any): boolean {
+    if (value == null || value === '') return false;
+    const s = String(value).toLowerCase();
+    return s === 'true' || s === '1' || s === 'yes';
   }
 
   /**

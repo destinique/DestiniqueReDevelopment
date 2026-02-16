@@ -5,6 +5,7 @@
 /tmp
 /out-tsc
 /bazel-out
+/backups
 
 # Node
 /node_modules
@@ -19,6 +20,7 @@ yarn-error.log
 *.launch
 .settings/
 *.sublime-workspace
+.editorconfig
 
 # Visual Studio Code
 .vscode/*
@@ -29,7 +31,7 @@ yarn-error.log
 .history/*
 
 # Miscellaneous
-/.angular/cache
+/.angular
 .sass-cache/
 /connect.lock
 /coverage

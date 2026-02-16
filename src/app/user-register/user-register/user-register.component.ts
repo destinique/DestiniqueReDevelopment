@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ToastrService } from "ngx-toastr";
-import { NgxSpinnerService } from "ngx-spinner";
+import { LoadSpinnerService } from 'src/app/shared/services/load-spinner.service';
 import { AuthService } from 'src/app/shared/services/auth.service';
 import { CrudService } from 'src/app/shared/services/crud.service';
 import { HttpErrorResponse } from '@angular/common/http';
@@ -34,7 +34,7 @@ export class UserRegisterComponent implements OnInit {
     private fb: FormBuilder,
     private router: Router,
     private toast: ToastrService,
-    private spinner: NgxSpinnerService,
+    private loadSpinner: LoadSpinnerService,
     private authService: AuthService,
     private crudService: CrudService
   ) {}
@@ -226,7 +226,7 @@ export class UserRegisterComponent implements OnInit {
     }
 
     this.isSubmitting = true;
-    this.spinner.show();
+    this.loadSpinner.show();
 
     const formData = this.registerForm.value;
 
@@ -244,7 +244,7 @@ export class UserRegisterComponent implements OnInit {
 
     this.crudService.registerUser(registrationData).subscribe({
       next: (response: any) => {
-        this.spinner.hide();
+        this.loadSpinner.hide();
         this.isSubmitting = false;
 
         // Your PHP returns { "status": "Done" } on success
@@ -267,7 +267,7 @@ export class UserRegisterComponent implements OnInit {
         }
       },
       error: (error: HttpErrorResponse) => {
-        this.spinner.hide();
+        this.loadSpinner.hide();
         this.isSubmitting = false;
         this.handleHttpError(error);
       }

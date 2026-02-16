@@ -1,5 +1,5 @@
 import { Component, OnInit, AfterViewInit, OnDestroy} from "@angular/core";
-import { NgxSpinnerService } from "ngx-spinner";
+import { LoadSpinnerService } from 'src/app/shared/services/load-spinner.service';
 import { ActivatedRoute } from "@angular/router";
 import { CrudService } from "src/app/shared/services/crud.service";
 import {AuthService} from "src/app/shared/services/auth.service";
@@ -25,7 +25,7 @@ export class OurPromotionsComponent implements OnInit, AfterViewInit, OnDestroy 
   constructor(
     private modalService: NgbModal,
     private crudService: CrudService,
-    private spinner: NgxSpinnerService,
+    private loadSpinner: LoadSpinnerService,
     private actRoute: ActivatedRoute,
     private userRoleService: UserRoleService,
     private cdr: ChangeDetectorRef
@@ -47,7 +47,7 @@ export class OurPromotionsComponent implements OnInit, AfterViewInit, OnDestroy 
   }
 
   ngAfterViewInit() {
-    this.spinner.show();
+    this.loadSpinner.show();
     this.loadPromoData(this.id);
   }
 
@@ -57,11 +57,11 @@ export class OurPromotionsComponent implements OnInit, AfterViewInit, OnDestroy 
       .toPromise()
       .then((resp) => {
         this.promoData = Array.isArray(resp) ? resp : [];
-        this.spinner.hide();
+        this.loadSpinner.hide();
       })
       .catch((error) => {
         console.error('Error loading promotions:', error);
-        this.spinner.hide();
+        this.loadSpinner.hide();
       });
   }
 

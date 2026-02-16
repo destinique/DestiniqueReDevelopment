@@ -1,7 +1,9 @@
+@use 'variables' as *;
+
 .testimonial-container {
     position: relative;
     text-align: center;
-    color: #fff;
+    color: $color-white;
 }
 .testimonial-container .overlay-effect {
     opacity: 1;
@@ -28,7 +30,7 @@
 }
 h1 {
     font-size: 3rem;
-    line-height: 1.5;
+    line-height: $line-height-base;
     font-weight: 300;
     letter-spacing: 10px;
     text-align: center;
@@ -75,23 +77,23 @@ h1 {
 }
 
 .text-lg {
-    font-size: 1.125rem;
+    font-size: $font-size-lg;
     line-height: 1.75rem;
     overflow-y: auto;
 }
 .close-quotation .fa {
-    color: #000;
+    color: $color-black;
 }
 .testimonials-user-info {
-    border-left: 3px solid #000;
+    border-left: 3px solid $color-black;
     padding-left: 12px;
 }
 .testimonials-user-name {
-    font-weight: 600;
+    font-weight: $font-weight-600;
     padding-top: 0px;
 }
 .testimonials-user-submit-date {
-    font-size: 14px;
+    font-size: $font-size-sm;
     font-weight: 300;
 }
 .right-10 {
@@ -104,8 +106,8 @@ h1 {
     letter-spacing: 5px;
 }
 .tracking-wide {
-    letter-spacing: 0.025em;
-    padding-left: 1rem;
+    letter-spacing: $letter-spacing-wide;
+    padding-left: $spacing-md;
 }
 .testimonials-header {
     padding-bottom: 0.6rem;
@@ -114,19 +116,19 @@ h1 {
     border-right: 2px solid;
 }
 .border-black {
-    border-color: #000;
+    border-color: $color-black;
 }
 .items-end {
     align-items: flex-end;
 }
 .pr-3, .px-3 {
-    padding-right: 1rem !important;
+    padding-right: $spacing-md !important;
 }
 svg {
     height: 40px;
 }
 .testimonial-item {
-    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2);
+    box-shadow: $shadow-lg;
     max-height: 80%;
     overflow: auto;
     right: 2.5rem;
@@ -138,8 +140,8 @@ svg {
 }
 @media (min-width: 1140px) {
     .testimonial-item {
-        font-size: 0.875rem;
-        line-height: 1.25rem;
+        font-size: $font-size-sm;
+        line-height: $line-height-tight;
         padding-top: 2.5rem;
         padding-left: 4rem;
         right: 3rem;
@@ -152,13 +154,13 @@ svg {
     .testimonial-item {
         padding-left: 2.5rem;
         position: absolute;
-        padding-right: 1rem;
+        padding-right: $spacing-md;
         width: 50%;
-        font-size: 0.875rem;
-        line-height: 1.25rem;
+        font-size: $font-size-sm;
+        line-height: $line-height-tight;
     }
     .lg-pt-2 {
-        padding-top: 0.5rem;
+        padding-top: $spacing-sm;
     }
     .lg-max-w-65 {
         max-width: 65%;
@@ -184,10 +186,10 @@ svg {
 }
 .testimonials-Review {
     text-align: left;
-    color: #68110a;
+    color: $color-accent;
     text-transform: uppercase;
-    margin-top: 3rem;
-    margin-bottom: 2rem;
+    margin-top: $spacing-3xl;
+    margin-bottom: $spacing-xl;
     font-size: 1.875rem;
     line-height: 2.25rem;
     font-weight: 300;
@@ -195,18 +197,18 @@ svg {
 }
 .card {
     background: transparent;
-    border-color: #e0e0e0 !important;
-    border-radius: unset;
+    border-color: $color-border !important;
+    border-radius: $border-radius-none;
 }
 .lbl {
-    font-weight: 400;
+    font-weight: $font-weight-400;
     font-size: 0.9rem;
     text-transform: uppercase;
-    line-height: 1.5rem;
-    letter-spacing: 0.1em;
+    line-height: $line-height-base;
+    letter-spacing: $letter-spacing-wider;
 }
 .form-control {
-    border-radius: 0rem;
+    border-radius: $border-radius-none;
     letter-spacing: 1px;
 }
 .btn-al-r {
@@ -215,33 +217,33 @@ svg {
 }
 .btn {
     font-family: inherit;
-    background: #378f86;
-    background-color: #378f86;
+    background: $color-primary;
+    background-color: $color-primary;
     border-style: none none none none;
-    color: #fff;
-    border-color: #378f86 #378f86 #378f86 #378f86;
-    font-weight: 700;
+    color: $color-white;
+    border-color: $color-primary $color-primary $color-primary $color-primary;
+    font-weight: $font-weight-700;
     text-transform: uppercase;
-    font-size: 14px;
+    font-size: $font-size-sm;
     line-height: 26px;
     letter-spacing: 3px;
-    border-radius: 0;
+    border-radius: $border-radius-none;
 }
 .mr-1, .mx-1 {
-    margin-right: .25rem !important;
+    margin-right: $spacing-xs !important;
 }
 .btn:hover {
-    color: #fff;
-    background-color: #378f86;
+    color: $color-white;
+    background-color: $color-primary;
 }
 .btn-primary:hover {
-    background-color: #68110a !important;
-    border-color: #68110a !important;
-    color: #fff;
-    box-shadow: 0 4px 14px 0 rgba(5, 5, 5, 0.47);
+    background-color: $color-accent !important;
+    border-color: $color-accent !important;
+    color: $color-white;
+    box-shadow: $shadow-primary;
 }
 .btn-secondary {
-    background-color: gray;
+    background-color: $color-muted;
 }
 @media screen and (max-width: 768px) {
     .testimonials-Review {
@@ -255,8 +257,8 @@ svg {
 /*consent*/
 .opt-in-text-s {
     font-size: 12px;
-    color: #555;
-    margin-bottom: 1rem;
+    color: $color-text-muted;
+    margin-bottom: $spacing-md;
     label {
         display: block;
     }
@@ -286,27 +288,27 @@ svg {
 }
 */
 a.collapsed {
-    color: #6fccc2;
+    color: $color-primary-light;
 }
 .sms-mms-consent a:hover, .sms-mms-consent a:active, .sms-mms-consent a:focus, .email-consent a:hover, .email-consent a:active, .email-consent a:focus {
-    color: #6fccc2;
+    color: $color-primary-light;
     text-decoration: underline;
 }
 .opt-in-text-s input {
-    background-color: #fff !important;
-    border-color: #E0E0E0 !important;
-    border-width: 1px !important;
-    border-radius: 0 !important;
-    padding: .75rem .75rem .5rem .75rem !important;
-    font-size: 1rem !important;
-    line-height: 1.5rem !important;
-    font-weight: 400 !important;
+    background-color: $color-white !important;
+    border-color: $color-border !important;
+    border-width: $border-width !important;
+    border-radius: $border-radius-none !important;
+    padding: .75rem .75rem $spacing-sm .75rem !important;
+    font-size: $font-size-base !important;
+    line-height: $line-height-base !important;
+    font-weight: $font-weight-400 !important;
     letter-spacing: 1px !important;
     padding-block-end: 8px !important;
     padding-block-start: 12px !important;
     padding-inline-end: 12px !important;
     padding-inline-start: 12px !important;
-    accent-color: #378f86;
+    accent-color: $color-primary;
 }
 .email-consent .collapse:not(.show) {
     display: -webkit-box;
@@ -317,4 +319,192 @@ a.collapsed {
     max-width: calc(100% - 90px);
     white-space: nowrap;
     text-overflow: ellipsis;
+}
+
+.top-cta-card {
+    position: relative;
+    background: linear-gradient(135deg,
+        rgba(245, 245, 240, 0.95) 0%,
+        rgba(250, 249, 245, 0.98) 25%,
+        rgba($color-primary, 0.05) 50%,
+        rgba(250, 249, 245, 0.98) 75%,
+        rgba(245, 245, 240, 0.95) 100%
+    );
+    border: $border-width solid rgba(232, 232, 227, 0.6);
+    border-radius: $border-radius-lg;
+    padding: $spacing-3xl $spacing-xl;
+    text-align: center;
+    box-shadow: $shadow-md, 0 0 0 1px rgba($color-primary, 0.1) inset;
+    transition: all 0.3s ease;
+    overflow: hidden;
+}
+
+.top-cta-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(ellipse at center, rgba($color-primary, 0.08) 0%, rgba($color-primary, 0.03) 40%, transparent 70%);
+    pointer-events: none;
+    z-index: 0;
+}
+
+.top-cta-card::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(to bottom, rgba($color-white, 0.3) 0%, transparent 15%, transparent 85%, rgba($color-white, 0.2) 100%);
+    pointer-events: none;
+    z-index: 0;
+}
+
+.top-cta-card:hover {
+    box-shadow: 0 8px 30px rgba($color-primary, 0.15), 0 0 0 1px rgba($color-primary, 0.2) inset;
+    transform: translateY(-2px);
+    border-color: rgba($color-primary, 0.3);
+}
+
+.top-cta-card .cta-content {
+    position: relative;
+    z-index: 1;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.top-cta-card .cta-heading {
+    font-size: 1.75rem;
+    font-weight: $font-weight-600;
+    color: $color-black;
+    margin-bottom: 0.75rem;
+    letter-spacing: 1px;
+}
+
+.top-cta-card .cta-subheading {
+    font-size: $font-size-base;
+    color: $color-text-light;
+    margin-bottom: $spacing-lg;
+    line-height: 1.6;
+}
+
+.btn-write-review-cta {
+    background-color: $color-primary;
+    padding: 14px 36px;
+    font-size: $font-size-base;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    box-shadow: $shadow-primary;
+    min-width: 200px;
+}
+
+.btn-write-review-cta:hover {
+    background-color: $color-accent !important;
+    transform: translateY(-2px);
+    box-shadow: $shadow-accent;
+}
+
+.btn-write-review-cta svg {
+    width: 20px;
+    height: 20px;
+    margin-right: 8px;
+}
+
+.floating-review-btn {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    background-color: $color-primary;
+    color: $color-white;
+    border: none;
+    border-radius: 50px;
+    padding: 16px 24px;
+    font-size: $font-size-sm;
+    font-weight: $font-weight-700;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    cursor: pointer;
+    box-shadow: 0 6px 20px rgba($color-primary, 0.4);
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.3s ease;
+    animation: pulse 2s infinite;
+}
+
+.floating-review-btn:hover {
+    background-color: $color-accent;
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba($color-accent, 0.5);
+}
+
+.floating-review-btn svg {
+    width: 24px;
+    height: 24px;
+    flex-shrink: 0;
+}
+
+.floating-btn-text {
+    white-space: nowrap;
+}
+
+@keyframes pulse {
+    0%, 100% {
+        box-shadow: 0 6px 20px rgba($color-primary, 0.4);
+    }
+    50% {
+        box-shadow: 0 6px 25px rgba($color-primary, 0.6);
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .top-cta-card {
+        padding: $spacing-xl $spacing-lg;
+    }
+    
+    .top-cta-card .cta-heading {
+        font-size: 1.5rem;
+    }
+    
+    .top-cta-card .cta-subheading {
+        font-size: 0.9rem;
+    }
+    
+    .btn-write-review-cta {
+        padding: 12px 28px;
+        font-size: $font-size-sm;
+        width: 100%;
+        max-width: 280px;
+    }
+    
+    .floating-review-btn {
+        bottom: 20px;
+        right: 20px;
+        padding: 14px 20px;
+        font-size: 12px;
+        letter-spacing: 1px;
+    }
+    
+    .floating-btn-text {
+        display: none;
+    }
+    
+    .floating-review-btn {
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        padding: 0;
+        justify-content: center;
+    }
+    
+    .floating-review-btn svg {
+        width: 28px;
+        height: 28px;
+    }
 }

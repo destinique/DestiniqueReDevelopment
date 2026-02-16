@@ -1,6 +1,6 @@
 // search-property.component.ts
 import { Component, OnInit, OnDestroy, AfterViewInit, ViewChild, ElementRef } from '@angular/core';
-import { NgxSpinnerService } from "ngx-spinner";
+import { LoadSpinnerService } from 'src/app/shared/services/load-spinner.service';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { SearchStateService } from 'src/app/shared/services/search-state.service';
 import { GoogleMapsService, PlacePrediction, PlaceDetails } from 'src/app/shared/services/google-maps.service';
@@ -77,7 +77,7 @@ export class SearchPropertyComponent implements OnInit, AfterViewInit, OnDestroy
 
   constructor(
     private fb: FormBuilder,
-    private spinner: NgxSpinnerService,
+    private loadSpinner: LoadSpinnerService,
     private searchState: SearchStateService,
     private googleMapsService: GoogleMapsService,
     private route: ActivatedRoute
@@ -583,7 +583,6 @@ export class SearchPropertyComponent implements OnInit, AfterViewInit, OnDestroy
     }
 
     this.searchState.updatePagination(1);
-    this.spinner.show();
   }
 
   /**

@@ -1,9 +1,12 @@
-// Price range filter – app theme (teal #378f86, black hover, #33d286 accent)
-$price-primary: #378f86;
-$price-primary-hover: #000;
-$price-accent: #33d286;
-$price-text: #333;
-$price-divider: rgba(0, 0, 0, 0.1);
+@use 'variables' as *;
+
+// Slider layout (component-specific)
+$track-h: 6px;
+$thumb-size: 22px;
+$slider-container-h: 10px;
+$track-margin-top: ($slider-container-h - $track-h) / 2;
+$thumb-offset: ($track-h - $thumb-size) / 2;
+$thumb-nudge: ($track-h - $thumb-size) / 2;
 
 .price-range-content {
   position: relative;
@@ -15,14 +18,14 @@ $price-divider: rgba(0, 0, 0, 0.1);
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0.75rem 1rem;
+  padding: 0.75rem $spacing-md;
 }
 
 .price-range-title {
   margin: 0;
-  font-size: 1.125rem;
-  font-weight: 700;
-  color: $price-text;
+  font-size: $font-size-lg;
+  font-weight: $font-weight-700;
+  color: #333;
 }
 
 .price-range-close-btn {
@@ -35,13 +38,13 @@ $price-divider: rgba(0, 0, 0, 0.1);
   border: none;
   border-radius: 50%;
   background-color: rgba(0, 0, 0, 0.06);
-  color: $price-text;
+  color: #333;
   cursor: pointer;
   transition: background-color 0.2s, color 0.2s;
 
   &:hover {
     background-color: rgba(0, 0, 0, 0.12);
-    color: #000;
+    color: $color-black;
   }
 
   &:focus,
@@ -53,13 +56,13 @@ $price-divider: rgba(0, 0, 0, 0.1);
 }
 
 .price-range-form {
-  padding: 0 1rem 1rem;
+  padding: 0 $spacing-md $spacing-md;
 }
 
 .price-range-inputs {
   display: flex;
-  gap: 1rem;
-  margin-bottom: 1rem;
+  gap: $spacing-md;
+  margin-bottom: $spacing-md;
 }
 
 .price-input-wrap {
@@ -68,23 +71,23 @@ $price-divider: rgba(0, 0, 0, 0.1);
 
 .price-range-label {
   display: block;
-  font-size: 0.875rem;
-  font-weight: 600;
-  color: $price-text;
+  font-size: $font-size-sm;
+  font-weight: $font-weight-600;
+  color: #333;
   margin-bottom: 0.35rem;
 }
 
 .price-range-input {
   width: 100%;
-  padding: 0.5rem 0.75rem;
-  font-size: 1rem;
-  border: 1px solid #ced4da;
-  border-radius: 0.25rem;
+  padding: $spacing-sm 0.75rem;
+  font-size: $font-size-base;
+  border: $border-width solid #ced4da;
+  border-radius: $spacing-xs;
 
   &:focus {
-    border-color: $price-primary;
+    border-color: $color-primary;
     outline: 0;
-    box-shadow: 0 0 0 0.2rem rgba(55, 143, 134, 0.25);
+    box-shadow: 0 0 0 0.2rem $color-focus-ring;
   }
 }
 
@@ -92,24 +95,17 @@ $price-divider: rgba(0, 0, 0, 0.1);
   display: flex;
   align-items: center;
   gap: 0.75rem;
-  margin-bottom: 1rem;
+  margin-bottom: $spacing-md;
 }
 
 .price-range-slider-label {
-  font-size: 0.875rem;
-  font-weight: 600;
-  color: $price-text;
+  font-size: $font-size-sm;
+  font-weight: $font-weight-600;
+  color: #333;
   flex-shrink: 0;
 }
 
 // Single clean track: one grey bar + teal fill; range inputs are thumb-only
-$track-h: 6px;
-$thumb-size: 22px;
-$slider-container-h: 10px;
-// Center track in container; center thumb on track (WebKit often anchors thumb to track top)
-$track-margin-top: ($slider-container-h - $track-h) / 2;
-$thumb-offset: ($track-h - $thumb-size) / 2;
-$thumb-nudge: ($track-h - $thumb-size) / 2;
 
 .price-range-slider-track {
   position: relative;
@@ -138,7 +134,7 @@ $thumb-nudge: ($track-h - $thumb-size) / 2;
   top: 50%;
   transform: translateY(-50%);
   height: $track-h;
-  background: $price-primary;
+  background: $color-primary;
   border-radius: $track-h / 2;
   pointer-events: none;
   z-index: 0;
@@ -170,8 +166,8 @@ $thumb-nudge: ($track-h - $thumb-size) / 2;
     width: $thumb-size;
     height: $thumb-size;
     border-radius: 50%;
-    background: $price-primary;
-    border: 1px solid rgba(255, 255, 255, 0.9);
+    background: $color-primary;
+    border: $border-width solid rgba($color-white, 0.9);
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
     cursor: pointer;
     pointer-events: auto;
@@ -179,7 +175,7 @@ $thumb-nudge: ($track-h - $thumb-size) / 2;
     transition: background-color 0.15s, box-shadow 0.15s;
 
     &:hover {
-      background: $price-primary-hover;
+      background: $color-black;
       box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
     }
   }
@@ -194,8 +190,8 @@ $thumb-nudge: ($track-h - $thumb-size) / 2;
     width: $thumb-size;
     height: $thumb-size;
     border-radius: 50%;
-    background: $price-primary;
-    border: 1px solid rgba(255, 255, 255, 0.9);
+    background: $color-primary;
+    border: $border-width solid rgba($color-white, 0.9);
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
     cursor: pointer;
     pointer-events: auto;
@@ -203,7 +199,7 @@ $thumb-nudge: ($track-h - $thumb-size) / 2;
     transition: background-color 0.15s, box-shadow 0.15s;
 
     &:hover {
-      background: $price-primary-hover;
+      background: $color-black;
       box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
     }
   }
@@ -224,14 +220,14 @@ $thumb-nudge: ($track-h - $thumb-size) / 2;
 .price-range-divider {
   margin: 0.75rem 0;
   border: 0;
-  border-top: 1px solid $price-divider;
+  border-top: $border-width solid rgba(0, 0, 0, 0.1);
 }
 
 .price-range-actions {
   display: flex;
   justify-content: flex-end;
   align-items: center;
-  gap: 0.5rem;
+  gap: $spacing-sm;
   flex-wrap: wrap;
 }
 
@@ -247,7 +243,7 @@ $thumb-nudge: ($track-h - $thumb-size) / 2;
   }
 
   .price-range-title {
-    font-size: 1rem;
+    font-size: $font-size-base;
   }
 
   .price-range-close-btn {
@@ -273,7 +269,7 @@ $thumb-nudge: ($track-h - $thumb-size) / 2;
   }
 
   .price-range-slider-wrap {
-    gap: 0.5rem;
+    gap: $spacing-sm;
     margin-bottom: 0.75rem;
   }
 
@@ -283,7 +279,7 @@ $thumb-nudge: ($track-h - $thumb-size) / 2;
 
   .price-range-actions {
     flex-direction: column;
-    gap: 0.5rem;
+    gap: $spacing-sm;
   }
 
   .price-range-apply-btn,
@@ -307,33 +303,33 @@ $thumb-nudge: ($track-h - $thumb-size) / 2;
 }
 
 .price-range-apply-btn {
-  background-color: $price-primary !important;
-  border-color: $price-primary !important;
-  color: #fff !important;
+  background-color: $color-primary !important;
+  border-color: $color-primary !important;
+  color: $color-white !important;
   padding: 6px 20px;
-  font-weight: 600;
-  font-size: 14px;
-  border-radius: 0;
+  font-weight: $font-weight-600;
+  font-size: $font-size-sm;
+  border-radius: $border-radius-none;
 
   &:hover {
-    background-color: $price-primary-hover !important;
-    border-color: $price-primary-hover !important;
-    color: $price-accent !important;
+    background-color: $color-black !important;
+    border-color: $color-black !important;
+    color: $color-success !important;
   }
 }
 
 .price-range-reset-btn {
-  background-color: #6c757d !important;
-  border-color: #6c757d !important;
-  color: #fff !important;
+  background-color: $color-muted !important;
+  border-color: $color-muted !important;
+  color: $color-white !important;
   padding: 6px 20px;
-  font-weight: 600;
-  font-size: 14px;
-  border-radius: 0;
+  font-weight: $font-weight-600;
+  font-size: $font-size-sm;
+  border-radius: $border-radius-none;
 
   &:hover {
     background-color: #5a6268 !important;
     border-color: #545b62 !important;
-    color: #fff !important;
+    color: $color-white !important;
   }
 }

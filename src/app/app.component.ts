@@ -1,8 +1,8 @@
 import { Component, AfterViewInit, Inject, PLATFORM_ID } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
-// import { Router, NavigationEnd } from '@angular/router';
-// import { filter, takeUntil } from 'rxjs/operators';
-// import { Subject } from 'rxjs';
+import { Router, NavigationEnd } from '@angular/router';
+import { filter } from 'rxjs/operators';
+import { LoadSpinnerService } from './shared/services/load-spinner.service';
 
 declare global {
   interface Window {
@@ -25,9 +25,17 @@ export class AppComponent implements AfterViewInit {
   // private readonly maxRetries = 5;
   // private retryDelay = 500;
   title = 'New Destinique';
+  spinnerMessage$ = this.LoadSpinnerService.message$;
 
-  constructor(@Inject(PLATFORM_ID) private platformId: Object) {}
-  // constructor(private router: Router, @Inject(PLATFORM_ID) private platformId: Object) {}
+  constructor(
+    @Inject(PLATFORM_ID) private platformId: Object,
+    private LoadSpinnerService: LoadSpinnerService,
+    private router: Router
+  ) {
+    this.router.events
+      .pipe(filter((e): e is NavigationEnd => e instanceof NavigationEnd))
+      .subscribe(() => this.LoadSpinnerService.reset());
+  }
 
   ngAfterViewInit() {
     if (!isPlatformBrowser(this.platformId)) return; // ONLY run in browser

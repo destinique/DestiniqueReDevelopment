@@ -1,11 +1,4 @@
-// ============================================
-// Variables
-// ============================================
-$primary-color: #378f86;
-$secondary-color: #33d286;
-$text-color: #000;
-$border-color: #dee2e6;
-$nav-tab-color: #95979d;
+@use 'variables' as *;
 
 // ============================================
 // Mixins
@@ -28,7 +21,7 @@ $nav-tab-color: #95979d;
 }
 .custom-tabset {
     .nav-tabs {
-        border-bottom: 2px solid $border-color;
+        border-bottom: 2px solid $color-border-light;
         display: flex;
         flex-wrap: nowrap;
         overflow-x: auto;
@@ -40,11 +33,11 @@ $nav-tab-color: #95979d;
         }
 
         &::-webkit-scrollbar-track {
-            background: #f1f1f1;
+            background: $color-bg-light;
         }
 
         &::-webkit-scrollbar-thumb {
-            background: $primary-color;
+            background: $color-primary;
         }
     }
 
@@ -54,25 +47,25 @@ $nav-tab-color: #95979d;
     }
 
     .nav-tab-link {
-        color: $nav-tab-color;
+        color: $color-gray-mid;
         cursor: pointer;
         border-bottom: 2px solid transparent;
         margin-right: 12px;
         text-decoration: none;
         display: inline-block;
-        font-weight: 600;
+        font-weight: $font-weight-600;
         background: transparent;
         border: none;
         position: relative;
 
         &:hover {
-            color: $primary-color;
-            border-color: $primary-color;
+            color: $color-primary;
+            border-color: $color-primary;
         }
 
         &.active {
-            color: $primary-color;
-            border-color: $primary-color;
+            color: $color-primary;
+            border-color: $color-primary;
             background: transparent;
         }
     }
@@ -87,40 +80,40 @@ $nav-tab-color: #95979d;
 // Navigation controls
 .tab-navigation-controls {
     padding: 15px;
-    background-color: #f8f9fa;
-    border-radius: 4px;
-    border: 1px solid $border-color;
+    background-color: $color-bg-light;
+    border-radius: $border-radius-sm;
+    border: $border-width solid $color-border-light;
 
     .btn-outline-primary {
-        color: $primary-color;
-        border-color: $primary-color;
+        color: $color-primary;
+        border-color: $color-primary;
 
         &:hover {
-            background-color: $primary-color;
-            color: white;
+            background-color: $color-primary;
+            color: $color-white;
         }
 
         &:disabled {
-            color: #6c757d;
-            border-color: #6c757d;
+            color: $color-muted;
+            border-color: $color-muted;
             cursor: not-allowed;
             opacity: 0.5;
 
             &:hover {
                 background-color: transparent;
-                color: #6c757d;
+                color: $color-muted;
             }
         }
     }
 
     .current-tab-indicator .badge {
-        background-color: $primary-color;
+        background-color: $color-primary;
         font-size: 0.9rem;
         padding: 8px 15px;
     }
 }
 .amenities-content ul li {
-    color: #62646a;
+    color: $color-text-light;
     float: left;
     position: relative;
     width: 33.333333%;
@@ -159,28 +152,28 @@ a:hover {
     cursor: pointer;
 }
 h3, h4 {
-    color: #555;
+    color: $color-text-muted;
 }
 .card {
-    border: 0px solid #ccc;
+    border: 0 solid $color-border;
     font-family: inherit;
-    color: $text-color;
-    border-radius: unset;
+    color: $color-black;
+    border-radius: $border-radius-none;
 }
 
 .shadow-lg {
     box-shadow: 0 34px 21px -22px #00000026 !important;
-    border: 1px solid $border-color !important;
-    border-top: 0px solid !important;
+    border: $border-width solid $color-border-light !important;
+    border-top: 0 solid !important;
 }
 
 .card-body {
-    padding: 1rem;
-    border-radius: unset;
+    padding: $spacing-md;
+    border-radius: $border-radius-none;
 }
 
 .tab-pane {
-    padding: 0px;
+    padding: 0;
 }
 
 .property-header-provider-name, h3 span {
@@ -189,32 +182,32 @@ h3, h4 {
 
 // Text styles
 .t-header {
-    font-weight: 600;
+    font-weight: $font-weight-600;
     font-size: 18px;
     line-height: 26px;
-    color: #555;
+    color: $color-text-muted;
 }
 
 .t-text {
-    font-weight: 400;
+    font-weight: $font-weight-400;
     font-size: 16px;
-    color: #62646a;
+    color: $color-text-light;
     word-break: break-word;
     line-height: 24px;
 }
 .p-description {
     margin-top: 0;
-    margin-bottom: 1rem;
+    margin-bottom: $spacing-md;
     font-size: 18px;
     font-weight: 300 !important;
     word-wrap: break-word;
-    color: #62646a !important;
+    color: $color-text-light !important;
 }
 // List styles
 .list-group {
     .fw-normal {
-        font-size: 1rem;
-        color: #62646a;
+        font-size: $font-size-base;
+        color: $color-text-light;
     }
 
     svg {
@@ -226,24 +219,24 @@ h3, h4 {
 
 // Button styles
 .btn {
-    background-color: $primary-color;
+    background-color: $color-primary;
     border: none;
-    color: #fff;
-    border-color: $primary-color !important;
-    font-weight: 500;
+    color: $color-white;
+    border-color: $color-primary !important;
+    font-weight: $font-weight-500;
     text-transform: uppercase;
-    font-size: 14px;
+    font-size: $font-size-sm;
     line-height: 20px;
     margin-top: 10px;
     letter-spacing: 2px;
-    border-radius: unset;
+    border-radius: $border-radius-none;
     padding: 10px 12px;
     box-shadow: 0 2px 6px 1px #1414147a;
     @include transition;
 
     &:hover {
-        background-color: #000;
-        color: $secondary-color;
+        background-color: $color-black;
+        color: $color-success;
     }
 }
 
@@ -251,7 +244,7 @@ h3, h4 {
 // Social Media Section
 // ============================================
 .property-details-s-media {
-    margin-top: 1rem;
+    margin-top: $spacing-md;
     text-transform: uppercase;
     font-size: 1.5rem;
     font-weight: 300 !important;
@@ -259,20 +252,20 @@ h3, h4 {
 
 .share-btn-container {
     .social-svg {
-        border: 1px solid #000;
+        border: $border-width solid $color-black;
         height: 45px;
         border-radius: 50%;
         padding: 10px;
-        color: #000;
+        color: $color-black;
         margin-right: 8px;
         margin-top: 3px;
-        margin-bottom: 1rem;
+        margin-bottom: $spacing-md;
         @include transition;
 
         &:hover {
-            background-color: $primary-color !important;
-            border: 1px solid $primary-color !important;
-            color: #fff !important;
+            background-color: $color-primary !important;
+            border: $border-width solid $color-primary !important;
+            color: $color-white !important;
         }
     }
 }
@@ -282,33 +275,33 @@ h3, h4 {
 // ============================================
 .property-rates {
     .card-header {
-        background-color: #000;
-        color: #fff;
-        border-radius: unset;
+        background-color: $color-black;
+        color: $color-white;
+        border-radius: $border-radius-none;
         height: 50px;
         padding: 12px;
     }
 
     label {
         display: inline-block;
-        font-weight: 400;
+        font-weight: $font-weight-400;
         font-size: 15px;
         text-transform: uppercase;
         line-height: 1.5rem;
-        letter-spacing: .1em;
+        letter-spacing: $letter-spacing-wider;
     }
 }
 
 // Form controls
 .form-control {
-    background-color: #fff !important;
-    border-color: #dcdcdc !important;
-    border-width: 1px !important;
-    border-radius: 0 !important;
-    padding: .75rem .75rem .5rem .75rem !important;
-    font-size: 1rem !important;
+    background-color: $color-white !important;
+    border-color: $color-border !important;
+    border-width: $border-width !important;
+    border-radius: $border-radius-none !important;
+    padding: .75rem .75rem $spacing-sm .75rem !important;
+    font-size: $font-size-base !important;
     line-height: 1.5rem !important;
-    font-weight: 500 !important;
+    font-weight: $font-weight-500 !important;
     letter-spacing: 1px !important;
     padding-block-end: 8px !important;
     padding-block-start: 12px !important;
@@ -323,7 +316,7 @@ h3, h4 {
 
 .required:after {
     content: "*";
-    color: red;
+    color: $color-error;
 }
 
 // ============================================
@@ -351,36 +344,36 @@ h3, h4 {
 
     &-content {
         width: fit-content;
-        background-color: #fff;
+        background-color: $color-white;
         max-height: 100vh;
         overflow-y: auto;
         box-shadow: 0 10px 20px 0 rgba(0, 0, 0, .3);
-        border-radius: 0px;
-        border: 0px solid !important;
+        border-radius: $border-radius-none;
+        border: 0 solid !important;
     }
 
     &-header {
-        background-color: $primary-color;
-        color: #fff;
+        background-color: $color-primary;
+        color: $color-white;
         padding: .8rem 1rem .8rem 3rem;
         text-transform: uppercase;
     }
 
     &-body {
-        padding: 2rem 3rem !important;
+        padding: $spacing-xl $spacing-3xl !important;
     }
 
     .checkout-summary h6 {
-        color: #62646a !important;
+        color: $color-text-light !important;
     }
 
     label {
         display: inline-block;
-        font-weight: 400;
+        font-weight: $font-weight-400;
         font-size: 15px;
         text-transform: uppercase;
         line-height: 1.5rem;
-        letter-spacing: .1em;
+        letter-spacing: $letter-spacing-wider;
     }
 }
 // ============================================
@@ -392,8 +385,8 @@ h3, h4 {
 
 .book-now-btn {
     width: 49.5%;
-    background-color: #e63946 !important;
-    border-color: #e63946 !important;
+    background-color: $color-error !important;
+    border-color: $color-error !important;
     float: right;
 }
 
@@ -429,7 +422,7 @@ h3, h4 {
     }
 
     .card {
-        border: 0px solid rgba(0, 0, 0, 0.4);
+        border: 0 solid rgba(0, 0, 0, 0.4);
         width: 100%;
         padding: 10px;
     }
@@ -447,7 +440,7 @@ h3, h4 {
     }
 }
 .checkout-summary h6 {
-    color: #62646a !important;
+    color: $color-text-light !important;
 }
 //css for image gallery
 .swiper-button-next, .swiper-button-prev {
@@ -482,14 +475,14 @@ h3, h4 {
         // Remove border radius for full width
         overflow: hidden;
         box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
-        background: #fff;
+        background: $color-white;
 
         .image-counter {
             position: absolute;
             top: 20px;
             right: 20px;
             background: rgba(0, 0, 0, 0.75);
-            color: white;
+            color: $color-white;
             padding: 8px 16px;
             border-radius: 20px;
             font-size: 15px;
@@ -500,7 +493,7 @@ h3, h4 {
             .current-slide {
                 color: #ffd700;
                 font-size: 18px;
-                font-weight: 700;
+                font-weight: $font-weight-700;
             }
         }
 
@@ -541,14 +534,14 @@ h3, h4 {
                         bottom: 25px;
                         left: 25px;
                         background: rgba(0, 0, 0, 0.85);
-                        color: white;
+                        color: $color-white;
                         width: 45px;
                         height: 45px;
                         border-radius: 50%;
                         display: flex;
                         align-items: center;
                         justify-content: center;
-                        font-weight: 700;
+                        font-weight: $font-weight-700;
                         font-size: 18px;
                         z-index: 2;
                         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
@@ -560,19 +553,19 @@ h3, h4 {
                         left: 0;
                         right: 0;
                         background: linear-gradient(transparent, rgba(0, 0, 0, 0.85));
-                        color: white;
+                        color: $color-white;
                         padding: 20px 25px 15px;
                         font-size: 16px;
                         text-align: center;
                         z-index: 2;
-                        font-weight: 500;
+                        font-weight: $font-weight-500;
                     }
                 }
             }
 
             .swiper-button-next,
             .swiper-button-prev {
-                color: white;
+                color: $color-white;
                 background: rgba(0, 0, 0, 0.6);
                 width: 56px;
                 height: 56px;
@@ -616,7 +609,7 @@ h3, h4 {
                     transition: all 0.3s ease;
 
                     &-active {
-                        background: #007bff;
+                        background: $color-info;
                         opacity: 1;
                         transform: scale(1.2);
                     }
@@ -634,9 +627,9 @@ h3, h4 {
         width: 100%;
         overflow: hidden;
         padding: 0;
-        background: #f8f9fa;
-        padding-left: 1rem;
-        padding-right: 1rem;
+        background: $color-bg-light;
+        padding-left: $spacing-md;
+        padding-right: $spacing-md;
 
         @media (max-width: 768px) {
             padding: 0 40px;
@@ -677,7 +670,7 @@ h3, h4 {
                 svg {
                     width: 20px;
                     height: 20px;
-                    color: white;
+                    color: $color-white;
                 }
 
                 &.swiper-button-disabled {
@@ -749,7 +742,7 @@ h3, h4 {
                 }
 
                 &.active {
-                    border-color: #378f86;
+                    border-color: $color-primary;
                     transform: scale(1.05);
                     box-shadow: 0 6px 16px rgba(0, 123, 255, 0.3);
                 }
@@ -772,7 +765,7 @@ h3, h4 {
                     bottom: 8px;
                     right: 8px;
                     background: rgba(0, 0, 0, 0.85);
-                    color: white;
+                    color: $color-white;
                     width: 28px;
                     height: 28px;
                     border-radius: 50%;
@@ -780,7 +773,7 @@ h3, h4 {
                     align-items: center;
                     justify-content: center;
                     font-size: 13px;
-                    font-weight: 700;
+                    font-weight: $font-weight-700;
                     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
                 }
 
@@ -845,7 +838,7 @@ h3, h4 {
 
 :host ::ng-deep {
     .custom-tabset  .nav-link {
-        color: #95979d;
+        color: $color-gray-mid;
         cursor: pointer;
         border-bottom: 2px solid transparent;
         margin-right: 12px;
@@ -853,23 +846,23 @@ h3, h4 {
         text-decoration: none;
         transition: color .2s ease-in-out;
         display: inline-block;
-        font-weight: 600;
+        font-weight: $font-weight-600;
     }
     .custom-tabset  .nav-link.active {
-        color: #378f86;
+        color: $color-primary;
 
     }
     @media (max-width: 1080px) {
         .custom-tabset  .nav-link {
-            border: 1px solid;
+            border: $border-width solid;
             margin-bottom: 6px;
         }
     }
 }
 /* ===== CALENDAR OPTIMIZATIONS ===== */
 .calendar-section {
-    border-radius: 8px;
-    background: #fff;
+    border-radius: $border-radius-md;
+    background: $color-white;
     min-height: 320px;
     display: flex;
     flex-direction: column;
@@ -881,10 +874,10 @@ h3, h4 {
     .custom-day-wrapper {
         width: 100% !important;
         height: 100% !important;
-        border-radius: 0px !important;
-        border: 1px solid transparent !important;
-        font-weight: 500 !important;
-        font-size: 0.875rem !important;
+        border-radius: $border-radius-none !important;
+        border: $border-width solid transparent !important;
+        font-weight: $font-weight-500 !important;
+        font-size: $font-size-sm !important;
         display: flex !important;
         align-items: center !important;
         justify-content: center !important;
@@ -894,16 +887,16 @@ h3, h4 {
 
         /* UNAVAILABLE DATES - RED (FULLY RED) */
         &.date-fully-unavailable {
-            background-color: #dc3545 !important;
-            color: white !important;
-            border-color: #dc3545 !important;
+            background-color: $color-error !important;
+            color: $color-white !important;
+            border-color: $color-error !important;
             text-decoration: line-through !important;
             opacity: 0.8 !important;
             cursor: not-allowed !important;
 
             &.disabled {
-                background-color: #dc3545 !important;
-                color: white !important;
+                background-color: $color-error !important;
+                color: $color-white !important;
                 opacity: 0.8 !important;
             }
 
@@ -911,8 +904,8 @@ h3, h4 {
             &.in-range,
             &.range-start,
             &.range-end {
-                background-color: #dc3545 !important;
-                color: white !important;
+                background-color: $color-error !important;
+                color: $color-white !important;
                 opacity: 0.8 !important;
                 cursor: not-allowed !important;
             }
@@ -923,14 +916,14 @@ h3, h4 {
 
         /* AVAILABLE DATES - GREEN (FULLY GREEN) */
         &.date-fully-available {
-            background-color: #28a745 !important;
-            color: white !important;
-            border-color: #28a745 !important;
+            background-color: $color-available !important;
+            color: $color-white !important;
+            border-color: $color-available !important;
             cursor: pointer !important;
 
             &.disabled {
-                background-color: #28a745 !important;
-                color: white !important;
+                background-color: $color-available !important;
+                color: $color-white !important;
                 cursor: not-allowed !important;
             }
 
@@ -944,9 +937,9 @@ h3, h4 {
 
         /* AM ONLY - Top Green / Bottom Red */
         &.date-am-only {
-            background: linear-gradient(to right bottom,#28a745 50%,#e63946 50%) !important;
-            color: white !important;
-            border-color: #dee2e6 !important;
+            background: linear-gradient(to right bottom, $color-available 50%, $color-error 50%) !important;
+            color: $color-white !important;
+            border-color: $color-border-light !important;
             cursor: pointer !important;
 
             &::after {
@@ -955,7 +948,7 @@ h3, h4 {
                 position: absolute !important;
                 top: 2px !important;
                 left: 2px !important;
-                color: white !important;
+                color: $color-white !important;
                 font-weight: bold !important;
                 text-shadow: 0 0 2px rgba(0,0,0,0.5);
             }
@@ -973,9 +966,9 @@ h3, h4 {
 
         /* PM ONLY - Top Red / Bottom Green */
         &.date-pm-only {
-            background: linear-gradient(to right bottom,#e63946 50%,#28a745 50%);
-            color: white !important;
-            border-color: #dee2e6 !important;
+            background: linear-gradient(to right bottom, $color-error 50%, $color-available 50%);
+            color: $color-white !important;
+            border-color: $color-border-light !important;
             cursor: pointer !important;
 
             &::after {
@@ -984,7 +977,7 @@ h3, h4 {
                 position: absolute !important;
                 bottom: 2px !important;
                 right: 2px !important;
-                color: white !important;
+                color: $color-white !important;
                 font-weight: bold !important;
                 text-shadow: 0 0 2px rgba(0,0,0,0.5);
             }
@@ -1002,9 +995,9 @@ h3, h4 {
 
         /* NO CHECKIN - Green with red dot */
         &.date-no-checkin {
-            background-color: #28a745 !important;
-            color: white !important;
-            border-color: #28a745 !important;
+            background-color: $color-available !important;
+            color: $color-white !important;
+            border-color: $color-available !important;
             position: relative !important;
             cursor: pointer !important;
 
@@ -1016,9 +1009,9 @@ h3, h4 {
                 transform: translate(-50%, -50%) !important;
                 width: 8px !important;
                 height: 8px !important;
-                background-color: #dc3545 !important;
+                background-color: $color-error !important;
                 border-radius: 50% !important;
-                border: 1px solid white !important;
+                border: $border-width solid $color-white !important;
                 box-shadow: 0 0 2px rgba(0,0,0,0.5);
             }
 
@@ -1037,14 +1030,14 @@ h3, h4 {
 
         /* Default styling for dates without custom status */
         &:not(.date-fully-unavailable):not(.date-fully-available):not(.date-am-only):not(.date-pm-only):not(.date-no-checkin) {
-            background-color: #f8f9fa !important;
+            background-color: $color-bg-light !important;
             color: #212529 !important;
-            border-color: #dee2e6 !important;
+            border-color: $color-border-light !important;
             cursor: default !important;
 
             &.disabled {
-                background-color: #6c757d !important;
-                color: white !important;
+                background-color: $color-muted !important;
+                color: $color-white !important;
                 opacity: 0.5 !important;
                 cursor: not-allowed !important;
             }
@@ -1062,18 +1055,18 @@ h3, h4 {
         &.in-range {
             background-color: rgba(40, 167, 69, 0.2) !important;
             color: #198754 !important;
-            border-radius: 0 !important;
+            border-radius: $border-radius-none !important;
 
             &:hover {
                 background-color: rgba(40, 167, 69, 0.3) !important;
-                color: #fff !important;
+                color: $color-white !important;
             }
         }
 
         &.range-start,
         &.range-end {
-            background-color: #28a745 !important;
-            color: white !important;
+            background-color: $color-available !important;
+            color: $color-white !important;
             border-radius: 50% !important;
             z-index: 1;
 
@@ -1084,7 +1077,7 @@ h3, h4 {
 
         &.blocked-range {
             background-color: rgba(220, 53, 69, 0.15) !important;
-            color: #dc3545 !important;
+            color: $color-error !important;
             cursor: not-allowed !important;
         }
     }
@@ -1118,15 +1111,15 @@ h3, h4 {
             width: 40px;
             height: 40px;
             font-style: normal;
-            color: #555;
+            color: $color-text-muted;
         }
         .ngb-dp-weekdays {
-            background-color: #fff;
-            border: 0px;
+            background-color: $color-white;
+            border: 0;
         }
         .ngb-dp-header, .ngb-dp-month-name {
-            background-color: #378f86;
-            color: #fff !important;
+            background-color: $color-primary;
+            color: $color-white !important;
             font-weight: 300;
             height: 42px;
             font-size: 18px;
@@ -1135,7 +1128,7 @@ h3, h4 {
             padding-top: .35rem;
         }
         .ngb-dp-navigation-chevron {
-            color: #fff !important;
+            color: $color-white !important;
             font-weight: 300;
         }
         .ngb-dp-arrow {
@@ -1165,20 +1158,20 @@ h3, h4 {
         width: 40px;
         height: 40px;
         font-style: normal;
-        color: #555;
+        color: $color-text-muted;
     }
     .ngb-dp-weekdays {
-        background-color: #fff;
-        border: 0px;
+        background-color: $color-white;
+        border: 0;
     }
     .ngb-dp-header, .ngb-dp-month-name {
-        background-color: #378f86;
-        color: #fff !important;
+        background-color: $color-primary;
+        color: $color-white !important;
         font-weight: 300;
         height: 42px;
     }
     .ngb-dp-navigation-chevron {
-        color: #fff !important;
+        color: $color-white !important;
         font-weight: 300;
     }
     .ngb-dp-arrow {
@@ -1197,23 +1190,23 @@ h3, h4 {
     flex-shrink: 0;
 
     &.fully-available {
-        background-color: #28a745;
+        background-color: $color-available;
     }
 
     &.fully-unavailable {
-        background-color: #dc3545;
+        background-color: $color-error;
     }
 
     &.am-only {
-        background: linear-gradient(to right bottom, #28a745 50%, #e63946 50%) !important;
+        background: linear-gradient(to right bottom, $color-available 50%, $color-error 50%) !important;
     }
 
     &.pm-only {
-        background: linear-gradient(to right bottom, #e63946 50%, #28a745 50%);
+        background: linear-gradient(to right bottom, $color-error 50%, $color-available 50%);
     }
 
     &.no-checkin {
-        background-color: #28a745;
+        background-color: $color-available;
         position: relative;
 
         &::before {
@@ -1225,7 +1218,7 @@ h3, h4 {
             width: 6px;
             height: 6px;
             border-radius: 50%;
-            background: #dc3545;
+            background: $color-error;
         }
     }
 }
@@ -1303,13 +1296,13 @@ h3, h4 {
 }
 ::ng-deep {
     .modal-content {
-        border: 0px solid !important;
+        border: 0 solid !important;
     }
     .btn-close {
         --bs-btn-close-focus-shadow: none !important;
     }
     .bi-shield-exclamation {
-        color: #4CAF50 !important;
+        color: $color-available !important;
     }
 }
 

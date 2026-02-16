@@ -40,7 +40,7 @@
 </div>
 
 <!-- Results Header -->
-<div id="maindiv">
+<div id="maindiv" #propertiesGridArea>
   <div class="row">
     <!-- Left side: Total count and global controls -->
     <div class="col-sm-6 d-flex justify-content-center align-items-center">
@@ -103,12 +103,22 @@
 
 <!-- Properties Grid -->
 <div class="container-fluid">
-  <!-- Loading Indicator -->
-  <div *ngIf="isLoading" class="text-center py-5">
-    <div class="spinner-border text-primary" role="status">
-      <span class="visually-hidden">Loading...</span>
+  <!-- Loading Skeleton Cards (pagination/filter changes only) -->
+  <div *ngIf="isLoading && !isInitialLoad" class="row view-grid">
+    <div *ngFor="let i of skeletonCount" class="col-12 col-md-6 col-lg-4 col-xl-4 properties">
+      <div class="property-skeleton-card">
+        <div class="skeleton-image"></div>
+        <div class="skeleton-body">
+          <div class="skeleton-line skeleton-title"></div>
+          <div class="skeleton-line skeleton-subtitle"></div>
+          <div class="skeleton-lines">
+            <div class="skeleton-line"></div>
+            <div class="skeleton-line"></div>
+            <div class="skeleton-line short"></div>
+          </div>
+        </div>
+      </div>
     </div>
-    <p class="mt-2">Loading properties...</p>
   </div>
 
   <!-- No Results -->

@@ -1,5 +1,5 @@
 import { Component, OnInit, AfterViewInit, OnDestroy, ViewChild, ElementRef } from '@angular/core';
-import { NgxSpinnerService } from "ngx-spinner";
+import { LoadSpinnerService } from 'src/app/shared/services/load-spinner.service';
 import { StorageService } from 'src/app/shared/services/storage.service';
 import { CrudService } from "src/app/shared/services/crud.service";
 import { ToastrService } from 'ngx-toastr';
@@ -109,7 +109,7 @@ export class ContactUsComponent implements OnInit, AfterViewInit, OnDestroy {
     private crudService: CrudService,
     private storageService: StorageService,
     private toast: ToastrService,
-    public spinner: NgxSpinnerService,
+    private loadSpinner: LoadSpinnerService,
     private localeService: BsLocaleService,
     private googleMapsService: GoogleMapsService
   ) {
@@ -119,14 +119,14 @@ export class ContactUsComponent implements OnInit, AfterViewInit, OnDestroy {
 
   ngOnInit(): void {
     this.isLoading = true;
-    this.spinner.show();
+    this.loadSpinner.show();
     this.setupDestinationInputSubscription();
   }
 
   ngAfterViewInit(): void {
     setTimeout(() => {
       this.isLoading = false;
-      this.spinner.hide();
+      this.loadSpinner.hide();
     }, 200);
   }
 
@@ -405,13 +405,7 @@ export class ContactUsComponent implements OnInit, AfterViewInit, OnDestroy {
     this.isLoading = true;
     this.isSubmitting = true;
 
-    this.spinner.show(undefined, {
-      type: 'ball-spin-clockwise',
-      size: 'medium',
-      bdColor: 'rgba(0, 0, 0, 0.8)',
-      color: '#fff',
-      fullScreen: true
-    });
+    this.loadSpinner.show();
 
     const loadingToast = this.toast.info('Submitting contact form data...', '', {
       disableTimeOut: true,
@@ -515,7 +509,7 @@ export class ContactUsComponent implements OnInit, AfterViewInit, OnDestroy {
     this.isSubmitting = false;
     this.isLoading = false;
     this.isSpinnerVisible = false;
-    this.spinner.hide();
+    this.loadSpinner.hide();
   }
 
   // Checkbox handling
@@ -589,13 +583,7 @@ export class ContactUsComponent implements OnInit, AfterViewInit, OnDestroy {
   // Test submission
   testSubmit(): void {
     this.isSpinnerVisible = true;
-    this.spinner.show(undefined, {
-      type: 'ball-spin-clockwise',
-      size: 'medium',
-      bdColor: 'rgba(0, 0, 0, 0.8)',
-      color: '#fff',
-      fullScreen: true
-    });
+    this.loadSpinner.show();
 
     const loadingToast = this.toast.info('Submitting test data...', '', {
       disableTimeOut: true,
@@ -627,13 +615,13 @@ export class ContactUsComponent implements OnInit, AfterViewInit, OnDestroy {
 
     this.crudService.submitContactForm(testData).subscribe({
       next: (response: ContactUSApiResponse) => {
-        this.spinner.hide();
+        this.loadSpinner.hide();
         this.isSpinnerVisible = false;
         this.toast.clear(loadingToast.toastId);
         this.handleApiResponse(response);
       },
       error: (error: Error) => {
-        this.spinner.hide();
+        this.loadSpinner.hide();
         this.isSpinnerVisible = false;
         this.toast.clear(loadingToast.toastId);
         this.handleError(error);

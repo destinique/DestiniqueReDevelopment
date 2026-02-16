@@ -7,7 +7,7 @@ import { AuthService } from 'src/app/shared/services/auth.service';
 import { UserRoleService } from 'src/app/shared/services/user-role.service';
 import { StorageService } from 'src/app/shared/services/storage.service'; // Add this import
 import { CrudService } from "src/app/shared/services/crud.service";
-import { NgxSpinnerService } from "ngx-spinner";
+import { LoadSpinnerService } from 'src/app/shared/services/load-spinner.service';
 import { ToastrService } from "ngx-toastr";
 
 @Component({
@@ -33,7 +33,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
     private authService: AuthService,
     private userRoleService: UserRoleService,
     private storageService: StorageService, // Add this
-    private spinner: NgxSpinnerService,
+    private loadSpinner: LoadSpinnerService,
     private toast: ToastrService
   ) {}
 
@@ -65,11 +65,11 @@ export class NavbarComponent implements OnInit, OnDestroy {
       return;
     }
 
-    this.spinner.show();
+    this.loadSpinner.show('Loading property...');
 
     this.crudService.getPropertyDetails(propertyId).subscribe({
       next: (resp: any) => {
-        this.spinner.hide();
+        this.loadSpinner.hide();
 
         if (resp?.length > 0) {
           const listId = resp[0].list_id;
@@ -87,7 +87,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
         }
       },
       error: () => {
-        this.spinner.hide();
+        this.loadSpinner.hide();
         this.showPropertyError();
       }
     });
@@ -237,13 +237,13 @@ export class NavbarComponent implements OnInit, OnDestroy {
 
     // Check if we're in browser before showing confirm dialog
     if (this.storageService.isBrowser() && confirm('Are you sure you want to logout?')) {
-      this.spinner.show();
+      this.loadSpinner.show();
 
       this.authService.logout().subscribe({
         next: () => {
           this.clearAuthData();
 
-          this.spinner.hide();
+          this.loadSpinner.hide();
           this.toast.success('You have been logged out successfully.', 'Logged Out', {
             timeOut: 3000,
             positionClass: 'toast-top-right'
@@ -252,7 +252,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
           this.router.navigate(['/']);
         },
         error: (error) => {
-          this.spinner.hide();
+          this.loadSpinner.hide();
           console.error('Logout error:', error);
 
           this.clearAuthData();

@@ -1,3 +1,5 @@
+@use 'variables' as *;
+
 /*FOOTER FEEDBACK*/
 .feedback {
   .form-heading {
@@ -14,13 +16,13 @@
   border-radius: unset;
   .footer-contact-elements {
     &::placeholder {
-      color: #aaa !important;
-      font-weight: 400 !important;
+      color: $color-placeholder !important;
+      font-weight: $font-weight-400 !important;
       text-transform: uppercase;
     }
     input, textarea {
-      background-color: #fff !important;
-      border-color: #E0E0E0 !important;
+      background-color: $color-white !important;
+      border-color: $color-border !important;
       border-width: 1px !important;
       border-radius: 0 !important;
       padding: .75rem .75rem .5rem .75rem !important;
@@ -32,16 +34,16 @@
       padding-block-start: 12px !important;
       padding-inline-end: 12px !important;
       padding-inline-start: 12px !important;
-      accent-color: #378f86;
+      accent-color: $color-primary;
     }
   }
 }
 .btn {
-  background-color: #378f86 !important;
-  color: #fff !important;
+  background-color: $color-primary !important;
+  color: $color-white !important;
   padding: 10px 20px;
-  box-shadow: 0 2px 6px 1px rgba(20, 20, 20, 0.48);
-  font-weight: 600;
+  box-shadow: $shadow-sm;
+  font-weight: $font-weight-600;
   text-transform: uppercase;
   font-size: 14px;
   line-height: 26px;
@@ -53,26 +55,26 @@
   margin-top: 1rem;
   margin-right: 6px;
   &:hover {
-    color: #33d286 !important;
-    background: #111 !important;
-    background-color: #111 !important;
-    box-shadow: 0 4px 14px 0 rgba(5, 5, 5, 0.47);
+    color: $color-success !important;
+    background: $color-nav-dark !important;
+    background-color: $color-nav-dark !important;
+    box-shadow: $shadow-md;
   }
 }
 .footer-review-sub-btn {
-  background: #e63946 !important;
-  background-color: #e63946 !important;
-  color: #fff !important;
-  border-color: #e63946 !important;
+  background: $color-error !important;
+  background-color: $color-error !important;
+  color: $color-white !important;
+  border-color: $color-error !important;
   transition: 0.5s;
 }
 input::placeholder, textarea::placeholder {
   opacity: 1;
   border-radius: 0rem !important;
-  color: #aaa !important;
-  font-weight: 400 !important;
+  color: $color-placeholder !important;
+  font-weight: $font-weight-400 !important;
   text-transform: uppercase !important;
-  font-size: 1rem !important;
+  font-size: $font-size-base !important;
 }
 
 .sms-mms-consent .collapse:not(.show) {
@@ -110,15 +112,15 @@ input::placeholder, textarea::placeholder {
 }
 */
 a.collapsed {
-  color: #6fccc2;
+  color: $color-primary-light;
 }
 .sms-mms-consent a:hover, .sms-mms-consent a:active, .sms-mms-consent a:focus, .email-consent a:hover, .email-consent a:active, .email-consent a:focus {
-  color: #6fccc2;
+  color: $color-primary-light;
   text-decoration: underline;
 }
 .opt-in-text-s {
   font-size: 12px;
-  color: #ccc;
+  color: $color-text-light;
   padding: 4px 6px;
   label {
     display: block;

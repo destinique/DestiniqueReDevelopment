@@ -1,5 +1,7 @@
+@use 'variables' as *;
+
 .login-content {
-    background-color: #fff;
+    background-color: $color-white;
     padding: 0;
     margin: 0;
 }
@@ -16,9 +18,9 @@
 }
 .close {
     font-size: 32px;
-    font-weight: 700;
+    font-weight: $font-weight-700;
     line-height: 1;
-    color: #000;
+    color: $color-black;
     background-color: transparent;
     cursor: pointer;
     padding: 0rem 1rem;
@@ -28,7 +30,7 @@
 }
 ::ng-deep .close {
     border: none;
-    background: #000;
+    background: $color-black;
 }
 
 .mobile-v {
@@ -49,17 +51,17 @@
     letter-spacing: 13px;
     font-size: 24px;
     font-style: normal;
-    font-weight: 600;
-    font-family: 'Montserrat', sans-serif !important;
+    font-weight: $font-weight-600;
+    font-family: $font-family-base !important;
     text-transform: uppercase;
-    color: #fff;
+    color: $color-white;
     text-align: center;
     padding-left: 12px;
     margin-top: 1rem;
 }
 .log-in-destinique-sub-text {
-    font-weight: 400 !important;
-    color: #fff;
+    font-weight: $font-weight-400 !important;
+    color: $color-white;
     text-align: center;
     font-size: 14px;
     letter-spacing: 2.4px;
@@ -68,18 +70,18 @@
     padding: 3rem 1.5rem 1.5rem 1.5rem;
 }
 .log-in-desc-info p {
-    color: #fff;
-    font-size: .875rem;
+    color: $color-white;
+    font-size: $font-size-sm;
     line-height: 1.25rem;
 }
 .loginModal {
-    border: 0px solid rgba(0, 0, 0, 0)
+    border: 0px solid rgba($color-black, 0);
 }
 .loginPopup {
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    box-shadow: $shadow-sm, $shadow-md;
 }
 .loginPopup .form-row .form-group a {
-    color: #bf1212;
+    color: $color-error;
 }
 .loginPopup .form-row .form-group {
     text-align: center;
@@ -91,13 +93,13 @@
     border: 0px;
 }
 .login-modal-header {
-    background-color: #fff !important;
-    color: #555;
+    background-color: $color-white !important;
+    color: $color-text-muted;
 }
 .login-modal-body {
-    background-color: #fff !important;
+    background-color: $color-white !important;
     width: auto;
-    color: #000;
+    color: $color-black;
     padding-top: .5rem;
 }
 #exampleModalLongTitle {
@@ -110,46 +112,46 @@
     position: relative;
 }
 .form-input input {
-    background-color: #fff !important;
-    border-color: #e0e0e0 !important;
+    background-color: $color-white !important;
+    border-color: $color-border !important;
     width: 100%;
     padding: .75rem .75rem .5rem .75rem;
     margin-top: 1rem;
     box-sizing: border-box;
     box-shadow: none;
-    border: 1px solid #e0e0e0;
+    border: 1px solid $color-border;
     border-radius: 0px;
     outline: none;
     font-size: 15px;
     line-height: 1.5rem;
-    color: #555;
+    color: $color-text-muted;
     letter-spacing: 1.5px;
-    accent-color: #378f86;
+    accent-color: $color-primary;
 }
 .form-input span {
     position: absolute;
     top: 10px;
     padding-left: 15px;
-    color: #378f86;
+    color: $color-primary;
 }
 .form-input input::placeholder {
-    color: #aaa;
+    color: $color-placeholder;
     padding-left: 0px;
 }
 .form-input input:focus,
 .form-input input:valid {
-    border: 1px solid #e0e0e0;
+    border: 1px solid $color-border;
 }
 .form-input input:focus::placeholder {
-    color: #aaa;
+    color: $color-placeholder;
 }
 .btn-primary {
-    background-color: #378f86;
-    color: #fff;
-    border-color: #378f86;
+    background-color: $color-primary;
+    color: $color-white;
+    border-color: $color-primary;
     padding: 6px 20px;
-    box-shadow: 0 1px 6px 1px rgba(20, 20, 20, 0.2);
-    font-weight: 600;
+    box-shadow: $shadow-sm;
+    font-weight: $font-weight-600;
     font-size: 14px;
     line-height: 26px;
     letter-spacing: 3px;
@@ -159,31 +161,31 @@
     text-transform: uppercase;
 }
 .btn-primary:hover {
-    background-color: #000;
-    color: #33d286;
-    border-color: #000;
+    background-color: $color-black;
+    color: $color-success;
+    border-color: $color-black;
 }
 .recover-user-url {
     text-decoration: underline;
-    text-decoration-color: #bf1212;
+    text-decoration-color: $color-error;
     cursor: pointer;
 }
 #recoverID {
-    color: #bf1212 !important;
+    color: $color-error !important;
     font-size: 13px !important;
-    border-color: #bf1212 !important;
+    border-color: $color-error !important;
     margin-top: 24px;
     margin-bottom: 0;
     text-align: center;
 }
 .modal-footer {
     justify-content: center;
-    background-color: #fff;
+    background-color: $color-white;
     border-bottom-left-radius: 0rem;
     border-bottom-right-radius: 0rem;
 }
 .register-link {
-    color: #378f86 !important;
+    color: $color-primary !important;
     cursor: pointer;
 }
 
@@ -213,7 +215,7 @@
 /*Consent*/
 .opt-in-text-s {
     font-size: 12px;
-    color: #495057;
+    color: $color-text-muted;
     max-width: 500px;
     text-align: justify;
     padding: 4px 6px;
@@ -255,20 +257,20 @@
 */
 
 a.collapsed, .read-more-sms-mms-consent a, .read-more-email-consent a {
-    color: #378f86 !important;
+    color: $color-primary !important;
 }
 .read-more-sms-mms-consent a:hover, .read-more-sms-mms-consent a:active, .read-more-sms-mms-consent a:focus, .read-more-email-consent a:hover, .read-more-email-consent a:active, .read-more-email-consent a:focus {
-    color: #6fccc2;
+    color: $color-primary-light;
     text-decoration: underline;
 }
 .f-w-b {
-    font-weight: bold;
+    font-weight: $font-weight-700;
 }
 label, .form-row {
     display: block;
 }
 input {
-    accent-color: #378f86;
+    accent-color: $color-primary;
 }
 .btn-block {
     display: block;
@@ -289,10 +291,10 @@ input {
   height: 32px;
   line-height: 32px;
   text-align: center;
-  background-color: #ffffff;
-  color: #007bff;
+  background-color: $color-white;
+  color: $color-info;
   border-radius: 50%;
-  font-weight: bold;
+  font-weight: $font-weight-700;
   font-size: 14px;
 }
 
@@ -303,10 +305,10 @@ input {
   height: 48px;
   line-height: 48px;
   text-align: center;
-  background-color: #007bff;
-  color: white;
+  background-color: $color-info;
+  color: $color-white;
   border-radius: 50%;
-  font-weight: bold;
+  font-weight: $font-weight-700;
   font-size: 20px;
   margin: 0 auto;
 }

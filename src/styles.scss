@@ -1,5 +1,7 @@
+@use 'variables' as *;
+
 body {
-    font-family: "Montserrat", sans-serif;
+    font-family: $font-family-base;
     font-optical-sizing: auto;
     font-style: normal;
 }
@@ -20,4 +22,45 @@ ngb-modal-window.destinique-login-dialog {
         --bs-modal-width: 320px !important;
         z-index: 999999 !important;
     }
+}
+
+/* Global loader - reduce gap between spinner animation and text */
+.ngx-spinner-overlay .loading-text {
+  top: 53% !important;
+  transform: translate(-50%, -10%) !important;
+}
+
+/* Global loader text - base (desktop) */
+.destinique-loader-text {
+  color: $color-white !important;
+  font-size: $font-size-base;
+  font-family: $font-family-base;
+  margin-top: 0.35rem;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+/* Tablet: slightly smaller loader text */
+@media screen and (max-width: 991px) {
+  .destinique-loader-text {
+    font-size: 0.9375rem; /* 15px */
+    letter-spacing: 0.4px;
+    margin-top: 0.3rem;
+  }
+  .ngx-spinner-overlay .loading-text {
+    top: 52% !important;
+  }
+}
+
+/* Mobile: compact loader text and position */
+@media screen and (max-width: 575px) {
+  .destinique-loader-text {
+    font-size: 0.8125rem; /* 13px */
+    letter-spacing: 0.3px;
+    margin-top: 0.25rem;
+  }
+  .ngx-spinner-overlay .loading-text {
+    top: 52% !important;
+    transform: translate(-50%, -12%) !important;
+  }
 }

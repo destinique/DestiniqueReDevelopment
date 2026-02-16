@@ -1,13 +1,14 @@
-// Promo Modal Styles
+@use 'variables' as *;
 
+// Promo Modal Styles
 :host {
     display: block;
     .promo-modal-content {
-        border-radius: 4px;
+        border-radius: $border-radius-sm;
         overflow: hidden;
         max-width: 900px;
         margin: 0 auto;
-        background: white;
+        background: $color-white;
         box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
 
         .modal-body {
@@ -22,7 +23,7 @@
                 .carousel-image-wrapper {
                     height: 450px;
                     overflow: hidden;
-                    background: linear-gradient(45deg, #f8f9fa, #e9ecef);
+                    background: linear-gradient(45deg, $color-bg-light, $color-bg-offwhite);
 
                     img {
                         width: 100%;
@@ -40,8 +41,8 @@
                     bottom: 0;
 
                     p {
-                        color: white;
-                        font-size: 14px;
+                        color: $color-white;
+                        font-size: $font-size-sm;
                         margin: 0;
                         opacity: 0.9;
                     }
@@ -58,7 +59,7 @@
                     transform: translateY(-50%);
                     margin: 0 20px;
                     backdrop-filter: blur(4px);
-                    border: 1px solid rgba(255, 255, 255, 0.3);
+                    border: $border-width solid rgba(255, 255, 255, 0.3);
 
                     &:hover {
                         background-color: rgba(255, 255, 255, 0.4);
@@ -86,8 +87,8 @@
                         opacity: 0.7;
 
                         &.active {
-                            background-color: white;
-                            border-color: white;
+                            background-color: $color-white;
+                            border-color: $color-white;
                             opacity: 1;
                         }
                     }
@@ -97,17 +98,17 @@
 
         // Promotion Details
         .promo-details-con {
-            background: white;
+            background: $color-white;
 
             .location-badge {
                 display: inline-block;
                 background: #f0f7ff;
-                color: #0066cc;
+                color: $color-info;
                 padding: 6px 16px;
                 border-radius: 20px;
-                font-size: 14px;
-                font-weight: 500;
-                border: 1px solid #cce0ff;
+                font-size: $font-size-sm;
+                font-weight: $font-weight-500;
+                border: $border-width solid #cce0ff;
 
                 i {
                     font-size: 12px;
@@ -116,11 +117,11 @@
 
             .travel-dates,
             .offer-dates {
-                color: #666;
+                color: $color-text-light;
                 font-size: 15px;
 
                 i {
-                    color: #6c757d;
+                    color: $color-muted;
                     font-size: 16px;
                 }
 
@@ -129,14 +130,14 @@
                 }
 
                 .fw-medium {
-                    font-weight: 500;
+                    font-weight: $font-weight-500;
                     color: #495057;
                 }
             }
 
             .promo-title {
                 font-size: 28px;
-                font-weight: 700;
+                font-weight: $font-weight-700;
                 color: #212529;
                 line-height: 1.3;
                 margin: 0;
@@ -146,7 +147,7 @@
             .promo-description {
                 color: #495057;
                 line-height: 1.7;
-                font-size: 16px;
+                font-size: $font-size-base;
 
                 // Style the HTML content safely
                 ::ng-deep {
@@ -168,7 +169,7 @@
                     h1, h2, h3, h4, h5, h6 {
                         margin-top: 1.5em;
                         margin-bottom: 0.8em;
-                        font-weight: 600;
+                        font-weight: $font-weight-600;
                         color: #212529;
                     }
 
@@ -182,7 +183,7 @@
                             padding-left: 0.5em;
 
                             &::marker {
-                                color: #007bff;
+                                color: $color-info;
                             }
                         }
                     }
@@ -195,7 +196,7 @@
 
                             &:before {
                                 content: "•";
-                                color: #007bff;
+                                color: $color-info;
                                 font-weight: bold;
                                 position: absolute;
                                 left: -1em;
@@ -205,24 +206,24 @@
 
                     // Strong/Bold
                     strong, b {
-                        font-weight: 600;
+                        font-weight: $font-weight-600;
                         color: #212529;
                     }
 
                     // Emphasis
                     em, i {
                         font-style: italic;
-                        color: #6c757d;
+                        color: $color-muted;
                     }
 
                     // Links
                     a {
-                        color: #007bff;
+                        color: $color-info;
                         text-decoration: none;
-                        font-weight: 500;
+                        font-weight: $font-weight-500;
 
                         &:hover {
-                            color: #0056b3;
+                            color: $color-secondary-light;
                             text-decoration: underline;
                         }
                     }
@@ -231,30 +232,30 @@
                     img {
                         max-width: 100%;
                         height: auto;
-                        border-radius: 8px;
+                        border-radius: $border-radius-md;
                         margin: 1.5em 0;
-                        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+                        box-shadow: $shadow-md;
                     }
 
                     // Code/Pre
                     code, pre {
-                        background: #f8f9fa;
-                        border-radius: 4px;
+                        background: $color-bg-light;
+                        border-radius: $border-radius-sm;
                         padding: 2px 6px;
                         font-family: 'Courier New', monospace;
-                        font-size: 14px;
+                        font-size: $font-size-sm;
                     }
 
                     // Blockquotes
                     blockquote {
-                        border-left: 4px solid #007bff;
+                        border-left: 4px solid $color-info;
                         padding-left: 1em;
                         margin-left: 0;
-                        color: #6c757d;
+                        color: $color-muted;
                         font-style: italic;
-                        background: #f8f9fa;
+                        background: $color-bg-light;
                         padding: 1em;
-                        border-radius: 0 8px 8px 0;
+                        border-radius: 0 $border-radius-md $border-radius-md 0;
                     }
 
                     // Tables
@@ -264,22 +265,22 @@
                         margin: 1.5em 0;
 
                         th, td {
-                            border: 1px solid #dee2e6;
+                            border: $border-width solid $color-border-light;
                             padding: 0.75em;
                             text-align: left;
                         }
 
                         th {
-                            background: #f8f9fa;
-                            font-weight: 600;
+                            background: $color-bg-light;
+                            font-weight: $font-weight-600;
                         }
                     }
 
                     // Horizontal rule
                     hr {
                         border: none;
-                        height: 1px;
-                        background: #dee2e6;
+                        height: $border-width;
+                        background: $color-border-light;
                         margin: 2em 0;
                     }
 
@@ -299,7 +300,7 @@
             .cta-buttons {
                 .btn {
                     padding: 14px 28px;
-                    font-weight: 600;
+                    font-weight: $font-weight-600;
                     border-radius: 10px;
                     transition: all 0.3s ease;
                     border: none;
@@ -313,8 +314,8 @@
                     }
 
                     &.btn-primary {
-                        background: linear-gradient(135deg, #007bff, #0056b3);
-                        color: white;
+                        background: linear-gradient(135deg, $color-info, $color-secondary-light);
+                        color: $color-white;
                         box-shadow: 0 4px 15px rgba(0, 123, 255, 0.3);
 
                         &:hover {
@@ -329,15 +330,15 @@
 
                     &.btn-outline-secondary {
                         background: transparent;
-                        color: #6c757d;
-                        border: 2px solid #dee2e6;
+                        color: $color-muted;
+                        border: 2px solid $color-border-light;
 
                         &:hover {
-                            background: #f8f9fa;
+                            background: $color-bg-light;
                             border-color: #adb5bd;
                             color: #495057;
                             transform: translateY(-2px);
-                            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+                            box-shadow: $shadow-md;
                         }
                     }
 
@@ -353,23 +354,23 @@
 
 .promo-details-con {
     text-align: center;
-    padding: 1rem;
+    padding: $spacing-md;
 }
 
 .m-term {
     font-family: "Neutraface Text", sans-serif;
     position: relative;
     top: -18px;
-    color: #fff;
-    font-size: 1rem;
-    font-weight: 700;
+    color: $color-white;
+    font-size: $font-size-base;
+    font-weight: $font-weight-700;
     text-transform: uppercase;
-    background: #45B4A9;
+    background: $color-primary-light;
     padding: 14px 20px;
     transform: translateX(-50%);
     letter-spacing: 2px;
     box-shadow: 0 34px 21px -22px rgba(0, 0, 0, 0.15) !important;
-    border: 1px solid #45B4A9 !important;
+    border: $border-width solid $color-primary-light !important;
 }
 .m-top {
     position: relative;
@@ -378,12 +379,12 @@
 }
 .m-period {
     font-size: 1.4rem;
-    font-weight: 400;
+    font-weight: $font-weight-400;
     text-transform: uppercase;
     letter-spacing: 1px;
     font-family: "Neutraface Text", sans-serif !important;
-    margin-bottom: 1rem;
-    color: #68110a !important;
+    margin-bottom: $spacing-md;
+    color: $color-accent !important;
     margin-top: .8rem;
 }
 .modal-content-date-to {
@@ -391,7 +392,7 @@
 }
 
 .m-discount {
-    color: #378f86;
+    color: $color-primary;
     font-size: 1.6rem;
     font-weight: 200;
     letter-spacing: 1px;
@@ -406,34 +407,34 @@
 }
 .m-details-url a {
     font-family: "Neutraface Text", sans-serif;
-    background: #378f86;
-    background-color: #378f86;
-    color: #fff;
-    border-color: #378f86 #378f86 #378f86 #378f86;
-    padding: 1rem 2rem;
+    background: $color-primary;
+    background-color: $color-primary;
+    color: $color-white;
+    border-color: $color-primary $color-primary $color-primary $color-primary;
+    padding: $spacing-md $spacing-xl;
     box-shadow: 0 2px 6px 1px rgba(20, 20, 20, 0.48);
-    font-weight: 600;
-    font-size: 14px;
+    font-weight: $font-weight-600;
+    font-size: $font-size-sm;
     line-height: 26px;
     letter-spacing: 3px;
     text-decoration: none;
     transition: 0.5s;
-    border-radius: 0px;
+    border-radius: $border-radius-none;
     text-transform: uppercase;
     display: block;
 }
 
 .m-details-url a:hover {
-    background-color: #000 !important;
-    border-color: #000 !important;
-    color: #33d286  !important;
+    background-color: $color-black !important;
+    border-color: $color-black !important;
+    color: $color-success !important;
     box-shadow: 0 4px 14px 0 rgba(5, 5, 5, 0.47);
     cursor: pointer;
 }
 .btn-close {
     --bs-btn-close-bg: none;
-    color: #000;
-    text-shadow: 0px 2px 18px #fff;
+    color: $color-black;
+    text-shadow: 0px 2px 18px $color-white;
     --bs-btn-close-focus-shadow: none;
     opacity: 0.7;
     right: 0px;
@@ -456,7 +457,7 @@
     justify-content: center;
     width: 15%;
     padding: 0;
-    color: #fff;
+    color: $color-white;
     text-align: center;
     background: 0 0;
     filter: var(--bs-carousel-control-icon-filter);
@@ -471,7 +472,7 @@
     :host {
         .promo-modal-content {
             margin: 10px;
-            border-radius: 12px;
+            border-radius: $border-radius-lg;
 
             .carousel-section {
                 ngb-carousel {

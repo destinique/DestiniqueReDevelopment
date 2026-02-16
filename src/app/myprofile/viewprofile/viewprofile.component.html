@@ -1,16 +1,5 @@
 <div class="profile-main">
     <div class="container-fluid">
-        <!-- Loading Spinner -->
-        <ngx-spinner
-          bdColor="rgba(0, 0, 0, 0.8)"
-          size="medium"
-          color="#fff"
-          type="ball-circus"
-          [fullScreen]="true"
-          *ngIf="isLoading">
-          <p style="color: white">{{ loadingText }}</p>
-        </ngx-spinner>
-
         <!-- Error State -->
         <div *ngIf="hasError && !isLoading" class="row justify-content-center">
           <div class="col-md-8 col-lg-6">

@@ -10,7 +10,7 @@ import {
 } from "@angular/forms";
 import { ToastrService } from "ngx-toastr";
 import { AuthService } from "src/app/shared/services/auth.service";
-import { NgxSpinnerService } from "ngx-spinner";
+import { LoadSpinnerService } from "src/app/shared/services/load-spinner.service";
 import { catchError, finalize } from "rxjs/operators";
 import { throwError } from "rxjs";
 
@@ -39,7 +39,7 @@ export class DestResponseResetComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private toast: ToastrService,
-    private spinner: NgxSpinnerService
+    private loadSpinner: LoadSpinnerService
   ) {
     this.route.params.subscribe((params) => {
       this.resetToken = params["resetToken"] || "";
@@ -161,7 +161,7 @@ export class DestResponseResetComponent implements OnInit {
     }
 
     this.loading = true;
-    this.spinner.show();
+    this.loadSpinner.show();
 
     const newPassword = this.f["newPassword"].value;
 
@@ -176,7 +176,7 @@ export class DestResponseResetComponent implements OnInit {
         }),
         finalize(() => {
           this.loading = false;
-          this.spinner.hide();
+          this.loadSpinner.hide();
         })
       )
       .subscribe({

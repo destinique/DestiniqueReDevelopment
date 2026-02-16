@@ -1,7 +1,9 @@
+@use 'variables' as *;
+
 .map-container {
     position: relative;
     text-align: center;
-    color: #fff;
+    color: $color-white;
 }
 .map-container .overlay-effect {
     opacity: 1;
@@ -28,7 +30,7 @@ img {
 }
 h1{
     font-size: 3rem;
-    line-height: 1.5;
+    line-height: $line-height-base;
     font-weight: 300;
     letter-spacing: 10px;
     text-align: center;
@@ -60,33 +62,33 @@ h1{
 .location-locator-search-map {
     z-index: 2;
     top: 33rem;
-    right: 3rem;
+    right: $spacing-3xl;
     width: 250px;
     padding: 17px;
     color: #3b3b3b;
-    background: #fff;
+    background: $color-white;
     position: absolute;
 }
 img.img-fluid {
-    margin-bottom: 3rem;
+    margin-bottom: $spacing-3xl;
 }
 label {
   font-size: 20px;
   line-height: 30px;
-  font-weight: 500;
+  font-weight: $font-weight-500;
   text-transform: capitalize;
 }
 .form-control {
-  color: #fff;
+  color: $color-white;
   background-color: #141414;
-  font-size: 16px;
+  font-size: $font-size-base;
   font-weight: 300;
   line-height: 30px;
   letter-spacing: 0;
-  border-radius: 0px;
+  border-radius: $border-radius-none;
 }
 .form-control::placeholder {
-  color: #6c757d;
+  color: $color-muted;
   opacity: .6;
   font-weight: 300;
 }

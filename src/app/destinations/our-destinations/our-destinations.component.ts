@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CrudService } from "src/app/shared/services/crud.service";
-import { NgxSpinnerService } from "ngx-spinner";
+import { LoadSpinnerService } from 'src/app/shared/services/load-spinner.service';
 
 @Component({
   selector: 'app-our-destinations',
@@ -15,7 +15,7 @@ export class OurDestinationsComponent implements OnInit {
   showUSADestination:boolean = true;
 
   constructor(private service: CrudService,
-              private spinner: NgxSpinnerService) {
+              private loadSpinner: LoadSpinnerService) {
 
   }
 
@@ -47,7 +47,7 @@ export class OurDestinationsComponent implements OnInit {
   }
 
   loadDestinationJSON() {
-    this.spinner.show();
+    this.loadSpinner.show('Loading destinations...');
     this.service.getDestinationData().subscribe((data) => {
       if (Array.isArray(data)) {
         this.destinationData = data.map((item: any) => ({
@@ -59,7 +59,7 @@ export class OurDestinationsComponent implements OnInit {
         this.destinationData = data;
       }
       this.lazyLoadBackgroundImages();
-      this.spinner.hide();
+      this.loadSpinner.hide();
     });
   }
   private lazyLoadBackgroundImages() {

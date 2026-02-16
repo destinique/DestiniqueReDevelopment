@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { CrudService } from 'src/app/shared/services/crud.service';
 import { StorageService } from 'src/app/shared/services/storage.service'; // Import StorageService
 import { ToastrService } from "ngx-toastr";
-import { NgxSpinnerService } from "ngx-spinner";
+import { LoadSpinnerService } from 'src/app/shared/services/load-spinner.service';
 import { catchError, finalize } from 'rxjs/operators';
 import { throwError } from 'rxjs';
 
@@ -25,7 +25,7 @@ export class DestforgotpasswordComponent implements OnInit {
 
   constructor(
     private crudService: CrudService,
-    private spinner: NgxSpinnerService,
+    private loadSpinner: LoadSpinnerService,
     private toast: ToastrService,
     private formBuilder: FormBuilder,
     private storageService: StorageService
@@ -75,7 +75,7 @@ export class DestforgotpasswordComponent implements OnInit {
     }
 
     this.isLoading = true;
-    this.spinner.show();
+    this.loadSpinner.show();
 
     const email = this.RequestResetForm.value.emailOrUsername.trim();
 
@@ -86,7 +86,7 @@ export class DestforgotpasswordComponent implements OnInit {
           return this.handleError(error);
         }),
         finalize(() => {
-          this.spinner.hide();
+          this.loadSpinner.hide();
           this.isLoading = false;
         })
       )

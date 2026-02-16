@@ -1,7 +1,9 @@
+@use 'variables' as *;
+
 .contact-header-container {
     position: relative;
     text-align: center;
-    color: #002245;
+    color: $color-secondary;
 }
 .contact-header-container .overlay-effect {
     opacity: 1;
@@ -20,7 +22,7 @@ img {
 }
 h2 {
     font-size: 36px;
-    color: rgb(255, 255, 255);
+    color: $color-white;
 }
 .contact-banner-header {
     font-size: 3rem;
@@ -80,16 +82,16 @@ h2 {
 /*body*/
 .contact-form {
     max-width: 1050px;
-    color: #000;
+    color: $color-black;
     padding: 5rem;
-    background-color: #efefef;
-    margin-top: 3rem;
-    margin-bottom: 3rem;
-    border: 1px solid #ddd;
+    background-color: $color-bg-offwhite;
+    margin-top: $spacing-3xl;
+    margin-bottom: $spacing-3xl;
+    border: 1px solid $color-border;
 }
 .contact-form input, .multiselect-dropdown span.dropdown-btn, .contact-form select, .contact-form textArea {
-    background-color: #fff !important;
-    border-color: #E0E0E0 !important;
+    background-color: $color-white !important;
+    border-color: $color-border !important;
     border-width: 1px !important;
     border-radius: 0 !important;
     padding: .75rem .75rem .5rem .75rem !important;
@@ -101,27 +103,27 @@ h2 {
     padding-block-start: 12px !important;
     padding-inline-end: 12px !important;
     padding-inline-start: 12px !important;
-    accent-color: #378f86;
+    accent-color: $color-primary;
 
 }
 .dropdown-toggle::after {
     content: none;
 }
 .contact-form ::placeholder {
-    color: #aaa !important;
+    color: $color-placeholder !important;
     font-weight: 400 !important;
     text-transform: uppercase;
 }
 .lbl-head {
-    font-weight: 500;
-    color: #fff;
+    font-weight: $font-weight-500;
+    color: $color-white;
     font-size: 36px;
 }
 .title-color {
-    color: #002245 !important;
+    color: $color-secondary !important;
 }
 .title-color span, .contact-form-note span {
-    color: red !important
+    color: $color-error !important;
 }
 .contact-welcome-text {
     letter-spacing: .025em;
@@ -140,9 +142,9 @@ h2 {
     flex-direction: column !important;
 }
 .lbl {
-    font-weight: 400;
-    color: #fff;
-    font-size: 1rem;
+    font-weight: $font-weight-400;
+    color: $color-white;
+    font-size: $font-size-base;
     text-transform: uppercase;
     line-height: 1.5rem;
     letter-spacing: .1em;
@@ -151,13 +153,13 @@ h2 {
     font-size: 0.9rem;
     display: none;
     width: 100%;
-    margin-top: .25rem;
-    color: #dc3545;
+    margin-top: $spacing-xs;
+    color: $color-error;
 }
 .form-control {
-    color: #000000;
-    font-size: 1rem;
-    border: 1px solid #002245;
+    color: $color-black;
+    font-size: $font-size-base;
+    border: 1px solid $color-secondary;
 }
 .no-border {
     border: none;
@@ -171,8 +173,8 @@ label {
     justify-content: right;
 }
 .btn-secondary {
-    background-color: #378f86 !important;
-    color: #fff !important;
+    background-color: $color-primary !important;
+    color: $color-white !important;
     padding: 10px 20px;
     box-shadow: 0 2px 6px 1px rgba(20, 20, 20, 0.48);
     font-weight: 600;
@@ -186,17 +188,17 @@ label {
     border-radius: 0px !important;
 }
 .contact-submit-btn {
-    background: #e63946 !important;
-    background-color: #e63946 !important;
-    color: #fff !important;
-    border-color: #e63946 !important;
+    background: $color-error !important;
+    background-color: $color-error !important;
+    color: $color-white !important;
+    border-color: $color-error !important;
     transition: 0.5s;
 }
 .btn:hover {
-    color: #33d286 !important;
-    background: #000 !important;
-    background-color: #000 !important;
-    box-shadow: 0 4px 14px 0 rgba(5, 5, 5, 0.47);
+    color: $color-success !important;
+    background: $color-black !important;
+    background-color: $color-black !important;
+    box-shadow: $shadow-md;
 }
 .mr-2, .mx-2 {
     margin-right: .5rem !important;
@@ -204,26 +206,26 @@ label {
 @media (max-width: 1048px) {
     .contact-form {
         max-width: 1050px;
-        color: #000;
+        color: $color-black;
         padding: 5rem;
-        background-color: #efefef;
-        margin-top: 0rem;
-        margin-bottom: 0rem;
-        border: 1px solid #ddd;
+        background-color: $color-bg-offwhite;
+        margin-top: 0;
+        margin-bottom: 0;
+        border: 1px solid $color-border;
     }
 }
 @media only screen and (max-width: 768px) {
     .contact-form {
         max-width: 1050px;
-        color: #000;
-        padding: 2rem;
-        background-color: #efefef;
-        margin-bottom: 2rem;
-        border: 1px solid #ddd;
+        color: $color-black;
+        padding: $spacing-xl;
+        background-color: $color-bg-offwhite;
+        margin-bottom: $spacing-xl;
+        border: 1px solid $color-border;
     }
     .lbl-head {
-        font-weight: 500;
-        color: #fff;
+        font-weight: $font-weight-500;
+        color: $color-white;
         font-size: 20px;
     }
     .contact-btn-right {
@@ -239,7 +241,7 @@ label {
 /*consent*/
 .opt-in-text-s {
     font-size: 12px;
-    color: #555;
+    color: $color-text-muted;
     margin-bottom: 1rem;
     label {
         display: block;
@@ -270,15 +272,15 @@ label {
 }
 */
 a.collapsed {
-    color: #6fccc2;
+    color: $color-primary-light;
 }
 .sms-mms-consent a:hover, .sms-mms-consent a:active, .sms-mms-consent a:focus, .email-consent a:hover, .email-consent a:active, .email-consent a:focus {
-    color: #6fccc2;
+    color: $color-primary-light;
     text-decoration: underline;
 }
 .opt-in-text-s input {
-    background-color: #fff !important;
-    border-color: #E0E0E0 !important;
+    background-color: $color-white !important;
+    border-color: $color-border !important;
     border-width: 1px !important;
     border-radius: 0 !important;
     padding: .75rem .75rem .5rem .75rem !important;
@@ -290,7 +292,7 @@ a.collapsed {
     padding-block-start: 12px !important;
     padding-inline-end: 12px !important;
     padding-inline-start: 12px !important;
-    accent-color: #378f86;
+    accent-color: $color-primary;
 }
 .email-consent .collapse:not(.show) {
     display: -webkit-box;
@@ -305,7 +307,7 @@ a.collapsed {
 
 /* Form validation styles */
 .is-invalid {
-  border-color: #dc3545 !important;
+  border-color: $color-error !important;
 }
 
 /* Checkbox label styling */
@@ -315,7 +317,7 @@ a.collapsed {
   margin-bottom: 8px;
   cursor: pointer;
   font-size: 0.9rem;
-  color: #333;
+  color: $color-black;
 }
 
 .checkbox-label input[type="checkbox"] {
@@ -358,7 +360,7 @@ input[type="date"]::-webkit-calendar-picker-indicator:hover {
 
 /* Enhanced validation styles */
 .is-invalid {
-  border-color: #e63946 !important;
+  border-color: $color-error !important;
   box-shadow: none !important;
 }
 .form-control:focus {
@@ -368,8 +370,8 @@ input[type="date"]::-webkit-calendar-picker-indicator:hover {
 .invalid-feedback {
   display: block !important; /* Ensure error messages are always visible when condition is met */
   font-size: 0.85rem;
-  margin-top: 0.25rem;
-  color: #e63946;
+  margin-top: $spacing-xs;
+  color: $color-error;
   animation: fadeIn 0.3s ease-in;
 }
 
@@ -387,13 +389,13 @@ input[type="date"]::-webkit-calendar-picker-indicator:hover {
 
 /* Optional: Style for fields that are currently focused but invalid */
 .form-control:focus.is-invalid {
-  border-color: #e63946 !important;
-  box-shadow: 0 0 0 0.3rem rgba(230, 57, 70, 0.25) !important;
+  border-color: $color-error !important;
+  box-shadow: 0 0 0 0.3rem $color-error-light !important;
 }
 
 /* Optional: Add a small red asterisk for required fields that are invalid */
 .w-100.lbl.title-color span {
-  color: #e63946;
+  color: $color-error;
 }
 
 /* Optional: Highlight the label when field is invalid */
@@ -403,22 +405,22 @@ input[type="date"]::-webkit-calendar-picker-indicator:hover {
 
 /* Datepicker Styles - Minimal */
 .bs-datepicker {
-  background: #fff;
-  border: 1px solid #002245;
-  border-radius: 4px;
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
+  background: $color-white;
+  border: 1px solid $color-secondary;
+  border-radius: $border-radius-sm;
+  box-shadow: $shadow-lg;
 
   &-container {
     z-index: 9999;
   }
 
   &-head {
-    background: #378f86;
-    color: white;
+    background: $color-primary;
+    color: $color-white;
     padding: 10px;
-    border-radius: 4px 4px 0 0;
+    border-radius: $border-radius-sm $border-radius-sm 0 0;
 
-    button { color: white; }
+    button { color: $color-white; }
   }
 
   &-body {
@@ -428,28 +430,28 @@ input[type="date"]::-webkit-calendar-picker-indicator:hover {
       width: 100%;
 
       th {
-        color: #378f86;
-        font-weight: 600;
+        color: $color-primary;
+        font-weight: $font-weight-600;
         padding: 8px;
       }
 
       td {
-        color: #002245;
+        color: $color-secondary;
         padding: 5px;
         text-align: center;
 
         span {
           display: block;
           padding: 8px;
-          border-radius: 4px;
+          border-radius: $border-radius-sm;
 
           &.selected {
-            background: #378f86;
-            color: white;
+            background: $color-primary;
+            color: $color-white;
           }
 
           &:not(.disabled):not(.selected):hover {
-            background: rgba(55, 143, 134, 0.1);
+            background: rgba($color-primary, 0.1);
           }
         }
       }
@@ -459,10 +461,10 @@ input[type="date"]::-webkit-calendar-picker-indicator:hover {
 
 /* Calendar Icon */
 .input-group-text {
-  background: #f8f9fa;
+  background: $color-bg-light;
   border-left: 0;
 
-  i { color: #378f86; }
+  i { color: $color-primary; }
 }
 
 
@@ -470,31 +472,31 @@ input[type="date"]::-webkit-calendar-picker-indicator:hover {
 .multiselect-dropdown {
   .form-select {
     cursor: pointer;
-    background-color: #fff !important;
-    border: 1px solid #E0E0E0 !important;
+    background-color: $color-white !important;
+    border: 1px solid $color-border !important;
     border-radius: 0 !important;
     padding: 0.75rem !important;
-    font-size: 1rem !important;
-    line-height: 1.5 !important;
+    font-size: $font-size-base !important;
+    line-height: $line-height-base !important;
     min-height: 50px;
     display: flex;
     align-items: center;
 
     &:focus {
-      box-shadow: 0 0 0 0.2rem rgba(55, 143, 134, 0.25) !important;
-      border-color: #378f86 !important;
+      box-shadow: 0 0 0 0.2rem $color-focus-ring !important;
+      border-color: $color-primary !important;
     }
 
     &.is-invalid {
-      border-color: #e63946 !important;
+      border-color: $color-error !important;
 
       &:focus {
-        box-shadow: 0 0 0 0.2rem rgba(230, 57, 70, 0.25) !important;
+        box-shadow: 0 0 0 0.2rem $color-focus-ring-error !important;
       }
     }
 
     i {
-      color: #378f86;
+      color: $color-primary;
       transition: transform 0.3s ease;
     }
   }
@@ -502,16 +504,16 @@ input[type="date"]::-webkit-calendar-picker-indicator:hover {
 
 /* Dropdown Menu Fixes */
 .dropdown-menu {
-  border: 1px solid #002245 !important;
+  border: 1px solid $color-secondary !important;
   border-radius: 0 !important;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+  box-shadow: $shadow-md !important;
   padding: 0.5rem 0 !important;
 
   .dropdown-item {
     padding: 0.5rem 1rem !important;
 
     &:hover, &:focus {
-      background-color: rgba(55, 143, 134, 0.1) !important;
+      background-color: rgba($color-primary, 0.1) !important;
     }
 
     /* Form Check Fixes */
@@ -527,26 +529,26 @@ input[type="date"]::-webkit-calendar-picker-indicator:hover {
         height: 16px !important;
         margin: 0 !important;
         cursor: pointer !important;
-        border: 1px solid #002245 !important;
+        border: 1px solid $color-secondary !important;
         top: -5px;
         padding: 0px !important;
 
         &:checked {
-          background-color: #378f86 !important;
-          border-color: #378f86 !important;
+          background-color: $color-primary !important;
+          border-color: $color-primary !important;
         }
 
         &:focus {
-          box-shadow: 0 0 0 0.2rem rgba(55, 143, 134, 0.25) !important;
+          box-shadow: 0 0 0 0.2rem $color-focus-ring !important;
         }
       }
 
       .form-check-label {
         cursor: pointer !important;
         user-select: none !important;
-        color: #002245 !important;
+        color: $color-secondary !important;
         font-size: 0.95rem !important;
-        font-weight: 400 !important;
+        font-weight: $font-weight-400 !important;
         margin-left: 0.5rem !important;
         flex: 1 !important;
       }
@@ -555,7 +557,7 @@ input[type="date"]::-webkit-calendar-picker-indicator:hover {
 
   .dropdown-divider {
     margin: 0.5rem 0 !important;
-    border-top: 1px solid #dee2e6 !important;
+    border-top: 1px solid $color-border-light !important;
   }
 }
 
@@ -569,23 +571,23 @@ input[type="date"]::-webkit-calendar-picker-indicator:hover {
     }
 
     strong {
-      color: #002245 !important;
-      font-weight: 600 !important;
+      color: $color-secondary !important;
+      font-weight: $font-weight-600 !important;
     }
   }
 }
 
 /* Clear Button */
 .btn-outline-secondary {
-  border-color: #6c757d !important;
-  color: #6c757d !important;
+  border-color: $color-muted !important;
+  color: $color-muted !important;
   font-size: 0.85rem !important;
   padding: 0.375rem 0.75rem !important;
 
   &:hover {
-    background-color: #6c757d !important;
-    color: white !important;
-    border-color: #6c757d !important;
+    background-color: $color-muted !important;
+    color: $color-white !important;
+    border-color: $color-muted !important;
   }
 }
 
@@ -594,15 +596,15 @@ input[type="date"]::-webkit-calendar-picker-indicator:hover {
   -webkit-appearance: none;
   -moz-appearance: none;
   appearance: none;
-  background-color: #fff;
-  border: 1px solid #002245;
+  background-color: $color-white;
+  border: 1px solid $color-secondary;
   width: 18px;
   height: 18px;
   position: relative;
 
   &:checked {
-    background-color: #378f86;
-    border-color: #378f86;
+    background-color: $color-primary;
+    border-color: $color-primary;
 
     &::after {
       position: absolute;
@@ -611,7 +613,7 @@ input[type="date"]::-webkit-calendar-picker-indicator:hover {
       top: 2px;
       width: 4px;
       height: 8px;
-      border: solid white;
+      border: solid $color-white;
       border-width: 0 2px 2px 0;
       transform: rotate(45deg);
     }
@@ -641,16 +643,16 @@ input[type="date"]::-webkit-calendar-picker-indicator:hover {
   max-height: 300px;
   overflow-y: auto;
   top: 100%;
-  border-radius: 0 0 4px 4px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  background-color: #fff;
+  border-radius: 0 0 $border-radius-sm $border-radius-sm;
+  box-shadow: $shadow-md;
+  background-color: $color-white;
   margin-top: -1px;
 
   .autocomplete-item {
     padding: 0.75rem 1rem;
     transition: background-color 0.2s ease;
     cursor: pointer;
-    border-bottom: 1px solid #f0f0f0;
+    border-bottom: 1px solid $color-border;
 
     &:last-child {
       border-bottom: none;
@@ -658,18 +660,18 @@ input[type="date"]::-webkit-calendar-picker-indicator:hover {
 
     &:hover,
     &.selected {
-      background-color: rgba(55, 143, 134, 0.1);
+      background-color: rgba($color-primary, 0.1);
     }
 
     .fw-semibold {
-      font-weight: 600;
-      color: #002245;
+      font-weight: $font-weight-600;
+      color: $color-secondary;
       font-size: 0.95rem;
-      margin-bottom: 0.25rem;
+      margin-bottom: $spacing-xs;
     }
 
     .text-muted {
-      color: #6c757d;
+      color: $color-text-muted;
       font-size: 0.85rem;
     }
   }

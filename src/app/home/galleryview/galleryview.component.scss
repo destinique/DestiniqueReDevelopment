@@ -1,5 +1,7 @@
+@use 'variables' as *;
+
 hr {
-    border-color: #dee2e6!important;
+    border-color: $color-border-light !important;
     margin-top: 0rem;
     margin-bottom: 0rem;
 }
@@ -17,10 +19,10 @@ hr {
         font-weight: 300;
         letter-spacing: 1px;
         text-transform: capitalize;
-        padding-bottom: 1rem;
+        padding-bottom: $spacing-md;
         text-align: center;
         color: #3b3b3b;
-        padding-top: 1.5rem;
+        padding-top: $spacing-lg;
         span{
             text-transform: uppercase;
         }
@@ -42,12 +44,12 @@ hr {
             left: 15%;
             padding-top: 20px;
             padding-bottom: 20px;
-            color: #fff;
+            color: $color-white;
             text-align: center;
             top: 143px;
             z-index: 10;
             a {
-                color: #fff;
+                color: $color-white;
                 text-transform: uppercase;
                 letter-spacing: 1px;
                 font-size: 2.5rem;
@@ -63,8 +65,8 @@ hr {
         margin-left: 15px;
         .fa-angle-left {
             font-size: 26px;
-            background-color: #fff;
-            color: #000;
+            background-color: $color-white;
+            color: $color-black;
             padding: 4px 15px 0px 10px;
             border-radius: 50%;
             height: 2.2rem;
@@ -79,8 +81,8 @@ hr {
         margin-right: 15px;
         .fa-angle-right {
             font-size: 26px;
-            background-color: #fff;
-            color: #000;
+            background-color: $color-white;
+            color: $color-black;
             padding: 4px 10px 0px 15px;
             border-radius: 50%;
             height: 2.2rem;
@@ -128,8 +130,8 @@ hr {
         opacity: 0;
         width: 100%;
         height: 100%;
-        background: rgba(0, 0, 0, 1);
-        color: #fff;
+        background: $color-black;
+        color: $color-white;
         display: table !important;
         position: absolute;
         transition: all 0.3s ease-in-out;
@@ -156,21 +158,21 @@ hr {
     .carousel-item {
         position: relative;
         text-align: center;
-        color: white;
+        color: $color-white;
     }
     .carousel-caption {
         position: absolute;
         top: 50%;
         left: 50%;
         z-index: 10;
-        color: #fff;
+        color: $color-white;
         text-align: center;
         transform: translate(-50%, -50%);
         bottom: initial;
         padding: 0 !important;
         min-width: 80%;
         a {
-            color: #fff;
+            color: $color-white;
             text-transform: uppercase;
             letter-spacing: 1px;
             font-size: 2.5rem;
@@ -206,7 +208,7 @@ hr {
     }
     .galleryview-container h1 {
         font-size: 2rem;
-        font-weight: 400 !important;
+        font-weight: $font-weight-400 !important;
     }
     h3 {
         font-size: 2.5rem;

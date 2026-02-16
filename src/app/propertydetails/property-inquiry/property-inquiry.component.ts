@@ -15,9 +15,9 @@ import {
 } from '@ng-bootstrap/ng-bootstrap';
 import { InquiryBookingFormLabelData } from 'src/app/shared/interfaces/inquiry-booking-form-label-data-interface';
 import { environment } from 'src/environments/environment';
-import { NgxSpinnerService } from "ngx-spinner";
 import { ToastrService } from "ngx-toastr";
 import { CrudService } from "src/app/shared/services/crud.service";
+import { LoadSpinnerService } from "src/app/shared/services/load-spinner.service";
 import { StorageService } from 'src/app/shared/services/storage.service';
 
 const MAX_GUEST_COUNT = 500;
@@ -65,7 +65,7 @@ export class PropertyInquiryComponent implements OnInit {
     private fb: FormBuilder,
     private crudService: CrudService,
     private toast: ToastrService,
-    private spinner: NgxSpinnerService,
+    private loadSpinner: LoadSpinnerService,
     private storageService: StorageService
   ) {}
 
@@ -480,17 +480,12 @@ export class PropertyInquiryComponent implements OnInit {
     this.isSubmitting = true;
 
     // Show spinner
-    this.spinner.show('propertyInquirySpinner', {
-      type: 'ball-circus',
-      bdColor: 'rgba(0,0,0,0.8)',
-      color: '#fff',
-      fullScreen: true
-    });
+    this.loadSpinner.show('Submitting your inquiry...');
 
     // Submit to API using CrudService
     this.crudService.submitPropertyInquiryData(apiRequest).subscribe({
       next: (response) => {
-        this.spinner.hide('propertyInquirySpinner');
+        this.loadSpinner.hide();
         this.isSubmitting = false;
 
         if (response.status === 'success') {
@@ -528,7 +523,7 @@ export class PropertyInquiryComponent implements OnInit {
         }
       },
       error: (error) => {
-        this.spinner.hide('propertyInquirySpinner');
+        this.loadSpinner.hide();
         this.isSubmitting = false;
 
         // Show error toast

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CrudService } from "src/app/shared/services/crud.service";
-import { NgxSpinnerService } from "ngx-spinner";
+import { LoadSpinnerService } from 'src/app/shared/services/load-spinner.service';
 
 @Component({
   selector: 'app-testimonials',
@@ -13,11 +13,11 @@ export class TestimonialsComponent implements OnInit {
   isEmailConsentCollapsed = true;
 
   constructor(private crudService: CrudService,
-              private spinner: NgxSpinnerService) {
+              private loadSpinner: LoadSpinnerService) {
   }
 
   ngOnInit() {
-    this.spinner.show();
+    this.loadSpinner.show();
     /*
     this.registerForm = this.formBuilder.group({
       name: ["", Validators.required],
@@ -50,8 +50,15 @@ export class TestimonialsComponent implements OnInit {
       .toPromise()
       .then((data) => {
         this.allFeedbacks = data;
-        this.spinner.hide();
+        this.loadSpinner.hide();
       });
+  }
+
+  scrollToReviewForm() {
+    const element = document.querySelector('.reviewForm');
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
   }
 
   /*

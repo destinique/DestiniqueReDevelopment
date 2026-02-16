@@ -1,3 +1,5 @@
+@use 'variables' as *;
+
 /* Property Card Carousel - matches screenshot design */
 
 .property-carousel {
@@ -25,13 +27,13 @@
     transform: translateY(-50%);
     bottom: auto;
     border-radius: 50%;
-    background-color: rgba(0, 0, 0, 0.4);
+    background-color: rgba($color-black, 0.4);
     border: none;
     opacity: 1;
     z-index: 10;
 
     &:hover {
-      background-color: rgba(0, 0, 0, 0.6);
+      background-color: rgba($color-black, 0.6);
     }
   }
 
@@ -57,8 +59,8 @@
     top: 12px;
     right: 15px;
     z-index: 10;
-    color: #000;
-    fill: #000;
+    color: $color-black;
+    fill: $color-black;
 
     svg {
       fill: currentColor;
@@ -70,8 +72,8 @@
     position: absolute;
     bottom: 0.75rem;
     padding: 6px 15px;
-    background-color: rgba(0, 0, 0, 0.5);
-    color: #fff;
+    background-color: rgba($color-black, 0.5);
+    color: $color-white;
     font-size: 14px;
     line-height: 1.4;
     max-width: 48%;
@@ -80,7 +82,7 @@
     z-index: 10;
 
     .fac-values {
-      color: #fff;
+      color: $color-white;
     }
   }
 
@@ -110,7 +112,7 @@
   display: flex;
   flex-direction: column;
   gap: 0;
-  background: #fff;
+  background: $color-white;
 }
 
 .property-card__header {
@@ -132,17 +134,17 @@
   }
 
   .form-check-input {
-    border: 1px solid #777;
+    border: 1px solid $color-text-muted;
     border-radius: 4px;
-    accent-color: #378f86;
+    accent-color: $color-primary;
     margin-right: 0.25rem;
   }
 }
 
 .property-card__id-label {
   font-size: 14px;
-  color: #777;
-  font-weight: 400;
+  color: $color-text-muted;
+  font-weight: $font-weight-400;
   text-transform: uppercase;
   letter-spacing: 1px;
   margin: 0;
@@ -150,12 +152,12 @@
 
 .property-card__id-value {
   font-size: 20px;
-  font-weight: 400;
-  color: #333;
+  font-weight: $font-weight-400;
+  color: $color-black;
   text-decoration: none;
 
   &:hover {
-    color: #000;
+    color: $color-black;
   }
 }
 
@@ -167,11 +169,11 @@
 }
 
 .property-card__city-link {
-  color: #333;
+  color: $color-black;
   text-decoration: none;
 
   &:hover {
-    color: #000;
+    color: $color-black;
   }
 }
 
@@ -207,8 +209,8 @@
 
 .property-card__label {
   font-size: 12px;
-  font-weight: 600;
-  color: #333;
+  font-weight: $font-weight-600;
+  color: $color-black;
   text-transform: uppercase;
   letter-spacing: 1px;
   margin-bottom: 0.25rem;
@@ -217,8 +219,8 @@
 
 .property-card__value {
   font-size: 15px;
-  font-weight: 400;
-  color: #777;
+  font-weight: $font-weight-400;
+  color: $color-text-muted;
   line-height: 1.4;
 
   &--price {
@@ -240,11 +242,11 @@
   background: transparent;
   border: none;
   font-size: 14px;
-  color: #777;
+  color: $color-text-muted;
   cursor: pointer;
   padding: 0.25rem 0.5rem;
 
   &:hover {
-    color: #555;
+    color: $color-text-muted;
   }
 }

@@ -1,3 +1,5 @@
+@use 'variables' as *;
+
 a {
     text-decoration: none !important;
 }
@@ -9,8 +11,8 @@ a:hover {
 }
 .promo-banner {
     text-align: center;
-    color: #002245;
-    margin-bottom: 1rem;
+    color: $color-secondary;
+    margin-bottom: $spacing-md;
 }
 .promo-banner img {
     width: 100%;
@@ -37,7 +39,7 @@ a:hover {
 }
 .promo-banner h2 {
     font-size: 36px;
-    color: rgb(255, 255, 255);
+    color: $color-white;
 }
 .centered {
     margin: 0 auto;
@@ -47,11 +49,11 @@ a:hover {
     line-height: 1.5rem;
     font-weight: 300;
     justify-content: center;
-    color: #fff;
+    color: $color-white;
     padding-left: 9rem;
     padding-right: 9rem;
-    margin-bottom: 2.5rem;
-    padding-top: 1rem;
+    margin-bottom: $spacing-2xl;
+    padding-top: $spacing-md;
 }
 
 
@@ -91,13 +93,13 @@ a:hover {
 }
 .destinations #destinations-tab .nav-pills .nav-link {
     border-bottom: 0px solid #d2c3a4;
-    padding-top: 0.5rem;
-    padding-bottom: 0.5rem;
+    padding-top: $spacing-sm;
+    padding-bottom: $spacing-sm;
     padding-left: 3rem;
-    padding-right: 1rem;
+    padding-right: $spacing-md;
 }
 .destinations #destinations-tab .nav-pills .nav-link .properties {
-    font-weight: 400;
+    font-weight: $font-weight-400;
     font-size: 16px;
     line-height: 19px;
     color: #d2c3a4;
@@ -105,7 +107,7 @@ a:hover {
 }
 .destinations #destinations-tab .tab-pane-body .destinations-list {
     margin-bottom: 0;
-    margin-left: 1.5rem;
+    margin-left: $spacing-lg;
     margin-top: 0rem;
 }
 .destinations-list {
@@ -123,7 +125,7 @@ a:hover {
     cursor: pointer;
 }
 .destinations #destinations-tab .tab-pane-body .destinations-list .location {
-    margin-bottom: 1.5rem;
+    margin-bottom: $spacing-lg;
     cursor: pointer;
 }
 .destinations-list .location {
@@ -135,9 +137,9 @@ a:hover {
 }
 .destinations-list span {
     padding-right: 2px;
-    font-size: 1rem;
-    color: #000;
-    font-weight: 700;
+    font-size: $font-size-base;
+    color: $color-black;
+    font-weight: $font-weight-700;
 }
 .destinations-list li > a {
     text-decoration: none;
@@ -218,12 +220,12 @@ a:hover {
     text-align: center;
 }
 .active-destination .destination-img-overlay .destination-name {
-    color: #fff !important;
+    color: $color-white !important;
 }
 .destination-name {
 
     font-size: 1.8rem;
-    color: #fff;
+    color: $color-white;
     position: absolute;
     top: 34%;
     text-transform: uppercase;
@@ -236,40 +238,40 @@ a:hover {
 .property-number {
     font-size: 1.4rem;
     line-height: 2.5rem;
-    letter-spacing: .1em;
+    letter-spacing: $letter-spacing-wider;
     font-weight: 300;
     justify-content: center;
     align-items: center;
 }
 .total-property-number {
-    bottom: .5rem;
-    right: .5rem;
+    bottom: $spacing-sm;
+    right: $spacing-sm;
     position: absolute;
-    color: #fff;
+    color: $color-white;
     padding-top: .2rem;
     padding-bottom: .2rem;
-    padding-left: 1rem;
-    padding-right: 1rem;
-    border: 2px solid #fff;
+    padding-left: $spacing-md;
+    padding-right: $spacing-md;
+    border: 2px solid $color-white;
     background-color: rgba(0, 0, 0, .3);
 }
 .property-text {
     font-size: .6rem;
     line-height: 1rem;
-    letter-spacing: .1em;
-    font-weight: 600;
+    letter-spacing: $letter-spacing-wider;
+    font-weight: $font-weight-600;
     justify-content: center;
     align-items: center;
 }
 .destination-row {
     padding-top: 13px;
-    padding-bottom: 1.5rem;
-    padding-left: 1.5rem;
+    padding-bottom: $spacing-lg;
+    padding-left: $spacing-lg;
 }
 .row.destination-row ul li {
 }
 .destination-area {
-    margin-bottom: 2rem;
+    margin-bottom: $spacing-xl;
     overflow: hidden;
 }
 .destination-usa .state-name {
@@ -282,38 +284,38 @@ a:hover {
     clear: both !important;
 }
 .destination-usa .state-name a {
-    color: #000000;
+    color: $color-black;
 
-    font-size: 1rem;
-    font-weight: 500 !important;
+    font-size: $font-size-base;
+    font-weight: $font-weight-500 !important;
     line-height: 1.75rem;
     text-transform: capitalize;
 }
 .destination-usa .city-name a {
-    font-weight: 400 !important;
+    font-weight: $font-weight-400 !important;
 }
 .country-name a{
-    color: #378f86;
+    color: $color-primary;
 
     font-size: 1.5rem;
-    font-weight: 500 !important;
+    font-weight: $font-weight-500 !important;
     line-height: 1.75rem;
 }
 .country-name {
     clear: both;
 }
 .state-name {
-    padding-top: 0.5rem;
+    padding-top: $spacing-sm;
     float: left;
     position: relative;
     width: 100%;
 }
 
 .state-name a {
-    color: #000000;
+    color: $color-black;
 
-    font-size: 1rem;
-    font-weight: 400 !important;
+    font-size: $font-size-base;
+    font-weight: $font-weight-400 !important;
     line-height: 1.75rem;
     text-transform: capitalize;
     svg {
@@ -322,10 +324,10 @@ a:hover {
     }
 }
 .total-property-available-in-state {
-    font-size: 14px;
-    color: #000;
+    font-size: $font-size-sm;
+    color: $color-black;
     padding: 2px 8px;
-    border-radius: 12px;
+    border-radius: $border-radius-lg;
     border: 1px solid #9d9d9d;
     position: relative;
     top: -1px;
@@ -339,9 +341,9 @@ a:hover {
     }
 }
 .total-property-available-in-country {
-    font-size: 1rem;
-    background-color: #378f86;
-    color: #fff;
+    font-size: $font-size-base;
+    background-color: $color-primary;
+    color: $color-white;
     padding: 3px 12px;
     border-radius: 15px;
     position: relative;
@@ -349,18 +351,18 @@ a:hover {
 }
 .total-property-available-in-city {
     font-size: .88rem;
-    color: #000000;
+    color: $color-black;
     padding: 1px 8px;
-    border-radius: 12px;
+    border-radius: $border-radius-lg;
     border: 1px solid #9d9d9d;
     position: relative;
     top: -1px;
 }
 .city-name a {
-    color: #555;
+    color: $color-text-muted;
 
-    font-size: 1rem;
-    font-weight: 400;
+    font-size: $font-size-base;
+    font-weight: $font-weight-400;
     line-height: 1.75rem;
     text-transform: capitalize;
 }
@@ -382,7 +384,7 @@ a:hover {
     width: 100%;
     transition: 0.5s ease;
     opacity: 1;
-    color: white;
+    color: $color-white;
     padding: 0px;
     text-align: center;
 }
@@ -391,21 +393,21 @@ img {
 }
 .active-destination {
     color: #b7872d !important;
-    background-color: #ffffff !important;
+    background-color: $color-white !important;
     box-shadow: none !important;
 }
 ul li,
 ol li {
-    font-weight: 400;
+    font-weight: $font-weight-400;
     letter-spacing: 0.01em;
     line-height: 22px;
 }
 ul li > a {
-    font-weight: 400;
+    font-weight: $font-weight-400;
 }
 ul {
     list-style-type: none !important;
-    padding-left: 1.5rem;
+    padding-left: $spacing-lg;
 }
 .nav-pills .nav-link.active, .nav-pills .show>.nav-link {
     background-color: transparent;
@@ -416,7 +418,7 @@ ul {
         font-size: 2rem;
     }
     .destinations #destinations-tab .nav-pills .nav-link {
-        padding-left: 1rem;
+        padding-left: $spacing-md;
     }
 }
 @media screen and (min-width: 900px) and (max-width:1244px) {
@@ -430,10 +432,10 @@ ul {
         line-height: 1.5rem;
         font-weight: 300;
         justify-content: center;
-        color: #fff;
-        padding-left: 1rem;
-        padding-right: 1rem;
-        margin-bottom: 1.5rem;
+        color: $color-white;
+        padding-left: $spacing-md;
+        padding-right: $spacing-md;
+        margin-bottom: $spacing-lg;
     }
 }
 @media (max-width: 767px) {

@@ -1,7 +1,9 @@
+@use 'variables' as *;
+
 .promotions-container {
     position: relative;
     text-align: center;
-    color: #fff;
+    color: $color-white;
 }
 .promotions-container .overlay-effect {
     opacity: 1;
@@ -29,7 +31,7 @@
 }
 h1 {
     font-size: 3rem;
-    line-height: 1.5;
+    line-height: $line-height-base;
     font-weight: 300;
     letter-spacing: 10px;
     text-align: center;
@@ -64,18 +66,18 @@ h1 {
     font-family: Montserrat, sans-serif !important;
     text-align: center;
     font-size: 2.25rem;
-    margin: 3rem;
+    margin: $spacing-3xl;
     font-weight: 300;
 }
 
 .promo-container {
-    margin-top: 3rem;
-    margin-left: 1rem;
-    margin-right: 1rem;
-    margin-bottom: 2rem;
+    margin-top: $spacing-3xl;
+    margin-left: $spacing-md;
+    margin-right: $spacing-md;
+    margin-bottom: $spacing-xl;
 }
 .promotions-item {
-    margin-bottom: 1rem;
+    margin-bottom: $spacing-md;
     box-shadow: 0 34px 21px -22px rgba(0,0,0,.15);
     transition: all 0.4s ease-in-out;
     aspect-ratio: 1200 / 630;
@@ -125,10 +127,8 @@ h1 {
     }
 
     .promotions-button {
-        background-color: #378f86 !important;
-        ;
-        border-color: #378f86 !important;
-        ;
+        background-color: $color-primary !important;
+        border-color: $color-primary !important;
         transition:  0.3s ease-in-out;
     }
 }
@@ -151,45 +151,45 @@ h1 {
     position: absolute;
     top: -6px;
     left: 50%;
-    color: #fff;
-    font-size: 1rem;
-    font-weight: 700;
+    color: $color-white;
+    font-size: $font-size-base;
+    font-weight: $font-weight-700;
     text-transform: uppercase;
     background: #45B4A9;
     padding: 10px 20px;
     transform: translateX(-50%);
     letter-spacing: 2px;
     box-shadow: 0 34px 21px -22px rgba(0, 0, 0, 0.15) !important;
-    border: 1px solid #45B4A9 !important;
+    border: $border-width solid #45B4A9 !important;
 }
 .promotions-title {
-    color: #FFFFFF;
+    color: $color-white;
     font-size: 2rem;
-    margin-top: 1rem;
-    font-weight: 400;
+    margin-top: $spacing-md;
+    font-weight: $font-weight-400;
     margin-bottom: 0rem;
 }
 .promotions-discount {
     font-size: 1.6rem;
-    font-weight: 400;
+    font-weight: $font-weight-400;
     text-transform: none;
     margin-top: 0;
-    color: #fff;
+    color: $color-white;
 }
 .promotions-acc-title {
-    color: #FFFFFF;
-    font-size: 1rem;
+    color: $color-white;
+    font-size: $font-size-base;
     font-weight: 200;
     letter-spacing: 1px;
     margin-top: 20px;
     text-transform: uppercase;
 }
 .promotions-button {
-    border: 1px solid #dee2e6;
+    border: $border-width solid $color-border-light;
     background: transparent;
     width: 100%;
-    font-size: 14px;
-    font-weight: 400;
+    font-size: $font-size-sm;
+    font-weight: $font-weight-400;
     letter-spacing: 1px;
     line-height: 1;
     text-align: center;
@@ -201,7 +201,7 @@ h1 {
     display: inline-block;
     overflow: visible;
     color: #808080 !important;
-    border-radius: 0;
+    border-radius: $border-radius-none;
     -webkit-user-select: none;
     -moz-user-select: none;
     user-select: none;
@@ -215,27 +215,27 @@ h1 {
 }
 .promotions-button:hover, .add-promo:hover, .add-promo:focus, .add-promo:active {
     cursor: pointer;
-    color: #378f86 !important;
+    color: $color-primary !important;
     transition:  0.3s ease-in-out;
     text-decoration: none;
 }
 .promo-edit-btn {
     position: absolute;
-    bottom: 1rem;
-    right: 2rem;
-    color: #555;
-    font-size: 1rem;
+    bottom: $spacing-md;
+    right: $spacing-xl;
+    color: $color-text-muted;
+    font-size: $font-size-base;
     text-decoration: none;
     cursor: pointer;
 }
 .promo-edit-btn:hover {
     text-decoration: underline;
-    color: #378f86 !important;
+    color: $color-primary !important;
     transition:  0.3s ease-in-out;
 }
 .add-promo {
-    font-size: 14px;
-    font-weight: 400;
+    font-size: $font-size-sm;
+    font-weight: $font-weight-400;
     letter-spacing: 1px;
     line-height: 1;
     text-align: center;
@@ -247,7 +247,7 @@ h1 {
     display: inline-block;
     overflow: visible;
     color: #808080 !important;
-    border-radius: 0;
+    border-radius: $border-radius-none;
     -webkit-user-select: none;
     -moz-user-select: none;
     user-select: none;
@@ -259,12 +259,12 @@ h1 {
 }
 .add-promo-con {
     /*height: calc(100% + 55px);*/
-    background: linear-gradient( to top, #fff 0%, #fff 50%, #D2D0D5 50%, #D2D0D5 100%);
+    background: linear-gradient( to top, $color-white 0%, $color-white 50%, #D2D0D5 50%, #D2D0D5 100%);
     display: flex;
     justify-content: center;
     align-items: center;
     aspect-ratio: 1200 / 630;
-    border: 1px solid #f4f4f4;
+    border: $border-width solid #f4f4f4;
 }
 .add-circle-outline-img {
     height: 50px;

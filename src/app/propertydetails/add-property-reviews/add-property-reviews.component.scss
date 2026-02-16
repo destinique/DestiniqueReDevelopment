@@ -1,12 +1,14 @@
+@use 'variables' as *;
+
 /*form*/
 .review-form {
   justify-content: center;
   margin: 0px;
   .testimonials-Review {
     text-align: left;
-    color: #777;
+    color: $color-muted;
     text-transform: uppercase;
-    margin-bottom: 1rem;
+    margin-bottom: $spacing-md;
     font-size: 1.875rem;
     line-height: 2.25rem;
     font-weight: 300;
@@ -14,20 +16,20 @@
   }
   .card {
     background: transparent;
-    border-color: #e0e0e0 !important;
-    border-radius: unset;
-    border: 1px solid #dee2e6 !important;
-    border-top: 0px !important;
+    border-color: $color-border !important;
+    border-radius: $border-radius-none;
+    border: $border-width solid $color-border-light !important;
+    border-top: 0 !important;
   }
   .lbl {
-    font-weight: 400;
+    font-weight: $font-weight-400;
     font-size: 0.9rem;
     text-transform: uppercase;
     line-height: 1.5rem;
-    letter-spacing: 0.1em;
+    letter-spacing: $letter-spacing-wider;
   }
   .form-control {
-    border-radius: 0rem;
+    border-radius: $border-radius-none;
     letter-spacing: 1px;
   }
   .btn-al-r {
@@ -36,33 +38,33 @@
   }
   .btn {
     font-family: inherit;
-    background: #378f86;
-    background-color: #378f86;
+    background: $color-primary;
+    background-color: $color-primary;
     border-style: none none none none;
-    color: #fff;
-    border-color: #378f86 #378f86 #378f86 #378f86;
-    font-weight: 700;
+    color: $color-white;
+    border-color: $color-primary;
+    font-weight: $font-weight-700;
     text-transform: uppercase;
-    font-size: 14px;
+    font-size: $font-size-sm;
     line-height: 26px;
     letter-spacing: 3px;
-    border-radius: 0;
+    border-radius: $border-radius-none;
   }
   .mr-1, .mx-1 {
-    margin-right: .25rem !important;
+    margin-right: $spacing-xs !important;
   }
   .btn:hover {
-    color: #33d286;
-    background-color: #000;
+    color: $color-success;
+    background-color: $color-black;
   }
   .btn-primary:hover {
-    background-color: #000 !important;
-    border-color: #000 !important;
-    color: #33d286;
-    box-shadow: 0 4px 14px 0 rgba(5, 5, 5, 0.47);
+    background-color: $color-black !important;
+    border-color: $color-black !important;
+    color: $color-success;
+    box-shadow: $shadow-md;
   }
   .btn-secondary {
-    background-color: gray;
+    background-color: $color-muted;
   }
   @media screen and (max-width: 768px) {
     .testimonials-Review {
@@ -79,8 +81,8 @@ a {
 }
 .opt-in-text-s {
   font-size: 12px;
-  color: #555;
-  margin-bottom: 1rem;
+  color: $color-text-muted;
+  margin-bottom: $spacing-md;
   label {
     display: block;
   }
@@ -110,27 +112,27 @@ a {
 }
 */
 a.collapsed {
-  color: #6fccc2;
+  color: $color-primary-light;
 }
 .sms-mms-consent a:hover, .sms-mms-consent a:active, .sms-mms-consent a:focus, .email-consent a:hover, .email-consent a:active, .email-consent a:focus {
-  color: #6fccc2;
+  color: $color-primary-light;
   text-decoration: underline !important;
 }
 .opt-in-text-s input {
-  background-color: #fff !important;
-  border-color: #E0E0E0 !important;
-  border-width: 1px !important;
-  border-radius: 0 !important;
-  padding: .75rem .75rem .5rem .75rem !important;
-  font-size: 1rem !important;
+  background-color: $color-white !important;
+  border-color: $color-border !important;
+  border-width: $border-width !important;
+  border-radius: $border-radius-none !important;
+  padding: .75rem .75rem $spacing-sm .75rem !important;
+  font-size: $font-size-base !important;
   line-height: 1.5rem !important;
-  font-weight: 400 !important;
+  font-weight: $font-weight-400 !important;
   letter-spacing: 1px !important;
   padding-block-end: 8px !important;
   padding-block-start: 12px !important;
   padding-inline-end: 12px !important;
   padding-inline-start: 12px !important;
-  accent-color: #378f86;
+  accent-color: $color-primary;
 }
 .email-consent .collapse:not(.show) {
   display: -webkit-box;

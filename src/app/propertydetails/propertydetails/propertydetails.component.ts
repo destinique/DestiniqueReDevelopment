@@ -7,7 +7,7 @@ Swiper.use([Navigation, Pagination, Thumbs, FreeMode]);
 
 import { TabsetComponent } from 'ngx-bootstrap/tabs';
 import { Router, ActivatedRoute } from "@angular/router";
-import { NgxSpinnerService } from "ngx-spinner";
+import { LoadSpinnerService } from 'src/app/shared/services/load-spinner.service';
 
 import { NgbDate, NgbInputDatepicker, NgbCalendar, NgbDateStruct, NgbDateParserFormatter, NgbDatepickerNavigateEvent } from '@ng-bootstrap/ng-bootstrap';
 import { Subscription } from 'rxjs';
@@ -128,7 +128,7 @@ export class PropertydetailsComponent implements OnInit, AfterViewInit, OnDestro
               private fb: FormBuilder,
               private router: Router,
               private route: ActivatedRoute,
-              private spinner: NgxSpinnerService,
+              private loadSpinner: LoadSpinnerService,
               private calendar: NgbCalendar,
               private availabilityService: AvailabilityService,
               private googleMapsService: GoogleMapsService,
@@ -167,7 +167,7 @@ export class PropertydetailsComponent implements OnInit, AfterViewInit, OnDestro
   }
 
   ngOnInit (){
-      this.spinner.show();
+      this.loadSpinner.show('Loading property...');
       if (this.storageService.isBrowser()){
           const userAgent = navigator.userAgent || navigator.vendor || (window as any)['opera'];
           this.isMobile = /android|iphone|ipad|ipod|opera mini|iemobile|wpdesktop/i.test(userAgent);
@@ -205,7 +205,7 @@ export class PropertydetailsComponent implements OnInit, AfterViewInit, OnDestro
       }
     }
 
-    setTimeout(() => {this.spinner.hide();}, 1400);
+    setTimeout(() => {this.loadSpinner.hide();}, 1400);
   }
 
   private tryInitMap(): void {
@@ -228,7 +228,7 @@ export class PropertydetailsComponent implements OnInit, AfterViewInit, OnDestro
   loadPropertyDetails(listId:any){
     this.crudService.getPropertyDetails(listId).subscribe({
       next: (resp: any) => {
-        this.spinner.hide();
+        this.loadSpinner.hide();
 
         if (resp?.length > 0) {
           if (parseInt(resp[0]["status"]) == 0) {
@@ -263,7 +263,7 @@ export class PropertydetailsComponent implements OnInit, AfterViewInit, OnDestro
         }
       },
       error: () => {
-        this.spinner.hide();
+        this.loadSpinner.hide();
         this.showPropertyError();
       }
     });
@@ -787,20 +787,20 @@ export class PropertydetailsComponent implements OnInit, AfterViewInit, OnDestro
       }
 
       const formValue = this.datesForm.value;
-      this.spinner.show();
+      this.loadSpinner.show('Loading property...');
       this.scheckin = SDATE;
       this.scheckout = EDATE;
 
       if (this.RATE_AVAILABLE == 0){
         this.isDatesFormSubmitting = false;
-        this.spinner.hide();
+        this.loadSpinner.hide();
         this.openRateNotAvailableModal();
         return;
       }
 
       if (this.dataSourceCode !== "AK") {
         this.isDatesFormSubmitting = false;
-        this.spinner.hide();
+        this.loadSpinner.hide();
 
         const message = `Unfortunately, this property requires that we call for rates.
         <br>Please submit your inquiry and one of our travel advisors will send you a
@@ -848,13 +848,13 @@ please call 850-312-5400. Thank you.`.trim();
             this.showZeroRateModal();
           }
 
-          this.spinner.hide();
+          this.loadSpinner.hide();
         },
         error: (error) => {
           this.isDatesFormSubmitting = false;
           this.showToast('Error loading rates. Please try again.', 'error');
           console.error('API Error:', error);
-          this.spinner.hide();
+          this.loadSpinner.hide();
         }
       });
 
@@ -936,7 +936,7 @@ please call 850-312-5400. Thank you.`.trim();
     try {
       const SDATE = this.scheckin;
       const EDATE = this.scheckout;
-      this.spinner.show();
+      this.loadSpinner.show('Loading property...');
 
       // Call API
       this.crudService.getRatesWithDetails(
@@ -960,16 +960,16 @@ please call 850-312-5400. Thank you.`.trim();
             this.openErrorPopup("Unable to fetch the price");
           }
 
-          this.spinner.hide();
+          this.loadSpinner.hide();
         },
         error: (error) => {
-          this.spinner.hide();
+          this.loadSpinner.hide();
           this.openErrorPopup('Error loading rates. Please try again.');
         }
       });
     }
     catch (error: any) {
-      this.spinner.hide();
+      this.loadSpinner.hide();
       this.openErrorPopup('Invalid date selection');
     }
   }

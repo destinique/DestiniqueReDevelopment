@@ -1,0 +1,76 @@
+// Destinique – Global SCSS Variables
+// Use in components: @use 'variables' as *;
+
+// ----- Brand colors -----
+$color-primary: #378f86;           // Teal – primary buttons, links, accents
+$color-primary-dark: #2d726b;      // Darker teal for hover/active
+$color-primary-light: #6fccc2;     // Light teal – links, focus rings
+
+$color-secondary: #002245;         // Dark blue – nav, headings, borders
+$color-secondary-light: #003366;   // Lighter dark blue (gradients)
+
+$color-accent: #68110a;            // Red/burgundy – hover, CTAs, emphasis
+$color-accent-hover: #8b1610;      // Lighter red for hover state
+
+$color-error: #e63946;             // Error red – validation, danger buttons
+$color-error-light: rgba(230, 57, 70, 0.25);
+$color-success: #33d286;           // Success green – hover states, confirmations
+$color-available: #28a745;           // Bootstrap/calendar available green
+$color-warning: #ffc107;            // Warning yellow – highlights, prefilled
+$color-info: #007bff;             // Info blue – external/utility links
+
+// ----- Neutrals -----
+$color-white: #ffffff;
+$color-black: #000000;
+$color-text-muted: #555555;
+$color-text-light: #666666;
+$color-border: #e0e0e0;
+$color-border-light: #dee2e6;
+$color-bg-light: #f8f9fa;
+$color-bg-offwhite: #efefef;
+$color-placeholder: #aaaaaa;
+$color-muted: #6c757d;               // Bootstrap secondary / muted text
+$color-nav-dark: #111111;            // Nav/dropdown dark bg
+$color-nav-dark-hover: #222222;      // Nav dropdown item hover
+$color-gray-mid: #747474;            // Placeholder/muted in dark nav
+
+// ----- Component-specific (optional overrides) -----
+$color-focus-ring: rgba(55, 143, 134, 0.2);
+$color-focus-ring-error: $color-error-light;
+
+// ----- Spacing -----
+$spacing-xs: 0.25rem;
+$spacing-sm: 0.5rem;
+$spacing-md: 1rem;
+$spacing-lg: 1.5rem;
+$spacing-xl: 2rem;
+$spacing-2xl: 2.5rem;
+$spacing-3xl: 3rem;
+
+// ----- Typography -----
+$font-family-base: "Montserrat", sans-serif;
+$font-size-base: 1rem;
+$font-size-sm: 0.875rem;
+$font-size-lg: 1.125rem;
+$font-weight-400: 400;
+$font-weight-500: 500;
+$font-weight-600: 600;
+$font-weight-700: 700;
+$line-height-base: 1.5;
+$line-height-tight: 1.25;
+$letter-spacing-wide: 0.025em;
+$letter-spacing-wider: 0.1em;
+
+// ----- Borders & radius -----
+$border-radius-none: 0;
+$border-radius-sm: 4px;
+$border-radius-md: 8px;
+$border-radius-lg: 12px;
+$border-width: 1px;
+
+// ----- Shadows -----
+$shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.06);
+$shadow-md: 0 4px 20px rgba(0, 0, 0, 0.08);
+$shadow-lg: 0 6px 24px rgba(0, 0, 0, 0.1);
+$shadow-primary: 0 4px 14px rgba(55, 143, 134, 0.3);
+$shadow-accent: 0 6px 20px rgba(104, 17, 10, 0.4);

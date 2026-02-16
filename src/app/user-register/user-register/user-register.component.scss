@@ -1,20 +1,22 @@
+@use 'variables' as *;
+
 .container {
-    padding-top: 2rem;
-    padding-bottom: 2rem;
+    padding-top: $spacing-xl;
+    padding-bottom: $spacing-xl;
     margin: 0 auto;
 }
 .register-header {
-    background-color: #fff !important;
+    background-color: $color-white !important;
     border-radius: 0px;
-    padding: 1rem !important;
-    border: 0px solid rgba(0, 0, 0, .125);
-    margin-bottom: 2rem;
+    padding: $spacing-md !important;
+    border: 0px solid rgba($color-black, .125);
+    margin-bottom: $spacing-xl;
     font-size: 2rem;
     line-height: 1;
     font-weight: 300;
     letter-spacing: 8px;
     text-align: center;
-    color: #378f86;
+    color: $color-primary;
     text-transform: uppercase;
 }
 .card {
@@ -22,40 +24,40 @@
     margin-bottom: 10px;
     width: 100%;
     border-radius: 0px;
-    border: 1px solid #E0E0E0 !important;
+    border: 1px solid $color-border !important;
 }
 .w-100 {
     width: 100% !important;
 }
 .lbl {
-    font-weight: 400;
+    font-weight: $font-weight-400;
     font-size: .9rem;
     text-transform: uppercase;
     line-height: 1.5rem;
-    letter-spacing: .1em;
+    letter-spacing: $letter-spacing-wider;
 }
 .titleColor {
-    color: #002245 !important;
+    color: $color-secondary !important;
 }
 .titleColor span {
-    color: red !important;
+    color: $color-error !important;
 }
 .form-control {
-    font-weight: 500;
-    color: #000000;
+    font-weight: $font-weight-500;
+    color: $color-black;
     display: block;
     width: 100%;
     height: calc(1.5em + .75rem + 2px);
     background-clip: padding-box;
-    border: 1px solid #ced4da;
+    border: 1px solid $color-border-light;
     transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
 }
 .form-control:focus {
     box-shadow: none;
 }
 input{
-    background-color: #fff !important;
-    border-color: #E0E0E0 !important;
+    background-color: $color-white !important;
+    border-color: $color-border !important;
     border-width: 1px !important;
     border-radius: 0 !important;
     padding: .75rem .75rem .5rem .75rem !important;
@@ -69,18 +71,18 @@ input{
     padding-inline-start: 12px !important;
 }
 input::placeholder, textarea::placeholder {
-    color: #aaa !important;
-    font-weight: 400 !important;
+    color: $color-placeholder !important;
+    font-weight: $font-weight-400 !important;
     text-transform: uppercase;
 }
 .invalid-feedback {
     font-size: 13px;
-    font-weight: 400;
+    font-weight: $font-weight-400;
 }
 .btn {
     padding: 6px 20px;
-    box-shadow: 0 2px 6px 1px rgba(20, 20, 20, 0.48);
-    font-weight: 600;
+    box-shadow: $shadow-sm;
+    font-weight: $font-weight-600;
     font-size: 14px;
     line-height: 26px;
     letter-spacing: 1px;
@@ -91,28 +93,28 @@ input::placeholder, textarea::placeholder {
     border: 0px;
 }
 .btn:hover {
-    background-color: #000 !important;
-    border-color: #000 !important;
-    color: #33d286 !important;
+    background-color: $color-black !important;
+    border-color: $color-black !important;
+    color: $color-success !important;
     border: 0px;
-    box-shadow: 0 4px 14px 0 rgba(5, 5, 5, 0.47);
+    box-shadow: $shadow-md;
 }
 .btn-al-r {
     text-align: right;
     display: inline-block;
 }
 .btn-primary {
-    background-color: #378f86 !important;
-    color: #fff;
+    background-color: $color-primary !important;
+    color: $color-white;
     border-radius: 0rem;
 }
 .btn-secondary {
     border-radius: 0rem;
 }
 .btGreen {
-    background-color: #21e0bd;
+    background-color: $color-primary-light;
     border-radius: 0rem;
-    color: #fff;
+    color: $color-white;
 }
 .me-2 {
     margin-right: .5rem !important;
@@ -129,27 +131,27 @@ input::placeholder, textarea::placeholder {
 /*consent*/
 .opt-in-text-s {
     font-size: 12px;
-    color: #555;
+    color: $color-text-muted;
     margin-bottom: 1rem;
     label {
         display: block;
     }
 }
 .opt-in-text-s input {
-    background-color: #fff !important;
-    border-color: #E0E0E0 !important;
-    border-width: 1px !important;
-    border-radius: 0 !important;
+    background-color: $color-white !important;
+    border-color: $color-border !important;
+    border-width: $border-width !important;
+    border-radius: $border-radius-none !important;
     padding: 0.75rem 0.75rem 0.5rem 0.75rem !important;
-    font-size: 1rem !important;
-    line-height: 1.5rem !important;
-    font-weight: 400 !important;
+    font-size: $font-size-base !important;
+    line-height: $line-height-base !important;
+    font-weight: $font-weight-400 !important;
     letter-spacing: 1px !important;
     padding-block-end: 8px !important;
     padding-block-start: 12px !important;
     padding-inline-end: 12px !important;
     padding-inline-start: 12px !important;
-    accent-color: #378f86;
+    accent-color: $color-primary;
 }
 .sms-mms-consent .collapse:not(.show) {
     display: -webkit-box;
@@ -168,10 +170,10 @@ input::placeholder, textarea::placeholder {
     min-height: 20px !important;
 }
 a.collapsed {
-    color: #6fccc2;
+    color: $color-primary-light;
 }
 .sms-mms-consent a:hover, .sms-mms-consent a:active, .sms-mms-consent a:focus, .email-consent a:hover, .email-consent a:active, .email-consent a:focus {
-    color: #6fccc2;
+    color: $color-primary-light;
     text-decoration: underline;
 }
 .email-consent .collapse:not(.show) {
@@ -187,7 +189,7 @@ a.collapsed {
 
 // FORM VALIDATION
 .is-invalid {
-    border-color: #dc3545 !important;
+    border-color: $color-error !important;
 }
 
 // PASSWORD TOGGLE BUTTONS
@@ -208,7 +210,7 @@ a.collapsed {
     .password-toggle-btn {
         border: 0px;
         border-left: 0;
-        background-color: #f8f9fa;
+        background-color: $color-bg-light;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -222,11 +224,11 @@ a.collapsed {
             background-color: transparent !important;
             border-color:0px;
             box-shadow: none;
-            color: #555;
+            color: $color-text-muted;
         }
 
         i {
-            color: #555;
+            color: $color-text-muted;
             font-size: 18px;
         }
     }
@@ -253,7 +255,7 @@ a.collapsed {
 .form-text.text-muted {
     font-size: 12px;
     margin-top: 5px;
-    color: #6c757d !important;
+    color: $color-muted !important;
     display: block;
 }
 
@@ -284,7 +286,7 @@ a.collapsed {
         -moz-appearance: checkbox;
 
         // Use modern accent-color property
-        accent-color: #378f86;
+        accent-color: $color-primary;
     }
 
     .form-check-label {
@@ -328,11 +330,11 @@ a.collapsed {
 }
 
 // Fallback for older browsers that don't support accent-color
-@supports not (accent-color: #378f86) {
+@supports not (accent-color: $color-primary) {
     .custom-checkbox .form-check-input:checked {
         position: relative;
-        background-color: #378f86;
-        border-color: #378f86;
+        background-color: $color-primary;
+        border-color: $color-primary;
 
         &:after {
             content: '';
@@ -341,7 +343,7 @@ a.collapsed {
             top: 3px;
             width: 5px;
             height: 10px;
-            border: solid white;
+            border: solid $color-white;
             border-width: 0 2px 2px 0;
             transform: rotate(45deg);
         }
@@ -489,7 +491,7 @@ a.collapsed {
 
 // Make sure the input shows red border when invalid
 .form-control.is-invalid {
-    border-color: #dc3545 !important;
+    border-color: $color-error !important;
     background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12' width='12' height='12' fill='none' stroke='%23dc3545'%3e%3ccircle cx='6' cy='6' r='4.5'/%3e%3cpath stroke-linejoin='round' d='M5.8 3.6h.4L6 6.5z'/%3e%3ccircle cx='6' cy='8.2' r='.6' fill='%23dc3545' stroke='none'/%3e%3c/svg%3e") !important;
     background-repeat: no-repeat !important;
     background-position: right calc(0.375em + 0.1875rem) center !important;

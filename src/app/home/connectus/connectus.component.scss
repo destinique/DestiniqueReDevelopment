@@ -1,7 +1,9 @@
+@use 'variables' as *;
+
 .connectus-container {
     position: relative;
     text-align: center;
-    color: #fff;
+    color: $color-white;
     .overlay-effect {
         opacity: 1;
         cursor: pointer;
@@ -11,7 +13,7 @@
         left: 0;
         right: 0;
         transition: 0.5s ease;
-        background-color: rgba(5, 5, 5, 0.6);
+        background-color: rgba($color-black, 0.6);
         overflow: hidden;
     }
     img {
@@ -43,11 +45,11 @@
         font-style: normal;
     }
     .btn {
-        color: #fff;
-        background: #002245 !important;
-        background-color: #002245 !important;
-        border-color: #002245 !important;
-        font-weight: 700;
+        color: $color-white;
+        background: $color-secondary !important;
+        background-color: $color-secondary !important;
+        border-color: $color-secondary !important;
+        font-weight: $font-weight-700;
         text-transform: uppercase;
         font-size: 14px;
         line-height: 26px;
@@ -55,24 +57,24 @@
         border-radius: 0rem;
     }
     .btn:hover {
-        background: #002245 !important;
-        border-color: #002245 !important;
-        color: #fff;
-        font-weight: 700;
+        background: $color-secondary !important;
+        border-color: $color-secondary !important;
+        color: $color-white;
+        font-weight: $font-weight-700;
         text-transform: uppercase;
-        box-shadow: 0 4px 14px 0 rgba(5, 5, 5, 0.47);
+        box-shadow: $shadow-md;
         font-size: 14px;
         line-height: 26px;
         letter-spacing: 3px;
     }
     .contact-btn {
-        background: #378f86 !important;
-        background-color: #378f86 !important;
-        color: #fff !important;
-        border-color: #378f86 !important;
+        background: $color-primary !important;
+        background-color: $color-primary !important;
+        color: $color-white !important;
+        border-color: $color-primary !important;
         padding: 10px 20px;
-        box-shadow: 0 2px 6px 1px rgba(20, 20, 20, 0.48);
-        font-weight: 600;
+        box-shadow: $shadow-sm;
+        font-weight: $font-weight-600;
         text-transform: uppercase;
         font-size: 14px;
         line-height: 26px;
@@ -82,10 +84,10 @@
         transition: 0.5s;
     }
     .contact-btn:hover {
-        color: #33d286 !important;
-        background: #000 !important;
-        background-color: #000 !important;
-        box-shadow: 0 4px 14px 0 rgba(5, 5, 5, 0.47);
+        color: $color-success !important;
+        background: $color-black !important;
+        background-color: $color-black !important;
+        box-shadow: $shadow-md;
     }
 }
 @media screen and (max-width: 768px) {
@@ -119,20 +121,20 @@
         }
 
         .btn {
-            font-weight: 700;
+            font-weight: $font-weight-700;
             text-transform: uppercase;
             font-size: 10px;
             line-height: 18px;
             letter-spacing: 2px;
-            color: #fff !important;
-            background: #378f86 !important;
-            background-color: #378f86 !important;
-            border-color: #378f86 #378f86 #378f86 #378f86 !important;
+            color: $color-white !important;
+            background: $color-primary !important;
+            background-color: $color-primary !important;
+            border-color: $color-primary $color-primary $color-primary $color-primary !important;
         }
         .btn:hover {
-            background-color: #000 !important;
-            color: #378f86;
-            font-weight: 700;
+            background-color: $color-black !important;
+            color: $color-primary;
+            font-weight: $font-weight-700;
             text-transform: uppercase;
             font-size: 10px;
             line-height: 18px;

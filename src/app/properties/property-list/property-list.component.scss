@@ -1,3 +1,4 @@
+@use 'variables' as *;
 @import url("https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css");
 ::placeholder {
     color: #777;
@@ -12,27 +13,27 @@
     }
     .btn-primary {
         background-color: transparent !important;
-        color: #002245;
+        color: $color-secondary;
         border: none;
-        font-weight: 400;
+        font-weight: $font-weight-400;
         letter-spacing: 0 !important;
-        border-radius: 0rem;
-        border: 1px solid #ced4da;
+        border-radius: $border-radius-none;
+        border: $border-width solid #ced4da;
     }
 
     .btn-primary:hover {
-        background-color: #000 !important;
-        color: #33d286 !important;
-        font-weight: 400;
+        background-color: $color-black !important;
+        color: $color-success !important;
+        font-weight: $font-weight-400;
     }
     .btn-secondary {
-        color: #fff;
-        background-color: #6c757d;
-        border-color: #6c757d;
+        color: $color-white;
+        background-color: $color-muted;
+        border-color: $color-muted;
     }
     .filter-btn {
         color: #495057 !important;
-        background-color: #fff !important;
+        background-color: $color-white !important;
     }
     @media (max-width: 320px) {
         .card {
@@ -60,19 +61,19 @@
         width: 100%;
         height: calc(1.5em + .75rem + 2px);
         padding: .375rem .75rem;
-        font-size: 1rem;
-        font-weight: 400;
-        line-height: 1.5;
+        font-size: $font-size-base;
+        font-weight: $font-weight-400;
+        line-height: $line-height-base;
         color: #777;
-        background-color: #fff;
+        background-color: $color-white;
         background-clip: padding-box;
         border: 2px solid #ced4da;
-        border-radius: .25rem;
+        border-radius: $spacing-xs;
         transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
     }
     .matSlider {
-        padding: 0 1rem .5rem;
-        font-weight: 700;
+        padding: 0 $spacing-md $spacing-sm;
+        font-weight: $font-weight-700;
     }
     .float-right {
         float: right !important;
@@ -117,10 +118,10 @@
     transform: translate(-25%, 10%) !important;
 }
 .dropdown-menu.advance-search-modal {
-    border: 1px solid #dee2e6;
-    border-radius: 8px;
+    border: $border-width solid $color-border-light;
+    border-radius: $border-radius-md;
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
-    background-color: #fff;
+    background-color: $color-white;
     max-height: 70vh;
     overflow-y: auto;
 }
@@ -165,19 +166,19 @@
 }
 /* Laptop/desktop (992px+): use default .dropdown-menu-center position (width 990px, translate(-25%, 10%)) – no override */
 .advance-search-modal .btn.showMore, .advance-search-modal .float-right .btn {
-    background: #378f86;
-    background-color: #378f86;
-    color: #fff;
-    border-color: #378f86;
+    background: $color-primary;
+    background-color: $color-primary;
+    color: $color-white;
+    border-color: $color-primary;
     padding: 6px 20px;
-    box-shadow: 0 2px 6px 1px rgba(20, 20, 20, 0.48);
-    font-weight: 600;
-    font-size: 14px;
+    box-shadow: $shadow-sm;
+    font-weight: $font-weight-600;
+    font-size: $font-size-sm;
     line-height: 26px;
     letter-spacing: 3px;
     text-decoration: none;
     transition: 0.5s;
-    border-radius: 0px;
+    border-radius: $border-radius-none;
     text-transform: uppercase;
 }
 .btn-warning.showMore {
@@ -191,19 +192,19 @@
 .advance-search-modal .float-right .btn:focus,
 .advance-search-modal .btn.showMore:active,
 .advance-search-modal .float-right .btn:active {
-    background-color: #000 !important;
-    border-color: #000 !important;
-    color: #33d286 !important;
-    box-shadow: 0 4px 14px 0 rgba(5, 5, 5, 0.47);
+    background-color: $color-black !important;
+    border-color: $color-black !important;
+    color: $color-success !important;
+    box-shadow: $shadow-md;
 }
 .bedroomClass {
-    margin-bottom: 2rem;
+    margin-bottom: $spacing-xl;
 }
 .bathroomClass {
-    margin-bottom: 2rem;
+    margin-bottom: $spacing-xl;
 }
 .priceClass {
-    margin-bottom: 2rem;
+    margin-bottom: $spacing-xl;
 }
 .btnClose {
     font-weight: 900;
@@ -215,7 +216,7 @@
     font-weight: bolder;
 }
 .filter-btn:hover .fa.fa-sliders {
-    color: #33d286 !important;
+    color: $color-success !important;
 }
 b {
     font-size: 24px;
@@ -244,10 +245,10 @@ label {
 }
 
 hr {
-    margin-top: 1rem;
-    margin-bottom: 1rem;
+    margin-top: $spacing-md;
+    margin-bottom: $spacing-md;
     border: 0;
-    border-top: 1px solid rgba(0, 0, 0, .1);
+    border-top: $border-width solid rgba(0, 0, 0, .1);
 }
 #advanced-search.dropdown-toggle::after {
     display: none;
@@ -283,13 +284,13 @@ img {
         overflow-y: scroll;
     }
     .bedroomClass {
-        margin-bottom: 1.5rem;
+        margin-bottom: $spacing-lg;
     }
     .bathroomClass {
-        margin-bottom: 1.5rem;
+        margin-bottom: $spacing-lg;
     }
     .priceClass {
-        margin-bottom: 1.5rem;
+        margin-bottom: $spacing-lg;
     }
 }
 @media all and (max-width: 910px) {
@@ -308,13 +309,13 @@ img {
         overflow-y: scroll;
     }
     .bedroomClass {
-        margin-bottom: 1.5rem;
+        margin-bottom: $spacing-lg;
     }
     .bathroomClass {
-        margin-bottom: 1.5rem;
+        margin-bottom: $spacing-lg;
     }
     .priceClass {
-        margin-bottom: 1.5rem;
+        margin-bottom: $spacing-lg;
     }
 }
 @media all and (min-width: 1025px) and (max-width: 1200px) {
@@ -338,13 +339,13 @@ img {
         overflow-y: scroll;
     }
     .bedroomClass {
-        margin-bottom: 1.5rem;
+        margin-bottom: $spacing-lg;
     }
     .bathroomClass {
-        margin-bottom: 1.5rem;
+        margin-bottom: $spacing-lg;
     }
     .priceClass {
-        margin-bottom: 1.5rem;
+        margin-bottom: $spacing-lg;
     }
 }
 /*Filters*/
@@ -368,16 +369,16 @@ img {
     gap: 10px;
     label {
         font-size: 16px;
-        font-weight: 400 !important;
+        font-weight: $font-weight-400 !important;
     }
     button.resetbtn {
-        background: #378f86 !important;
+        background: $color-primary !important;
         border: 0;
-        color: #fff;
+        color: $color-white;
         padding: 4px 12px !important;
         align-items: center;
         justify-content: center;
-        border-right: 1px solid #ffffff;
+        border-right: $border-width solid $color-white;
         text-transform: capitalize;
         transition: 0.3s;
         height: 32px;
@@ -387,23 +388,23 @@ img {
     }
 
     button.resetbtn:hover, button.resetbtn:focus, button.resetbtn:active {
-        background-color: #000 !important;
-        color: #33d286 !important;
+        background-color: $color-black !important;
+        color: $color-success !important;
     }
 }
 #maindivspan {
-    border-bottom: 1px solid #002245;
-    color: #555;
-    font-size: 1rem;
+    border-bottom: $border-width solid $color-secondary;
+    color: $color-text-muted;
+    font-size: $font-size-base;
     letter-spacing: 0;
-    font-weight: 400;
+    font-weight: $font-weight-400;
     padding: 0.7rem 0.75rem;
     height: 46px !important;
     max-width: -moz-fit-content;
     max-width: fit-content;
 }
 .expandview-title {
-    font-size: 1rem;
+    font-size: $font-size-base;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -412,15 +413,15 @@ img {
     width: 145px;
     padding: 11px 0;
     input {
-        margin-right: .25rem!important;
-        border: 1px solid #777 !important;
-        border-radius: 4px !important;
-        accent-color: #378f86 !important;
+        margin-right: $spacing-xs !important;
+        border: $border-width solid #777 !important;
+        border-radius: $border-radius-sm !important;
+        accent-color: $color-primary !important;
         top: -2px;
         position: relative;
     }
     .form-check-input:checked {
-        background-color: #378f86 !important;
+        background-color: $color-primary !important;
     }
 }
 #filter-properties {
@@ -430,21 +431,21 @@ img {
     padding-right: 10px !important
 }
 .mr-1, .mx-1 {
-    margin-right: .25rem !important;
+    margin-right: $spacing-xs !important;
 }
 /* Page Size & Sort - underline-only style (reference) */
 #filter-properties .form-select,
 #filter-properties .sort-by-opt,
 .sort-by-opt {
     border: none !important;
-    border-radius: 0 !important;
-    border-bottom: 1px solid #ced4da !important;
+    border-radius: $border-radius-none !important;
+    border-bottom: $border-width solid #ced4da !important;
     box-shadow: none !important;
     background-color: transparent !important;
     color: #777 !important;
-    font-size: 1rem;
+    font-size: $font-size-base;
     option {
-        font-weight: 600;
+        font-weight: $font-weight-600;
         letter-spacing: 1.5px;
         color: #333;
     }
@@ -513,13 +514,67 @@ img {
     margin-left: 0;
     margin-right: 0;
     display: flex;
-    margin-top: .25rem !important;
+    margin-top: $spacing-xs !important;
     align-items: flex-start !important;
 }
 .properties {
     padding: 12px 2px !important;
     transition: box-shadow .3s ease;
 }
+
+/* Property skeleton loading cards */
+.property-skeleton-card {
+    background: $color-white;
+    border: $border-width solid $color-border-light;
+    border-radius: $spacing-xs;
+    box-shadow: 0 34px 21px -22px rgba(0, 0, 0, 0.15);
+    overflow: hidden;
+}
+
+.skeleton-image {
+    aspect-ratio: 3 / 2;
+    background: linear-gradient(90deg, #e8e8e8 25%, #f5f5f5 50%, #e8e8e8 75%);
+    background-size: 200% 100%;
+    animation: skeleton-shimmer 1.4s ease infinite;
+}
+
+.skeleton-body {
+    padding: $spacing-md 1.25rem;
+}
+
+.skeleton-line {
+    height: $font-size-sm;
+    background: linear-gradient(90deg, #e8e8e8 25%, #f5f5f5 50%, #e8e8e8 75%);
+    background-size: 200% 100%;
+    animation: skeleton-shimmer 1.4s ease infinite;
+    border-radius: $border-radius-sm;
+    margin-bottom: $spacing-sm;
+
+    &.skeleton-title {
+        height: 1.25rem;
+        width: 60%;
+        margin-bottom: 0.75rem;
+    }
+
+    &.skeleton-subtitle {
+        width: 45%;
+        margin-bottom: 1rem;
+    }
+
+    &.short {
+        width: 70%;
+    }
+}
+
+.skeleton-lines .skeleton-line:last-child {
+    margin-bottom: 0;
+}
+
+@keyframes skeleton-shimmer {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+}
+
 .cardcustomcss {
     --display: flex;
     --flex-direction: row;
@@ -561,7 +616,7 @@ img {
     transition: all 0.4s ease-in-out;
 }
 .cardcustomcss .card-body {
-    border-radius: 0 0 .25rem .25rem;
+    border-radius: 0 0 $spacing-xs $spacing-xs;
 }
 .cardcustomcss .card-body,
 .cardcustomcss .card-body .containers {
@@ -578,13 +633,13 @@ img {
     flex-direction: column;
     min-width: 0;
     word-wrap: break-word;
-    background-color: #fff;
+    background-color: $color-white;
     background-clip: border-box;
-    border-radius: .25rem;
+    border-radius: $spacing-xs;
     letter-spacing: 1px;
     box-shadow: 0 34px 21px -22px #00000026;
     margin-bottom: 20px;
-    border: 1px solid #dee2e6 !important;
+    border: $border-width solid $color-border-light !important;
 }
 .absolute {
     position: absolute;
@@ -594,7 +649,7 @@ img {
 }
 .text-white {
     --tw-text-opacity: 1;
-    color: #fff !important;
+    color: $color-white !important;
 }
 .facvalues {
     font-size: 16px;
@@ -610,11 +665,11 @@ img {
     word-break: break-word;
     background-color: #0006;
     padding: 4px 15px;
-    bottom: .5rem;
-    color: #fff !important;
+    bottom: $spacing-sm;
+    color: $color-white !important;
 }
 .bottom-6 {
-    bottom: .5rem;
+    bottom: $spacing-sm;
 }
 
 .propertyidcontai {
@@ -627,16 +682,16 @@ img {
     gap: 5px;
 }
 .cardcustomcss .form-check-input {
-    border: 1px solid #777 !important;
-    border-radius: 4px !important;
-    accent-color: #378f86 !important;
+    border: $border-width solid #777 !important;
+    border-radius: $border-radius-sm !important;
+    accent-color: $color-primary !important;
     box-shadow: none;
     position: relative;
     top: 7px;
 }
 .form-check-input:checked {
-    background-color: #378f86 !important;
-    border-color: #378f86 !important;
+    background-color: $color-primary !important;
+    border-color: $color-primary !important;
     box-shadow: none;
 }
 .cursor-pointer {
@@ -645,7 +700,7 @@ img {
 .propertyidtitle {
     margin: 0;
     font-size: 25px;
-    color: #000;
+    color: $color-black;
     letter-spacing: 1px;
     text-align: center;
     text-transform: uppercase;
@@ -656,7 +711,7 @@ img {
     font-size: 25px;
     font-weight: 300;
     text-align: center;
-    color: #000 !important;
+    color: $color-black !important;
 }
 .city-name {
     font-size: 30px;
@@ -664,7 +719,7 @@ img {
     line-height: 1em;
     text-align: center;
     text-decoration: none;
-    color: #000 !important;
+    color: $color-black !important;
     cursor: pointer;
 }
 .facilities {
@@ -708,8 +763,8 @@ img {
 }
 .fac-title {
     margin: 0;
-    font-size: 14px;
-    color: #000;
+    font-size: $font-size-sm;
+    color: $color-black;
     letter-spacing: 1px;
     text-align: center;
     text-transform: uppercase;
@@ -729,19 +784,19 @@ img {
 .expand-View {
     box-shadow: none;
     font-size: 16px;
-    color: #555;
+    color: $color-text-muted;
 }
 .facilities .btn {
     display: inline-block;
-    font-weight: 400;
+    font-weight: $font-weight-400;
     text-align: center;
     vertical-align: middle;
     user-select: none;
     background-color: transparent !important;
-    border: 1px solid transparent !important;
+    border: $border-width solid transparent !important;
     padding: .375rem .75rem !important;
-    line-height: 1.5;
-    border-radius: .25rem;
+    line-height: $line-height-base;
+    border-radius: $spacing-xs;
     transition: color .15s ease-in-out, background-color .15s ease-in-out, border-color .15s ease-in-out, box-shadow .15s ease-in-out;
     text-transform: capitalize;
 }
@@ -784,8 +839,8 @@ img {
 
 /* Price range dropdown – match app theme, centered under Price button */
 .dropdown-menu.price-range-dropdown {
-  border: 1px solid #dee2e6;
-  border-radius: 8px;
+  border: $border-width solid $color-border-light;
+  border-radius: $border-radius-md;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
   padding: 0;
   overflow: hidden;

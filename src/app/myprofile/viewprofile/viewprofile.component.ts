@@ -1,5 +1,5 @@
 import { Component, OnInit, AfterViewInit, OnDestroy } from '@angular/core';
-import { NgxSpinnerService } from "ngx-spinner";
+import { LoadSpinnerService } from 'src/app/shared/services/load-spinner.service';
 import { StorageService } from 'src/app/shared/services/storage.service';
 import { CrudService } from "src/app/shared/services/crud.service";
 import { ToastrService } from 'ngx-toastr';
@@ -43,7 +43,7 @@ export class ViewprofileComponent implements OnInit, AfterViewInit, OnDestroy {
     private crudService: CrudService,
     private storageService: StorageService,
     private toast: ToastrService,
-    private spinner: NgxSpinnerService,
+    private loadSpinner: LoadSpinnerService,
     private authService: AuthService
   ) {}
 
@@ -98,7 +98,7 @@ export class ViewprofileComponent implements OnInit, AfterViewInit, OnDestroy {
     this.isLoading = true;
     this.hasError = false;
     this.errorMessage = '';
-    this.spinner.show();
+    this.loadSpinner.show();
 
     // Use AuthService to get token (it uses StorageService internally)
     const token = this.authService.getToken();
@@ -125,7 +125,7 @@ export class ViewprofileComponent implements OnInit, AfterViewInit, OnDestroy {
       },
       complete: () => {
         this.isLoading = false;
-        this.spinner.hide();
+        this.loadSpinner.hide();
       }
     });
   }

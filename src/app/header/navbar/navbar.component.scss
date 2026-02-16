@@ -1,14 +1,16 @@
+@use 'variables' as *;
+
 .topbar {
     font-size: 14px;
     .dest-call {
-        color: #e0e0e0;
+        color: $color-border;
         &:hover {
-            color: #33d286;
+            color: $color-success;
         }
     }
 }
 .icon-1 {
-    color: #fff;
+    color: $color-white;
 }
 .nav-whatsapp {
     width: 16px;
@@ -33,35 +35,35 @@
     height: 26px;
 }
 .main-nav {
-    background: #000 !important;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    background: $color-black !important;
+    border-bottom: 1px solid rgba($color-white, 0.1);
     height: 96px;
-    font-family: Montserrat, sans-serif !important;
+    font-family: $font-family-base !important;
 
     .navbar-brand .logo {
         height: 156px;
         width: auto;
         position: relative;
         top: 24px;
-        padding: 1rem;
+        padding: $spacing-md;
         z-index: 99999;
     }
 
     #main-nav-items {
         z-index: 999;
-        background-color: #000 !important;
+        background-color: $color-black !important;
     }
 
     // Style for regular nav links
     .nav-link {
-        color: #e0e0e0 !important;
+        color: $color-border !important;
         font-size: .85rem;
         letter-spacing: 1px;
         font-weight: 300;
         text-decoration: none;
 
         &:hover {
-            color: #33d286 !important;
+            color: $color-success !important;
             text-decoration: underline;
         }
 
@@ -70,7 +72,7 @@
             background: transparent !important;
             border: none !important;
             padding: 0.5rem 1rem;
-            color: #e0e0e0 !important;
+            color: $color-border !important;
             font-size: .85rem;
             letter-spacing: 1px;
             font-weight: 300;
@@ -78,7 +80,7 @@
             cursor: pointer;
 
             &:hover, &:focus {
-                color: #33d286 !important;
+                color: $color-success !important;
                 text-decoration: underline;
                 background: transparent !important;
                 border: none !important;
@@ -124,22 +126,22 @@
 
     .nav-search-box {
         background-color: transparent;
-        color: #e0e0e0;
+        color: $color-border;
         border-left: 0px;
         border-right: 0px;
         border-top: 0px;
         border-radius: 0;
         font-size: 0.8rem;
-        border-color: #e0e0e0;
+        border-color: $color-border;
 
         &::placeholder {
-            color: #747474;
+            color: $color-gray-mid;
             opacity: 1;
         }
 
         &:focus {
             box-shadow: none;
-            border-color: #e0e0e0;
+            border-color: $color-border;
         }
     }
 
@@ -148,12 +150,12 @@
         border: 0px;
         border-bottom: 1px solid;
         border-radius: 0;
-        color: #e0e0e0;
+        color: $color-border;
 
         &:hover, &:focus {
             background-color: transparent;
-            border-color: #33d286;
-            color: #33d286;
+            border-color: $color-success;
+            color: $color-success;
         }
     }
 
@@ -183,20 +185,20 @@
         }
 
         li:first-child {
-            border-bottom: 1px solid #747474;
+            border-bottom: 1px solid $color-gray-mid;
         }
         .dropdown-header {
-            color: #e0e0e0;
+            color: $color-border;
             cursor: text;
             .small {
-                color: #aaa;
+                color: $color-placeholder;
             }
         }
         .dropdown-divider {
             height: 0;
             margin: .5rem 0;
             overflow: hidden;
-            border-top: 1px solid #777;
+            border-top: 1px solid $color-text-muted;
         }
     }
 
@@ -219,28 +221,28 @@
 }
 
 .dropdown-menu {
-    background: #111;
+    background: $color-nav-dark;
     border-radius: 0;
     .dropdown-item {
-        color: #fff;
+        color: $color-white;
         font-size: .85rem;
         font-weight: 300;
         padding: .4rem 1rem;
-        letter-spacing: .025em;
-        font-family: Montserrat, sans-serif !important;
+        letter-spacing: $letter-spacing-wide;
+        font-family: $font-family-base !important;
         text-decoration: none;
         cursor: pointer;
 
         &:hover {
-            background: #222;
-            color: #33d286 !important;
+            background: $color-nav-dark-hover;
+            color: $color-success !important;
         }
     }
 
     li {
         &:hover {
-            background-color: #222 !important;
-            color: #33d286 !important;
+            background-color: $color-nav-dark-hover !important;
+            color: $color-success !important;
             text-decoration: underline;
         }
     }
@@ -255,7 +257,7 @@
             position: absolute;
             left: 0;
             right: 0;
-            background-color: #000;
+            background-color: $color-black;
             z-index: 1000;
             padding: 20px 0;
             max-height: calc(100vh - 80px);
@@ -277,10 +279,10 @@
             text-align: left;
             padding: 0.5rem 0;
             font-size: .85rem;
-            color: #e0e0e0 !important;
+            color: $color-border !important;
 
             &:hover {
-                color: #33d286 !important;
+                color: $color-success !important;
             }
         }
     }
@@ -297,7 +299,7 @@
     }
 
     .container-fluid {
-        background-color: #000;
+        background-color: $color-black;
         padding-left: 0px;
         padding-right: 0px;
     }
@@ -341,7 +343,7 @@
             float: none;
             width: auto;
             margin-top: 10px;
-            background-color: #111;
+            background-color: $color-nav-dark;
             border: none;
             padding-left: 15px;
             padding-right: 15px;
@@ -373,7 +375,7 @@
             /*width: 100%;*/
             text-align: left;
             /*background-color: #111 !important;*/
-            color: white !important;
+            color: $color-white !important;
             /*border: 1px solid #333 !important;*/
             /*padding: 10px 15px;*/
             margin-top: 10px;

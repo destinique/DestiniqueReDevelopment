@@ -4,7 +4,7 @@ import { Subject, Subscription } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { PropertyService, PropertyResponse, Property } from 'src/app/shared/services/property.service';
 import { SearchStateService } from 'src/app/shared/services/search-state.service';
-import { NgxSpinnerService } from 'ngx-spinner';
+import { LoadSpinnerService } from 'src/app/shared/services/load-spinner.service';
 
 @Component({
   selector: 'app-property-list',
@@ -20,6 +20,7 @@ export class PropertyListComponent implements OnInit, OnDestroy {
   priceRangeOpen = false;
   @ViewChild('advancedSearchDropdown') advancedSearchDropdown?: ElementRef<HTMLDivElement>;
   @ViewChild('priceRangeDropdown') priceRangeDropdown?: ElementRef<HTMLDivElement>;
+  @ViewChild('propertiesGridArea') propertiesGridArea?: ElementRef<HTMLDivElement>;
   paginationInfo: any = {
     page: 1,
     pageSize: 12,
@@ -33,6 +34,8 @@ export class PropertyListComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<void>();
   private searchSubscription?: Subscription;
   isLoading = false;
+  isInitialLoad = true; // spinner on first load, skeleton on pagination/filter changes
+  skeletonCount = [1, 2, 3];
   expandedPropertyIds: Set<number> = new Set();
   showMoreDetailsGlobal = false;
 
@@ -64,7 +67,7 @@ export class PropertyListComponent implements OnInit, OnDestroy {
   constructor(
     private propertyService: PropertyService,
     public searchState: SearchStateService,
-    private spinner: NgxSpinnerService
+    private loadSpinner: LoadSpinnerService
   ) {}
 
   // ========== LIFECYCLE HOOKS ==========
@@ -93,25 +96,31 @@ export class PropertyListComponent implements OnInit, OnDestroy {
 
   private loadProperties(): void {
     this.isLoading = true;
-    this.spinner.show();
+
+    if (this.isInitialLoad) {
+      this.loadSpinner.show('Loading properties...');
+    }
 
     const params = this.searchState.getSearchParams();
 
     this.propertyService.searchProperties(params).subscribe({
       next: (response: PropertyResponse) => {
         this.properties = response.data;
-
-        // console.log(this.properties);
-
         this.updatePaginationInfo(response);
         this.isLoading = false;
-        this.spinner.hide();
+        if (this.isInitialLoad) {
+          this.isInitialLoad = false;
+          this.loadSpinner.hide();
+        }
       },
       error: (error) => {
         console.error('Error loading properties:', error);
         this.properties = [];
         this.isLoading = false;
-        this.spinner.hide();
+        if (this.isInitialLoad) {
+          this.isInitialLoad = false;
+          this.loadSpinner.hide();
+        }
       }
     });
   }
@@ -129,15 +138,22 @@ export class PropertyListComponent implements OnInit, OnDestroy {
 
   // ========== EVENT HANDLERS ==========
   onPageChange(page: number): void {
+    this.scrollToPropertiesGrid();
     this.searchState.updatePagination(page);
   }
 
   onPageSizeChange(pageSize: number): void {
+    this.scrollToPropertiesGrid();
     this.searchState.updatePagination(1, pageSize);
   }
 
   onSortChange(sortBy: string): void {
+    this.scrollToPropertiesGrid();
     this.searchState.updateSorting(sortBy);
+  }
+
+  private scrollToPropertiesGrid(): void {
+    this.propertiesGridArea?.nativeElement?.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
 
   onListIdSearchComplete(results: any): void {

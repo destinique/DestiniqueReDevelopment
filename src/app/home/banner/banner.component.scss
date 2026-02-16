@@ -1,3 +1,5 @@
+@use 'variables' as *;
+
 .kb-wrapper {
     position: relative;
     width: 100%;
@@ -34,11 +36,11 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    background-color: #11111169;
+    background-color: rgba($color-nav-dark, 0.41);
     text-align: center;
-    color: #fff;
+    color: $color-white;
     pointer-events: auto;
-    text-shadow: 1px 1px 8px rgba(0, 0, 0, 0.4);
+    text-shadow: 1px 1px 8px rgba($color-black, 0.4);
 }
 
 /* Ken Burns animation */
@@ -130,7 +132,7 @@
     width: 100%;
 }
 .carousel_title {
-    color: rgb(255, 255, 255);
+    color: $color-white;
     line-height: 65px;
     letter-spacing: 15px;
     font-size: 85px;
@@ -145,11 +147,11 @@
 .destinique-sub {
     text-align: center;
     font-size: 2.1rem;
-    color: #fff;
+    color: $color-white;
     margin-bottom: 0.1rem;
     margin-top: 1.4rem;
     font-weight: 400;
-    border-right: 3px solid #fff;
+    border-right: 3px solid $color-white;
     width: 100%;
     white-space: nowrap;
     overflow: hidden;
@@ -161,7 +163,7 @@
     font-size: 18px;
     font-style: normal;
     font-weight: 300;
-    color: #fff;
+    color: $color-white;
 }
 
 .two-path-layout h3 {
@@ -181,13 +183,13 @@
 .two-path-layout .form-control {
     width: 220px;
     height: 60px !important;
-    background-color: rgba(0,0,0,.6) !important;
-    border: 1px solid #fff;
+    background-color: rgba($color-black, 0.6) !important;
+    border: 1px solid $color-white;
     border-radius: .125rem 0 0 .125rem;
-    padding: 1rem;
+    padding: $spacing-md;
     flex-grow: 1;
-    color: #fff;
-    font-size: 1rem;
+    color: $color-white;
+    font-size: $font-size-base;
 }
 .two-path-layout .form-control:focus {
     border-right: 0px !important;
@@ -197,28 +199,28 @@
     height: 60px;
     border-radius: .125rem 0 0 .125rem;
     width: 60px;
-    background-color: #2d766f !important;
-    border-color: #2d766f !important;
+    background-color: $color-primary-dark !important;
+    border-color: $color-primary-dark !important;
 }
 
 .two-path-layout .btn.btn-success:hover, .two-path-layout .btn.btn-success:active, .two-path-layout .btn.btn-success:focus {
-    color: #ccc !important;
+    color: $color-text-light !important;
 }
 
 .two-path-layout .form-control::placeholder {
     /* Chrome, Firefox, Opera, Safari 10.1+ */
-    color: #757575 !important;
+    color: $color-text-muted !important;
     opacity: 1;
     /* Firefox */
 }
 
 .two-path-layout-btn {
-    background-color: #2d766f;
+    background-color: $color-primary-dark;
     height: 60px !important;
     width: 310px !important;
     text-transform: uppercase;
     letter-spacing: 0px;
-    color: #fff !important;
+    color: $color-white !important;
     max-width: 22.5rem;
     margin-top: 2rem;
     line-height: 2.5rem;
@@ -234,12 +236,12 @@
     margin-bottom: 0px !important;
 }
 .two-path-2nd-layout {
-    border-left: 2px solid #fff !important;
+    border-left: 2px solid $color-white !important;
 }
 .two-path-layout-btn:hover, .two-path-layout-btn:focus, .two-path-layout-btn:active {
-    color: #ccc !important;
-    background-color: #378f86 !important;
-    border-color:  #378f86 !important;
+    color: $color-text-light !important;
+    background-color: $color-primary !important;
+    border-color: $color-primary !important;
     transition: 0.3s;
 }
 .ken-burns-slideshow {
@@ -290,7 +292,7 @@
     .destinique-sub {
         font-size: 26px;
         font-weight: 400;
-        border-right: 3px solid #fff;
+        border-right: 3px solid $color-white;
         width: 100%;
         white-space: nowrap;
         overflow: hidden;
@@ -323,11 +325,11 @@
     .destinique-sub {
         text-align: center;
         font-size: 24px;
-        color: #fff;
+        color: $color-white;
         margin-bottom: 1rem;
         margin-top: 1.4rem;
         font-weight: 400;
-        border-right: 3px solid #fff;
+        border-right: 3px solid $color-white;
         width: 100%;
         white-space: nowrap;
         overflow: hidden;
@@ -373,10 +375,10 @@
     top: 100%;
     left: 0;
     right: 0;
-    background: white;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    background: $color-white;
+    border: 1px solid $color-border;
+    border-radius: $border-radius-sm;
+    box-shadow: $shadow-md;
     max-height: 300px;
     /*overflow-y: auto;*/
     margin-top: 2px;
@@ -390,7 +392,7 @@
 .autocomplete-item {
     padding: 12px 15px;
     cursor: pointer;
-    border-bottom: 1px solid #f0f0f0;
+    border-bottom: 1px solid $color-border;
     transition: background-color 0.2s;
     z-index: 999999999999;
       position: relative;
@@ -398,7 +400,7 @@
 }
 
 .autocomplete-item:hover {
-    background-color: #f8f9fa;
+    background-color: $color-bg-light;
 }
 
 .autocomplete-item:last-child {
@@ -406,15 +408,15 @@
 }
 
 .prediction-main {
-    font-weight: 500;
-    color: #333;
+    font-weight: $font-weight-500;
+    color: $color-black;
     font-size: 15px;
     margin-bottom: 2px;
 }
 
 .prediction-secondary {
     font-size: 13px;
-    color: #666;
+    color: $color-text-light;
 }
 
 .loading-indicator {
@@ -426,15 +428,15 @@
 input:-webkit-autofill,
 input:-webkit-autofill:hover,
 input:-webkit-autofill:focus {
-    -webkit-box-shadow: 0 0 0px 1000px white inset !important;
+    -webkit-box-shadow: 0 0 0px 1000px $color-white inset !important;
 }
 
 .location-details {
     margin-top: 10px;
     padding: 10px;
-    background-color: #f8f9fa;
-    border-radius: 4px;
-    border-left: 3px solid #28a745;
+    background-color: $color-bg-light;
+    border-radius: $border-radius-sm;
+    border-left: 3px solid $color-success;
 }
 
 .selected-city {
@@ -445,12 +447,12 @@ input:-webkit-autofill:focus {
 
 .location-meta {
     font-size: 12px;
-    color: #666;
+    color: $color-text-light;
 }
 
 .coordinates {
     font-size: 11px;
-    color: #888;
+    color: $color-text-muted;
     font-family: monospace;
 }
 @media (max-width: 1200px) {

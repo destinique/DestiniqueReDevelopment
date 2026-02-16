@@ -1,3 +1,5 @@
+@use 'variables' as *;
+
 h3 {
     text-transform: none;
     letter-spacing: 1px;
@@ -5,43 +7,42 @@ h3 {
     line-height: 72px;
     font-weight: 100 !important;
     font-style: normal;
-    color: #000;
-    margin-bottom: 2rem;
+    color: $color-black;
+    margin-bottom: $spacing-xl;
 }
 h4 {
-    font-weight: 500;
+    font-weight: $font-weight-500;
     font-size: 32px;
     line-height: 38px;
     text-transform: none;
     letter-spacing: 0;
-    color: #000;
+    color: $color-black;
 }
 .about-us-btn-above-txt {
     font-size: 1.4rem;
     text-align: center;
     margin-top: 4rem;
-    font-weight: 400;
+    font-weight: $font-weight-400;
 }
-.btn {    
-    background-color: #378f86 !important;
-    color: #fff !important;
+.btn {
+    background-color: $color-primary !important;
+    color: $color-white !important;
     padding: 10px 20px;
-    box-shadow: 0 2px 6px 1px rgba(20, 20, 20, 0.48);
-    font-weight: 600;
+    box-shadow: $shadow-sm;
+    font-weight: $font-weight-600;
     text-transform: uppercase;
-    font-size: 14px;
+    font-size: $font-size-sm;
     line-height: 26px;
     letter-spacing: 3px;
     text-decoration: none;
-    border: 0px !important;
+    border: 0 !important;
     transition: 0.5s;
-    border-radius: 0px !important;
+    border-radius: $border-radius-none !important;
 }
 .btn:hover {
-    color: #33d286 !important;
-    background: #000 !important;
-    background-color: #000 !important;
-    box-shadow: 0 4px 14px 0 rgba(5, 5, 5, 0.47);
+    color: $color-success !important;
+    background-color: $color-black !important;
+    box-shadow: $shadow-md;
 }
 p {
     font-size: 18px;
@@ -49,31 +50,31 @@ p {
     line-height: 30px;
     letter-spacing: 0;
     text-transform: none;
-    color: #404040;
+    color: $color-text-muted;
 }
 .about-section-properties-btn a {
     margin-bottom: 5rem;
-    margin-top: 1rem;
+    margin-top: $spacing-md;
     text-align: center;
 }
 .about-section-properties-btn {
     text-align: center;
 }
 .fw-6 {
-    font-weight: 600 !important;
+    font-weight: $font-weight-600 !important;
 }
 .about-us-title {
     font-size: 3rem;
-    line-height: 1.5;
+    line-height: $line-height-base;
     font-weight: 300;
     letter-spacing: 10px;
     text-align: center;
     text-transform: uppercase;
-    margin: 3rem auto;
+    margin: $spacing-3xl auto;
 }
 iframe {
     width: 50%;
-    border-color: aquamarine;
+    border-color: $color-primary-light;
     float: left;
     margin-right: 50px;
     margin-bottom: 50px;
@@ -87,6 +88,6 @@ iframe {
     iframe {
         width: 100%;
         height: 22rem;
-        border-color: aquamarine;
+        border-color: $color-primary-light;
     }
 }

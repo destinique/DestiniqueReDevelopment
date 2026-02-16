@@ -1,3 +1,14 @@
+<!-- Global loaders - single instance for entire app. Show/hide via NgxSpinnerService -->
+<ngx-spinner
+  bdColor="rgba(0, 0, 0, 0.8)"
+  size="medium"
+  color="#378f86"
+  type="ball-circus"
+  [fullScreen]="true"
+>
+  <p class="destinique-loader-text">{{ spinnerMessage$ | async }}</p>
+</ngx-spinner>
+
 <app-navbar></app-navbar>
 
 <router-outlet></router-outlet>

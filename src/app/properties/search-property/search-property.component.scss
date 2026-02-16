@@ -1,10 +1,11 @@
+@use 'variables' as *;
 @import url("https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css");
 ::placeholder {
-  color: #777;
+  color: $color-muted;
   opacity: 1;
 }
 .properties-header {
-  color: #000;
+  color: $color-black;
   text-align: left !important;
 }
 
@@ -15,7 +16,7 @@
 .animate-sub {
   width: 286px;
   margin: auto;
-  margin-top: 1rem;
+  margin-top: $spacing-md;
   font-size: 2.5rem;
   font-weight: 300;
 }
@@ -28,16 +29,16 @@
 }
 .reqForm {
   text-decoration: none;
-  color: #3d85c6;
-  border-bottom: 1px solid #3d85c6;
+  color: $color-info;
+  border-bottom: $border-width solid $color-info;
   padding: 2px 4px;
-  font-weight: 400;
-  border-radius: 0rem;
+  font-weight: $font-weight-400;
+  border-radius: $border-radius-none;
   transition: color 0.3s;
   letter-spacing: .5px;
 }
 .reqForm:hover {
-  color: #006aca;
+  color: $color-info;
 }
 .outterdiv {
   align-items: center;
@@ -74,16 +75,16 @@
 button {
   width: 150px;
   margin-right: 2px;
-  background: #21e0bd;
+  background: $color-primary-light;
 }
 .input input, button, select, button:focus {
   outline: 0px;
-  border: 1px solid #ced4da;
+  border: $border-width solid #ced4da;
 }
 .btn-primary.focus, .btn-primary:focus, button {
   box-shadow: none;
   outline: none;
-  border: 1px solid #ced4da;
+  border: $border-width solid #ced4da;
 }
 
 .btn-primary:not(:disabled):not(.disabled).active, .btn-primary:not(:disabled):not(.disabled):active, .show>.btn-primary.dropdown-toggle {
@@ -91,39 +92,39 @@ button {
 }
 
 input:focus {
-  border-radius: 0px;
+  border-radius: $border-radius-none;
   border: 0px solid;
   appearance: none;
 }
 button {
   width: 100% !important;
-  background: #378f86 !important;
+  background: $color-primary !important;
   border: 0;
-  color: #fff;
-  padding: .75rem .75rem .5rem .75rem !important;
+  color: $color-white;
+  padding: .75rem .75rem $spacing-sm .75rem !important;
   display: flex;
   align-items: center;
   justify-content: center;
-  border-right: 1px solid #ffffff;
+  border-right: $border-width solid $color-white;
   text-transform: uppercase;
   transition: 0.3s;
   height: 46px;
 }
 button:hover {
-  background-color: #000 !important;
-  color: #33d286 !important;
+  background-color: $color-black !important;
+  color: $color-success !important;
   cursor: pointer;
 }
 
 .from-control {
-  border-radius: 0 !important;
-  padding: .75rem .75rem .5rem !important;
+  border-radius: $border-radius-none !important;
+  padding: .75rem .75rem $spacing-sm !important;
   height: 46px;
-  font-size: 16px !important;
+  font-size: $font-size-base !important;
   display: block;
-  line-height: 1.5;
-  color: #777 !important;
-  background-color: #fff;
+  line-height: $line-height-base;
+  color: $color-muted !important;
+  background-color: $color-white;
   background-clip: padding-box;
   text-transform: uppercase;
   -webkit-appearance: none;
@@ -145,7 +146,7 @@ button:hover {
 }
 .form-select {
   height: 46px;
-  border-radius: 0;
+  border-radius: $border-radius-none;
 }
 @media (min-width: 1366px) {
   .container {
@@ -175,11 +176,10 @@ button:hover {
   }
   .input {
     display: flex;
-    gap: 1rem;
+    gap: $spacing-md;
   }
   .buttonsdiv {
-    margin-top:
-      .5rem;
+    margin-top: $spacing-sm;
   }
   button {
     margin-right: 0px;
@@ -198,7 +198,7 @@ button:hover {
             ); /* Two rows, with height determined by content */
   }
   .container {
-    margin-top: 1.5rem;
+    margin-top: $spacing-lg;
   }
   .headingProp {
     display: none;
@@ -241,8 +241,8 @@ button:hover {
   top: 100%;
   left: 0;
   right: 0;
-  background: white;
-  border: 1px solid #ced4da;
+  background: $color-white;
+  border: $border-width solid #ced4da;
   border-top: none;
   z-index: 1000;
   max-height: 300px;
@@ -252,7 +252,7 @@ button:hover {
   .prediction-item {
     padding: 10px 12px;
     cursor: pointer;
-    border-bottom: 1px solid #f0f0f0;
+    border-bottom: $border-width solid #f0f0f0;
     transition: background-color 0.2s;
 
     &:last-child {
@@ -261,18 +261,18 @@ button:hover {
 
     &:hover,
     &.selected {
-      background-color: #f8f9fa;
+      background-color: $color-bg-light;
     }
 
     .prediction-main-text {
-      font-weight: 500;
-      color: #333;
-      font-size: 14px;
+      font-weight: $font-weight-500;
+      color: $color-black;
+      font-size: $font-size-sm;
     }
 
     .prediction-secondary-text {
       font-size: 12px;
-      color: #666;
+      color: $color-text-light;
       margin-top: 2px;
     }
   }
@@ -283,14 +283,14 @@ button:hover {
   .places-predictions-dropdown {
     position: relative;
     margin-top: 5px;
-    border: 1px solid #ced4da;
-    border-radius: 4px;
+    border: $border-width solid #ced4da;
+    border-radius: $border-radius-sm;
   }
 }
 
 /* Style for selected prediction */
 .prediction-item.selected {
-  background-color: #e9ecef !important;
+  background-color: $color-border !important;
 }
 
 /* Ensure form controls maintain consistent height */
@@ -309,7 +309,7 @@ input[type="date"] {
   }
 
   &::-webkit-datetime-edit {
-    color: #777;
+    color: $color-muted;
   }
 }
 
@@ -342,11 +342,11 @@ input[type="date"] {
     display: flex !important;
     align-items: center !important;
     justify-content: center !important;
-    font-weight: 700 !important;
-    font-size: 0.875rem !important;
-    color: #000 !important;
+    font-weight: $font-weight-700 !important;
+    font-size: $font-size-sm !important;
+    color: $color-black !important;
     background: transparent !important;
-    border-radius: 0 !important;
+    border-radius: $border-radius-none !important;
     position: relative !important;
     cursor: pointer !important;
     transition: background-color 0.15s ease, color 0.15s ease;
@@ -361,14 +361,14 @@ input[type="date"] {
     color: #c7c7c7 !important;
     pointer-events: none !important;
     background: transparent !important;
-    font-weight: 600 !important;
+    font-weight: $font-weight-600 !important;
   }
 
   /* ---------- RANGE CONNECTOR BAR ---------- */
   .custom-day-wrapper.in-range {
-    background: #b2ebf2 !important; /* light blue fill for range */
-    color: #000 !important;
-    border-radius: 0 !important;
+    background: rgba($color-primary-light, 0.4) !important; /* light teal fill for range */
+    color: $color-black !important;
+    border-radius: $border-radius-none !important;
     position: relative;
 
     &::before {
@@ -378,7 +378,7 @@ input[type="date"] {
       left: 0;
       right: 0;
       height: 6px; /* thickness of connector bar */
-      background-color: #4fc3dc; /* same as start/end circle */
+      background-color: $color-primary-light;
       border-radius: 3px;
       transform: translateY(-50%);
       z-index: -1;
@@ -388,8 +388,8 @@ input[type="date"] {
   /* ---------- RANGE START & END CIRCLES ---------- */
   .custom-day-wrapper.range-start,
   .custom-day-wrapper.range-end {
-    background-color: #4fc3dc !important; /* bright blue */
-    color: #fff !important;
+    background-color: $color-primary-light !important;
+    color: $color-white !important;
     border-radius: 50% !important;
     width: 34px;
     height: 34px;
@@ -403,8 +403,8 @@ input[type="date"] {
 
   /* ---------- HOVER RANGE PREVIEW ---------- */
   .custom-day-wrapper.hover-range {
-    background-color: rgba(79,195,220,0.35) !important; /* soft blue hover */
-    color: #000 !important;
+    background-color: rgba($color-primary-light, 0.35) !important; /* soft teal hover */
+    color: $color-black !important;
     position: relative;
     cursor: pointer !important;
 
@@ -415,7 +415,7 @@ input[type="date"] {
       left: 0;
       right: 0;
       height: 6px;
-      background-color: rgba(79,195,220,0.35);
+      background-color: rgba($color-primary-light, 0.35);
       border-radius: 3px;
       transform: translateY(-50%);
       z-index: -1;
@@ -424,8 +424,8 @@ input[type="date"] {
 
   .custom-day-wrapper.hover-range.start,
   .custom-day-wrapper.hover-range.end {
-    background-color: #4fc3dc !important; /* blue circle hover */
-    color: #fff !important;
+    background-color: $color-primary-light !important;
+    color: $color-white !important;
     border-radius: 50% !important;
     width: 34px;
     height: 34px;
@@ -435,22 +435,22 @@ input[type="date"] {
 
   /* ---------- WEEKDAY HEADER ---------- */
   .ngb-dp-weekday {
-    font-weight: 500;
-    color: #000;
+    font-weight: $font-weight-500;
+    color: $color-black;
     width: 40px;
     height: 40px;
     display: flex !important;
     align-items: center !important;
     justify-content: center !important;
-    font-size: 0.875rem;
+    font-size: $font-size-sm;
   }
 
   /* ---------- MONTH HEADER ---------- */
   .ngb-dp-header,
   .ngb-dp-month-name {
-    background-color: #378f86;
-    color: #fff !important;
-    font-weight: 400;
+    background-color: $color-primary;
+    color: $color-white !important;
+    font-weight: $font-weight-400;
   }
 
   /* ---------- DAY CELL SIZE ---------- */

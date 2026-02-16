@@ -1,6 +1,8 @@
+@use 'variables' as *;
+
 .aboutUs-flexContainer {
     background-color: #173c58;
-    padding: 50px 0px 0px 0px;
+    padding: 50px 0 0 0;
     position: relative;
     width: 100%;
     overflow: hidden;
@@ -12,8 +14,8 @@
         margin-left: auto;
     }
     .mainContainer > .containers {
-        background: #fff;
-        background-color: rgba(255, 255, 255, 1);
+        background: $color-white;
+        background-color: $color-white;
     }
     .destinique-difference-section {
         font-size: 53px;
@@ -21,23 +23,23 @@
         font-weight: 300;
         letter-spacing: 1px;
         text-transform: capitalize;
-        padding-bottom: 1rem;
+        padding-bottom: $spacing-md;
         text-align: center;
-        color: #fff;
+        color: $color-white;
     }
     .destinique-baner-text {
         font-size: 1.1rem;
         text-align: center;
-        padding: 0rem 2rem 1rem 2rem;
-        margin-bottom: 1rem;
-        font-weight: 400;
+        padding: 0 $spacing-xl $spacing-md $spacing-xl;
+        margin-bottom: $spacing-md;
+        font-weight: $font-weight-400;
         color: rgba(255, 255, 255, 0.9);
     }
 
 }
 .how-it-works {
     background-color: #F5F3EE;
-    padding: 50px 0px 0px 0px;
+    padding: 50px 0 0 0;
     .dd-header, .dd-text {
         color: #3b3b3b !important;
     }
@@ -47,7 +49,7 @@
         font-weight: 300;
         letter-spacing: 1px;
         text-transform: capitalize;
-        padding-bottom: 3rem;
+        padding-bottom: $spacing-3xl;
         text-align: center;
         color: #3b3b3b;
     }
@@ -79,64 +81,64 @@ img {
 }
 .dd-header {
     font-size: 12px;
-    letter-spacing: 0.1em;
-    font-weight: 600;
+    letter-spacing: $letter-spacing-wider;
+    font-weight: $font-weight-600;
     text-align: center;
-    padding-top: 0.5rem;
-    padding-left: 1rem;
-    padding-right: 1rem;
+    padding-top: $spacing-sm;
+    padding-left: $spacing-md;
+    padding-right: $spacing-md;
     color: rgba(255, 255, 255, 0.9);
     min-height: 51px;
     text-transform: uppercase;
 }
 .dd-text {
-    font-size: 14px;
+    font-size: $font-size-sm;
     line-height: 1.25rem;
     text-align: center;
     padding-top: 1.25rem;
-    padding-left: 1rem;
-    padding-right: 1rem;
-    margin-bottom: 1rem;
+    padding-left: $spacing-md;
+    padding-right: $spacing-md;
+    margin-bottom: $spacing-md;
     color: rgba(255, 255, 255, 0.9);
 }
 .btn {
-    background-color: #002245 !important;
-    color: #fff;
+    background-color: $color-secondary !important;
+    color: $color-white;
     font-size: 1.2rem;
-    border-radius: unset;
+    border-radius: $border-radius-none;
     &:hover {
-        background-color: #002245 !important;
-        color: #378f86;
+        background-color: $color-secondary !important;
+        color: $color-primary;
         font-size: 1.2rem;
         cursor: pointer;
     }
 }
 .btn-vacation-rentals {
-    background-color: #378f86 !important;
-    color: #fff;
-    border-color: #378f86;
+    background-color: $color-primary !important;
+    color: $color-white;
+    border-color: $color-primary;
     padding: 9px 20px;
     box-shadow: 0 2px 6px 1px rgba(20, 20, 20, 0.48);
-    font-weight: 600;
+    font-weight: $font-weight-600;
     text-transform: uppercase;
-    font-size: 14px;
+    font-size: $font-size-sm;
     line-height: 26px;
     letter-spacing: 3px;
     text-decoration: none;
     transition: 0.5s;
     &:hover, &:focus,&:active {
         box-shadow: 0 4px 14px 0 rgba(5, 5, 5, 0.47);
-        background: #000 !important;
-        background-color: #000 !important;
-        font-size: 14px !important;
-        color: #33d286 !important;
-        border-color: #000 !important;
+        background: $color-black !important;
+        background-color: $color-black !important;
+        font-size: $font-size-sm !important;
+        color: $color-success !important;
+        border-color: $color-black !important;
         text-decoration: none;
         transition: 0.5s;
     }
 }
 .our-vacation-btn {
-    margin-bottom: 2rem;
+    margin-bottom: $spacing-xl;
 }
 .dd-number {
     width: 100%;
@@ -144,14 +146,14 @@ img {
 .dd-counter {
     font-size: 1.5rem;
     line-height: 2rem;
-    border-color: #000;
+    border-color: $color-black;
     border-radius: 50%;
     text-align: center;
     width: 3rem;
     height: 3rem;
     border: 0.8px solid;
     padding: 7px;
-    margin: 1.5rem auto 0.5rem auto;
+    margin: $spacing-lg auto $spacing-sm auto;
 }
 
 .dd-right-arrow {
@@ -162,12 +164,12 @@ img {
 }
 
 .luxury-services-font-b {
-    font-weight: 500;
+    font-weight: $font-weight-500;
 }
 
 .get-started-button {
     text-align: center;
-    margin-top: 2rem;
+    margin-top: $spacing-xl;
 }
 
 
@@ -222,10 +224,10 @@ img {
             font-size: 0.9rem;
             line-height: 1.25rem;
             text-align: center;
-            padding-top: 0rem;
-            padding-left: 1rem;
-            padding-right: 1rem;
-            margin-bottom: 3rem;
+            padding-top: 0;
+            padding-left: $spacing-md;
+            padding-right: $spacing-md;
+            margin-bottom: $spacing-3xl;
         }
         .dd-top {
             min-height: 165px !important;
@@ -236,14 +238,14 @@ img {
     .how-it-works {
         .destinique-how-it-works-section {
             font-size: 2rem;
-            font-weight: 400;
+            font-weight: $font-weight-400;
             line-height: 47px;
         }
     }
     .aboutUs-flexContainer {
         .destinique-difference-section {
             font-size: 2rem;
-            font-weight: 400;
+            font-weight: $font-weight-400;
             line-height: 47px;
         }
         .destinique-baner-text {
@@ -254,9 +256,9 @@ img {
             width: 94% !important;
         }
         .btn:hover {
-            background-color: #000 !important;
-            color: #378f86;
-            font-size: 1rem;
+            background-color: $color-black !important;
+            color: $color-primary;
+            font-size: $font-size-base;
             cursor: pointer;
         }
     }
@@ -264,13 +266,13 @@ img {
 @media (max-width: 575px) {
     .dd-header {
         min-height: auto;
-        margin-bottom: .5rem;
+        margin-bottom: $spacing-sm;
         font-size: 13px;
     }
     .aboutUs-flexContainer .dd-text {
-        margin-bottom: 0rem;
+        margin-bottom: 0;
     }
     .dd-img img {
-        margin-top: 1.5rem;
+        margin-top: $spacing-lg;
     }
 }

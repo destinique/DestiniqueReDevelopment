@@ -1,10 +1,17 @@
 // property-list.component.ts
 import { Component, OnInit, OnDestroy, HostListener, ElementRef, ViewChild } from '@angular/core';
+import { Router } from '@angular/router';
 import { Subject, Subscription } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { PropertyService, PropertyResponse, Property } from 'src/app/shared/services/property.service';
 import { SearchStateService } from 'src/app/shared/services/search-state.service';
 import { LoadSpinnerService } from 'src/app/shared/services/load-spinner.service';
+import {
+  buildUrlFromState,
+  areUrlsEquivalent,
+  DEFAULT_PROPERTIES_URL_CONFIG
+} from '../properties-url.config';
+import { SearchState } from 'src/app/shared/interfaces/search-state.interface';
 
 @Component({
   selector: 'app-property-list',
@@ -33,6 +40,8 @@ export class PropertyListComponent implements OnInit, OnDestroy {
   // ========== COMPONENT STATE ==========
   private destroy$ = new Subject<void>();
   private searchSubscription?: Subscription;
+  /** Set when syncing URL; skip the next state$ emission (from resolver) to avoid loop + duplicate API call */
+  private skipNextEmissionFromUrlSync = false;
   isLoading = false;
   isInitialLoad = true; // spinner on first load, skeleton on pagination/filter changes
   skeletonCount = [1, 2, 3];
@@ -67,7 +76,8 @@ export class PropertyListComponent implements OnInit, OnDestroy {
   constructor(
     private propertyService: PropertyService,
     public searchState: SearchStateService,
-    private loadSpinner: LoadSpinnerService
+    private loadSpinner: LoadSpinnerService,
+    private router: Router
   ) {}
 
   // ========== LIFECYCLE HOOKS ==========
@@ -89,9 +99,35 @@ export class PropertyListComponent implements OnInit, OnDestroy {
   private setupSearchListener(): void {
     this.searchState.state$
       .pipe(takeUntil(this.destroy$))
-      .subscribe(() => {
+      .subscribe((state) => {
+        if (this.skipNextEmissionFromUrlSync) {
+          this.skipNextEmissionFromUrlSync = false;
+          return; // Emission came from resolver after our URL sync – don't load API or sync again
+        }
         this.loadProperties();
+        this.syncUrlFromState(state);
       });
+  }
+
+  /**
+   * Sync browser URL to match search state for shareable links.
+   * Uses replaceUrl to avoid polluting history on filter changes.
+   * Does NOT trigger API call; the resolver's state update is skipped via skipNextEmissionFromUrlSync.
+   * Passes queryParams: null when empty to explicitly clear URL params on reset.
+   */
+  private syncUrlFromState(state: SearchState): void {
+    const config = DEFAULT_PROPERTIES_URL_CONFIG;
+    const currentUrl = this.router.url.split('#')[0];
+    if (areUrlsEquivalent(currentUrl, state, config)) {
+      return;
+    }
+    this.skipNextEmissionFromUrlSync = true;
+    const { pathCommands, queryParams } = buildUrlFromState(state, config);
+    const hasQueryParams = Object.keys(queryParams).length > 0;
+    this.router.navigate(pathCommands, {
+      queryParams: hasQueryParams ? queryParams : null,
+      replaceUrl: true
+    });
   }
 
   private loadProperties(): void {

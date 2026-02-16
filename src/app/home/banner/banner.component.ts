@@ -16,22 +16,13 @@ import { isPlatformBrowser } from '@angular/common';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
-import { Subject, debounceTime, distinctUntilChanged, switchMap, takeUntil } from 'rxjs';
-import { CrudService, BannerImage } from 'src/app/shared/services/crud.service';
-import { GoogleMapsService, PlacePrediction } from 'src/app/shared/services/google-maps.service';
-
-declare const google: any;
-// Add interface for location data
-export interface LocationData {
-  city: string;
-  state?: string;
-  country?: string;
-  latitude?: number;
-  longitude?: number;
-  formattedAddress?: string;
-  placeId?: string;
-  zipCode?: string; // Add if you need postal code
-}
+import { Subject, from } from 'rxjs';
+import { debounceTime, filter, switchMap, takeUntil, catchError, tap } from 'rxjs/operators';
+import { of } from 'rxjs';
+import { CrudService } from 'src/app/shared/services/crud.service';
+import { GoogleMapsService, PlacePrediction, PlaceDetails } from 'src/app/shared/services/google-maps.service';
+import { SearchStateService } from 'src/app/shared/services/search-state.service';
+import { LocationData } from 'src/app/shared/interfaces/search-state.interface';
 
 @Component({
   selector: 'app-banner',
@@ -43,12 +34,11 @@ export class BannerComponent implements OnInit, AfterViewInit, OnDestroy {
 
   slides: string[] = [];
   activeSlideIndex = 0;
-  slideDuration = 9000; // Slide interval
+  slideDuration = 9000;
   isPaused = false;
 
-  // Track which slides are loaded
   loadedSlides: boolean[] = [];
-  isApiLoaded = false; // track if API data has arrived
+  isApiLoaded = false;
 
   kenBurnsClasses = [
     'kb-zoom-in-left',
@@ -59,32 +49,30 @@ export class BannerComponent implements OnInit, AfterViewInit, OnDestroy {
 
   slideAnimations: string[] = [];
 
-  // Swipe support
   touchStartX = 0;
   touchEndX = 0;
   private sliderInterval: any;
 
   @ViewChildren('kbSlide') slideElements!: QueryList<ElementRef>;
-  @ViewChild('cityInput', { static: false }) cityInput!: ElementRef;
+  @ViewChild('destinationInput', { static: false }) destinationInput!: ElementRef<HTMLInputElement>;
 
-  // Google Places Autocomplete properties
+  // Google Places Autocomplete (same pattern as SearchProperty)
   isLoadingAutocomplete = false;
   showPredictions = false;
   placePredictions: PlacePrediction[] = [];
-  selectedCityName = '';
+  selectedPredictionIndex = -1;
+  /** Prevents blur from overwriting when user selected from dropdown */
+  private lastSelectedPlaceAddress: string | null = null;
+  /** Stores selected location for Search button (only updated on selection, not on blur) */
+  selectedLocation: LocationData | null = null;
 
   searchForm: FormGroup;
   private destroy$ = new Subject<void>();
-  private searchInput$ = new Subject<string>();
 
-  // Update component properties
-  selectedLocation: LocationData | null = null;
-
-  // Track loading states
+  // Google Maps delayed load
   private scriptLoaded = false;
   private delayedLoadTimeout: any;
-  private userInteractedBeforeDelay= false;
-
+  private userInteractedBeforeDelay = false;
   private isDelayedLoadInProgress = false;
 
   constructor(
@@ -94,739 +82,468 @@ export class BannerComponent implements OnInit, AfterViewInit, OnDestroy {
     private toast: ToastrService,
     private crudService: CrudService,
     private googleMapsService: GoogleMapsService,
+    private searchState: SearchStateService,
     @Inject(PLATFORM_ID) private platformId: Object
   ) {
     this.searchForm = this.fb.group({
-      City: ['']
+      destination: ['']
     });
   }
 
   ngOnInit(): void {
     this.fetchSlides();
-    // Setup search input stream with debounce
-    this.setupSearchStream();
-
-    // Start delayed loading (3 seconds after page load)
+    this.setupDestinationInputSubscription();
+    this.initializeFormFromState();
     this.startDelayedLoading();
   }
 
-  ngAfterViewInit() {
-    this.setupCityInput();
+  ngAfterViewInit(): void {
+    this.setupDestinationInputListeners();
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     clearInterval(this.sliderInterval);
-    clearTimeout(this.delayedLoadTimeout); // Clear the timeout
+    clearTimeout(this.delayedLoadTimeout);
     this.destroy$.next();
     this.destroy$.complete();
   }
 
-  /**
-   *
-   * How It Works:
-   * Scenario 1: User doesn't interact for 3 seconds
-   *
-   *     Page loads → Timer starts (3 seconds)
-   *
-   *     After 3 seconds → Google Maps loads automatically
-   *
-   *     User clicks input later → Script already loaded, ready to use
-   *
-   * Scenario 2: User interacts before 3 seconds
-   *
-   *     Page loads → Timer starts (3 seconds)
-   *
-   *     User clicks/taps/inputs before 3 seconds → Timer cancelled
-   *
-   *     Google Maps loads immediately
-   *
-   *     Autocomplete works right away
-   *
-   * Scenario 3: Script already loaded
-   *
-   *     Any interaction → Uses already loaded script
-   *
-   *     No duplicate loading
-   *
-   * Benefits:
-   *
-   *     Better performance - Delays non-critical third-party script
-   *
-   *     Good UX - Script loads before user might need it
-   *
-   *     Fallback - User interaction overrides the delay
-   *
-   *     No duplicate loads - Smart state management
-   *
-   */
-
-
-  // ========== GOOGLE MAPS LOADING STRATEGY ==========
-  private startDelayedLoading() {
-    // Clear any existing timeout
-    if (this.delayedLoadTimeout) {
-      clearTimeout(this.delayedLoadTimeout);
-    }
-
-    // Set 3-second delayed load
-    this.delayedLoadTimeout = setTimeout(() => {
-      console.log('⏰ Loading Google Maps after 3-second delay...');
-      this.isDelayedLoadInProgress = true;
-      this.loadGoogleMapsIfNotLoaded();
-    }, 6000); // 3 seconds
-  }
-
-  private loadCallId = 0;
-  private loadGoogleMapsIfNotLoaded() {
-    // Guard against multiple calls
-    if (this.scriptLoaded) return;
-
-    const callId = ++this.loadCallId;
-    console.log(`🔍 loadGoogleMapsIfNotLoaded() called #${callId}`, {
-      scriptLoaded: this.scriptLoaded,
-      userInteracted: this.userInteractedBeforeDelay,
-      delayedLoadInProgress: this.isDelayedLoadInProgress
-    });
-
-    // Only load if not already loaded, user hasn't interacted, AND delayed load is in progress
-    if (!this.scriptLoaded && !this.userInteractedBeforeDelay && this.isDelayedLoadInProgress) {
-      console.log(`⏰ [Call #${callId}] Loading Google Maps after 3-second delay...`);
-      this.loadGoogleMapsScript();
-      this.isDelayedLoadInProgress = false; // Reset flag
-    }
-    else {
-      console.log(`⏹️ [Call #${callId}] Skipping load - conditions not met`);
+  // ========== SYNC FROM SEARCH STATE ==========
+  private initializeFormFromState(): void {
+    const state = this.searchState.currentState;
+    if (state.location?.text) {
+      this.searchForm.patchValue({ destination: state.location.text }, { emitEvent: false });
+      this.lastSelectedPlaceAddress = state.location.text;
+      this.selectedLocation = state.location;
     }
   }
 
-  private setupSearchStream() {
-    this.searchInput$
+  // ========== REACTIVE DESTINATION INPUT (same as SearchProperty) ==========
+  private setupDestinationInputSubscription(): void {
+    const destinationControl = this.searchForm.get('destination');
+    if (!destinationControl) return;
+
+    destinationControl.valueChanges
       .pipe(
         takeUntil(this.destroy$),
-        debounceTime(300), // Wait 300ms after user stops typing
-        distinctUntilChanged(), // Only emit if value changed
-        switchMap(query => {
-          if (!query || query.length < 2) {
-            this.placePredictions = [];
-            this.showPredictions = false;
-            return [];
+        debounceTime(300),
+        tap(() => (this.selectedPredictionIndex = -1)),
+        filter((value: string | null): value is string => {
+          if (!value || value.trim().length < 2) {
+            this.hidePredictions();
+            return false;
           }
-
-          // Only fetch predictions if Google Maps is loaded
-          if (this.scriptLoaded || this.googleMapsService.isApiLoaded()) {
-            return this.fetchPlacePredictions(query);
-          }
-
-          return [];
-        })
+          return true;
+        }),
+        switchMap((value: string) =>
+          from(this.getPlacePredictions(value.trim())).pipe(
+            catchError((error) => {
+              console.error('Error getting place predictions:', error);
+              this.hidePredictions();
+              return of(null);
+            })
+          )
+        )
       )
       .subscribe();
   }
 
-  private setupCityInput() {
-    const input = this.cityInput?.nativeElement;
-    if (!input) return;
-
-    // Track user interaction
-    const trackUserInteraction = () => {
-      if (!this.userInteractedBeforeDelay) {
-        this.userInteractedBeforeDelay = true;
-        console.log('👆 User interacted before delay, loading immediately...');
-
-        // Cancel the delayed load
-        clearTimeout(this.delayedLoadTimeout);
-        this.isDelayedLoadInProgress = false; // Reset flag
-
-        // Load immediately
-        if (!this.scriptLoaded) {
-          this.loadGoogleMapsScript();
-        }
-      }
-    };
-
-    // Add interaction listeners
-    const events = ['focus', 'touchstart', 'input', 'click'];
-    events.forEach(event => {
-      input.addEventListener(event, trackUserInteraction, { passive: true });
-    });
-
-    /*
-    let firstInteractionHandled = false;
-
-    const handleFirstInteraction = () => {
-      if (!firstInteractionHandled && !this.scriptLoaded) {
-        firstInteractionHandled = true;
-        console.log('🔄 Loading Google Maps on first user interaction...');
-        this.loadGoogleMapsScript();
-        this.scriptLoaded = true;
-
-        // Clean up one-time listeners
-        input.removeEventListener('focus', handleFirstInteraction);
-        input.removeEventListener('touchstart', handleFirstInteraction);
-        input.removeEventListener('input', handleFirstKeystroke);
-      }
-    };
-
-    const handleFirstKeystroke = () => {
-      handleFirstInteraction();
-    };
-
-    // Set up one-time listeners
-    input.addEventListener('focus', handleFirstInteraction);
-    input.addEventListener('touchstart', handleFirstInteraction, { passive: true });
-    input.addEventListener('input', handleFirstKeystroke);
-    */
-
-    // Handle Enter key for predictions (always active)
-    input.addEventListener('keydown', (event: KeyboardEvent) => {
-      if (event.key === 'Enter' && this.showPredictions && this.placePredictions.length > 0) {
-        event.preventDefault();
-        if (this.placePredictions[0]) {
-          this.selectPrediction(this.placePredictions[0]);
-        }
-      }
-    });
-  }
-
-  // Event handler methods for template
-  onCityInput(event: Event) {
-    const inputElement = event.target as HTMLInputElement;
-    const value = inputElement.value;
-
-    // Track user interaction
-    if (!this.userInteractedBeforeDelay && value.length > 0) {
-      this.userInteractedBeforeDelay = true;
-      clearTimeout(this.delayedLoadTimeout);
-
-      if (!this.scriptLoaded) {
-        this.loadGoogleMapsScript();
-        // this.scriptLoaded = true;
-      }
+  private async getPlacePredictions(input: string): Promise<void> {
+    if (!this.googleMapsService.isApiLoaded()) {
+      await this.onDestinationFocus();
     }
-
-    this.searchInput$.next(value);
+    try {
+      const predictions = await this.googleMapsService.getPlacePredictions(input);
+      this.placePredictions = predictions;
+      this.showPredictions = predictions.length > 0;
+    } catch {
+      this.hidePredictions();
+    }
   }
 
-  onCityFocus() {
-    // Only manage UI, not loading
-    // Track user interaction
+  async onDestinationFocus(): Promise<void> {
     if (!this.userInteractedBeforeDelay) {
       this.userInteractedBeforeDelay = true;
       clearTimeout(this.delayedLoadTimeout);
-
-      if (!this.scriptLoaded) {
-        this.loadGoogleMapsScript();
+      this.isDelayedLoadInProgress = false;
+    }
+    if (!this.googleMapsService.isApiLoaded()) {
+      try {
+        await this.loadGoogleMapsScript();
+      } catch (error) {
+        console.error('Failed to load Google Maps API:', error);
       }
     }
-
     if (this.placePredictions.length > 0) {
       this.showPredictions = true;
     }
   }
 
-  onCityBlur() {
+  onDestinationBlur(): void {
     setTimeout(() => {
-      this.showPredictions = false;
+      this.hidePredictions();
+
+      const value = (this.searchForm.get('destination')?.value ?? '').trim();
+      if (!value) {
+        this.lastSelectedPlaceAddress = null;
+        return;
+      }
+      if (value === this.lastSelectedPlaceAddress) {
+        return;
+      }
+      // User typed manually — clear selectedLocation so Search uses text-only
+      this.selectedLocation = null;
+      this.lastSelectedPlaceAddress = null;
     }, 200);
   }
 
-  private async loadGoogleMapsScript() {
-    // Prevent multiple loads
-    if (this.scriptLoaded || this.googleMapsService.isApiLoaded()) {
-      return;
+  onDestinationKeyDown(event: KeyboardEvent): void {
+    if (!this.showPredictions || this.placePredictions.length === 0) return;
+
+    switch (event.key) {
+      case 'ArrowDown':
+        event.preventDefault();
+        this.selectedPredictionIndex = Math.min(
+          this.selectedPredictionIndex + 1,
+          this.placePredictions.length - 1
+        );
+        break;
+      case 'ArrowUp':
+        event.preventDefault();
+        this.selectedPredictionIndex = Math.max(this.selectedPredictionIndex - 1, -1);
+        break;
+      case 'Enter':
+        event.preventDefault();
+        if (this.selectedPredictionIndex >= 0 && this.selectedPredictionIndex < this.placePredictions.length) {
+          this.onPlaceSelected(this.placePredictions[this.selectedPredictionIndex]);
+        }
+        break;
+      case 'Escape':
+        this.hidePredictions();
+        break;
     }
+  }
+
+  trackByPlaceId(_index: number, p: PlacePrediction): string {
+    return p.place_id;
+  }
+
+  async onPlaceSelected(prediction: PlacePrediction): Promise<void> {
+    this.hidePredictions();
+
+    try {
+      const placeDetails = await this.googleMapsService.getPlaceDetails(prediction.place_id);
+
+      this.searchForm
+        .get('destination')
+        ?.setValue(placeDetails.formatted_address, { emitEvent: false });
+      this.lastSelectedPlaceAddress = placeDetails.formatted_address;
+
+      this.selectedLocation = this.placeDetailsToLocationData(placeDetails);
+      this.destinationInput?.nativeElement?.focus();
+    } catch (error) {
+      console.error('Error getting place details:', error);
+      this.searchForm
+        .get('destination')
+        ?.setValue(prediction.description, { emitEvent: false });
+      this.lastSelectedPlaceAddress = prediction.description;
+      this.selectedLocation = {
+        text: prediction.description,
+        city: '',
+        state: '',
+        country: ''
+      };
+    }
+  }
+
+  private placeDetailsToLocationData(d: PlaceDetails): LocationData {
+    const text = d.formatted_address || d.name || '';
+    const city = d.city || this.extractCityName(d);
+    return {
+      text,
+      city,
+      state: d.state || '',
+      country: d.country || '',
+      latitude: d.latitude,
+      longitude: d.longitude,
+      placeId: d.place_id
+    };
+  }
+
+  private extractCityName(d: PlaceDetails): string {
+    if (d.city) return d.city;
+    for (const c of d.address_components || []) {
+      if (
+        c.types?.includes('locality') ||
+        c.types?.includes('postal_town') ||
+        c.types?.includes('administrative_area_level_2')
+      ) {
+        return c.long_name;
+      }
+    }
+    return d.name || d.formatted_address?.split(',')[0] || '';
+  }
+
+  private hidePredictions(): void {
+    this.showPredictions = false;
+    this.placePredictions = [];
+    this.selectedPredictionIndex = -1;
+  }
+
+  // ========== GOOGLE MAPS DELAYED LOAD ==========
+  private setupDestinationInputListeners(): void {
+    const input = this.destinationInput?.nativeElement;
+    if (!input) return;
+
+    const trackUserInteraction = () => {
+      if (!this.userInteractedBeforeDelay) {
+        this.userInteractedBeforeDelay = true;
+        clearTimeout(this.delayedLoadTimeout);
+        this.isDelayedLoadInProgress = false;
+        if (!this.scriptLoaded && !this.googleMapsService.isApiLoaded()) {
+          this.loadGoogleMapsScript();
+        }
+      }
+    };
+
+    ['focus', 'touchstart', 'input', 'click'].forEach((ev) =>
+      input.addEventListener(ev, trackUserInteraction, { passive: true })
+    );
+  }
+
+  private startDelayedLoading(): void {
+    if (this.delayedLoadTimeout) clearTimeout(this.delayedLoadTimeout);
+    this.delayedLoadTimeout = setTimeout(() => {
+      this.isDelayedLoadInProgress = true;
+      if (!this.scriptLoaded && !this.userInteractedBeforeDelay) {
+        this.loadGoogleMapsScript();
+      }
+      this.isDelayedLoadInProgress = false;
+    }, 6000);
+  }
+
+  private async loadGoogleMapsScript(): Promise<void> {
+    if (this.scriptLoaded || this.googleMapsService.isApiLoaded()) return;
 
     this.isLoadingAutocomplete = true;
-
     try {
       await this.googleMapsService.loadGoogleMaps();
       this.scriptLoaded = true;
-      console.log('Google Maps script loaded for predictions');
     } catch (error) {
       console.error('Failed to load Google Maps:', error);
-      // Fallback: Use the datalist that's already in your template
-      const input = this.cityInput?.nativeElement;
-      if (input) {
-        input.setAttribute('list', 'city-suggestions-fallback');
-      }
+      const input = this.destinationInput?.nativeElement;
+      if (input) input.setAttribute('list', 'city-suggestions-fallback');
     } finally {
       this.isLoadingAutocomplete = false;
     }
   }
 
-  private async fetchPlacePredictions(query: string): Promise<void> {
-    try {
-      const predictions = await this.googleMapsService.getPlacePredictions(query);
-      this.placePredictions = predictions;
-      this.showPredictions = predictions.length > 0;
-    } catch (error) {
-      console.error('Error fetching predictions:', error);
-      this.placePredictions = [];
-      this.showPredictions = false;
-    }
-  }
+  // ========== SEARCH (update state + navigate on button click only) ==========
+  search(): void {
+    const destValue = (this.searchForm.get('destination')?.value ?? '').trim();
 
-  // Update selectPrediction method
-  async selectPrediction(prediction: PlacePrediction) {
-    try {
-      this.isLoadingAutocomplete = true;
-
-      // Get full place details with structured data
-      const placeDetails = await this.googleMapsService.getPlaceDetails(prediction.place_id);
-
-      // Create location data object
-      this.selectedLocation = {
-        city: placeDetails.city || this.extractCityName(placeDetails),
-        state: placeDetails.state,
-        country: placeDetails.country,
-        latitude: placeDetails.latitude,
-        longitude: placeDetails.longitude,
-        formattedAddress: placeDetails.formatted_address,
-        placeId: placeDetails.place_id,
-        zipCode: placeDetails.zipCode // Add zip code
-      };
-
-      // Update form with city name
-      const displayCity = placeDetails.city || placeDetails.name;
-      this.selectedCityName = displayCity;
-      this.searchForm.patchValue({ City: displayCity });
-
-      // Log all data
-      console.log('Selected location:', this.selectedLocation);
-      console.log('Coordinates:', placeDetails.latitude, placeDetails.longitude);
-      console.log('City:', placeDetails.city);
-      console.log('State:', placeDetails.state);
-      console.log('Country:', placeDetails.country);
-
-      // Hide predictions
-      this.showPredictions = false;
-      this.placePredictions = [];
-
-      // Focus back to input
-      this.cityInput.nativeElement.focus();
-
-    } catch (error) {
-      console.error('Error getting place details:', error);
-      // Fallback
-      this.searchForm.patchValue({ City: prediction.structured_formatting.main_text });
-    } finally {
-      this.isLoadingAutocomplete = false;
-    }
-  }
-
-  private extractCityName(placeDetails: any): string {
-    // First try to get from extracted city
-    if (placeDetails.city) return placeDetails.city;
-
-    // Fallback to locality
-    for (const component of placeDetails.address_components || []) {
-      if (component.types.includes('locality') ||
-        component.types.includes('postal_town') ||
-        component.types.includes('administrative_area_level_2')) {
-        return component.long_name;
-      }
-    }
-
-    // Fallback to place name
-    return placeDetails.name || placeDetails.formatted_address?.split(',')[0] || '';
-  }
-
-  // Form submission
-  /*
-  search() {
-    const city = this.searchForm.get('City')?.value?.trim();
-
-    if (!city) {
-      this.toast.error(
-        'Please enter or select a city',
-        'Validation Error',
-        {
-          tapToDismiss: true,
-          timeOut: 3000,
-          positionClass: 'toast-top-center'
-        }
-      );
-      return;
-    }
-
-    console.log('Searching for:', city);
-
-    // Navigate to search results
-    this.router.navigate(['/search'], {
-      queryParams: { city }
-    });
-  }
-  */
-
-  // Form submission
-  search() {
-    // Check if we have valid location data
     if (this.selectedLocation && this.isDefinedAndNotEmpty(this.selectedLocation.city)) {
-      this.navigateWithLocationData();
+      this.updateStateAndNavigateWithLocation(this.selectedLocation);
+    } else if (this.isDefinedAndNotEmpty(destValue)) {
+      this.updateStateAndNavigateWithTextOnly(destValue);
     } else {
-      // Try to use form value
-      const cityValue = this.searchForm.get('City')?.value?.trim();
-
-      if (this.isDefinedAndNotEmpty(cityValue)) {
-        // Simple navigation with just city name
-        this.router.navigate(['/properties', encodeURIComponent(cityValue)]);
-      } else {
-        // No city provided
-        this.toast.error(
-          'Please enter or select a city',
-          'Validation Error',
-          {
-            tapToDismiss: true,
-            timeOut: 3000,
-            positionClass: 'toast-top-center'
-          }
-        );
-      }
+      this.toast.error('Please enter or select a city', 'Validation Error', {
+        tapToDismiss: true,
+        timeOut: 3000,
+        positionClass: 'toast-top-center'
+      });
     }
   }
 
-  private navigateWithLocationData() {
-    if (!this.selectedLocation || !this.selectedLocation.city) {
-      this.navigateWithCityOnly();
-      return;
-    }
+  private updateStateAndNavigateWithLocation(location: LocationData): void {
+    this.searchState.updateLocation(location);
+    this.searchState.updatePagination(1);
 
-    // Build the city parameter WITHOUT extra encoding
-    const cityParam = this.buildCityParam(this.selectedLocation);
-    // cityParam = "Destin, 32541, FL" (with spaces)
-
-    // Build query parameters
-    const queryParams = this.buildQueryParams(this.selectedLocation);
-    // queryParams = {
-    //   Latitude: "30.389606",
-    //   Longitude: "-86.48362340000001",
-    //   Country: "United States",  // No encoding here
-    //   State: "Florida",
-    //   ZipCode: "32541",
-    //   placeId: "ChIJt_RAyXlDkYgRMkxYRtuLpBc"
-    // }
-
-    // Angular router will handle encoding automatically
+    const cityParam = this.buildCityParam(location);
+    const queryParams = this.buildQueryParams(location);
     this.router.navigate(['/properties', cityParam], { queryParams });
   }
 
-  private navigateWithCityOnly() {
-    const city = this.searchForm.get('City')?.value?.trim();
-
-    if (!this.isDefinedAndNotEmpty(city)) {
-      this.toast.error(
-        'Please enter or select a city',
-        'Validation Error',
-        {
-          tapToDismiss: true,
-          timeOut: 3000,
-          positionClass: 'toast-top-center'
-        }
-      );
-      return;
-    }
-
-    // Simple navigation with just city
-    this.router.navigate(['/properties', encodeURIComponent(city)]);
+  private updateStateAndNavigateWithTextOnly(text: string): void {
+    const location: LocationData = {
+      text,
+      city: text.split(',')[0]?.trim() || text,
+      state: '',
+      country: ''
+    };
+    this.searchState.updateLocation(location);
+    this.searchState.updatePagination(1);
+    this.router.navigate(['/properties', text]);
   }
 
-  // Build city parameter for URL path
   private buildCityParam(location: LocationData): string {
-    if (!location.city) return '';
-
-    const parts = [location.city];
-
-    // Check country
-    const isUS= location.country && location.country === 'United States' || location.country === 'United States of America';
-    const isCA= location.country && location.country === 'Canada';
-    const isUK= location.country && location.country === 'United Kingdom';
-
-    // For US/Canada: Add state/province
-    if ((isUS || isCA) && location.state) {
-      const stateCode = this.getStateCode(location.state);
-      const statePart = stateCode || location.state;
-
-      // Add ZIP/Postal code if available
-      if (location.zipCode) {
-        parts.push(`${statePart} ${location.zipCode}`);
-      } else {
-        parts.push(statePart);
-      }
+    // Use full formatted address when available (e.g. "Destin, FL 32541, USA")
+    if (location.text && location.text.includes(',')) {
+      return location.text;
     }
-    // For other countries with states/regions
-    else if (location.state && location.country) {
+    const parts: string[] = [];
+    if (location.city) parts.push(location.city);
+    const isUS =
+      location.country === 'United States' || location.country === 'United States of America';
+    const isCA = location.country === 'Canada';
+    const isUK = location.country === 'United Kingdom';
+    if ((isUS || isCA) && location.state) {
+      parts.push(this.getStateCode(location.state) || location.state);
+    } else if (location.state && location.country) {
       parts.push(location.state);
     }
-
-    // Add country code
     if (location.country) {
-      if (isUS) {
-        parts.push('USA');
-      } else if (isUK) {
-        parts.push('UK');
-      } else if (isCA) {
-        parts.push('CA');
-      } else {
-        const countryCode = this.getCountryCode(location.country);
-        parts.push(countryCode || location.country);
-      }
+      if (isUS) parts.push('USA');
+      else if (isUK) parts.push('UK');
+      else if (isCA) parts.push('CA');
+      else parts.push(this.getCountryCode(location.country) || location.country);
     }
-
-    return parts.join(', ');
+    return parts.length > 0 ? parts.join(', ') : location.text || location.city || '';
   }
 
-  private shouldAddCountry(location: LocationData): boolean {
-    // Add country if:
-    // 1. Country exists
-    // 2. Not USA (for USA we already have state)
-    // 3. Or USA but no state
-    return !!location.country &&
-      (location.country !== 'United States' || !location.state);
+  private buildQueryParams(location: LocationData): Record<string, string> {
+    const q: Record<string, string> = {};
+    if (location.latitude != null) q['latitude'] = String(location.latitude);
+    if (location.longitude != null) q['longitude'] = String(location.longitude);
+    if (location.state) q['state'] = location.state;
+    if (location.country) q['country'] = location.country;
+    if (location.placeId) q['placeId'] = location.placeId;
+    return q;
   }
 
-  // Build query parameters object
-  // Remove any .replace(/%20/g, '+') calls
-  private buildQueryParams(location: LocationData): any {
-    const queryParams: any = {};
-
-    if (location.latitude != null) {
-      queryParams.Latitude = location.latitude.toString();
-    }
-
-    if (location.longitude != null) {
-      queryParams.Longitude = location.longitude.toString();
-    }
-
-    // Just assign the values - Angular will encode them
-    if (location.country) {
-      queryParams.Country = location.country; // "United States"
-    }
-
-    if (location.state) {
-      queryParams.State = location.state; // "Florida"
-    }
-
-    if (location.zipCode) {
-      queryParams.ZipCode = location.zipCode;
-    }
-
-    if (location.placeId) {
-      queryParams.placeId = location.placeId;
-    }
-
-    return queryParams;
-  }
-
-  // Helper method to check if value is defined and not empty
-  isDefinedAndNotEmpty(value: any): boolean {
+  private isDefinedAndNotEmpty(value: any): boolean {
     return value !== undefined && value !== null && value !== '';
   }
 
-  // Helper to get US state codes
-  private getStateCode(stateName: string): string {
-    const normalizedStateName = stateName.toLowerCase();
-    const usStateCodes: { [key: string]: string } = {
-      'Alabama': 'AL', 'Alaska': 'AK', 'Arizona': 'AZ', 'Arkansas': 'AR',
-      'California': 'CA', 'Colorado': 'CO', 'Connecticut': 'CT', 'Delaware': 'DE',
-      'Florida': 'FL', 'Georgia': 'GA', 'Hawaii': 'HI', 'Idaho': 'ID',
-      'Illinois': 'IL', 'Indiana': 'IN', 'Iowa': 'IA', 'Kansas': 'KS',
-      'Kentucky': 'KY', 'Louisiana': 'LA', 'Maine': 'ME', 'Maryland': 'MD',
-      'Massachusetts': 'MA', 'Michigan': 'MI', 'Minnesota': 'MN', 'Mississippi': 'MS',
-      'Missouri': 'MO', 'Montana': 'MT', 'Nebraska': 'NE', 'Nevada': 'NV',
-      'New Hampshire': 'NH', 'New Jersey': 'NJ', 'New Mexico': 'NM', 'New York': 'NY',
-      'North Carolina': 'NC', 'North Dakota': 'ND', 'Ohio': 'OH', 'Oklahoma': 'OK',
-      'Oregon': 'OR', 'Pennsylvania': 'PA', 'Rhode Island': 'RI', 'South Carolina': 'SC',
-      'South Dakota': 'SD', 'Tennessee': 'TN', 'Texas': 'TX', 'Utah': 'UT',
-      'Vermont': 'VT', 'Virginia': 'VA', 'Washington': 'WA', 'West Virginia': 'WV',
-      'Wisconsin': 'WI', 'Wyoming': 'WY'
+  private getStateCode(name: string): string {
+    const map: Record<string, string> = {
+      alabama: 'AL', alaska: 'AK', arizona: 'AZ', arkansas: 'AR', california: 'CA',
+      colorado: 'CO', connecticut: 'CT', delaware: 'DE', florida: 'FL', georgia: 'GA',
+      hawaii: 'HI', idaho: 'ID', illinois: 'IL', indiana: 'IN', iowa: 'IA', kansas: 'KS',
+      kentucky: 'KY', louisiana: 'LA', maine: 'ME', maryland: 'MD', massachusetts: 'MA',
+      michigan: 'MI', minnesota: 'MN', mississippi: 'MS', missouri: 'MO', montana: 'MT',
+      nebraska: 'NE', nevada: 'NV', 'new hampshire': 'NH', 'new jersey': 'NJ',
+      'new mexico': 'NM', 'new york': 'NY', 'north carolina': 'NC', 'north dakota': 'ND',
+      ohio: 'OH', oklahoma: 'OK', oregon: 'OR', pennsylvania: 'PA', 'rhode island': 'RI',
+      'south carolina': 'SC', 'south dakota': 'SD', tennessee: 'TN', texas: 'TX',
+      utah: 'UT', vermont: 'VT', virginia: 'VA', washington: 'WA', 'west virginia': 'WV',
+      wisconsin: 'WI', wyoming: 'WY'
     };
-
-    const canadianProvinces: { [key: string]: string } = {
-      'Alberta': 'AB', 'British Columbia': 'BC', 'Manitoba': 'MB',
-      'New Brunswick': 'NB', 'Newfoundland and Labrador': 'NL',
-      'Northwest Territories': 'NT', 'Nova Scotia': 'NS', 'Nunavut': 'NU',
-      'Ontario': 'ON', 'Prince Edward Island': 'PE', 'Quebec': 'QC',
-      'Saskatchewan': 'SK', 'Yukon': 'YT'
-    };
-
-    return usStateCodes[normalizedStateName] || canadianProvinces[normalizedStateName] || '';
+    return map[name.toLowerCase()] || '';
   }
 
-  // Helper to get country codes
-  private getCountryCode(countryName: string): string {
-    const countryCodes: { [key: string]: string } = {
-      'United States': 'USA',
-      'United States of America': 'USA',
-      'United Kingdom': 'UK',
-      'Great Britain': 'UK',
-      'Canada': 'CA',
-      'Australia': 'AU',
-      'Germany': 'DE',
-      'France': 'FR',
-      'Italy': 'IT',
-      'Spain': 'ES',
-      'Japan': 'JP',
-      'China': 'CN',
-      'India': 'IN',
-      'Brazil': 'BR',
-      'Mexico': 'MX',
-      'Netherlands': 'NL',
-      'Switzerland': 'CH',
-      'Sweden': 'SE',
-      'Norway': 'NO',
-      'Denmark': 'DK',
-      'Finland': 'FI',
-      'Russia': 'RU',
-      'South Korea': 'KR',
-      'Singapore': 'SG',
-      'New Zealand': 'NZ'
+  private getCountryCode(name: string): string {
+    const map: Record<string, string> = {
+      'United States': 'USA', 'United States of America': 'USA', 'United Kingdom': 'UK',
+      'Great Britain': 'UK', Canada: 'CA', Australia: 'AU', Germany: 'DE', France: 'FR',
+      Italy: 'IT', Spain: 'ES', Japan: 'JP', China: 'CN', India: 'IN', Brazil: 'BR',
+      Mexico: 'MX', Netherlands: 'NL', Switzerland: 'CH', Sweden: 'SE', Norway: 'NO'
     };
-
-    return countryCodes[countryName] || '';
+    return map[name] || '';
   }
 
-  // Utility methods
-  stopBackgroundAnimationSelect(event: Event) {
+  stopBackgroundAnimationSelect(event: Event): void {
     event.stopPropagation();
   }
 
-  // ========== SLIDER METHODS (UNCHANGED) ==========
-
-  // Returns slides to display: placeholder if API not loaded yet
+  // ========== SLIDER ==========
   slidesToShow(): string[] {
-    if (this.slides.length === 0) {
-      return [this.placeholderImage]; // show placeholder first
-    }
-    return this.slides;
+    return this.slides.length === 0 ? [this.placeholderImage] : this.slides;
   }
 
-  fetchSlides() {
-    this.crudService.getBannerImages()
-      .subscribe({
-        next: (data) => {
-          // Only use active slides (status === 1)
-          const activeSlides = data.filter(d => d.status === 1);
-          this.slides = activeSlides.map(d => d.photosURL);
-          this.loadedSlides = this.slides.map((_, i) => i === 0); // only first slide loaded
-
-          // 🎯 Assign random Ken Burns direction per slide
-          this.slideAnimations = this.slides.map(
-            () => this.kenBurnsClasses[
-              Math.floor(Math.random() * this.kenBurnsClasses.length)
-              ]
-          );
-          this.isApiLoaded = true;
-
-          // ✅ Start ONLY after slides exist
-          if (isPlatformBrowser(this.platformId)) {
-            setTimeout(() => {
-              this.lazyLoadUpcomingSlides();
-              this.startSlider();
-            });
-          }
-        },
-        error: (err) => {
-          console.error('Failed to fetch banner images', err);
+  fetchSlides(): void {
+    this.crudService.getBannerImages().subscribe({
+      next: (data) => {
+        const activeSlides = data.filter((d: any) => d.status === 1);
+        this.slides = activeSlides.map((d: any) => d.photosURL);
+        this.loadedSlides = this.slides.map((_, i) => i === 0);
+        this.slideAnimations = this.slides.map(
+          () => this.kenBurnsClasses[Math.floor(Math.random() * this.kenBurnsClasses.length)]
+        );
+        this.isApiLoaded = true;
+        if (isPlatformBrowser(this.platformId)) {
+          setTimeout(() => {
+            this.lazyLoadUpcomingSlides();
+            this.startSlider();
+          });
         }
-      });
+      },
+      error: (err) => console.error('Failed to fetch banner images', err)
+    });
   }
 
-  // Start slider interval outside Angular to reduce change detection load
-  startSlider() {
-    //if (this.slides.length <= 1) return;
+  startSlider(): void {
     this.ngZone.runOutsideAngular(() => {
       this.sliderInterval = setInterval(() => {
-        if (!this.isPaused) {
-          this.ngZone.run(() => this.nextSlide());
-        }
+        if (!this.isPaused) this.ngZone.run(() => this.nextSlide());
       }, this.slideDuration);
     });
   }
 
-  nextSlide() {
+  nextSlide(): void {
     const nextIndex = (this.activeSlideIndex + 1) % this.slides.length;
-
-    // Load the next slide immediately for smooth transition
     this.loadSlide(nextIndex);
-
-    // Also preload the one after next (optional for even smoother UX)
-    const afterNext = (nextIndex + 1) % this.slides.length;
-    this.loadSlide(afterNext);
-
+    this.loadSlide((nextIndex + 1) % this.slides.length);
     this.activeSlideIndex = nextIndex;
     this.preloadNextSlides(this.activeSlideIndex);
   }
 
-  prevSlide() {
+  prevSlide(): void {
     const prevIndex = (this.activeSlideIndex - 1 + this.slides.length) % this.slides.length;
-
-    // Load previous slide
     this.loadSlide(prevIndex);
-
-    // Also preload the slide before previous
-    const beforePrev = (prevIndex - 1 + this.slides.length) % this.slides.length;
-    this.loadSlide(beforePrev);
-
+    this.loadSlide((prevIndex - 1 + this.slides.length) % this.slides.length);
     this.activeSlideIndex = prevIndex;
     this.preloadNextSlides(this.activeSlideIndex);
   }
 
-  pauseSlider() { this.isPaused = true; }
-  resumeSlider() { this.isPaused = false; }
+  pauseSlider(): void { this.isPaused = true; }
+  resumeSlider(): void { this.isPaused = false; }
 
-  // Swipe support
   @HostListener('touchstart', ['$event'])
-  onTouchStart(event: TouchEvent) { this.touchStartX = event.changedTouches[0].screenX; }
-
-  @HostListener('touchend', ['$event'])
-  onTouchEnd(event: TouchEvent) {
-    this.touchEndX = event.changedTouches[0].screenX;
-    const distance = this.touchEndX - this.touchStartX;
-    if (distance > 50) this.prevSlide();
-    else if (distance < -50) this.nextSlide();
+  onTouchStart(event: TouchEvent): void {
+    this.touchStartX = event.changedTouches[0].screenX;
   }
 
-  // Lazy load a slide just in time
-  private loadSlide(index: number) {
+  @HostListener('touchend', ['$event'])
+  onTouchEnd(event: TouchEvent): void {
+    this.touchEndX = event.changedTouches[0].screenX;
+    const d = this.touchEndX - this.touchStartX;
+    if (d > 50) this.prevSlide();
+    else if (d < -50) this.nextSlide();
+  }
+
+  private loadSlide(index: number): void {
     if (
       !isPlatformBrowser(this.platformId) ||
       !this.slides.length ||
       index < 0 ||
       index >= this.slides.length ||
-      !this.slides[index]
-    ) {
+      this.loadedSlides[index]
+    )
       return;
-    }
-
-    if (this.loadedSlides[index]) return;
-
-    if (!this.loadedSlides[index]) {
-      const img = document.createElement('img');
-      img.src = this.slides[index];
-      img.onload = () => this.loadedSlides[index] = true;
-    }
+    const img = document.createElement('img');
+    img.src = this.slides[index];
+    img.onload = () => (this.loadedSlides[index] = true);
   }
 
-  private preloadNextSlides(currentIndex: number) {
-    const next1 = (currentIndex + 1) % this.slides.length;
-    const next2 = (currentIndex + 2) % this.slides.length;
-
-    [next1, next2].forEach(idx => this.loadSlide(idx));
+  private preloadNextSlides(current: number): void {
+    [1, 2].forEach((i) => this.loadSlide((current + i) % this.slides.length));
   }
 
-  // Optional: preload the next 1–2 slides for smooth animation
-  private lazyLoadUpcomingSlides() {
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        const idx = Number(entry.target.getAttribute('data-index'));
-        if (entry.isIntersecting) {
-          this.loadSlide(idx);
-          observer.unobserve(entry.target);
-        }
-      });
-    }, { threshold: 0.1 });
-
-    this.slideElements.forEach((el, i) => {
+  private lazyLoadUpcomingSlides(): void {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((e) => {
+          const idx = Number((e.target as HTMLElement).getAttribute('data-index'));
+          if (e.isIntersecting) {
+            this.loadSlide(idx);
+            observer.unobserve(e.target);
+          }
+        });
+      },
+      { threshold: 0.1 }
+    );
+    this.slideElements?.forEach((el, i) => {
       if (!this.loadedSlides[i]) observer.observe(el.nativeElement);
     });
   }

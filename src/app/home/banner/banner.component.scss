@@ -369,54 +369,48 @@
     padding-right: 35px;
 }
 
-/* Custom dropdown for predictions */
-.city-dropdown {
-    position: absolute;
-    top: 100%;
-    left: 0;
-    right: 0;
-    background: $color-white;
-    border: 1px solid $color-border;
-    border-radius: $border-radius-sm;
-    box-shadow: $shadow-md;
-    max-height: 300px;
-    /*overflow-y: auto;*/
-    margin-top: 2px;
-    z-index:9999999999;
-    display: block;
-    overflow: visible !important;
-    position-visibility: always !important;
-    visibility: visible !important;
-}
+/* Places predictions dropdown (matches properties page) */
+.places-predictions-dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: $color-white;
+  border: 1px solid #ced4da;
+  border-top: none;
+  z-index: 9999;
+  max-height: 300px;
+  overflow-y: auto;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  margin-top: 2px;
 
-.autocomplete-item {
-    padding: 12px 15px;
+  .prediction-item {
+    padding: 10px 12px;
     cursor: pointer;
-    border-bottom: 1px solid $color-border;
+    border-bottom: 1px solid #f0f0f0;
     transition: background-color 0.2s;
-    z-index: 999999999999;
-      position: relative;
-      overflow:  hidden;
-}
 
-.autocomplete-item:hover {
-    background-color: $color-bg-light;
-}
+    &:last-child {
+      border-bottom: none;
+    }
 
-.autocomplete-item:last-child {
-    border-bottom: none;
-}
+    &:hover,
+    &.selected {
+      background-color: $color-bg-light;
+    }
 
-.prediction-main {
-    font-weight: $font-weight-500;
-    color: $color-black;
-    font-size: 15px;
-    margin-bottom: 2px;
-}
+    .prediction-main-text {
+      font-weight: $font-weight-500;
+      color: $color-black;
+      font-size: $font-size-sm;
+    }
 
-.prediction-secondary {
-    font-size: 13px;
-    color: $color-text-light;
+    .prediction-secondary-text {
+      font-size: 12px;
+      color: $color-text-light;
+      margin-top: 2px;
+    }
+  }
 }
 
 .loading-indicator {

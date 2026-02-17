@@ -1,5 +1,4 @@
 import { Component, AfterViewInit } from '@angular/core';
-import { LoadSpinnerService } from 'src/app/shared/services/load-spinner.service';
 
 @Component({
   selector: 'app-userhome',
@@ -7,11 +6,11 @@ import { LoadSpinnerService } from 'src/app/shared/services/load-spinner.service
   styleUrls: ['./userhome.component.scss']
 })
 export class UserhomeComponent implements AfterViewInit {
-  constructor(private loadSpinner: LoadSpinnerService) {}
+  showContentLoader = true;
+
   ngAfterViewInit() {
-    this.loadSpinner.show();
     setTimeout(() => {
-      this.loadSpinner.hide();
-    }, 500);
+      this.showContentLoader = false;
+    }, 800);
   }
 }

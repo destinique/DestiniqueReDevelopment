@@ -128,6 +128,10 @@ export class PropertyListComponent implements OnInit, OnDestroy {
       queryParams: hasQueryParams ? queryParams : null,
       replaceUrl: true
     });
+    // Reset flag if resolver doesn't emit (e.g. empty merged when navigating to /properties without query params)
+    setTimeout(() => {
+      this.skipNextEmissionFromUrlSync = false;
+    }, 0);
   }
 
   private loadProperties(): void {

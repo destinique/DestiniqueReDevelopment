@@ -41,8 +41,15 @@ export class PaginationComponent {
 
   // Change page
   goToPage(page: number | string): void {
-    if (typeof page === 'number' && page >= 1 && page <= this.totalPages && page !== this.currentPage) {
-      this.pageChange.emit(page);
+    const pageNum = typeof page === 'string' ? Number(page) : page;
+
+    if (
+      !isNaN(pageNum) &&
+      pageNum >= 1 &&
+      pageNum <= this.totalPages &&
+      pageNum !== this.currentPage
+    ) {
+      this.pageChange.emit(pageNum);
     }
   }
 

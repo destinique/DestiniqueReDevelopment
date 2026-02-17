@@ -13,7 +13,8 @@ export class LoadSpinnerService {
 
   /** Show spinner with optional message. Omit message for default "Loading...". */
   show(message?: string): void {
-    this._message$.next(message ?? this.defaultMessage);
+    const msg = message ?? this.defaultMessage;
+    setTimeout(() => this._message$.next(msg), 0);
     this.spinner.show();
   }
 
@@ -24,7 +25,7 @@ export class LoadSpinnerService {
 
   /** Reset message to default (e.g. on route change). */
   reset(): void {
-    this._message$.next(this.defaultMessage);
+    setTimeout(() => this._message$.next(this.defaultMessage), 0);
   }
 }
 

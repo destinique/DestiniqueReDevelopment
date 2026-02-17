@@ -42,9 +42,8 @@
                                 #destinationInput
                                 type="text"
                                 class="form-control"
-                                placeholder="Search Destination"
+                                [placeholder]="isLoadingAutocomplete ? 'Loading suggestions...' : 'Search Destination'"
                                 formControlName="destination"
-                                [attr.disabled]="isLoadingAutocomplete ? true : null"
                                 autocomplete="off"
                                 aria-label="Search destination city"
                                 (focus)="onDestinationFocus()"

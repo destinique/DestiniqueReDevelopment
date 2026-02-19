@@ -1,8 +1,8 @@
 // property-list.component.ts
 import { Component, OnInit, OnDestroy, HostListener, ElementRef, ViewChild } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, NavigationEnd } from '@angular/router';
 import { Subject, Subscription } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { takeUntil, filter } from 'rxjs/operators';
 import { PropertyService, PropertyResponse, Property } from 'src/app/shared/services/property.service';
 import { SearchStateService } from 'src/app/shared/services/search-state.service';
 import { LoadSpinnerService } from 'src/app/shared/services/load-spinner.service';
@@ -101,11 +101,25 @@ export class PropertyListComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroy$))
       .subscribe((state) => {
         if (this.skipNextEmissionFromUrlSync) {
+          // Emission came from resolver after our URL sync
+          // Reset flag and trigger loadProperties since we skipped the resolver's emission
           this.skipNextEmissionFromUrlSync = false;
-          return; // Emission came from resolver after our URL sync – don't load API or sync again
+          this.loadProperties();
+          return;
         }
-        this.loadProperties();
-        this.syncUrlFromState(state);
+        
+        // Check if URL needs updating BEFORE loading properties
+        const config = DEFAULT_PROPERTIES_URL_CONFIG;
+        const currentUrl = this.router.url.split('#')[0];
+        const urlNeedsUpdate = !areUrlsEquivalent(currentUrl, state, config);
+        
+        if (urlNeedsUpdate) {
+          // URL needs updating - sync URL first, resolver will trigger loadProperties
+          this.syncUrlFromState(state);
+        } else {
+          // URL is already correct - load properties directly
+          this.loadProperties();
+        }
       });
   }
 
@@ -114,24 +128,36 @@ export class PropertyListComponent implements OnInit, OnDestroy {
    * Uses replaceUrl to avoid polluting history on filter changes.
    * Does NOT trigger API call; the resolver's state update is skipped via skipNextEmissionFromUrlSync.
    * Passes queryParams: null when empty to explicitly clear URL params on reset.
+   * 
+   * NOTE: URL equivalence is already checked in setupSearchListener before calling this method,
+   * so we don't need to check again here. This ensures navigation always happens when needed.
    */
   private syncUrlFromState(state: SearchState): void {
     const config = DEFAULT_PROPERTIES_URL_CONFIG;
-    const currentUrl = this.router.url.split('#')[0];
-    if (areUrlsEquivalent(currentUrl, state, config)) {
-      return;
-    }
     this.skipNextEmissionFromUrlSync = true;
     const { pathCommands, queryParams } = buildUrlFromState(state, config);
     const hasQueryParams = Object.keys(queryParams).length > 0;
+    
     this.router.navigate(pathCommands, {
       queryParams: hasQueryParams ? queryParams : null,
       replaceUrl: true
-    });
-    // Reset flag if resolver doesn't emit (e.g. empty merged when navigating to /properties without query params)
-    setTimeout(() => {
+    }).then(() => {
+      // Navigation completed
+      // If resolver runs, it will update state and trigger loadProperties via subscription (flag will be reset)
+      // If resolver doesn't run (same route pattern optimization), flag stays true - fallback triggers loadProperties
+      setTimeout(() => {
+        if (this.skipNextEmissionFromUrlSync) {
+          // Resolver didn't run - manually trigger API call
+          this.skipNextEmissionFromUrlSync = false;
+          this.loadProperties();
+        }
+        // If flag was already false, resolver ran and subscription already triggered loadProperties
+      }, 150); // Give resolver time to run
+    }).catch(() => {
+      // Navigation failed - reset flag and trigger API call anyway
       this.skipNextEmissionFromUrlSync = false;
-    }, 0);
+      this.loadProperties();
+    });
   }
 
   private loadProperties(): void {

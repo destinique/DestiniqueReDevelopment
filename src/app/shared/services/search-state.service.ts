@@ -187,9 +187,14 @@ export class SearchStateService {
   getSearchParams(): SearchParams {
     const state = this.currentState;
 
+    // For country-level search (e.g. Italy, United States): omit city to avoid API returning 0 results
+    const rawCity = state.location?.city;
+    const country = state.location?.country;
+    const city = rawCity && country && rawCity === country ? undefined : rawCity;
+
     const params: SearchParams = {
       // Flatten location (convert null to undefined)
-      city: state.location?.city,
+      city,
       state: state.location?.state,
       country: state.location?.country,
       latitude: state.location?.latitude,  // No need for || undefined
@@ -300,7 +305,9 @@ export class SearchStateService {
       const lat = this.parseNum(params['latitude']);
       const lng = this.parseNum(params['longitude']);
       const placeId = typeof params['placeId'] === 'string' ? params['placeId'].trim() : undefined;
-      const city = this.extractCityFromPath(pathCity);
+      // For country-level paths (e.g. "Italy", "Caribbean"): keep city empty to avoid API returning 0 results
+      const extractedCity = this.extractCityFromPath(pathCity);
+      const city = extractedCity && countryParam && extractedCity === countryParam ? '' : (extractedCity || '');
 
       updates.location = {
         text: pathCity,

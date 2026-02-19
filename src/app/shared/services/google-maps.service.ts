@@ -124,7 +124,9 @@ export class GoogleMapsService {
       this.autocompleteService.getPlacePredictions(
         {
           input: input,
-          types: ['(cities)']
+          // No types restriction = returns all place types including cities, states, countries, continents
+          // This matches @agm/core behavior which shows continent-level suggestions like "Caribbean", "North America"
+          // types: ['(regions)'] // Removed to allow continents
           // componentRestrictions: { country: 'us' }
         },
         (predictions: any[], status: string) => {

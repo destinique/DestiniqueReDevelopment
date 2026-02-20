@@ -7,13 +7,11 @@
 
 .content-skeleton {
   position: absolute;
-  top: 0;
+  top: 1rem;
   left: 50%;
   transform: translateX(-50%);
-  /* Width follows skeleton content only (no full-width stretch) */
   width: 100%;
-  max-width: 1140px;
-  /* Height from content only – no extra empty space below */
+  max-width: 1400px;
   min-height: 0;
   padding: 0;
   background: $color-bg-light;
@@ -22,35 +20,35 @@
 
 /* Hero block (banner placeholder) */
 .skeleton-hero {
-  height:  clamp(280px, 45vw, 420px);
-  background: linear-gradient(90deg, #e8e8e8 25%, #f5f5f5 50%, #e8e8e8 75%);
+  height: clamp(280px, 45vw, 420px);
+  background: linear-gradient(90deg, $color-bg-offwhite 25%, $color-bg-light 50%, $color-bg-offwhite 75%);
   background-size: 200% 100%;
   animation: app-skeleton-shimmer 1.4s ease infinite;
 }
 
 .skeleton-content {
-  max-width: 1140px;
+  max-width: 1400px;
   margin: 0 auto;
   padding: $spacing-xl $spacing-md;
 }
 
 .skeleton-line {
-  height: 0.875rem;
-  background: linear-gradient(90deg, #e8e8e8 25%, #f5f5f5 50%, #e8e8e8 75%);
+  height: $font-size-sm;
+  background: linear-gradient(90deg, $color-bg-offwhite 25%, $color-bg-light 50%, $color-bg-offwhite 75%);
   background-size: 200% 100%;
   animation: app-skeleton-shimmer 1.4s ease infinite;
-  border-radius: 4px;
+  border-radius: $border-radius-sm;
   margin-bottom: $spacing-sm;
 
   &.skeleton-title {
     height: 1.25rem;
     width: 50%;
-    margin-bottom: 0.75rem;
+    margin-bottom: $spacing-md;
   }
 
   &.skeleton-subtitle {
     width: 35%;
-    margin-bottom: 1rem;
+    margin-bottom: $spacing-md;
   }
 
   &.short {
@@ -65,7 +63,7 @@
 .skeleton-cards {
   display: flex;
   gap: $spacing-md;
-  max-width: 1140px;
+  max-width: 1400px;
   margin: 0 auto;
   padding: 0 $spacing-md $spacing-2xl;
   flex-wrap: wrap;
@@ -75,10 +73,10 @@
   flex: 1 1 280px;
   max-width: 340px;
   height: 200px;
-  background: linear-gradient(90deg, #e8e8e8 25%, #f5f5f5 50%, #e8e8e8 75%);
+  background: linear-gradient(90deg, $color-bg-offwhite 25%, $color-bg-light 50%, $color-bg-offwhite 75%);
   background-size: 200% 100%;
   animation: app-skeleton-shimmer 1.4s ease infinite;
-  border-radius: 8px;
+  border-radius: $border-radius-md;
 }
 
 @keyframes app-skeleton-shimmer {

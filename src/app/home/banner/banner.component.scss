@@ -2,8 +2,15 @@
 
 .kb-wrapper {
     position: relative;
+    z-index: 5;
     width: 100%;
     height: calc(100vh - 96px);
+    overflow: visible;
+}
+
+.kb-slides-container {
+    position: absolute;
+    inset: 0;
     overflow: hidden;
 }
 
@@ -31,7 +38,8 @@
 .overlay-content {
     position: absolute;
     inset: 0;
-    z-index: 5;
+    z-index: 10;
+    transform: translateZ(0);
     display: block;
     flex-direction: column;
     align-items: center;
@@ -239,7 +247,7 @@
     border-left: 2px solid $color-white !important;
 }
 .two-path-layout-btn:hover, .two-path-layout-btn:focus, .two-path-layout-btn:active {
-    color: $color-text-light !important;
+    color: $color-white !important;
     background-color: $color-primary !important;
     border-color: $color-primary !important;
     transition: 0.3s;
@@ -358,6 +366,7 @@
 
 .search-container {
     position: relative;
+    z-index: 100;
 }
 
 /* Input loading state */
@@ -378,7 +387,8 @@
   background: $color-white;
   border: 1px solid #ced4da;
   border-top: none;
-  z-index: 9999;
+  z-index: 10001;
+  isolation: isolate;
   max-height: 300px;
   overflow-y: auto;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);

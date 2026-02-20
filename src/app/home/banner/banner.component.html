@@ -1,18 +1,20 @@
 <div class="kb-wrapper">
-    <!-- Background slides -->
-    <div
-        class="kb-slide"
-        *ngFor="let img of slidesToShow(); let i = index"
-        #kbSlide
-        [attr.data-index]="i"
-        [style.backgroundImage]="
-        loadedSlides[i]
-        ? 'url(' + img + ')'
-        : 'url(assets/website_images/home/banner/banner_404.webp)'
-        "
-        [class.active]="i === activeSlideIndex"
-        [class]="slideAnimations[i]"
-        >
+   <!-- Background slides -->
+    <div class="kb-slides-container">
+      <div
+          class="kb-slide"
+          *ngFor="let img of slidesToShow(); let i = index"
+          #kbSlide
+          [attr.data-index]="i"
+          [style.backgroundImage]="
+          loadedSlides[i]
+          ? 'url(' + img + ')'
+          : 'url(assets/website_images/home/banner/banner_404.webp)'
+          "
+          [class.active]="i === activeSlideIndex"
+          [class]="slideAnimations[i]"
+          >
+      </div>
     </div>
 
     <!-- FIXED overlay -->

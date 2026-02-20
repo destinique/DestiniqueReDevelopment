@@ -445,6 +445,15 @@ export class SearchPropertyComponent implements OnInit, AfterViewInit, OnDestroy
     }, 0);
   }
 
+  clearSearchDates(): void {
+    this.searchFromDate = null;
+    this.searchToDate = null;
+    this.hoveredDate = null;
+    this.updateSearchCalendarField();
+    this.updateDateRangeInState();
+    this.searchDp?.close();
+  }
+
 
   /** Utility to get today's date in NgbDateStruct */
   private getTodayDate(): NgbDateStruct {

@@ -319,6 +319,51 @@ input[type="date"] {
 
 .datepicker-wrapper {
   position: relative;
+  flex: 0 0 auto;
+
+  .from-control {
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+
+  .from-control.has-date {
+    padding-right: 36px;
+  }
+
+  .datepicker-clear {
+    position: absolute;
+    right: 10px;
+    top: 53%;
+    transform: translateY(-50%);
+    z-index: 2;
+    width: auto !important;
+    min-width: 0 !important;
+    height: auto !important;
+    min-height: 28px;
+    margin: 0 !important;
+    padding: $spacing-sm !important;
+    background: transparent !important;
+    border: none !important;
+    border-right: none !important;
+    box-shadow: none !important;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    color: $color-muted !important;
+    transition: color 0.2s, background-color 0.2s;
+
+    &:hover {
+      color: $color-black !important;
+      background: $color-border !important;
+      border-radius: 50%;
+    }
+
+    &:focus {
+      outline: none;
+    }
+  }
 }
 
 :host ::ng-deep ngb-datepicker.dropdown-menu {

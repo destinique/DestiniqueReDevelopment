@@ -26,6 +26,7 @@ export class AppComponent implements AfterViewInit {
   // private retryDelay = 500;
   title = 'New Destinique';
   spinnerMessage$ = this.LoadSpinnerService.message$;
+  contentReady = false;
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object,
@@ -35,6 +36,12 @@ export class AppComponent implements AfterViewInit {
     this.router.events
       .pipe(filter((e): e is NavigationEnd => e instanceof NavigationEnd))
       .subscribe(() => this.LoadSpinnerService.reset());
+  }
+
+  onRouterOutletActivate(): void {
+    if (!this.contentReady) {
+        this.contentReady = true;
+    }
   }
 
   ngAfterViewInit() {

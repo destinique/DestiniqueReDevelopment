@@ -11,8 +11,32 @@
 
 <app-navbar></app-navbar>
 
-<router-outlet></router-outlet>
+<div class="app-content-wrapper">
+  <div *ngIf="!contentReady" class="content-skeleton" aria-hidden="true">
+    <div class="skeleton-hero"></div>
+    <div class="skeleton-content">
+      <div class="skeleton-line skeleton-title"></div>
+      <div class="skeleton-line skeleton-subtitle"></div>
+      <div class="skeleton-lines">
+        <div class="skeleton-line"></div>
+        <div class="skeleton-line"></div>
+        <div class="skeleton-line short"></div>
+      </div>
+    </div>
+    <div class="skeleton-content">
+      <div class="skeleton-line skeleton-title"></div>
+      <div class="skeleton-line"></div>
+      <div class="skeleton-line short"></div>
+    </div>
+    <div class="skeleton-cards">
+      <div class="skeleton-card"></div>
+      <div class="skeleton-card"></div>
+      <div class="skeleton-card"></div>
+    </div>
+  </div>
+  <router-outlet (activate)="onRouterOutletActivate()"></router-outlet>
+</div>
 
-<app-dest-footer></app-dest-footer>
+<app-dest-footer *ngIf="contentReady"></app-dest-footer>
 
 <app-scroll-to-top></app-scroll-to-top>

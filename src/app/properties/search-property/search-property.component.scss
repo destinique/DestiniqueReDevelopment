@@ -9,9 +9,9 @@
   text-align: left !important;
 }
 
-.properties-header p{
+.properties-header p {
   font-weight: 300;
-  font-size: 18px;
+  font-size: $font-size-lg;
 }
 .animate-sub {
   width: 286px;
@@ -78,13 +78,13 @@ button {
   background: $color-primary-light;
 }
 .input input, button, select, button:focus {
-  outline: 0px;
-  border: $border-width solid #ced4da;
+  outline: 0;
+  border: $border-width solid $color-border-light;
 }
 .btn-primary.focus, .btn-primary:focus, button {
   box-shadow: none;
   outline: none;
-  border: $border-width solid #ced4da;
+  border: $border-width solid $color-border-light;
 }
 
 .btn-primary:not(:disabled):not(.disabled).active, .btn-primary:not(:disabled):not(.disabled):active, .show>.btn-primary.dropdown-toggle {
@@ -242,17 +242,17 @@ button:hover {
   left: 0;
   right: 0;
   background: $color-white;
-  border: $border-width solid #ced4da;
+  border: $border-width solid $color-border-light;
   border-top: none;
   z-index: 1000;
   max-height: 300px;
   overflow-y: auto;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  box-shadow: $shadow-sm;
 
   .prediction-item {
-    padding: 10px 12px;
+    padding: $spacing-md $spacing-md;
     cursor: pointer;
-    border-bottom: $border-width solid #f0f0f0;
+    border-bottom: $border-width solid $color-bg-light;
     transition: background-color 0.2s;
 
     &:last-child {
@@ -271,9 +271,9 @@ button:hover {
     }
 
     .prediction-secondary-text {
-      font-size: 12px;
+      font-size: $font-size-sm;
       color: $color-text-light;
-      margin-top: 2px;
+      margin-top: $spacing-xs;
     }
   }
 }
@@ -282,8 +282,8 @@ button:hover {
 @media (max-width: 768px) {
   .places-predictions-dropdown {
     position: relative;
-    margin-top: 5px;
-    border: $border-width solid #ced4da;
+    margin-top: $spacing-sm;
+    border: $border-width solid $color-border-light;
     border-radius: $border-radius-sm;
   }
 }
@@ -403,7 +403,7 @@ input[type="date"] {
   .custom-day-wrapper.past-date,
   .ngb-dp-day.disabled,
   .ngb-dp-day.ngb-dp-disabled {
-    color: #c7c7c7 !important;
+    color: $color-placeholder !important;
     pointer-events: none !important;
     background: transparent !important;
     font-weight: $font-weight-600 !important;

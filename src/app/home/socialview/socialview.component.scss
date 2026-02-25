@@ -1,3 +1,5 @@
+@use 'variables' as *;
+
 body {
   margin: 0;
   height: 2000px;
@@ -17,48 +19,48 @@ body {
 .icon-bar a {
   display: block;
   text-align: center;
-  padding: 14px;
+  padding: $spacing-md;
   transition: all 0.3s ease;
-  color: white;
-  font-size: 18px;
-  margin: 6px 6px 6px 6px !important;
+  color: $color-white;
+  font-size: $font-size-base;
+  margin: $spacing-sm !important;
 }
 
 .icon-bar a:hover {
-  background-color: rgb(43, 39, 39);
+  background-color: $color-nav-dark-hover;
 }
 
 .facebook {
   background: #3b5998;
-  color: white;
+  color: $color-white;
 }
 
 .twitter {
   background: #55acee;
-  color: white;
+  color: $color-white;
 }
 
 .google {
   background: #dd4b39;
-  color: white;
+  color: $color-white;
 }
 
 .linkedin {
   background: #007bb5;
-  color: white;
+  color: $color-white;
 }
 
 .youtube {
   background: #ee4545;
-  color: white;
+  color: $color-white;
 }
 .instagram {
   background: #ee4545;
-  color: white;
+  color: $color-white;
 }
 .pinterest {
   background: #d22735;
-  color: white;
+  color: $color-white;
 }
 
 @media screen and (max-width: 768px) {
@@ -69,10 +71,10 @@ body {
   .icon-bar a {
     display: none;
     text-align: center;
-    padding: 6px 12px;
+    padding: $spacing-sm $spacing-md;
     transition: all 0.3s ease;
-    color: white;
-    font-size: 18px;
-    margin: 6px 6px 6px 6px !important;
+    color: $color-white;
+    font-size: $font-size-base;
+    margin: $spacing-sm !important;
   }
 }

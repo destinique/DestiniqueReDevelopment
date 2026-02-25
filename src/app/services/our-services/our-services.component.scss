@@ -1,17 +1,17 @@
 @use 'variables' as *;
 
 .destinique-services {
-    padding-top: 4rem;
+    padding-top: $spacing-3xl;
 }
 .services-header {
     font-size: 3rem;
-    line-height: 1;
+    line-height: $line-height-tight;
     font-weight: 300;
-    letter-spacing: 10px;
+    letter-spacing: $letter-spacing-wider;
     text-align: center;
-    color: #333;
+    color: $color-text-muted;
     text-transform: uppercase;
-    padding-bottom: 4rem;
+    padding-bottom: $spacing-3xl;
 }
 .services-single-item {
     margin-bottom: -5px;

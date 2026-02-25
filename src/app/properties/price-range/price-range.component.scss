@@ -25,7 +25,7 @@ $thumb-nudge: ($track-h - $thumb-size) / 2;
   margin: 0;
   font-size: $font-size-lg;
   font-weight: $font-weight-700;
-  color: #333;
+  color: $color-text-muted;
 }
 
 .price-range-close-btn {
@@ -37,13 +37,13 @@ $thumb-nudge: ($track-h - $thumb-size) / 2;
   padding: 0;
   border: none;
   border-radius: 50%;
-  background-color: rgba(0, 0, 0, 0.06);
-  color: #333;
+  background-color: rgba($color-black, 0.06);
+  color: $color-text-muted;
   cursor: pointer;
   transition: background-color 0.2s, color 0.2s;
 
   &:hover {
-    background-color: rgba(0, 0, 0, 0.12);
+    background-color: rgba($color-black, 0.12);
     color: $color-black;
   }
 
@@ -73,7 +73,7 @@ $thumb-nudge: ($track-h - $thumb-size) / 2;
   display: block;
   font-size: $font-size-sm;
   font-weight: $font-weight-600;
-  color: #333;
+  color: $color-text-muted;
   margin-bottom: 0.35rem;
 }
 
@@ -81,8 +81,8 @@ $thumb-nudge: ($track-h - $thumb-size) / 2;
   width: 100%;
   padding: $spacing-sm 0.75rem;
   font-size: $font-size-base;
-  border: $border-width solid #ced4da;
-  border-radius: $spacing-xs;
+  border: $border-width solid $color-border-light;
+  border-radius: $border-radius-sm;
 
   &:focus {
     border-color: $color-primary;
@@ -101,7 +101,7 @@ $thumb-nudge: ($track-h - $thumb-size) / 2;
 .price-range-slider-label {
   font-size: $font-size-sm;
   font-weight: $font-weight-600;
-  color: #333;
+  color: $color-text-muted;
   flex-shrink: 0;
 }
 
@@ -124,7 +124,7 @@ $thumb-nudge: ($track-h - $thumb-size) / 2;
   top: 50%;
   transform: translateY(-50%);
   height: $track-h;
-  background: #e2e6ea;
+  background: $color-border;
   border-radius: $track-h / 2;
   pointer-events: none;
 }
@@ -328,8 +328,8 @@ $thumb-nudge: ($track-h - $thumb-size) / 2;
   border-radius: $border-radius-none;
 
   &:hover {
-    background-color: #5a6268 !important;
-    border-color: #545b62 !important;
+    background-color: $color-gray-mid !important;
+    border-color: $color-text-muted !important;
     color: $color-white !important;
   }
 }

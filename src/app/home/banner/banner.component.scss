@@ -125,7 +125,7 @@
     bottom: 0;
     left: 0;
     right: 0;
-    background-color: rgba(17, 17, 17, 0.41);
+    background-color: rgba($color-nav-dark, 0.41);
     z-index: 1;
 }
 .carousel-caption {
@@ -385,19 +385,19 @@
   left: 0;
   right: 0;
   background: $color-white;
-  border: 1px solid #ced4da;
+  border: $border-width solid $color-border-light;
   border-top: none;
   z-index: 10001;
   isolation: isolate;
   max-height: 300px;
   overflow-y: auto;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  margin-top: 2px;
+  box-shadow: $shadow-sm;
+  margin-top: $spacing-xs;
 
   .prediction-item {
-    padding: 10px 12px;
+    padding: $spacing-md;
     cursor: pointer;
-    border-bottom: 1px solid #f0f0f0;
+    border-bottom: $border-width solid $color-bg-light;
     transition: background-color 0.2s;
 
     &:last-child {
@@ -416,16 +416,16 @@
     }
 
     .prediction-secondary-text {
-      font-size: 12px;
+      font-size: $font-size-sm;
       color: $color-text-light;
-      margin-top: 2px;
+      margin-top: $spacing-xs;
     }
   }
 }
 
 .loading-indicator {
-    margin-top: 5px;
-    font-size: 12px;
+    margin-top: $spacing-sm;
+    font-size: $font-size-sm;
 }
 
 /* Hide default browser autocomplete */
@@ -436,8 +436,8 @@ input:-webkit-autofill:focus {
 }
 
 .location-details {
-    margin-top: 10px;
-    padding: 10px;
+    margin-top: $spacing-md;
+    padding: $spacing-md;
     background-color: $color-bg-light;
     border-radius: $border-radius-sm;
     border-left: 3px solid $color-success;
@@ -446,16 +446,16 @@ input:-webkit-autofill:focus {
 .selected-city {
     display: flex;
     flex-direction: column;
-    gap: 4px;
+    gap: $spacing-xs;
 }
 
 .location-meta {
-    font-size: 12px;
+    font-size: $font-size-sm;
     color: $color-text-light;
 }
 
 .coordinates {
-    font-size: 11px;
+    font-size: $font-size-sm;
     color: $color-text-muted;
     font-family: monospace;
 }

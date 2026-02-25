@@ -28,7 +28,7 @@
     cursor: pointer;
 
     &:hover:not(.active .page-link) {
-      color: #333;
+      color: $color-text-muted;
     }
   }
 
@@ -39,7 +39,7 @@
   }
 
   &.disabled .page-link {
-    color: #b0b0b0;
+    color: $color-placeholder;
     cursor: not-allowed;
     pointer-events: none;
   }

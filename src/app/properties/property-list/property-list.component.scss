@@ -1,7 +1,7 @@
 @use 'variables' as *;
 @import url("https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css");
 ::placeholder {
-    color: #777;
+    color: $color-muted;
     opacity: 1;
 }
 /*price*/
@@ -18,7 +18,7 @@
         font-weight: $font-weight-400;
         letter-spacing: 0 !important;
         border-radius: $border-radius-none;
-        border: $border-width solid #ced4da;
+        border: $border-width solid $color-border-light;
     }
 
     .btn-primary:hover {
@@ -32,7 +32,7 @@
         border-color: $color-muted;
     }
     .filter-btn {
-        color: #495057 !important;
+        color: $color-text-muted !important;
         background-color: $color-white !important;
     }
     @media (max-width: 320px) {
@@ -64,10 +64,10 @@
         font-size: $font-size-base;
         font-weight: $font-weight-400;
         line-height: $line-height-base;
-        color: #777;
+        color: $color-muted;
         background-color: $color-white;
         background-clip: padding-box;
-        border: 2px solid #ced4da;
+        border: $border-width solid $color-border-light;
         border-radius: $spacing-xs;
         transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
     }
@@ -120,7 +120,7 @@
 .dropdown-menu.advance-search-modal {
     border: $border-width solid $color-border-light;
     border-radius: $border-radius-md;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+    box-shadow: $shadow-md;
     background-color: $color-white;
     max-height: 70vh;
     overflow-y: auto;
@@ -182,9 +182,9 @@
     text-transform: uppercase;
 }
 .btn-warning.showMore {
-    background: #ff5722 !important;
-    background-color: #ff5722 !important;
-    border-color: #ff5722 !important;
+    background: $color-accent !important;
+    background-color: $color-accent !important;
+    border-color: $color-accent !important;
 }
 .advance-search-modal .btn.showMore:hover,
 .advance-search-modal .float-right .btn:hover,
@@ -211,7 +211,7 @@
     font-size: 24px;
 }
 .fa.fa-sliders {
-    color: #495057;
+    color: $color-text-muted;
     rotate: 90deg;
     font-weight: bolder;
 }
@@ -408,13 +408,13 @@ img {
     display: flex;
     justify-content: center;
     align-items: center;
-    color: #444;
+    color: $color-text-muted;
     text-wrap: pretty;
     width: 145px;
     padding: 11px 0;
     input {
         margin-right: $spacing-xs !important;
-        border: $border-width solid #777 !important;
+        border: $border-width solid $color-muted !important;
         border-radius: $border-radius-sm !important;
         accent-color: $color-primary !important;
         top: -2px;
@@ -439,15 +439,15 @@ img {
 .sort-by-opt {
     border: none !important;
     border-radius: $border-radius-none !important;
-    border-bottom: $border-width solid #ced4da !important;
+    border-bottom: $border-width solid $color-border-light !important;
     box-shadow: none !important;
     background-color: transparent !important;
-    color: #777 !important;
+    color: $color-muted !important;
     font-size: $font-size-base;
     option {
         font-weight: $font-weight-600;
         letter-spacing: 1.5px;
-        color: #333;
+        color: $color-text-muted;
     }
 }
 @media (min-width: 1040px) {
@@ -527,13 +527,13 @@ img {
     background: $color-white;
     border: $border-width solid $color-border-light;
     border-radius: $spacing-xs;
-    box-shadow: 0 34px 21px -22px rgba(0, 0, 0, 0.15);
+    box-shadow: $shadow-lg;
     overflow: hidden;
 }
 
 .skeleton-image {
     aspect-ratio: 3 / 2;
-    background: linear-gradient(90deg, #e8e8e8 25%, #f5f5f5 50%, #e8e8e8 75%);
+    background: linear-gradient(90deg, $color-bg-offwhite 25%, $color-bg-light 50%, $color-bg-offwhite 75%);
     background-size: 200% 100%;
     animation: skeleton-shimmer 1.4s ease infinite;
 }
@@ -544,7 +544,7 @@ img {
 
 .skeleton-line {
     height: $font-size-sm;
-    background: linear-gradient(90deg, #e8e8e8 25%, #f5f5f5 50%, #e8e8e8 75%);
+    background: linear-gradient(90deg, $color-bg-offwhite 25%, $color-bg-light 50%, $color-bg-offwhite 75%);
     background-size: 200% 100%;
     animation: skeleton-shimmer 1.4s ease infinite;
     border-radius: $border-radius-sm;
@@ -594,10 +594,10 @@ img {
     --border-inline-end-width: 1px;
     --border-block-end-width: 1px;
     --border-inline-start-width: 1px;
-    border-color: #eaeff2;
+    border-color: $color-border;
     /* --border-color: #eaeff2; */
     --border-radius: 0px 0px 0px 0px;
-    box-shadow: 0 34px 21px -22px rgba(0, 0, 0, 0.15);
+    box-shadow: $shadow-lg;
     --padding-block-start: 0px;
     --padding-block-end: 0px;
     --padding-inline-start: 0px;
@@ -610,7 +610,7 @@ img {
 }
 
 .cardcustomcss:hover {
-    box-shadow: 0 50px 21px -22px rgba(0, 0, 0, 0.25);
+    box-shadow: $shadow-primary;
     transition-property: transform, opacity;
     transition-timing-function: cubic-bezier(0, 0.33, 0.07, 1.03);
     transition: all 0.4s ease-in-out;
@@ -637,7 +637,7 @@ img {
     background-clip: border-box;
     border-radius: $spacing-xs;
     letter-spacing: 1px;
-    box-shadow: 0 34px 21px -22px #00000026;
+    box-shadow: $shadow-lg;
     margin-bottom: 20px;
     border: $border-width solid $color-border-light !important;
 }
@@ -663,7 +663,7 @@ img {
     max-width: 48%;
     line-height: 27px;
     word-break: break-word;
-    background-color: #0006;
+    background-color: rgba($color-black, 0.4);
     padding: 4px 15px;
     bottom: $spacing-sm;
     color: $color-white !important;
@@ -682,7 +682,7 @@ img {
     gap: 5px;
 }
 .cardcustomcss .form-check-input {
-    border: $border-width solid #777 !important;
+    border: $border-width solid $color-muted !important;
     border-radius: $border-radius-sm !important;
     accent-color: $color-primary !important;
     box-shadow: none;
@@ -742,7 +742,7 @@ img {
     --border-inline-end-width: 0px;
     --border-block-end-width: 0px;
     --border-inline-start-width: 0px;
-    border-color: #f9f9f9;
+    border-color: $color-bg-light;
     --border-color: #f9f9f9;
     --padding-block-start: 0px;
     --padding-block-end: 5px;
@@ -755,7 +755,7 @@ img {
     width: 100%;
 }
 .fac-h6 {
-    color: #4f7889;
+    color: $color-text-light;
     font-size: 20px;
     font-weight: 400;
     line-height: 1em;
@@ -802,7 +802,7 @@ img {
 }
 .facilities button:hover {
     background-color: transparent !important;
-    color: #777 !important;
+    color: $color-muted !important;
 }
 .viewtypeandprice {
     display: flex;
@@ -813,9 +813,9 @@ img {
     margin: 0 auto;
 }
 .rate a {
-    font-size: 18px !important;
-    font-weight: 400;
-    color: gray !important;
+    font-size: $font-size-lg !important;
+    font-weight: $font-weight-400;
+    color: $color-text-light !important;
     text-transform: capitalize;
 }
 .matIcon {
@@ -841,7 +841,7 @@ img {
 .dropdown-menu.price-range-dropdown {
   border: $border-width solid $color-border-light;
   border-radius: $border-radius-md;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  box-shadow: $shadow-md;
   padding: 0;
   overflow: hidden;
   min-width: 400px;

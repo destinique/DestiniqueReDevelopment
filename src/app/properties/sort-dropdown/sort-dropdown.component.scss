@@ -1,16 +1,18 @@
+@use 'variables' as *;
+
 /* Underline-only style (matches reference) */
 .form-select.sort-by-opt {
   border: none !important;
-  border-radius: 0 !important;
-  border-bottom: 1px solid #ced4da !important;
+  border-radius: $border-radius-none !important;
+  border-bottom: $border-width solid $color-border-light !important;
   box-shadow: none !important;
   background-color: transparent !important;
-  color: #777 !important;
-  font-size: 1rem;
+  color: $color-muted !important;
+  font-size: $font-size-base;
 
   option {
-    font-weight: 600;
+    font-weight: $font-weight-600;
     letter-spacing: 1.5px;
-    color: #333;
+    color: $color-text-muted;
   }
 }

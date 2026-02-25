@@ -1,58 +1,60 @@
+@use 'variables' as *;
+
 .container {
-    padding: 4rem 1rem;
+  padding: $spacing-3xl $spacing-md;
 }
 .privacy-policy a {
-    font-weight: bold;
+  font-weight: $font-weight-700;
 }
 .privacy-policy-header {
-    font-size: 3rem;
-    line-height: 1;
-    font-weight: 300;
-    letter-spacing: 10px;
-    text-align: center;
-    color: #68110A;
-    text-transform: uppercase;
+  font-size: 3rem;
+  line-height: $line-height-tight;
+  font-weight: 300;
+  letter-spacing: $letter-spacing-wider;
+  text-align: center;
+  color: $color-accent;
+  text-transform: uppercase;
 }
 .privacy-policy-intro {
-    padding-top: 4rem;
-    font-size: 16px;
-    color: #222;
-    letter-spacing: .1px;
+  padding-top: $spacing-3xl;
+  font-size: $font-size-base;
+  color: $color-nav-dark-hover;
+  letter-spacing: $letter-spacing-wide;
 }
 .privacy-policy-item {
-    margin-top: 24px;
+  margin-top: $spacing-xl;
 }
 .privacy-policy-item h4 {
-    font-size: 16px;
+  font-size: $font-size-base;
 }
 .privacy-policy-item h4 span {
-    font-weight: bold;
+  font-weight: $font-weight-700;
 }
 .privacy-policy-item-content {
-    margin-bottom: 8px;
+  margin-bottom: $spacing-md;
 }
 .privacy-policy-item-content span {
-    font-weight: bold;
-    padding-left: 24px;
-    font-size: 14px;
+  font-weight: $font-weight-700;
+  padding-left: $spacing-xl;
+  font-size: $font-size-sm;
 }
 .privacy-policy-item-content ul {
-    margin-top: 0px;
+  margin-top: 0;
 }
 .text-re-maroon {
-    color: #68110A;
+  color: $color-accent;
 }
 .underline {
-    text-decoration: underline;
+  text-decoration: underline;
 }
 .p-l-24 {
-    padding-left: 24px;
+  padding-left: $spacing-xl;
 }
 .privacy-nb {
-    font-weight: 600;
-    color: #68110A;
-    padding-top: 1rem;
+  font-weight: $font-weight-600;
+  color: $color-accent;
+  padding-top: $spacing-md;
 }
 .contact-email {
-    font-weight: 500 !important;
+  font-weight: $font-weight-500 !important;
 }

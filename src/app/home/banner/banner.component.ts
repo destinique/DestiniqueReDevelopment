@@ -319,7 +319,7 @@ export class BannerComponent implements OnInit, AfterViewInit, OnDestroy {
         this.loadGoogleMapsScript();
       }
       this.isDelayedLoadInProgress = false;
-    }, 6000);
+    }, 3000);
   }
 
   private async loadGoogleMapsScript(): Promise<void> {

@@ -171,6 +171,14 @@ ngb-modal-window.destinique-login-dialog {
   text-align: center;
   text-transform: uppercase;
   letter-spacing: 0.02em;
+  display: block;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.map-info-window-fixed .map-info-view-type:hover {
+  background: #003366;
+  text-decoration: underline;
 }
 
 /* Property ID overlay on carousel – bottom bar, clickable link */
@@ -194,4 +202,5 @@ ngb-modal-window.destinique-login-dialog {
 .map-info-window-fixed .map-info-property-id-overlay:hover {
   background: #002245;
   color: #fff;
+  text-decoration: underline;
 }

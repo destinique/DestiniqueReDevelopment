@@ -40,8 +40,14 @@ export class PropertyListComponent implements OnInit, OnDestroy {
   // ========== COMPONENT STATE ==========
   private destroy$ = new Subject<void>();
   private searchSubscription?: Subscription;
-  /** Set when syncing URL; skip the next state$ emission (from resolver) to avoid loop + duplicate API call */
+  /** De-dupe key for last search params sent to API */
+  private lastApiParamsKey: string | null = null;
+  /** Set when syncing URL; next state$ emission (from resolver) must not call syncUrlFromState again or browser can loop/freeze */
   private skipNextEmissionFromUrlSync = false;
+  /** True while a URL sync is in progress; prevents loading again from urlNeedsUpdate=false when setTimeout ran first */
+  private syncInProgress = false;
+  /** Prevents a second loadProperties() from running until the current request finishes (stops duplicate API calls) */
+  private loadInProgress = false;
   isLoading = false;
   isInitialLoad = true; // spinner on first load, skeleton on pagination/filter changes
   skeletonCount = [1, 2, 3];
@@ -101,23 +107,23 @@ export class PropertyListComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroy$))
       .subscribe((state) => {
         if (this.skipNextEmissionFromUrlSync) {
-          // Emission came from resolver after our URL sync
-          // Reset flag and trigger loadProperties since we skipped the resolver's emission
           this.skipNextEmissionFromUrlSync = false;
+          this.syncInProgress = false;
           this.loadProperties();
           return;
         }
-        
-        // Check if URL needs updating BEFORE loading properties
+
         const config = DEFAULT_PROPERTIES_URL_CONFIG;
         const currentUrl = this.router.url.split('#')[0];
         const urlNeedsUpdate = !areUrlsEquivalent(currentUrl, state, config);
-        
+
         if (urlNeedsUpdate) {
-          // URL needs updating - sync URL first, resolver will trigger loadProperties
           this.syncUrlFromState(state);
         } else {
-          // URL is already correct - load properties directly
+          if (this.syncInProgress) {
+            this.syncInProgress = false;
+            return;
+          }
           this.loadProperties();
         }
       });
@@ -125,55 +131,71 @@ export class PropertyListComponent implements OnInit, OnDestroy {
 
   /**
    * Sync browser URL to match search state for shareable links.
-   * Uses replaceUrl to avoid polluting history on filter changes.
-   * Does NOT trigger API call; the resolver's state update is skipped via skipNextEmissionFromUrlSync.
-   * Passes queryParams: null when empty to explicitly clear URL params on reset.
-   * 
-   * NOTE: URL equivalence is already checked in setupSearchListener before calling this method,
-   * so we don't need to check again here. This ensures navigation always happens when needed.
+   * Sets skipNextEmissionFromUrlSync so the resolver's state emission does not call syncUrlFromState again
+   * (router.url can still be old when resolver runs, which would cause an infinite sync loop and freeze the browser).
+   * Fallback setTimeout triggers loadProperties only when resolver does not run (e.g. reset to empty URL).
    */
   private syncUrlFromState(state: SearchState): void {
     const config = DEFAULT_PROPERTIES_URL_CONFIG;
     this.skipNextEmissionFromUrlSync = true;
+    this.syncInProgress = true;
     const { pathCommands, queryParams } = buildUrlFromState(state, config);
     const hasQueryParams = Object.keys(queryParams).length > 0;
-    
+
     this.router.navigate(pathCommands, {
       queryParams: hasQueryParams ? queryParams : null,
       replaceUrl: true
     }).then(() => {
-      // Navigation completed
-      // If resolver runs, it will update state and trigger loadProperties via subscription (flag will be reset)
-      // If resolver doesn't run (same route pattern optimization), flag stays true - fallback triggers loadProperties
       setTimeout(() => {
         if (this.skipNextEmissionFromUrlSync) {
-          // Resolver didn't run - manually trigger API call
           this.skipNextEmissionFromUrlSync = false;
           this.loadProperties();
+          setTimeout(() => (this.syncInProgress = false), 50);
         }
-        // If flag was already false, resolver ran and subscription already triggered loadProperties
-      }, 150); // Give resolver time to run
+      }, 150);
     }).catch(() => {
-      // Navigation failed - reset flag and trigger API call anyway
       this.skipNextEmissionFromUrlSync = false;
+      this.syncInProgress = false;
       this.loadProperties();
     });
   }
 
+  /**
+   * Stable string key for params so identical params always produce the same key
+   * (avoids duplicate API calls when resolver and user state differ only by property order or Date format).
+   */
+  private stableParamsKey(obj: Record<string, unknown> | unknown): string {
+    if (obj === null || obj === undefined) return '';
+    if (obj instanceof Date) return obj.getTime().toString();
+    if (typeof obj !== 'object') return JSON.stringify(obj);
+    if (Array.isArray(obj)) return '[' + obj.map((v) => this.stableParamsKey(v)).join(',') + ']';
+    const keys = Object.keys(obj).filter((k) => (obj as Record<string, unknown>)[k] !== undefined && (obj as Record<string, unknown>)[k] !== null).sort();
+    const parts = keys.map((k) => JSON.stringify(k) + ':' + this.stableParamsKey((obj as Record<string, unknown>)[k]));
+    return '{' + parts.join(',') + '}';
+  }
+
   private loadProperties(): void {
+    if (this.loadInProgress) return;
+
+    const params = this.searchState.getSearchParams();
+    const key = this.stableParamsKey(params);
+
+    if (this.lastApiParamsKey === key) return;
+    this.lastApiParamsKey = key;
+    this.loadInProgress = true;
+
     this.isLoading = true;
 
     if (this.isInitialLoad) {
       this.loadSpinner.show('Loading properties...');
     }
 
-    const params = this.searchState.getSearchParams();
-
     this.propertyService.searchProperties(params).subscribe({
       next: (response: PropertyResponse) => {
         this.properties = response.data;
         this.updatePaginationInfo(response);
         this.isLoading = false;
+        this.loadInProgress = false;
         if (this.isInitialLoad) {
           this.isInitialLoad = false;
           this.loadSpinner.hide();
@@ -183,6 +205,7 @@ export class PropertyListComponent implements OnInit, OnDestroy {
         console.error('Error loading properties:', error);
         this.properties = [];
         this.isLoading = false;
+        this.loadInProgress = false;
         if (this.isInitialLoad) {
           this.isInitialLoad = false;
           this.loadSpinner.hide();

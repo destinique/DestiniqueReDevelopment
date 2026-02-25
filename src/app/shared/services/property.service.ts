@@ -2,7 +2,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
-import { catchError, map, shareReplay } from 'rxjs/operators';
+import { catchError, map, shareReplay, finalize } from 'rxjs/operators';
 import { FilterOption } from '../interfaces/advanced-filter-form.interface';
 import { VIEW_TYPES_REMOVE_LIST } from '../constants/view-type-remove-list.constant';
 
@@ -111,6 +111,12 @@ export class PropertyService {
   /** Cached observable for filter options (property types + view types). */
   private filterOptions$: Observable<{ propertyTypes: FilterOption[]; viewTypes: FilterOption[] }> | null = null;
 
+  /**
+   * In-flight search requests keyed by stable params.
+   * Ensures that concurrent calls with identical params share a single HTTP request.
+   */
+  private inFlightSearches = new Map<string, Observable<PropertyResponse>>();
+
   constructor(private http: HttpClient) {
     // No dependency on SearchStateService
   }
@@ -165,38 +171,69 @@ export class PropertyService {
    * Search properties with given parameters
    */
   searchProperties(params: SearchParams): Observable<PropertyResponse> {
+    // Stable key for params so concurrent identical calls share a single HTTP request
+    const key = this.stableParamsKey(params);
+    const existing = this.inFlightSearches.get(key);
+    if (existing) {
+      // Reuse the in-flight request for identical params
+      return existing;
+    }
+
     // Convert to HttpParams for the API call
     let httpParams = new HttpParams();
 
     // Add all non-null/undefined parameters
-    Object.entries(params).forEach(([key, value]) => {
+    Object.entries(params).forEach(([paramKey, value]) => {
       if (value !== null && value !== undefined && value !== '') {
         if (Array.isArray(value)) {
           // For array parameters (amenities, providers, etc.)
           if (value.length > 0) {
-            httpParams = httpParams.append(key, value.join(','));
+            httpParams = httpParams.append(paramKey, value.join(','));
           }
         } else if (value instanceof Date) {
           // Format dates as YYYY-MM-DD
-          httpParams = httpParams.append(key, this.formatDate(value));
+          httpParams = httpParams.append(paramKey, this.formatDate(value));
         } else if (typeof value === 'boolean') {
           // Convert boolean to string
-          httpParams = httpParams.append(key, value.toString());
+          httpParams = httpParams.append(paramKey, value.toString());
         } else {
-          httpParams = httpParams.append(key, value.toString());
+          httpParams = httpParams.append(paramKey, value.toString());
         }
       }
     });
 
     console.log('🔍 API Call with params:', httpParams.toString());
 
-    return this.http.get<PropertyResponse>(this.apiUrl, { params: httpParams })
-      .pipe(
-        catchError(error => {
-          console.error('❌ API Error:', error);
-          throw error;
-        })
-      );
+    const request$ = this.http.get<PropertyResponse>(this.apiUrl, { params: httpParams }).pipe(
+      catchError(error => {
+        console.error('❌ API Error:', error);
+        throw error;
+      }),
+      finalize(() => {
+        this.inFlightSearches.delete(key);
+      }),
+      shareReplay(1)
+    );
+
+    this.inFlightSearches.set(key, request$);
+    return request$;
+  }
+
+  /**
+   * Stable string key for search params so identical params always produce the same key.
+   * Mirrors the logic used in PropertyListComponent for deduplication.
+   */
+  private stableParamsKey(obj: Record<string, unknown> | unknown): string {
+    if (obj === null || obj === undefined) return '';
+    if (obj instanceof Date) return obj.getTime().toString();
+    if (typeof obj !== 'object') return JSON.stringify(obj);
+    if (Array.isArray(obj)) return '[' + obj.map((v) => this.stableParamsKey(v)).join(',') + ']';
+    const record = obj as Record<string, unknown>;
+    const keys = Object.keys(record)
+      .filter((k) => record[k] !== undefined && record[k] !== null)
+      .sort();
+    const parts = keys.map((k) => JSON.stringify(k) + ':' + this.stableParamsKey(record[k]));
+    return '{' + parts.join(',') + '}';
   }
 
   /**

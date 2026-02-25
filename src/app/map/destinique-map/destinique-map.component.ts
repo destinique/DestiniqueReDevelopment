@@ -26,7 +26,14 @@ export class DestiniqueMapComponent implements OnInit, AfterViewInit {
 
   /** Site theme green/teal for markers (#378f86) */
   private readonly markerColor = '#378f86';
+  /** Hover color for marker (lighter teal) */
+  private readonly markerHoverColor = '#6fccc2';
+  /** Highlight color for active marker (success green) */
+  private readonly markerHighlightColor = '#33d286';
   private markerIconUrl: string | null = null;
+  private markerHoverIconUrl: string | null = null;
+  private markerHighlightIconUrl: string | null = null;
+  private activeMarker: google.maps.Marker | null = null;
 
   isApiLoaded = false;
   loading = false;
@@ -62,7 +69,9 @@ export class DestiniqueMapComponent implements OnInit, AfterViewInit {
   }
 
   private initializeMapAndSearch(): void {
-    this.markerIconUrl = this.getMarkerIconUrl();
+    this.markerIconUrl = this.getMarkerIconUrl(this.markerColor);
+    this.markerHoverIconUrl = this.getMarkerIconUrl(this.markerHoverColor);
+    this.markerHighlightIconUrl = this.getMarkerIconUrl(this.markerHighlightColor);
     this.registerCarouselHandlers();
     this.initMap();
     this.initAutocomplete();
@@ -70,10 +79,10 @@ export class DestiniqueMapComponent implements OnInit, AfterViewInit {
   }
 
   /** SVG pin marker in theme green (#378f86). */
-  private getMarkerIconUrl(): string {
+  private getMarkerIconUrl(color: string): string {
     const svg = `
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 36" width="28" height="42">
-        <path fill="${this.markerColor}" stroke="#fff" stroke-width="1.5" stroke-linejoin="round"
+        <path fill="${color}" stroke="#fff" stroke-width="1.5" stroke-linejoin="round"
           d="M12 0C5.4 0 0 5.4 0 12c0 9 12 24 12 24s12-15 12-24C24 5.4 18.6 0 12 0z"/>
         <circle cx="12" cy="12" r="5" fill="#fff"/>
       </svg>`;
@@ -119,7 +128,8 @@ export class DestiniqueMapComponent implements OnInit, AfterViewInit {
     }
 
     const autocomplete = new google.maps.places.Autocomplete(this.searchInput.nativeElement, {
-      fields: ['geometry', 'formatted_address', 'name'],
+      // Include address_components so we can derive city/state/country
+      fields: ['geometry', 'formatted_address', 'name', 'address_component'],
     });
 
     autocomplete.addListener('place_changed', () => {
@@ -133,21 +143,47 @@ export class DestiniqueMapComponent implements OnInit, AfterViewInit {
         const lng = place.geometry.location.lng();
         const locationText = place.formatted_address || place.name || '';
 
+        // Parse city, state, country from address_components
+        const addressComponents = place.address_components || [];
+        const getComponent = (type: string): string | '' => {
+          const comp = addressComponents.find((c: any) => c.types?.includes(type));
+          return comp?.long_name || comp?.short_name || '';
+        };
+
+        const city =
+          getComponent('locality') ||
+          getComponent('postal_town') ||
+          getComponent('sublocality') ||
+          getComponent('administrative_area_level_2') ||
+          '';
+        const state = getComponent('administrative_area_level_1') || '';
+        const country = getComponent('country') || '';
+
         this.map.setCenter({ lat, lng });
         this.map.setZoom(10);
 
-        this.loadPropertiesForLocation(lat, lng, locationText);
+        this.loadPropertiesForLocation(lat, lng, locationText, city, state, country);
       });
     });
   }
 
-  private loadPropertiesForLocation(lat: number, lng: number, locationText: string): void {
+  private loadPropertiesForLocation(
+    lat: number,
+    lng: number,
+    locationText: string,
+    city?: string,
+    state?: string,
+    country?: string
+  ): void {
     this.loading = true;
     this.mapPropertiesService
       .getProperties({
         latitude: lat,
         longitude: lng,
         locationText,
+        city,
+        state,
+        country,
       })
       .subscribe({
         next: (props) => {
@@ -180,7 +216,15 @@ export class DestiniqueMapComponent implements OnInit, AfterViewInit {
       });
 
       marker.addListener('click', () => {
-        this.openInfoWindow(marker, prop);
+        this.handleMarkerClick(marker, prop);
+      });
+
+      marker.addListener('mouseover', () => {
+        this.handleMarkerMouseOver(marker);
+      });
+
+      marker.addListener('mouseout', () => {
+        this.handleMarkerMouseOut(marker);
       });
 
       this.markers.push(marker);
@@ -190,6 +234,67 @@ export class DestiniqueMapComponent implements OnInit, AfterViewInit {
   private clearMarkers(): void {
     this.markers.forEach((m) => m.setMap(null));
     this.markers = [];
+    this.activeMarker = null;
+  }
+
+  private handleMarkerClick(marker: google.maps.Marker, prop: MapProperty): void {
+    // Reset previous active marker (icon + animation)
+    if (this.activeMarker && this.activeMarker !== marker) {
+      this.activeMarker.setAnimation(null);
+      if (this.markerIconUrl) {
+        this.activeMarker.setIcon({
+          url: this.markerIconUrl,
+          scaledSize: new google.maps.Size(28, 42),
+        });
+      }
+    }
+
+    this.activeMarker = marker;
+
+    // Apply highlighted icon and bounce animation
+    if (this.markerHighlightIconUrl) {
+      marker.setIcon({
+        url: this.markerHighlightIconUrl,
+        scaledSize: new google.maps.Size(28, 42),
+      });
+    }
+
+    marker.setAnimation(google.maps.Animation.BOUNCE);
+
+    // Stop bouncing after a short period, but keep icon highlighted
+    setTimeout(() => {
+      if (this.activeMarker === marker) {
+        marker.setAnimation(null);
+      }
+    }, 1400);
+
+    this.openInfoWindow(marker, prop);
+  }
+
+  private handleMarkerMouseOver(marker: google.maps.Marker): void {
+    // Do not override the highlighted icon for the active marker
+    if (this.activeMarker === marker) {
+      return;
+    }
+    if (this.markerHoverIconUrl) {
+      marker.setIcon({
+        url: this.markerHoverIconUrl,
+        scaledSize: new google.maps.Size(28, 42),
+      });
+    }
+  }
+
+  private handleMarkerMouseOut(marker: google.maps.Marker): void {
+    // Keep active marker highlighted; reset others to default color
+    if (this.activeMarker === marker) {
+      return;
+    }
+    if (this.markerIconUrl) {
+      marker.setIcon({
+        url: this.markerIconUrl,
+        scaledSize: new google.maps.Size(28, 42),
+      });
+    }
   }
 
   private openInfoWindow(marker: google.maps.Marker, prop: MapProperty): void {
@@ -227,7 +332,7 @@ export class DestiniqueMapComponent implements OnInit, AfterViewInit {
           <div class="map-info-location">${cityState}</div>
           <div class="map-info-meta">GUESTS ${prop.sleeps} | BR ${prop.bedrooms} | BA ${prop.bathrooms} | ${(prop.property_type || '').toUpperCase()}</div>
           <div class="map-info-price">From $${prop.price_per_night.toFixed(0)} / night</div>
-          <div class="map-info-view-type">VIEW | ${viewTypeLabel}</div>
+          <a href="${propertyUrl}" target="_blank" rel="noopener noreferrer" class="map-info-view-type">VIEW | ${viewTypeLabel}</a>
         </div>
       </div>
     `;

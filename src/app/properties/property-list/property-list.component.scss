@@ -837,6 +837,57 @@ img {
   width: 100%;
 }
 
+/* No-results (empty state) card */
+.no-results-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.no-results-card {
+  background: $color-white;
+  border-radius: $border-radius-lg;
+  box-shadow: $shadow-md;
+  border: $border-width solid $color-border-light;
+  padding: $spacing-xl;
+  max-width: 480px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.no-results-icon {
+  width: 56px;
+  height: 56px;
+  margin: 0 auto;
+  border-radius: 50%;
+  background: rgba($color-primary, 0.08);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.no-results-title {
+  font-size: 1rem;
+  font-weight: $font-weight-500;
+  color: $color-secondary;
+  text-transform: uppercase;
+}
+
+.no-results-destination {
+  font-weight: $font-weight-400;
+  color: inherit;
+}
+
+.no-results-text {
+  font-size: $font-size-base;
+  color: $color-text-light;
+}
+
+.no-results-note {
+  font-size: $font-size-sm;
+  color: $color-muted;
+}
+
 /* Price range dropdown – match app theme, centered under Price button */
 .dropdown-menu.price-range-dropdown {
   border: $border-width solid $color-border-light;

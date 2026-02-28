@@ -37,6 +37,7 @@ export class DestiniqueMapComponent implements OnInit, AfterViewInit {
 
   isApiLoaded = false;
   loading = false;
+  mapReady = false;
 
   constructor(
     private mapPropertiesService: MapPropertiesService,
@@ -192,10 +193,12 @@ export class DestiniqueMapComponent implements OnInit, AfterViewInit {
           );
           this.refreshMarkers();
           this.loading = false;
+          this.mapReady = true;
         },
         error: (err) => {
           console.error('Failed to load map properties', err);
           this.loading = false;
+          this.mapReady = true;
         },
       });
   }

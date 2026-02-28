@@ -112,7 +112,12 @@ label {
 }
 @media all and (max-width: 768px) {
     .location-locator-search-map {
-        display: none;
+        position: relative;
+        top: auto;
+        right: auto;
+        width: 100%;
+        max-width: 100%;
+        margin-bottom: $spacing-md;
     }
 }
 

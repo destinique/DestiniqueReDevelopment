@@ -1,66 +1,124 @@
 @use 'variables' as *;
 
 .destinique-services {
-    padding-top: $spacing-3xl;
+  padding: $spacing-3xl 0;
 }
+
 .services-header {
-    font-size: 3rem;
-    line-height: $line-height-tight;
-    font-weight: 300;
-    letter-spacing: $letter-spacing-wider;
-    text-align: center;
-    color: $color-text-muted;
-    text-transform: uppercase;
-    padding-bottom: $spacing-3xl;
+  font-size: 2.5rem;
+  line-height: $line-height-tight;
+  font-weight: 300;
+  letter-spacing: $letter-spacing-wider;
+  text-align: center;
+  color: $color-secondary;
+  text-transform: uppercase;
+  margin: 0 0 $spacing-3xl;
 }
-.services-single-item {
-    margin-bottom: -5px;
-    position: relative;
-    display: inline-block;
-    width: 100%;
-    transition: .6s ease;
-    overflow: hidden;
+
+.service-card {
+  height: 100%;
+  border-radius: $border-radius-lg;
+  overflow: hidden;
+  background: $color-white;
+  box-shadow: $shadow-md;
+  transition: transform 0.35s ease, box-shadow 0.35s ease;
+
+  &:hover {
+    transform: translateY(-8px);
+    box-shadow: $shadow-lg, $shadow-primary;
+  }
 }
-.services-single-item img {
+
+.service-card__image {
+  position: relative;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+
+  img {
     display: block;
     width: 100%;
-    height: 300px;
-    transition: .6s ease;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+  }
+
+  .service-card:hover & img {
+    transform: scale(1.08);
+  }
 }
-.services-single-item:hover img {
-    transform: scale(1.2);
+
+.service-card__overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to top,
+    rgba($color-black, 0.85) 0%,
+    rgba($color-black, 0.4) 40%,
+    transparent 70%
+  );
+  display: flex;
+  align-items: flex-end;
+  padding: $spacing-lg;
+  transition: background 0.35s ease;
 }
-.services-img-text {
-    color: $color-white;
-    letter-spacing: $letter-spacing-wider;
-    font-weight: $font-weight-600;
-    padding: 0 $spacing-md;
-    position: absolute;
-    top: 0rem;
-    height: 300px;
-    bottom: 0; 
-    background: rgba(0, 0, 0, 0.2);
-    width: 100%;
-    transition: .5s ease;
-    font-size: 20px;
-    opacity: 1;
+
+.service-card:hover .service-card__overlay {
+  background: linear-gradient(
+    to top,
+    rgba($color-secondary, 0.92) 0%,
+    rgba($color-primary, 0.5) 50%,
+    rgba($color-primary, 0.2) 100%
+  );
 }
-.services-first-text {
-    margin-top: $spacing-md;
+
+.service-card__title {
+  width: 100%;
+  padding-bottom: $spacing-xs;
+  border-bottom: 3px solid $color-primary-light;
+  transition: border-color 0.3s ease, color 0.3s ease;
 }
-.col, .col-1, .col-10, .col-11, .col-12, .col-2, .col-3, .col-4, .col-5, .col-6, .col-7, .col-8, .col-9, .col-auto, .col-lg, .col-lg-1, .col-lg-10, .col-lg-11, .col-lg-12, .col-lg-2, .col-lg-3, .col-lg-4, .col-lg-5, .col-lg-6, .col-lg-7, .col-lg-8, .col-lg-9, .col-lg-auto, .col-md, .col-md-1, .col-md-10, .col-md-11, .col-md-12, .col-md-2, .col-md-3, .col-md-4, .col-md-5, .col-md-6, .col-md-7, .col-md-8, .col-md-9, .col-md-auto, .col-sm, .col-sm-1, .col-sm-10, .col-sm-11, .col-sm-12, .col-sm-2, .col-sm-3, .col-sm-4, .col-sm-5, .col-sm-6, .col-sm-7, .col-sm-8, .col-sm-9, .col-sm-auto, .col-xl, .col-xl-1, .col-xl-10, .col-xl-11, .col-xl-12, .col-xl-2, .col-xl-3, .col-xl-4, .col-xl-5, .col-xl-6, .col-xl-7, .col-xl-8, .col-xl-9, .col-xl-auto {
-    position: relative;
-    padding-right: 1px;
-    padding-left: 1px;
+
+.service-card:hover .service-card__title {
+  border-bottom-color: $color-white;
 }
-@media (max-width: 992px) {
-    .services-header {
-        font-size: 2rem;
-        line-height: 1;
-    }
+
+.service-card__main {
+  display: block;
+  color: $color-white;
+  font-size: 1.125rem;
+  font-weight: $font-weight-600;
+  letter-spacing: $letter-spacing-wide;
+  text-transform: uppercase;
+  line-height: 1.3;
 }
-@media (max-width: 576px) {
-    .col-12 {
-        width: 100%;
-    }
+
+.service-card__sub {
+  display: block;
+  color: rgba($color-white, 0.9);
+  font-size: $font-size-sm;
+  font-weight: $font-weight-500;
+  letter-spacing: $letter-spacing-wide;
+  text-transform: uppercase;
+  margin-top: $spacing-xs;
+}
+
+@media (max-width: 991.98px) {
+  .services-header {
+    font-size: 2rem;
+  }
+}
+
+@media (max-width: 575.98px) {
+  .destinique-services {
+    padding: $spacing-xl 0;
+  }
+
+  .services-header {
+    font-size: 1.5rem;
+    margin-bottom: $spacing-xl;
+  }
+
+  .service-card__main {
+    font-size: $font-size-base;
+  }
 }

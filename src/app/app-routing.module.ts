@@ -66,6 +66,13 @@ const routes: Routes = [
       ),
   },
   {
+    path: "cookie-policy",
+    loadChildren: () =>
+      import("./cookie-policy/cookie-policy.module").then(
+        (m) => m.CookiePolicyModule
+      ),
+  },
+  {
     path: "testimonials",
     loadChildren: () =>
       import("./testimonials/testimonials.module").then(

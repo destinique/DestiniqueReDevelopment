@@ -16,6 +16,7 @@ import { defineLocale } from 'ngx-bootstrap/chronos';
 import { enGbLocale } from 'ngx-bootstrap/locale'; // Use enGbLocale but configure for US format
 // Define locale
 defineLocale('en-gb', enGbLocale);
+import { CookieBannerComponent } from './shared/components/cookie-banner/cookie-banner.component';
 
 @NgModule({
   declarations: [
@@ -47,7 +48,8 @@ defineLocale('en-gb', enGbLocale);
     HttpClientModule,
     FooterModule,
     TopScrollModule,
-    BsDatepickerModule.forRoot()
+    BsDatepickerModule.forRoot(),
+    CookieBannerComponent
   ],
   providers: [],
   bootstrap: [AppComponent]

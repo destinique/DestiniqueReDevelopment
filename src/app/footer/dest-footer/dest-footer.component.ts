@@ -1,5 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 import { Router } from "@angular/router";
+import { CookieConsentService } from "src/app/shared/services/cookie-consent.service";
 //import { EnvService } from "src/app/env.service";
 
 @Component({
@@ -13,11 +14,18 @@ export class DestFooterComponent implements OnInit {
 
   imageURL: any;
 
-  constructor( private router: Router) {
+  constructor(
+    private router: Router,
+    private cookieConsent: CookieConsentService
+  ) {
    // this.imageURL = this.envService.footerLogoImageURL;
   }
 
   ngOnInit() {}
+
+  openCookiePreferences(): void {
+    this.cookieConsent.openPreferences();
+  }
 
   goToSocialSection() {
     //this.scroller.scrollToAnchor("StayConnected");

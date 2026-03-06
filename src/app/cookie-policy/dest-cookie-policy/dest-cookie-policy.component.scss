@@ -1,0 +1,107 @@
+@use 'variables' as *;
+
+.container {
+  padding: $spacing-3xl $spacing-md;
+}
+
+.cookie-policy a {
+  color: $color-primary;
+  font-weight: $font-weight-500;
+  &:hover {
+    color: $color-primary-dark;
+    text-decoration: underline;
+  }
+}
+
+.cookie-policy-header {
+  font-size: 2.5rem;
+  line-height: $line-height-tight;
+  font-weight: $font-weight-600;
+  letter-spacing: $letter-spacing-wider;
+  text-align: center;
+  color: $color-secondary;
+  text-transform: uppercase;
+  margin-bottom: $spacing-lg;
+}
+
+.cookie-policy-intro {
+  font-size: $font-size-base;
+  color: $color-text-muted;
+  letter-spacing: $letter-spacing-wide;
+  line-height: $line-height-base;
+  margin-bottom: $spacing-xl;
+}
+
+.cookie-policy-section {
+  margin-top: $spacing-xl;
+
+  h2 {
+    font-size: $font-size-lg;
+    font-weight: $font-weight-600;
+    color: $color-secondary;
+    margin-bottom: $spacing-sm;
+    border-bottom: $border-width solid $color-border-light;
+    padding-bottom: $spacing-xs;
+  }
+
+  p {
+    margin-bottom: $spacing-md;
+    color: $color-text-muted;
+    line-height: $line-height-base;
+  }
+
+  ul {
+    margin-bottom: $spacing-md;
+    padding-left: $spacing-xl;
+    color: $color-text-muted;
+
+    li {
+      margin-bottom: $spacing-xs;
+    }
+  }
+}
+
+.cookie-policy-item {
+  margin-top: $spacing-lg;
+
+  h3 {
+    font-size: $font-size-base;
+    font-weight: $font-weight-600;
+    color: $color-secondary;
+    margin-bottom: $spacing-xs;
+  }
+
+  p {
+    margin: 0;
+    font-size: $font-size-sm;
+    color: $color-text-muted;
+  }
+}
+
+.cookie-policy-manage-btn {
+  display: inline-block;
+  padding: $spacing-sm $spacing-md;
+  font-family: $font-family-base;
+  font-size: $font-size-sm;
+  font-weight: $font-weight-500;
+  color: $color-white;
+  background-color: $color-primary;
+  border: $border-width solid $color-primary;
+  border-radius: $border-radius-sm;
+  cursor: pointer;
+  transition: background-color 0.2s, border-color 0.2s;
+
+  &:hover {
+    background-color: $color-primary-dark;
+    border-color: $color-primary-dark;
+  }
+
+  &:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 3px $color-focus-ring;
+  }
+}
+
+.cookie-policy-link {
+  text-decoration: none;
+}

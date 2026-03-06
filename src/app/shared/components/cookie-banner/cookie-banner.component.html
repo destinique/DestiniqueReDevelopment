@@ -1,0 +1,128 @@
+<div
+  *ngIf="bannerVisible"
+  class="cc-banner"
+  role="dialog"
+  aria-live="polite"
+  aria-label="Cookie consent"
+>
+  <div class="cc-banner-content">
+    <div class="cc-banner-text">
+      <h2 class="cc-title">This website uses cookies</h2>
+      <p class="cc-message">
+        We use cookies to improve your experience, analyze traffic, and personalize content.
+      </p>
+    </div>
+    <div class="cc-banner-actions">
+      <button type="button" class="cc-btn cc-btn-primary" (click)="onAcceptAll()">
+        Accept All
+      </button>
+      <button type="button" class="cc-btn cc-btn-secondary" (click)="onRejectNonEssential()">
+        Reject Non-Essential
+      </button>
+      <button type="button" class="cc-btn cc-btn-link" (click)="onCustomize()">
+        Customize
+      </button>
+      <a class="cc-link" routerLink="/cookie-policy">
+        Learn More
+      </a>
+    </div>
+  </div>
+</div>
+
+<!-- Preferences modal -->
+<div *ngIf="modalOpen" class="cc-modal-backdrop" role="dialog" aria-modal="true">
+  <div class="cc-modal" role="document">
+    <header class="cc-modal-header">
+      <h2 class="cc-modal-title">Cookie preferences</h2>
+      <button type="button" class="cc-modal-close" (click)="onCloseModal()" aria-label="Close">
+        ×
+      </button>
+    </header>
+
+    <div class="cc-modal-body">
+      <p class="cc-modal-intro">
+        Choose which types of cookies you want to allow. You can change your choice at any time.
+      </p>
+
+      <section class="cc-category">
+        <div class="cc-category-header">
+          <h3>Necessary cookies</h3>
+          <span class="cc-tag">Always active</span>
+        </div>
+        <p class="cc-category-text">
+          Required for the website to function properly, including security, authentication, and session management.
+        </p>
+      </section>
+
+      <section class="cc-category">
+        <div class="cc-category-header">
+          <div class="cc-toggle-row">
+            <label class="cc-toggle-label" for="cc-analytics">Analytics cookies</label>
+            <label class="cc-switch">
+              <input
+                id="cc-analytics"
+                type="checkbox"
+                [(ngModel)]="analytics"
+              />
+              <span class="cc-slider"></span>
+            </label>
+          </div>
+        </div>
+        <p class="cc-category-text">
+          Help us understand how visitors use our site so we can improve it (e.g. traffic measurement, user behavior).
+        </p>
+      </section>
+
+      <section class="cc-category">
+        <div class="cc-category-header">
+          <div class="cc-toggle-row">
+            <label class="cc-toggle-label" for="cc-functional">Functional cookies</label>
+            <label class="cc-switch">
+              <input
+                id="cc-functional"
+                type="checkbox"
+                [(ngModel)]="functional"
+              />
+              <span class="cc-slider"></span>
+            </label>
+          </div>
+        </div>
+        <p class="cc-category-text">
+          Remember your preferences (such as language) and help personalize your experience.
+        </p>
+      </section>
+
+      <section class="cc-category">
+        <div class="cc-category-header">
+          <div class="cc-toggle-row">
+            <label class="cc-toggle-label" for="cc-marketing">Marketing cookies</label>
+            <label class="cc-switch">
+              <input
+                id="cc-marketing"
+                type="checkbox"
+                [(ngModel)]="marketing"
+              />
+              <span class="cc-slider"></span>
+            </label>
+          </div>
+        </div>
+        <p class="cc-category-text">
+          Used for advertising and tracking across websites (e.g. remarketing and personalized ads).
+        </p>
+      </section>
+    </div>
+
+    <footer class="cc-modal-footer">
+      <button type="button" class="cc-btn cc-btn-secondary" (click)="onRejectAllFromModal()">
+        Reject All
+      </button>
+      <button type="button" class="cc-btn cc-btn-primary" (click)="onSavePreferences()">
+        Save Preferences
+      </button>
+      <button type="button" class="cc-btn cc-btn-link" (click)="onAcceptAllFromModal()">
+        Accept All
+      </button>
+    </footer>
+  </div>
+</div>
+

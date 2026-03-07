@@ -2,9 +2,9 @@ import { Component, OnInit, AfterViewInit, OnDestroy} from "@angular/core";
 import { LoadSpinnerService } from 'src/app/shared/services/load-spinner.service';
 import { ActivatedRoute } from "@angular/router";
 import { CrudService } from "src/app/shared/services/crud.service";
-import {AuthService} from "src/app/shared/services/auth.service";
 import { UserRoleService } from 'src/app/shared/services/user-role.service';
-import { Subscription } from 'rxjs';  // ← Add this import
+import { Subscription } from 'rxjs';
+import { finalize } from 'rxjs/operators';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { PromotepropertyComponent } from '../promoteproperty/promoteproperty.component';
 import { ChangeDetectorRef } from '@angular/core';
@@ -16,9 +16,11 @@ import { ChangeDetectorRef } from '@angular/core';
 })
 export class OurPromotionsComponent implements OnInit, AfterViewInit, OnDestroy {
   promoData: any = [];
+  promoLoading = true;
   id: any; //Getting Promotion id from URL
   userRole: number | null = null;
   private subscription: Subscription | null = null;
+  private promoLoadSubscription: Subscription | null = null;
   // Add this for mobile menu collapse
   isMenuCollapsed = true;
 
@@ -44,24 +46,30 @@ export class OurPromotionsComponent implements OnInit, AfterViewInit, OnDestroy 
     if (this.subscription) {
       this.subscription.unsubscribe();// Prevent memory leaks
     }
+    if (this.promoLoadSubscription) {
+      this.promoLoadSubscription.unsubscribe();
+    }
   }
 
   ngAfterViewInit() {
-    this.loadSpinner.show();
     this.loadPromoData(this.id);
   }
 
   loadPromoData(id: string | number) {
-    this.crudService
+    this.promoLoading = true;
+    this.promoLoadSubscription = this.crudService
       .getAllPublishedPromotions(id)
-      .toPromise()
-      .then((resp) => {
-        this.promoData = Array.isArray(resp) ? resp : [];
-        this.loadSpinner.hide();
-      })
-      .catch((error) => {
-        console.error('Error loading promotions:', error);
-        this.loadSpinner.hide();
+      .pipe(
+        finalize(() => (this.promoLoading = false))
+      )
+      .subscribe({
+        next: (resp) => {
+          this.promoData = Array.isArray(resp) ? resp : [];
+        },
+        error: (error) => {
+          console.error('Error loading promotions:', error);
+          this.promoData = [];
+        }
       });
   }
 

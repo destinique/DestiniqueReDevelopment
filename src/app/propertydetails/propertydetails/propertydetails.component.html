@@ -310,6 +310,11 @@
                                                         <div class="text-end" *ngIf="propertyDetailData?.originalLink">
                                                             <a target="_blank" *ngIf="propertyDetailData?.originalLink" (click)="sendDestiniqueManageIamgeURL()" class="btn btn-primary mb-2">DESTINIQUE MANAGE IMAGE PAGE</a>
                                                         </div>
+                                                        <div class="text-end" *ngIf="propertyDetailData?.originalLink">
+                                                          <a target="_blank" *ngIf="propertyDetailData?.originalLink" 
+                                                          (click)="sendToDestiniqueImgeScanner()" 
+                                                          class="btn btn-primary mb-2">DESTINIQUE IMAGE SCANNER</a>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>

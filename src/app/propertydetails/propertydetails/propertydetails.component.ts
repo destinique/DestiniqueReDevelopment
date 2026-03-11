@@ -1010,7 +1010,7 @@ please call 850-312-5400. Thank you.`.trim();
   }
 
   sendToDestiniqueImgeScanner() {
-    let manageImgURL = `https://quote.destinique.com/destin/web-api/dashboard_properties.php?action=view&list_id=${this.listId}`;
+    let manageImgURL = `https://quote.destinique.com/destin/web-api/website_properties.php?action=view&list_id=${this.listId}`;
     window.open(manageImgURL, "_blank");
   }
 

@@ -6,11 +6,11 @@ const routes: Routes = [
     path: '',
     loadChildren: () =>
       import('./home/home.module').then(m => m.HomeModule)
-  },
+  },  
   {
     path: 'home',
-    loadChildren: () =>
-      import('./home/home.module').then(m => m.HomeModule)
+    redirectTo : '',
+    pathMatch : 'full'
   },
   {
     path: 'destinations',
@@ -109,7 +109,8 @@ const routes: Routes = [
     path: "my-profile",
     loadChildren: () =>
       import("./myprofile/myprofile.module").then((m) => m.MyprofileModule),
-  }
+  },
+  { path: '**', redirectTo: '', pathMatch: 'full' }
 ];
 
 @NgModule({

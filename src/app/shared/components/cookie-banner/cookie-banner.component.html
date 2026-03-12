@@ -1,128 +1,122 @@
-<div
+<!-- Cookie consent bar -->
+<aside
   *ngIf="bannerVisible"
   class="cc-banner"
   role="dialog"
   aria-live="polite"
   aria-label="Cookie consent"
 >
-  <div class="cc-banner-content">
-    <div class="cc-banner-text">
-      <h2 class="cc-title">This website uses cookies</h2>
-      <p class="cc-message">
-        We use cookies to improve your experience, analyze traffic, and personalize content.
-      </p>
+  <div class="cc-banner__inner">
+    <div class="cc-banner__main">
+      <div class="cc-banner__icon" aria-hidden="true">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 2a10 10 0 1 0 10 10 10 10 0 0 0-10-10Z"/>
+          <path d="M8 10h.01M12 10h.01M16 10h.01M8 14h.01M12 14h.01M16 14h.01"/>
+        </svg>
+      </div>
+      <div class="cc-banner__copy">
+        <h2 class="cc-banner__title">We use cookies</h2>
+        <p class="cc-banner__message">
+          We use cookies to improve your experience, analyze traffic, and personalize content.
+        </p>
+      </div>
     </div>
-    <div class="cc-banner-actions">
-      <button type="button" class="cc-btn cc-btn-primary" (click)="onAcceptAll()">
-        Accept All
-      </button>
-      <button type="button" class="cc-btn cc-btn-secondary" (click)="onRejectNonEssential()">
-        Reject Non-Essential
-      </button>
-      <button type="button" class="cc-btn cc-btn-link" (click)="onCustomize()">
-        Customize
-      </button>
-      <a class="cc-link" routerLink="/cookie-policy">
-        Learn More
+    <div class="cc-banner__actions">
+      <div class="cc-banner__button-row">
+        <button type="button" class="cc-btn cc-btn--primary" (click)="onAcceptAll()">
+          Accept all
+        </button>
+        <button type="button" class="cc-btn cc-btn--secondary" (click)="onRejectNonEssential()">
+          Reject non-essential
+        </button>
+        <button type="button" class="cc-btn cc-btn--ghost" (click)="onCustomize()">
+          Customize
+        </button>
+      </div>
+      <a class="cc-banner__link" routerLink="/cookie-policy">
+        Learn more
+        <svg class="cc-banner__link-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>
+        </svg>
       </a>
     </div>
   </div>
-</div>
+</aside>
 
 <!-- Preferences modal -->
-<div *ngIf="modalOpen" class="cc-modal-backdrop" role="dialog" aria-modal="true">
+<div *ngIf="modalOpen" class="cc-modal-backdrop" role="dialog" aria-modal="true" (click)="$event.target === $event.currentTarget && onCloseModal()">
   <div class="cc-modal" role="document">
-    <header class="cc-modal-header">
-      <h2 class="cc-modal-title">Cookie preferences</h2>
-      <button type="button" class="cc-modal-close" (click)="onCloseModal()" aria-label="Close">
-        ×
+    <header class="cc-modal__header">
+      <h2 class="cc-modal__title">Cookie preferences</h2>
+      <button type="button" class="cc-modal__close" (click)="onCloseModal()" aria-label="Close">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
       </button>
     </header>
 
-    <div class="cc-modal-body">
-      <p class="cc-modal-intro">
+    <div class="cc-modal__body">
+      <p class="cc-modal__intro">
         Choose which types of cookies you want to allow. You can change your choice at any time.
       </p>
 
-      <section class="cc-category">
-        <div class="cc-category-header">
-          <h3>Necessary cookies</h3>
-          <span class="cc-tag">Always active</span>
-        </div>
-        <p class="cc-category-text">
-          Required for the website to function properly, including security, authentication, and session management.
-        </p>
-      </section>
-
-      <section class="cc-category">
-        <div class="cc-category-header">
-          <div class="cc-toggle-row">
-            <label class="cc-toggle-label" for="cc-analytics">Analytics cookies</label>
-            <label class="cc-switch">
-              <input
-                id="cc-analytics"
-                type="checkbox"
-                [(ngModel)]="analytics"
-              />
-              <span class="cc-slider"></span>
-            </label>
+      <div class="cc-modal__categories">
+        <section class="cc-category cc-category--locked">
+          <div class="cc-category__head">
+            <h3 class="cc-category__title">Necessary</h3>
+            <span class="cc-category__badge">Always on</span>
           </div>
-        </div>
-        <p class="cc-category-text">
-          Help us understand how visitors use our site so we can improve it (e.g. traffic measurement, user behavior).
-        </p>
-      </section>
+          <p class="cc-category__desc">
+            Required for the site to work (security, sign-in, sessions).
+          </p>
+        </section>
 
-      <section class="cc-category">
-        <div class="cc-category-header">
-          <div class="cc-toggle-row">
-            <label class="cc-toggle-label" for="cc-functional">Functional cookies</label>
-            <label class="cc-switch">
-              <input
-                id="cc-functional"
-                type="checkbox"
-                [(ngModel)]="functional"
-              />
-              <span class="cc-slider"></span>
-            </label>
+        <section class="cc-category">
+          <div class="cc-category__head">
+            <h3 class="cc-category__title">Analytics</h3>
+            <button type="button" class="cc-switch" role="switch" [class.cc-switch--on]="analytics" [attr.aria-checked]="analytics" aria-label="Allow analytics cookies" (click)="analytics = !analytics">
+              <span class="cc-switch__track"></span>
+            </button>
           </div>
-        </div>
-        <p class="cc-category-text">
-          Remember your preferences (such as language) and help personalize your experience.
-        </p>
-      </section>
+          <p class="cc-category__desc">
+            Help us understand how visitors use the site so we can improve it.
+          </p>
+        </section>
 
-      <section class="cc-category">
-        <div class="cc-category-header">
-          <div class="cc-toggle-row">
-            <label class="cc-toggle-label" for="cc-marketing">Marketing cookies</label>
-            <label class="cc-switch">
-              <input
-                id="cc-marketing"
-                type="checkbox"
-                [(ngModel)]="marketing"
-              />
-              <span class="cc-slider"></span>
-            </label>
+        <section class="cc-category">
+          <div class="cc-category__head">
+            <h3 class="cc-category__title">Functional</h3>
+            <button type="button" class="cc-switch" role="switch" [class.cc-switch--on]="functional" [attr.aria-checked]="functional" aria-label="Allow functional cookies" (click)="functional = !functional">
+              <span class="cc-switch__track"></span>
+            </button>
           </div>
-        </div>
-        <p class="cc-category-text">
-          Used for advertising and tracking across websites (e.g. remarketing and personalized ads).
-        </p>
-      </section>
+          <p class="cc-category__desc">
+            Remember your preferences (e.g. language) and personalize your experience.
+          </p>
+        </section>
+
+        <section class="cc-category">
+          <div class="cc-category__head">
+            <h3 class="cc-category__title">Marketing</h3>
+            <button type="button" class="cc-switch" role="switch" [class.cc-switch--on]="marketing" [attr.aria-checked]="marketing" aria-label="Allow marketing cookies" (click)="marketing = !marketing">
+              <span class="cc-switch__track"></span>
+            </button>
+          </div>
+          <p class="cc-category__desc">
+            Used for advertising and tracking (e.g. remarketing, personalized ads).
+          </p>
+        </section>
+      </div>
     </div>
 
-    <footer class="cc-modal-footer">
-      <button type="button" class="cc-btn cc-btn-secondary" (click)="onRejectAllFromModal()">
-        Reject All
+    <footer class="cc-modal__footer">
+      <button type="button" class="cc-btn cc-btn--secondary" (click)="onRejectAllFromModal()">
+        Reject all
       </button>
-      <button type="button" class="cc-btn cc-btn-primary" (click)="onSavePreferences()">
-        Save Preferences
+      <button type="button" class="cc-btn cc-btn--ghost" (click)="onAcceptAllFromModal()">
+        Accept all
       </button>
-      <button type="button" class="cc-btn cc-btn-link" (click)="onAcceptAllFromModal()">
-        Accept All
+      <button type="button" class="cc-btn cc-btn--primary" (click)="onSavePreferences()">
+        Save preferences
       </button>
     </footer>
   </div>
 </div>
-

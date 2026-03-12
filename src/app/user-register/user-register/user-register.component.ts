@@ -128,6 +128,33 @@ export class UserRegisterComponent implements OnInit {
   // Form field getters
   get f() { return this.registerForm.controls; }
 
+  // Real-time password validation for UI
+  get passwordValue(): string {
+    return this.registerForm?.get('password')?.value ?? '';
+  }
+  get confirmPasswordValue(): string {
+    return this.registerForm?.get('confirmPassword')?.value ?? '';
+  }
+  get passwordHasMinLength(): boolean {
+    return this.passwordValue.length >= 6;
+  }
+  get passwordHasLetter(): boolean {
+    return /[a-zA-Z]/.test(this.passwordValue);
+  }
+  get passwordHasNumber(): boolean {
+    return /\d/.test(this.passwordValue);
+  }
+  get passwordsMatch(): boolean {
+    const p = this.passwordValue;
+    const c = this.confirmPasswordValue;
+    return p.length > 0 && c.length > 0 && p === c;
+  }
+  get confirmPasswordMismatch(): boolean {
+    const p = this.passwordValue;
+    const c = this.confirmPasswordValue;
+    return c.length > 0 && p !== c;
+  }
+
   // Clear all server errors
   private clearServerErrors(): void {
     this.serverErrors = {

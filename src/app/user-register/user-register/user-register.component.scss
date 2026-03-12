@@ -1,30 +1,92 @@
 @use 'variables' as *;
 
-.container {
-    padding-top: $spacing-xl;
-    padding-bottom: $spacing-xl;
-    margin: 0 auto;
+// ----- Modern page layout -----
+.register-page {
+  min-height: 100%;
+  padding: $spacing-2xl $spacing-md;
+  background: var(--theme-bg);
+  color: var(--theme-text);
 }
+
+.register-wrap {
+  max-width: 960px;
+  margin: 0 auto;
+}
+
 .register-header {
-    background-color: $color-white !important;
-    border-radius: 0px;
-    padding: $spacing-md !important;
-    border: 0px solid rgba($color-black, .125);
-    margin-bottom: $spacing-xl;
-    font-size: 2rem;
-    line-height: 1;
-    font-weight: 300;
-    letter-spacing: 8px;
-    text-align: center;
-    color: $color-primary;
-    text-transform: uppercase;
+  text-align: center;
+  margin-bottom: $spacing-2xl;
 }
+
+.register-title {
+  font-size: clamp(1.5rem, 4vw, 2rem);
+  font-weight: $font-weight-600;
+  letter-spacing: 0.02em;
+  color: var(--theme-text);
+  margin: 0 0 $spacing-sm;
+}
+
+.register-subtitle {
+  font-size: $font-size-base;
+  color: var(--theme-text-muted);
+  margin: 0;
+  line-height: $line-height-base;
+}
+
+// ----- Card -----
+.register-card.card {
+  margin: 0 auto $spacing-lg;
+  width: 100%;
+  border-radius: $border-radius-lg;
+  border: 1px solid var(--theme-border) !important;
+  background: var(--theme-card-bg);
+  box-shadow: $shadow-md;
+  overflow: hidden;
+}
+
+.register-card .card-body {
+  padding: $spacing-2xl $spacing-xl;
+}
+
+// ----- Form sections -----
+.form-section {
+  margin-bottom: $spacing-2xl;
+}
+
+.form-section__title {
+  font-size: $font-size-lg;
+  font-weight: $font-weight-600;
+  color: var(--theme-text);
+  margin: 0 0 $spacing-lg;
+  padding-bottom: $spacing-sm;
+  border-bottom: 2px solid $color-primary;
+  letter-spacing: 0.02em;
+}
+
+.form-section--consent .form-section__title {
+  margin-bottom: $spacing-md;
+}
+
+.consent-block {
+  margin-bottom: $spacing-lg;
+}
+
+.form-divider {
+  margin: $spacing-xl 0 $spacing-lg;
+  border-color: var(--theme-border);
+}
+
+.form-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $spacing-sm;
+}
+
+// ----- Legacy card (keep for .card class) -----
 .card {
-    margin: 0 auto;
-    margin-bottom: 10px;
-    width: 100%;
-    border-radius: 0px;
-    border: 1px solid $color-border !important;
+  margin: 0 auto;
+  margin-bottom: 10px;
+  width: 100%;
 }
 .w-100 {
     width: 100% !important;
@@ -121,10 +183,25 @@ input::placeholder, textarea::placeholder {
 }
 
 @media screen and (max-width: 768px) {
-    .register-header {
-        font-size: 1.2rem;
-        font-weight: 300;
-        letter-spacing: 2px;
+    .register-page {
+        padding: $spacing-lg $spacing-md;
+    }
+    .register-card .card-body {
+        padding: $spacing-lg $spacing-md;
+    }
+    .form-actions.btn-al-r {
+        display: flex !important; /* override .btn-al-r display: inline-block */
+        width: 100%;
+        flex-direction: column;
+        align-items: stretch;
+
+        .btn {
+            width: 100% !important;
+            max-width: 100%;
+            flex: 0 0 auto;
+            display: block;
+            margin-right: 0 !important;
+        }
     }
 }
 
@@ -259,6 +336,48 @@ a.collapsed {
     display: block;
 }
 
+// Real-time password validation list (column layout)
+.password-validation-list {
+  list-style: none;
+  padding: 0;
+  margin: $spacing-sm 0 0;
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-xs;
+}
+
+.password-validation-item {
+  display: flex;
+  align-items: center;
+  gap: $spacing-sm;
+  font-size: $font-size-sm;
+  color: var(--theme-text-muted);
+
+  .password-validation-icon {
+    display: inline-flex;
+    align-items: center;
+    flex-shrink: 0;
+  }
+
+  .password-validation-text {
+    line-height: 1.4;
+  }
+
+  &.valid {
+    color: $color-success;
+    .password-validation-icon svg {
+      fill: $color-success;
+    }
+  }
+
+  &.invalid {
+    color: $color-error;
+    .password-validation-icon svg {
+      fill: $color-error;
+    }
+  }
+}
+
 // CUSTOM CHECKBOXES - WORKING SOLUTION (UPDATE THIS SECTION)
 .custom-checkbox {
     display: flex;
@@ -383,11 +502,15 @@ a.collapsed {
     }
 
     .btn-al-r {
+        display: flex !important;
+        width: 100%;
+        flex-direction: column;
+        align-items: stretch;
         text-align: center !important;
 
         .btn {
             margin-bottom: 0.5rem;
-            width: 100%;
+            width: 100% !important;
             display: block;
 
             &:last-child {
@@ -496,4 +619,27 @@ a.collapsed {
     background-repeat: no-repeat !important;
     background-position: right calc(0.375em + 0.1875rem) center !important;
     background-size: calc(0.75em + 0.375rem) calc(0.75em + 0.375rem) !important;
+}
+
+// ----- Dark theme -----
+:host-context([data-theme="dark"]) {
+  .register-card.card {
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.25);
+  }
+  .form-section__title {
+    border-bottom-color: $color-primary-light;
+  }
+  input,
+  .form-control {
+    background-color: var(--theme-bg-secondary) !important;
+    border-color: var(--theme-border) !important;
+    color: var(--theme-text) !important;
+  }
+  .lbl,
+  .titleColor {
+    color: var(--theme-text) !important;
+  }
+  .titleColor span {
+    color: $color-error !important;
+  }
 }

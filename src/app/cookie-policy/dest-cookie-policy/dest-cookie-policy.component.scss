@@ -1,93 +1,184 @@
 @use 'variables' as *;
 
-.container {
-  padding: $spacing-3xl $spacing-md;
-}
+// Page wrapper: full-width background, centered content
+.cookie-policy-page {
+  padding: $spacing-xl $spacing-md $spacing-3xl;
+  font-family: $font-family-base;
+  background-color: $color-bg-light;
 
-.cookie-policy a {
-  color: $color-primary;
-  font-weight: $font-weight-500;
-  &:hover {
-    color: $color-primary-dark;
-    text-decoration: underline;
+  @media (min-width: 768px) {
+    padding: $spacing-2xl $spacing-lg $spacing-3xl;
   }
 }
 
+// Constrained content width for readability (standard ~65ch / 720px)
+.cookie-policy-wrap {
+  max-width: 720px;
+  margin: 0 auto;
+  background-color: $color-white;
+  border-radius: $border-radius-lg;
+  box-shadow: $shadow-md;
+  padding: $spacing-xl $spacing-lg;
+
+  @media (min-width: 768px) {
+    padding: $spacing-2xl $spacing-xl;
+  }
+}
+
+// ----- Header -----
 .cookie-policy-header {
-  font-size: 2.5rem;
-  line-height: $line-height-tight;
+  margin-bottom: $spacing-xl;
+  padding-bottom: $spacing-lg;
+  border-bottom: $border-width solid $color-border-light;
+}
+
+.cookie-policy-title {
+  margin: 0 0 $spacing-md 0;
+  font-size: 1.75rem;
   font-weight: $font-weight-600;
-  letter-spacing: $letter-spacing-wider;
-  text-align: center;
+  line-height: $line-height-tight;
   color: $color-secondary;
-  text-transform: uppercase;
-  margin-bottom: $spacing-lg;
+
+  @media (min-width: 768px) {
+    font-size: 2rem;
+  }
 }
 
 .cookie-policy-intro {
+  margin: 0;
   font-size: $font-size-base;
-  color: $color-text-muted;
-  letter-spacing: $letter-spacing-wide;
   line-height: $line-height-base;
-  margin-bottom: $spacing-xl;
+  color: $color-text-muted;
 }
 
+// ----- Sections -----
 .cookie-policy-section {
-  margin-top: $spacing-xl;
+  margin-bottom: $spacing-xl;
 
-  h2 {
-    font-size: $font-size-lg;
-    font-weight: $font-weight-600;
-    color: $color-secondary;
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.cookie-policy-section-title {
+  margin: 0 0 $spacing-md 0;
+  font-size: $font-size-lg;
+  font-weight: $font-weight-600;
+  color: $color-secondary;
+  line-height: $line-height-tight;
+}
+
+.cookie-policy-text {
+  margin: 0 0 $spacing-md 0;
+  font-size: $font-size-base;
+  line-height: $line-height-base;
+  color: $color-text-muted;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+// ----- Cookie type cards (section 2) -----
+.cookie-type-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-md;
+}
+
+.cookie-type-card {
+  background-color: $color-bg-light;
+  border: $border-width solid $color-border-light;
+  border-radius: $border-radius-md;
+  padding: $spacing-md $spacing-lg;
+
+  @media (min-width: 768px) {
+    padding: $spacing-lg;
+  }
+}
+
+.cookie-type-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: $spacing-sm;
+  margin-bottom: $spacing-xs;
+}
+
+.cookie-type-name {
+  margin: 0;
+  font-size: $font-size-base;
+  font-weight: $font-weight-600;
+  color: $color-secondary;
+}
+
+.cookie-type-badge {
+  padding: $spacing-xs $spacing-sm;
+  border-radius: $border-radius-sm;
+  font-size: 0.75rem;
+  font-weight: $font-weight-500;
+  text-transform: uppercase;
+  letter-spacing: $letter-spacing-wide;
+  background-color: $color-white;
+  color: $color-text-muted;
+  border: $border-width solid $color-border;
+}
+
+.cookie-type-badge-required {
+  background-color: $color-secondary;
+  color: $color-white;
+  border-color: $color-secondary;
+}
+
+.cookie-type-desc {
+  margin: 0;
+  font-size: $font-size-sm;
+  line-height: $line-height-base;
+  color: $color-text-muted;
+}
+
+// ----- Standard list (bullets) -----
+.cookie-policy-list {
+  margin: 0 0 $spacing-md 0;
+  padding-left: $spacing-xl;
+
+  li {
     margin-bottom: $spacing-sm;
-    border-bottom: $border-width solid $color-border-light;
-    padding-bottom: $spacing-xs;
-  }
-
-  p {
-    margin-bottom: $spacing-md;
-    color: $color-text-muted;
     line-height: $line-height-base;
-  }
-
-  ul {
-    margin-bottom: $spacing-md;
-    padding-left: $spacing-xl;
     color: $color-text-muted;
 
-    li {
-      margin-bottom: $spacing-xs;
+    &:last-child {
+      margin-bottom: 0;
     }
   }
 }
 
-.cookie-policy-item {
-  margin-top: $spacing-lg;
+// ----- CTA: Manage preferences -----
+.cookie-policy-section-actions .cookie-policy-text:last-of-type {
+  margin-bottom: $spacing-md;
+}
 
-  h3 {
-    font-size: $font-size-base;
-    font-weight: $font-weight-600;
-    color: $color-secondary;
-    margin-bottom: $spacing-xs;
-  }
-
-  p {
-    margin: 0;
-    font-size: $font-size-sm;
-    color: $color-text-muted;
-  }
+.cookie-policy-cta {
+  margin: 0;
 }
 
 .cookie-policy-manage-btn {
-  display: inline-block;
-  padding: $spacing-sm $spacing-md;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  padding: $spacing-sm $spacing-lg;
   font-family: $font-family-base;
-  font-size: $font-size-sm;
+  font-size: $font-size-base;
   font-weight: $font-weight-500;
   color: $color-white;
   background-color: $color-primary;
   border: $border-width solid $color-primary;
-  border-radius: $border-radius-sm;
+  border-radius: $border-radius-md;
   cursor: pointer;
   transition: background-color 0.2s, border-color 0.2s;
 
@@ -96,12 +187,28 @@
     border-color: $color-primary-dark;
   }
 
-  &:focus-visible {
+  &:focus {
     outline: none;
+  }
+
+  &:focus-visible {
     box-shadow: 0 0 0 3px $color-focus-ring;
   }
 }
 
+// ----- Links -----
 .cookie-policy-link {
-  text-decoration: none;
+  color: $color-primary;
+  font-weight: $font-weight-500;
+  text-decoration: underline;
+
+  &:hover {
+    color: $color-primary-dark;
+  }
+
+  &:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 3px $color-focus-ring;
+    border-radius: $border-radius-sm;
+  }
 }

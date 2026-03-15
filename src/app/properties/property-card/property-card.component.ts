@@ -27,17 +27,14 @@ export class PropertyCardComponent implements OnChanges {
   }
 
   get neighborhood(): string {
-    // Note: API returns "Neighborhood" with capital N
     return this.property.Neighborhood || this.property.city || 'Not specified';
   }
 
   get isPetFriendly(): boolean {
-    // API returns "petFriendly" with lowercase F
     return this.property.petFriendly || false;
   }
 
   get viewType(): string {
-    // API returns "view_type" (sometimes empty)
     return this.property.view_type || 'Not specified';
   }
 
@@ -46,24 +43,19 @@ export class PropertyCardComponent implements OnChanges {
   }
 
   get zipCode(): string {
-    // API returns "Zip" as number
     return this.property.Zip ? this.property.Zip.toString() : '';
   }
 
   get provider(): string {
-    // API returns lowercase provider names
     return this.formatProviderName(this.property.provider);
   }
 
-  // Format provider name for display
   private formatProviderName(provider: string): string {
     if (!provider) return 'Unknown';
-
-    // Convert "pinkieflamingo" to "Pinkie Flamingo"
     return provider
-      .replace(/([a-z])([A-Z])/g, '$1 $2') // Add space before capital letters
-      .replace(/^./, str => str.toUpperCase()) // Capitalize first letter
-      .replace(/(^|\s)\S/g, l => l.toUpperCase()); // Capitalize first letter of each word
+      .replace(/([a-z])([A-Z])/g, '$1 $2')
+      .replace(/^./, str => str.toUpperCase())
+      .replace(/(^|\s)\S/g, l => l.toUpperCase());
   }
 
   // Get images for carousel - API format { URLTxt: string }
@@ -86,9 +78,7 @@ export class PropertyCardComponent implements OnChanges {
   }
 
   goToPrev(): void {
-    if (this.displayImages.length === 0) {
-      return;
-    }
+    if (this.displayImages.length === 0) return;
     this.currentSlideIndex =
       this.currentSlideIndex === 0
         ? this.displayImages.length - 1
@@ -96,9 +86,7 @@ export class PropertyCardComponent implements OnChanges {
   }
 
   goToNext(): void {
-    if (this.displayImages.length === 0) {
-      return;
-    }
+    if (this.displayImages.length === 0) return;
     this.currentSlideIndex =
       this.currentSlideIndex === this.displayImages.length - 1
         ? 0
@@ -106,9 +94,7 @@ export class PropertyCardComponent implements OnChanges {
   }
 
   formatPrice(price: number): string {
-    if (!price || price <= 0) {
-      return 'Call for rates';
-    }
+    if (!price || price <= 0) return 'Call for rates';
     return new Intl.NumberFormat('en-US', {
       style: 'currency',
       currency: 'USD',
@@ -133,13 +119,11 @@ export class PropertyCardComponent implements OnChanges {
     return this.property.bathrooms || 0;
   }
 
-  // Get rating stars
   getRatingStars(): string {
     const rating = this.property.rating || 0;
     return '★'.repeat(Math.floor(rating)) + '☆'.repeat(5 - Math.floor(rating));
   }
 
-  // Truncate description
   getShortDescription(): string {
     if (!this.property.description) return '';
     return this.property.description.length > 150

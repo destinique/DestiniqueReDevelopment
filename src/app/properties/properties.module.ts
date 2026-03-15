@@ -17,6 +17,7 @@ import { SortDropdownComponent } from './sort-dropdown/sort-dropdown.component';
 import { ListIdSearchComponent } from './list-id-search/list-id-search.component';
 import { AdvancedSearchComponent } from './advanced-search/advanced-search.component';
 import { PriceRangeComponent } from './price-range/price-range.component';
+import { PropertyMapComponent } from './property-map/property-map.component';
 
 @NgModule({
   declarations: [
@@ -28,7 +29,8 @@ import { PriceRangeComponent } from './price-range/price-range.component';
     SortDropdownComponent,
     ListIdSearchComponent,
     AdvancedSearchComponent,
-    PriceRangeComponent
+    PriceRangeComponent,
+    PropertyMapComponent
   ],
   imports: [
     CommonModule,

@@ -108,7 +108,7 @@
 
 /* Property Card Body - matches screenshot layout */
 .property-card__body {
-  padding: $spacing-md $spacing-md $spacing-lg;
+  padding: 1rem 1rem 1.25rem;
   display: flex;
   flex-direction: column;
   gap: 0;
@@ -134,15 +134,15 @@
   }
 
   .form-check-input {
-    border: $border-width solid $color-text-muted;
-    border-radius: $border-radius-sm;
+    border: 1px solid $color-text-muted;
+    border-radius: 4px;
     accent-color: $color-primary;
-    margin-right: $spacing-xs;
+    margin-right: 0.25rem;
   }
 }
 
 .property-card__id-label {
-  font-size: $font-size-sm;
+  font-size: 14px;
   color: $color-text-muted;
   font-weight: $font-weight-400;
   text-transform: uppercase;
@@ -208,7 +208,7 @@
 }
 
 .property-card__label {
-  font-size: $font-size-sm;
+  font-size: 12px;
   font-weight: $font-weight-600;
   color: $color-black;
   text-transform: uppercase;
@@ -241,13 +241,12 @@
   gap: 0.35rem;
   background: transparent;
   border: none;
-  font-size: $font-size-sm;
+  font-size: 14px;
   color: $color-text-muted;
   cursor: pointer;
-  padding: $spacing-xs $spacing-sm;
+  padding: 0.25rem 0.5rem;
 
   &:hover {
     color: $color-text-muted;
   }
 }
-

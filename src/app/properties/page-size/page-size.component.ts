@@ -13,10 +13,10 @@ export interface PageSizeOption {
 })
 export class PageSizeComponent {
   @Input() pageSizeOptions: PageSizeOption[] = [
-    { value: 12, label: '12 per page' },
-    { value: 24, label: '24 per page' },
-    { value: 48, label: '48 per page' },
-    { value: 60, label: '60 per page' }
+    { value: 12, label: '12' },
+    { value: 24, label: '24' },
+    { value: 48, label: '48' },
+    { value: 60, label: '60' }
   ];
 
   @Input() selectedPageSize = 12;

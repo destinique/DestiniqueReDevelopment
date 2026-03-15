@@ -1,24 +1,21 @@
 <!-- search-property.component.html -->
-<div class="container pt-3 mb-1 properties-header">
-  <!-- Header content remains exactly as you had it -->
-  <div class="text-center animate-sub">
-    <div class="animate-dream animate__animated animate__fadeInLeft">dream</div>
-    <div class="animate-pic animate__animated animate__fadeInUp">.pick</div>
-    <div class="animate-stay animate__animated animate__fadeInRight">.stay</div>
+<div class="container pt-3 pb-2 properties-intro">
+  <div class="properties-intro__title-wrap text-center">
+    <div class="animate-sub">
+      <span class="animate-dream animate__animated animate__fadeInLeft">dream</span>
+      <span class="animate-pic animate__animated animate__fadeInUp">.pick</span>
+      <span class="animate-stay animate__animated animate__fadeInRight">.stay</span>
+    </div>
   </div>
-
-  <p class="">
-    <br>
+  <p class="properties-intro__lead">
     Our curated collection features stunning homes across the USA and private villas abroad. From beachfront escapes to mountain-view retreats and city-chic hideaways, each stay is handpicked for its style, privacy, and exceptional guest experience.
-    <br>
   </p>
-
-  <p class="">
-    Don't see exactly what you're looking for? Simply complete our <a class="reqForm" target="_blank" [routerLink]="['/contact']">Travel Request Form,</a> share your wish list, and let us find the perfect fit for your journey.
+  <p class="properties-intro__cta">
+    Don't see exactly what you're looking for? Simply complete our <a class="properties-intro__link" routerLink="/contact">Travel Request Form</a>, share your wish list, and let us find the perfect fit for your journey.
   </p>
 </div>
 
-<div class="container mt-1">
+<div class="container mt-1 search-form-container">
   <form [formGroup]="searchForm" (ngSubmit)="onSubmit()">
     <div class="outterdiv">
       <div class="innerdiv">

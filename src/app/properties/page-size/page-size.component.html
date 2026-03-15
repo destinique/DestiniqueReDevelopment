@@ -1,8 +1,12 @@
 <!-- page-size.component.html -->
-<div class="page-size">
-  <select class="form-select sort-by-opt" [value]="selectedPageSize" (change)="onPageSizeChange($event)">
-    <option *ngFor="let option of pageSizeOptions" [value]="option.value">
-      {{option.label}}
-    </option>
-  </select>
+<div class="inline-dropdown page-size">
+  <span class="inline-dropdown-label">Per page:</span>
+  <div class="inline-dropdown-select-wrap">
+    <select class="inline-dropdown-select" [value]="selectedPageSize" (change)="onPageSizeChange($event)">
+      <option *ngFor="let option of pageSizeOptions" [value]="option.value">
+        {{ option.label }}
+      </option>
+    </select>
+    <span class="inline-dropdown-arrow" aria-hidden="true">▼</span>
+  </div>
 </div>

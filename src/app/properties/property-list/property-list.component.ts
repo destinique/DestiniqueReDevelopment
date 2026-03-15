@@ -1,8 +1,18 @@
 // property-list.component.ts
-import { Component, OnInit, OnDestroy, HostListener, ElementRef, ViewChild } from '@angular/core';
-import { Router, NavigationEnd } from '@angular/router';
+import {
+  Component,
+  OnInit,
+  OnDestroy,
+  HostListener,
+  ElementRef,
+  ViewChild,
+  ViewChildren,
+  QueryList,
+  ChangeDetectorRef,
+} from '@angular/core';
+import { Router } from '@angular/router';
 import { Subject, Subscription } from 'rxjs';
-import { takeUntil, filter } from 'rxjs/operators';
+import { takeUntil } from 'rxjs/operators';
 import { PropertyService, PropertyResponse, Property } from 'src/app/shared/services/property.service';
 import { SearchStateService } from 'src/app/shared/services/search-state.service';
 import { LoadSpinnerService } from 'src/app/shared/services/load-spinner.service';
@@ -21,6 +31,14 @@ import { SearchState } from 'src/app/shared/interfaces/search-state.interface';
 export class PropertyListComponent implements OnInit, OnDestroy {
   // ========== PROPERTY DATA ==========
   properties: Property[] = [];
+  mapProperties: Property[] = [];
+  activePropertyId: number | null = null;
+  /** When user hovers a list card, this is set so the map can highlight the matching marker */
+  hoveredPropertyId: number | null = null;
+  visiblePropertyIds: number[] = [];
+  private lastAppliedVisiblePropertyIds: number[] | null = null;
+  mapFilteringEnabled = false;
+  private mapFilterDebounceHandle: any = null;
 
   // ========== DROPDOWNS ==========
   advancedSearchOpen = false;
@@ -28,6 +46,7 @@ export class PropertyListComponent implements OnInit, OnDestroy {
   @ViewChild('advancedSearchDropdown') advancedSearchDropdown?: ElementRef<HTMLDivElement>;
   @ViewChild('priceRangeDropdown') priceRangeDropdown?: ElementRef<HTMLDivElement>;
   @ViewChild('propertiesGridArea') propertiesGridArea?: ElementRef<HTMLDivElement>;
+  @ViewChildren('propertyCardWrapper') propertyCardWrappers?: QueryList<ElementRef<HTMLDivElement>>;
   paginationInfo: any = {
     page: 1,
     pageSize: 12,
@@ -48,10 +67,20 @@ export class PropertyListComponent implements OnInit, OnDestroy {
   private syncInProgress = false;
   /** Prevents a second loadProperties() from running until the current request finishes (stops duplicate API calls) */
   private loadInProgress = false;
+  private intersectionObserver?: IntersectionObserver;
   isLoading = false;
+  /** While map-based filtering is in progress, show card skeletons */
+  isFiltering = false;
   isInitialLoad = true; // spinner on first load, skeleton on pagination/filter changes
-  skeletonCount = [1, 2, 3];
+  /** Skeleton placeholders count = pageSize so list height doesn't shrink when showing skeleton */
+  get skeletonArray(): number[] {
+    const n = this.paginationInfo?.pageSize ?? 12;
+    return Array.from({ length: Math.min(Math.max(n, 1), 60) }, (_, i) => i);
+  }
+
+  /** More Details: set of property list_ids that are expanded (per-card toggle) */
   expandedPropertyIds: Set<number> = new Set();
+  /** More Details: when true, all cards show expanded details */
   showMoreDetailsGlobal = false;
 
   // ========== FILTER OPTIONS ==========
@@ -73,17 +102,18 @@ export class PropertyListComponent implements OnInit, OnDestroy {
   ];
 
   pageSizeOptions = [
-    { value: 12, label: '12 per page' },
-    { value: 24, label: '24 per page' },
-    { value: 48, label: '48 per page' },
-    { value: 60, label: '60 per page' }
+    { value: 12, label: '12' },
+    { value: 24, label: '24' },
+    { value: 48, label: '48' },
+    { value: 60, label: '60' }
   ];
 
   constructor(
     private propertyService: PropertyService,
     public searchState: SearchStateService,
     private loadSpinner: LoadSpinnerService,
-    private router: Router
+    private router: Router,
+    private cdr: ChangeDetectorRef
   ) {}
 
   // ========== LIFECYCLE HOOKS ==========
@@ -98,6 +128,9 @@ export class PropertyListComponent implements OnInit, OnDestroy {
     this.destroy$.complete();
     if (this.searchSubscription) {
       this.searchSubscription.unsubscribe();
+    }
+    if (this.intersectionObserver) {
+      this.intersectionObserver.disconnect();
     }
   }
 
@@ -192,9 +225,12 @@ export class PropertyListComponent implements OnInit, OnDestroy {
 
     this.propertyService.searchProperties(params).subscribe({
       next: (response: PropertyResponse) => {
+        this.mapProperties = response.data;
         this.properties = response.data;
+        this.activePropertyId = this.properties.length ? this.properties[0].list_id : null;
         this.updatePaginationInfo(response);
         this.isLoading = false;
+        this.isFiltering = false;
         this.loadInProgress = false;
         if (this.isInitialLoad) {
           this.isInitialLoad = false;
@@ -203,8 +239,11 @@ export class PropertyListComponent implements OnInit, OnDestroy {
       },
       error: (error) => {
         console.error('Error loading properties:', error);
+        this.mapProperties = [];
         this.properties = [];
+        this.activePropertyId = null;
         this.isLoading = false;
+        this.isFiltering = false;
         this.loadInProgress = false;
         if (this.isInitialLoad) {
           this.isInitialLoad = false;
@@ -227,18 +266,36 @@ export class PropertyListComponent implements OnInit, OnDestroy {
 
   // ========== EVENT HANDLERS ==========
   onPageChange(page: number): void {
-    this.scrollToPropertiesGrid();
     this.searchState.updatePagination(page);
   }
 
   onPageSizeChange(pageSize: number): void {
-    this.scrollToPropertiesGrid();
     this.searchState.updatePagination(1, pageSize);
   }
 
   onSortChange(sortBy: string): void {
-    this.scrollToPropertiesGrid();
     this.searchState.updateSorting(sortBy);
+  }
+
+  /** Toggle More Details for a single property card */
+  onToggleExpand(propertyId: number): void {
+    const next = new Set(this.expandedPropertyIds);
+    if (next.has(propertyId)) next.delete(propertyId);
+    else next.add(propertyId);
+    this.expandedPropertyIds = next;
+  }
+
+  /** View more toggle: when on, all cards show expanded details */
+  onViewMoreToggle(): void {
+    this.showMoreDetailsGlobal = !this.showMoreDetailsGlobal;
+  }
+
+  /** Keyboard: Space/Enter on View more switch toggles it */
+  onViewMoreKeydown(event: KeyboardEvent): void {
+    if (event.key === ' ' || event.key === 'Enter') {
+      event.preventDefault();
+      this.onViewMoreToggle();
+    }
   }
 
   private scrollToPropertiesGrid(): void {
@@ -248,7 +305,9 @@ export class PropertyListComponent implements OnInit, OnDestroy {
   onListIdSearchComplete(results: any): void {
     // Handle list ID search results
     if (results && results.length > 0) {
+      this.mapProperties = results;
       this.properties = results;
+      this.activePropertyId = this.properties[0]?.list_id ?? null;
       // Update pagination for single result
       this.paginationInfo = {
         page: 1,
@@ -258,21 +317,134 @@ export class PropertyListComponent implements OnInit, OnDestroy {
         hasNext: false,
         hasPrev: false
       };
+      this.isFiltering = false;
     }
   }
 
-  onToggleExpand(propertyId: number): void {
-    const next = new Set(this.expandedPropertyIds);
-    if (next.has(propertyId)) next.delete(propertyId);
-    else next.add(propertyId);
-    this.expandedPropertyIds = next;
+  setActiveProperty(listId: number): void {
+    this.activePropertyId = listId;
   }
 
-  onToggleGlobalMoreDetails(): void {
-    // this.showMoreDetailsGlobal = !this.showMoreDetailsGlobal;
-    if (!this.showMoreDetailsGlobal) {
-      this.expandedPropertyIds = new Set();
+  onMapPropertyFocused(listId: number): void {
+    this.activePropertyId = listId;
+  }
+
+  onVisiblePropertyIdsChange(ids: number[]): void {
+    if (!this.mapFilteringEnabled) {
+      // Ignore map bounds changes until user has actually zoomed.
+      return;
     }
+
+    // Debounce updates so we only filter once the user pauses zooming/panning.
+    this.isFiltering = true;
+    if (this.mapFilterDebounceHandle) {
+      clearTimeout(this.mapFilterDebounceHandle);
+    }
+
+    this.visiblePropertyIds = ids ?? [];
+
+    this.mapFilterDebounceHandle = setTimeout(() => {
+      if (!this.visiblePropertyIds || this.visiblePropertyIds.length === 0) {
+        this.properties = [];
+        this.lastAppliedVisiblePropertyIds = [];
+        this.scrollToPropertiesGrid();
+        this.isFiltering = false;
+        this.cdr.detectChanges();
+        return;
+      }
+
+      const nextIds = [...this.visiblePropertyIds].sort((a, b) => a - b);
+      const prevIds = this.lastAppliedVisiblePropertyIds
+        ? [...this.lastAppliedVisiblePropertyIds].sort((a, b) => a - b)
+        : null;
+
+      const isSameAsPrevious =
+        !!prevIds &&
+        prevIds.length === nextIds.length &&
+        prevIds.every((id, idx) => id === nextIds[idx]);
+
+      if (isSameAsPrevious) {
+        this.isFiltering = false;
+        this.cdr.detectChanges();
+        return;
+      }
+
+      const idSet = new Set(this.visiblePropertyIds);
+      this.properties = this.mapProperties.filter((p) => idSet.has(p.list_id));
+      this.lastAppliedVisiblePropertyIds = nextIds;
+      this.scrollToPropertiesGrid();
+      this.isFiltering = false;
+      this.cdr.detectChanges();
+    }, 250);
+  }
+
+  onMapReset(): void {
+    this.visiblePropertyIds = [];
+    this.lastAppliedVisiblePropertyIds = null;
+    this.mapFilteringEnabled = false;
+    this.properties = this.mapProperties.slice();
+  }
+
+  onMapFilteringActivated(): void {
+    this.mapFilteringEnabled = true;
+    this.isFiltering = true;
+    this.cdr.detectChanges();
+  }
+
+  private setupIntersectionObserver(): void {
+    if (typeof window === 'undefined' || !(window as any).IntersectionObserver) {
+      return;
+    }
+
+    this.intersectionObserver = new IntersectionObserver(
+      (entries) => {
+        const visible: Array<{ id: number; distance: number }> = [];
+        const viewportCenter = window.innerHeight / 2;
+
+        for (const entry of entries) {
+          if (!entry.isIntersecting) continue;
+          const target = entry.target as HTMLElement;
+          const idAttr = target.getAttribute('data-property-id');
+          if (!idAttr) continue;
+          const rect = entry.boundingClientRect;
+          const elementCenter = rect.top + rect.height / 2;
+          const distance = Math.abs(elementCenter - viewportCenter);
+          visible.push({ id: Number(idAttr), distance });
+        }
+
+        if (!visible.length) return;
+
+        visible.sort((a, b) => a.distance - b.distance);
+        const closest = visible[0];
+        if (closest && closest.id !== this.activePropertyId) {
+          this.activePropertyId = closest.id;
+        }
+      },
+      {
+        threshold: 0.4
+      }
+    );
+
+    const observeAll = (list: QueryList<ElementRef<HTMLDivElement>>) => {
+      this.intersectionObserver?.disconnect();
+      list.forEach((el) => {
+        if (el.nativeElement) {
+          this.intersectionObserver?.observe(el.nativeElement);
+        }
+      });
+    };
+
+    if (this.propertyCardWrappers) {
+      observeAll(this.propertyCardWrappers);
+      this.propertyCardWrappers.changes.subscribe(
+        (list: QueryList<ElementRef<HTMLDivElement>>) => observeAll(list)
+      );
+    }
+  }
+
+  /** Stable identity for list items so Angular reuses DOM and images don’t re-render on scroll */
+  trackByPropertyId(_: number, property: Property): number {
+    return property.list_id;
   }
 
   toggleAdvancedSearch(): void {

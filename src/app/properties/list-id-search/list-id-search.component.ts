@@ -1,8 +1,9 @@
 // list-id-search.component.ts
 import { Component, Output, EventEmitter, OnInit } from '@angular/core';
+import { ToastrService } from 'ngx-toastr';
 import { PropertyService } from 'src/app/shared/services/property.service';
 import { UserRoleService } from 'src/app/shared/services/user-role.service';
-import { Subscription } from 'rxjs';  // ← Add this import
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-list-id-search',
@@ -12,15 +13,16 @@ import { Subscription } from 'rxjs';  // ← Add this import
 export class ListIdSearchComponent implements OnInit {
   searchTerm = '';
   isLoading = false;
-  errorMessage = '';
   userRole: number | null = null;
   private subscription: Subscription | null = null;
 
-  @Output() searchComplete = new EventEmitter<any>(); // You might want to create a specific interface
+  @Output() searchComplete = new EventEmitter<any>();
 
-  constructor(private propertyService: PropertyService,
-              private userRoleService: UserRoleService
-              ) {}
+  constructor(
+    private propertyService: PropertyService,
+    private userRoleService: UserRoleService,
+    private toast: ToastrService
+  ) {}
 
   ngOnInit() {
     // Subscribe to get the role dynamically
@@ -38,47 +40,39 @@ export class ListIdSearchComponent implements OnInit {
 
   onSearch(): void {
     if (!this.searchTerm.trim()) {
-      if (this.userRole == 1 || this.userRole == 2){
-        this.errorMessage = 'Please enter a List ID or headline';
-      }
-      else {
-        this.errorMessage = 'Please enter a List ID';
-      }
-
+      const msg = (this.userRole === 1 || this.userRole === 2)
+        ? 'Please enter a List ID or headline'
+        : 'Please enter a List ID';
+      this.toast.error(msg, 'Invalid Input', { positionClass: 'toast-top-right' });
       return;
     }
 
     this.isLoading = true;
-    this.errorMessage = '';
 
-    // Check if it's a numeric list_id
     const listId = parseInt(this.searchTerm, 10);
 
     if (!isNaN(listId)) {
-      // Search by list_id
       this.propertyService.getPropertyById(listId).subscribe({
         next: (response) => {
           this.isLoading = false;
-          this.searchComplete.emit(response.data); // Wrap in array for consistency
+          this.searchComplete.emit(response.data);
         },
         error: (error) => {
           this.isLoading = false;
-          // Backend message
-          this.errorMessage = error?.error?.message || 'Sorry, no property found.';
+          const msg = error?.error?.message || 'Sorry, no property found.';
+          this.toast.error(msg, 'No property found', { positionClass: 'toast-top-right' });
         }
       });
-    }
-    else {
-      // Search by headline/text
+    } else {
       this.propertyService.getPropertiesByheadLine(this.searchTerm).subscribe({
         next: (response) => {
           this.isLoading = false;
-          this.searchComplete.emit(response.data); // Wrap in array for consistency
+          this.searchComplete.emit(response.data);
         },
         error: (error) => {
           this.isLoading = false;
-          // Backend message
-          this.errorMessage = error?.error?.message || 'Sorry, no property found.';
+          const msg = error?.error?.message || 'Sorry, no property found.';
+          this.toast.error(msg, 'No property found', { positionClass: 'toast-top-right' });
         }
       });
     }
@@ -93,8 +87,6 @@ export class ListIdSearchComponent implements OnInit {
 
   clearSearch(): void {
     this.searchTerm = '';
-    this.errorMessage = '';
-    // Emit empty to show all properties again
     this.searchComplete.emit([]);
   }
 }

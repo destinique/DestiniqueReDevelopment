@@ -79,7 +79,7 @@
         </div>
       </div>
 
-      <!-- Expanded rows -->
+      <!-- Expanded rows (More Details) -->
       <ng-container *ngIf="isPropertyExpanded">
         <!-- Row 2: ViewType (centered, full width) -->
         <div class="property-card__grid-row property-card__grid-row--single">
@@ -125,7 +125,7 @@
       </ng-container>
     </div>
 
-    <!-- Expand/Collapse toggle -->
+    <!-- Expand/Collapse toggle (More Details) -->
     <div class="property-card__toggle">
       <button class="property-card__toggle-btn" type="button" (click)="onToggleExpand()">
             {{isPropertyExpanded ? 'Less' : 'More Details'}}

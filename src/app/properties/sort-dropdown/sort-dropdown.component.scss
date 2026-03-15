@@ -1,18 +1,67 @@
 @use 'variables' as *;
 
-/* Underline-only style (matches reference) */
-.form-select.sort-by-opt {
+/* Inline dropdown style (reference: "Sort by: recommended ▼") */
+.inline-dropdown.sort-dropdown {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  min-width: 180px;
+  border: $border-width solid $color-border-light;
+  border-radius: $border-radius-sm;
+  padding: $spacing-xs $spacing-sm;
+  background: $color-white;
+}
+
+.inline-dropdown-label {
+  font-size: $font-size-sm;
+  color: $color-text-muted;
+  font-weight: $font-weight-400;
+}
+
+.inline-dropdown-select-wrap {
+  display: inline-flex;
+  align-items: center;
+  position: relative;
+  flex: 1;
+  min-width: 0;
+}
+
+.inline-dropdown-select {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
   border: none !important;
-  border-radius: $border-radius-none !important;
-  border-bottom: $border-width solid $color-border-light !important;
+  border-radius: 0 !important;
   box-shadow: none !important;
-  background-color: transparent !important;
-  color: $color-muted !important;
-  font-size: $font-size-base;
+  background: transparent !important;
+  color: $color-secondary;
+  font-size: $font-size-sm;
+  font-weight: $font-weight-400;
+  cursor: pointer;
+  padding: 0;
+  margin: 0;
+  min-width: 8rem;
+  width: 100%;
+  padding-right: 1.25rem;
+  line-height: 1.5;
 
   option {
-    font-weight: $font-weight-600;
-    letter-spacing: 1.5px;
-    color: $color-text-muted;
+    font-weight: $font-weight-400;
+    color: $color-secondary;
   }
+
+  &:focus {
+    outline: none;
+  }
+}
+
+.inline-dropdown-arrow {
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 0.45rem;
+  color: $color-secondary;
+  pointer-events: none;
+  line-height: 1;
 }

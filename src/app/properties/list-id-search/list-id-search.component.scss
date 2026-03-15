@@ -2,28 +2,67 @@
 
 .search-input-wrapper {
   position: relative;
-  width: max-content;
+  width: 100%;
+  min-width: 0;
+  border: $border-width solid $color-border-light;
+  border-radius: $border-radius-sm;
+  padding: $spacing-xs $spacing-sm;
+  background: $color-white;
+  display: flex;
+  align-items: center;
+  box-sizing: border-box;
 
   form {
     position: relative;
     display: flex;
     align-items: center;
+    flex: 1;
+    min-width: 0;
+    width: 100%;
   }
 
   .search-input {
-    width: 170px;
-    padding: $spacing-sm $spacing-xl $spacing-sm $spacing-sm;
+    width: 100%;
+    min-width: 0;
+    padding: 0 2.25rem 0 $spacing-sm;
+    min-height: 0;
+    line-height: 1.5;
     border: none;
-    border-radius: $border-radius-none;
-    border-bottom: $border-width solid $color-border-light;
+    border-radius: 0;
     background-color: transparent;
     box-shadow: none;
     outline: none;
-    font-size: $font-size-base;
-    color: $color-muted;
+    font-size: $font-size-sm;
+    color: $color-secondary;
+    box-sizing: border-box;
 
     &::placeholder {
       color: $color-placeholder;
+    }
+  }
+
+  .search-clear-btn {
+    position: absolute;
+    right: 2.25rem;
+    top: 50%;
+    transform: translateY(-50%);
+    background: transparent;
+    border: none;
+    padding: 2px;
+    cursor: pointer;
+    color: $color-muted;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    svg {
+      display: block;
+      width: 14px;
+      height: 14px;
+    }
+
+    &:hover {
+      color: $color-secondary;
     }
   }
 
@@ -34,9 +73,18 @@
     transform: translateY(-50%);
     background: transparent;
     border: none;
-    padding: $spacing-xs;
+    padding: 2px;
     cursor: pointer;
     color: $color-muted;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    svg {
+      display: block;
+      width: 16px;
+      height: 16px;
+    }
 
     &:disabled {
       opacity: 0.6;
@@ -45,10 +93,6 @@
 
     &:hover:not(:disabled) {
       color: $color-text-muted;
-    }
-
-    svg {
-      display: block;
     }
   }
 }

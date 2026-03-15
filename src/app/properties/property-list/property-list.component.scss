@@ -118,9 +118,9 @@
     transform: translate(-25%, 10%) !important;
 }
 .dropdown-menu.advance-search-modal {
-    border: $border-width solid $color-border-light;
-    border-radius: $border-radius-md;
-    box-shadow: $shadow-md;
+    border: none;
+    border-radius: $border-radius-lg;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06), 0 12px 32px rgba(0, 0, 0, 0.08);
     background-color: $color-white;
     max-height: 70vh;
     overflow-y: auto;
@@ -459,9 +459,9 @@ img {
 }
 @media (max-width: 992px) {
     #filter-properties {
-        display: grid !important;
-        grid-template-columns: repeat(1, 1fr);
-        gap: 0px;
+        display: flex !important;
+        flex-wrap: nowrap;
+        width: 100%;
     }
 }
 @media screen and (min-width: 992px) and (max-width: 1120px) {
@@ -511,63 +511,72 @@ img {
     background: transparent !important;
 }
 .view-grid {
-    margin-left: 0;
-    margin-right: 0;
-    display: flex;
-    margin-top: $spacing-xs !important;
-    align-items: flex-start !important;
+  margin-left: 0;
+  margin-right: 0;
+  margin-top: 0 !important;
+  display: flex;
+  align-items: flex-start !important;
 }
 .properties {
-    padding: 12px 2px !important;
-    transition: box-shadow .3s ease;
+  padding: 6px 4px !important;
+  transition: box-shadow .3s ease;
 }
 
 /* Property skeleton loading cards */
 .property-skeleton-card {
-    background: $color-white;
-    border: $border-width solid $color-border-light;
-    border-radius: $spacing-xs;
-    box-shadow: $shadow-lg;
-    overflow: hidden;
+  background: $color-white;
+  border: none;
+  border-radius: 0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04), 0 8px 24px rgba(0, 0, 0, 0.06);
+  overflow: hidden;
+  width: 100%;
 }
 
 .skeleton-image {
-    aspect-ratio: 3 / 2;
-    background: linear-gradient(90deg, $color-bg-offwhite 25%, $color-bg-light 50%, $color-bg-offwhite 75%);
-    background-size: 200% 100%;
-    animation: skeleton-shimmer 1.4s ease infinite;
+  display: block;
+  width: 100%;
+  min-height: 120px;
+  aspect-ratio: 3 / 2;
+  background: $color-bg-offwhite;
+  background: linear-gradient(90deg, $color-bg-offwhite 25%, $color-bg-light 50%, $color-bg-offwhite 75%);
+  background-size: 200% 100%;
+  animation: skeleton-shimmer 1.4s ease infinite;
 }
 
 .skeleton-body {
-    padding: $spacing-md 1.25rem;
+  display: block;
+  padding: $spacing-md 1.25rem;
 }
 
 .skeleton-line {
-    height: $font-size-sm;
-    background: linear-gradient(90deg, $color-bg-offwhite 25%, $color-bg-light 50%, $color-bg-offwhite 75%);
-    background-size: 200% 100%;
-    animation: skeleton-shimmer 1.4s ease infinite;
-    border-radius: $border-radius-sm;
-    margin-bottom: $spacing-sm;
+  display: block;
+  height: $font-size-sm;
+  min-height: 0.875rem;
+  background: $color-bg-offwhite;
+  background: linear-gradient(90deg, $color-bg-offwhite 25%, $color-bg-light 50%, $color-bg-offwhite 75%);
+  background-size: 200% 100%;
+  animation: skeleton-shimmer 1.4s ease infinite;
+  border-radius: $border-radius-sm;
+  margin-bottom: $spacing-sm;
 
-    &.skeleton-title {
-        height: 1.25rem;
-        width: 60%;
-        margin-bottom: 0.75rem;
-    }
+  &.skeleton-title {
+    height: 1.25rem;
+    width: 60%;
+    margin-bottom: 0.75rem;
+  }
 
-    &.skeleton-subtitle {
-        width: 45%;
-        margin-bottom: 1rem;
-    }
+  &.skeleton-subtitle {
+    width: 45%;
+    margin-bottom: 1rem;
+  }
 
-    &.short {
-        width: 70%;
-    }
+  &.short {
+    width: 70%;
+  }
 }
 
 .skeleton-lines .skeleton-line:last-child {
-    margin-bottom: 0;
+  margin-bottom: 0;
 }
 
 @keyframes skeleton-shimmer {
@@ -587,14 +596,14 @@ img {
     --align-items: stretch;
     --gap: 10px 10px;
     --background-transition: 0.3s;
-    border-style: solid;
-    --border-style: solid;
-    border-width: 1px;
-    --border-block-start-width: 1px;
-    --border-inline-end-width: 1px;
-    --border-block-end-width: 1px;
-    --border-inline-start-width: 1px;
-    border-color: $color-border;
+    border: none;
+    --border-style: none;
+    border-width: 0;
+    --border-block-start-width: 0;
+    --border-inline-end-width: 0;
+    --border-block-end-width: 0;
+    --border-inline-start-width: 0;
+    border-color: transparent;
     /* --border-color: #eaeff2; */
     --border-radius: 0px 0px 0px 0px;
     box-shadow: $shadow-lg;
@@ -616,7 +625,7 @@ img {
     transition: all 0.4s ease-in-out;
 }
 .cardcustomcss .card-body {
-    border-radius: 0 0 $spacing-xs $spacing-xs;
+    border-radius: 0;
 }
 .cardcustomcss .card-body,
 .cardcustomcss .card-body .containers {
@@ -628,18 +637,18 @@ img {
     margin-top: auto;
 }
 .view-grid .card {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    min-width: 0;
-    word-wrap: break-word;
-    background-color: $color-white;
-    background-clip: border-box;
-    border-radius: $spacing-xs;
-    letter-spacing: 1px;
-    box-shadow: $shadow-lg;
-    margin-bottom: 20px;
-    border: $border-width solid $color-border-light !important;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  word-wrap: break-word;
+  background-color: $color-white;
+  background-clip: border-box;
+  border-radius: 0;
+  letter-spacing: 1px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04), 0 8px 24px rgba(0, 0, 0, 0.06);
+  margin-bottom: 0.5rem;
+  border: none !important;
 }
 .absolute {
     position: absolute;
@@ -837,6 +846,36 @@ img {
   width: 100%;
 }
 
+.property-list-col .pagination-wrapper {
+  margin-top: $spacing-lg;
+  margin-bottom: $spacing-md;
+}
+
+/* Map skeleton used during initial load in list layout */
+.property-map-loading-skeleton {
+  width: 100%;
+  height: 100%;
+  min-height: 360px;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  background: linear-gradient(
+    90deg,
+    $color-bg-offwhite 25%,
+    #e5e5e5 50%,
+    $color-bg-offwhite 75%
+  );
+  background-size: 200% 100%;
+  animation: property-map-skeleton-loading 1.2s ease-in-out infinite;
+}
+
+@keyframes property-map-skeleton-loading {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
 /* No-results (empty state) card */
 .no-results-wrapper {
   display: flex;
@@ -847,8 +886,8 @@ img {
 .no-results-card {
   background: $color-white;
   border-radius: $border-radius-lg;
-  box-shadow: $shadow-md;
-  border: $border-width solid $color-border-light;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04), 0 12px 32px rgba(0, 0, 0, 0.06);
+  border: none;
   padding: $spacing-xl;
   max-width: 480px;
   width: 100%;
@@ -888,11 +927,339 @@ img {
   color: $color-muted;
 }
 
-/* Price range dropdown – match app theme, centered under Price button */
+/* Map area info banner (when current bounds contain no properties) */
+.map-area-info-banner {
+  display: flex;
+  align-items: center;
+  padding: $spacing-md $spacing-lg;
+  margin-bottom: $spacing-md;
+  border-radius: $border-radius-lg;
+  border: none;
+  background: linear-gradient(135deg, $color-bg-light 0%, $color-bg-offwhite 100%);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.map-area-info-icon {
+  flex: 0 0 auto;
+  margin-right: $spacing-md;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.map-area-info-text .title {
+  font-size: $font-size-base;
+  font-weight: $font-weight-600;
+  color: $color-secondary;
+  margin-bottom: 2px;
+}
+
+.map-area-info-text .subtitle {
+  font-size: $font-size-sm;
+  color: $color-text-light;
+}
+
+/* === List toolbar (left column, modern) === */
+.list-toolbar.list-toolbar-modern {
+  padding: 0;
+  margin-bottom: $spacing-sm;
+  background: transparent;
+}
+
+.list-toolbar-inner {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: $spacing-sm;
+  padding: 0.6rem 0.75rem;
+  border-radius: $border-radius-lg;
+  background: linear-gradient(180deg, $color-bg-light 0%, rgba($color-bg-offwhite, 0.6) 100%);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+}
+
+.list-toolbar-count {
+  font-size: $font-size-base;
+  font-weight: $font-weight-600;
+  color: $color-secondary;
+  letter-spacing: 0.02em;
+}
+
+.list-toolbar-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: stretch;
+  justify-content: flex-start;
+  gap: $spacing-md;
+  width: 100%;
+  &#filter-properties {
+    float: none;
+    padding: 0;
+  }
+}
+
+.list-toolbar-dropdowns {
+  display: contents;
+}
+
+/* Desktop: single row – count + three fields with equal space */
+.list-toolbar-row .list-toolbar-count {
+  flex: 0 0 auto;
+  align-self: center;
+  margin-right: $spacing-xs;
+}
+.list-toolbar-row app-page-size {
+  flex: 0 1 125px;
+  min-width: 125px;
+  max-width: 125px;
+}
+.list-toolbar-row app-sort-dropdown,
+.list-toolbar-row app-list-id-search {
+  flex: 1 1 140px;
+  min-width: 140px;
+  max-width: 100%;
+}
+
+/* Inner controls fill their column */
+.list-toolbar-row app-page-size::ng-deep .inline-dropdown,
+.list-toolbar-row app-sort-dropdown::ng-deep .inline-dropdown {
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+}
+.list-toolbar-row app-list-id-search::ng-deep .search-input-wrapper {
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+}
+.list-toolbar-row app-list-id-search::ng-deep .search-input {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* View more – toggle switch (pill + knob) */
+.list-toolbar-view-more {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  gap: $spacing-sm;
+  margin: 0;
+  padding-left: $spacing-sm;
+  font-size: $font-size-sm;
+  font-weight: $font-weight-400;
+  color: $color-text-muted;
+  cursor: pointer;
+  user-select: none;
+  white-space: nowrap;
+}
+
+.list-toolbar-view-more__toggle {
+  position: relative;
+  width: 44px;
+  height: 24px;
+  padding: 0;
+  border: none;
+  border-radius: 999px;
+  background: $color-border-light;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  flex-shrink: 0;
+
+  &:focus {
+    outline: none;
+  }
+  &:focus-visible {
+    box-shadow: 0 0 0 2px rgba($color-primary, 0.35);
+  }
+
+  &--on {
+    background-color: $color-primary;
+  }
+}
+
+.list-toolbar-view-more__knob {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: $color-white;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+  transition: transform 0.2s ease;
+}
+
+.list-toolbar-view-more__toggle--on .list-toolbar-view-more__knob {
+  transform: translateX(20px); /* 44px track - 2*2px padding - 20px knob = 20px */
+}
+
+.list-content {
+  margin-top: $spacing-sm;
+}
+
+/* Subtle loading state when keeping current cards visible during pagination/sort */
+.list-content-loading {
+  position: relative;
+  pointer-events: none;
+  opacity: 0.92;
+}
+
+/* Single-column cards in list panel (desktop) – equal height cards in each row */
+.properties-list-map-section .property-list-col .row {
+  align-items: stretch;
+}
+
+.properties-list-map-section .property-list-col .properties {
+  display: flex;
+  padding-left: 0;
+  padding-right: 0;
+  @media (min-width: 992px) {
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+  }
+}
+
+.properties-list-map-section .property-list-col app-property-card {
+  flex: 1 1 auto;
+  min-height: 0;
+  width: 100%;
+}
+
+/* Ensure skeleton cards in list+map layout show image and lines (full width, visible placeholders) */
+.properties-list-map-section .property-list-col .property-skeleton-card {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+.properties-list-map-section .property-list-col .property-skeleton-card .skeleton-image,
+.properties-list-map-section .property-list-col .property-skeleton-card .skeleton-line {
+  background-color: $color-bg-offwhite;
+}
+
+/* Tablet (768px–991px): keep row layout so Search by List Id is not full width */
+@media (max-width: 991.98px) {
+  .list-toolbar-inner {
+    align-items: stretch;
+    gap: $spacing-sm;
+  }
+  .list-toolbar-row {
+    width: 100%;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: stretch;
+    gap: $spacing-md;
+  }
+  .list-toolbar-row app-page-size {
+    flex: 0 1 125px;
+    min-width: 125px;
+    max-width: 125px;
+  }
+  .list-toolbar-row app-sort-dropdown,
+  .list-toolbar-row app-list-id-search {
+    flex: 1 1 140px;
+    min-width: 140px;
+  }
+}
+
+/* Mobile only: stack and full width for all three fields */
+@media (max-width: 767.98px) {
+  .list-toolbar-row {
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-items: stretch;
+    gap: $spacing-sm;
+  }
+  .list-toolbar-row .list-toolbar-count {
+    margin-right: 0;
+    margin-bottom: 2px;
+  }
+  .list-toolbar-row app-page-size,
+  .list-toolbar-row app-sort-dropdown,
+  .list-toolbar-row app-list-id-search {
+    flex: 1 1 auto;
+    min-width: 100%;
+    max-width: 100%;
+    width: 100%;
+  }
+}
+
+@media (max-width: 576px) {
+  .list-toolbar-row {
+    gap: $spacing-sm;
+  }
+}
+
+/* === Properties list + map section (full-width, map covers space) === */
+
+.properties-list-map-section {
+  width: 100%;
+  max-width: 100vw;
+  /* Avoid overflow: hidden so position: sticky on map works when page scrolls */
+}
+
+.properties-list-map-section .view-grid.property-list-layout {
+  margin-top: 0 !important;
+  margin-bottom: 0;
+}
+
+.property-list-layout {
+  align-items: flex-start;
+  margin-left: 0;
+  margin-right: 0;
+}
+
+/* List column – modern container: soft shadow, no hard border */
+.property-list-col {
+  margin-bottom: 0;
+  padding: $spacing-md $spacing-sm $spacing-lg;
+  background: $color-white;
+  @media (min-width: 992px) {
+    padding: $spacing-lg $spacing-md $spacing-xl $spacing-md;
+    border-right: none;
+    box-shadow: 4px 0 24px rgba(0, 0, 0, 0.04);
+  }
+}
+
+.property-map-col {
+  margin-top: 0;
+  padding: 0;
+  @media (min-width: 992px) {
+    padding: 0;
+  }
+}
+
+.property-map-inner {
+  height: calc(100vh - 20px);
+  min-height: 460px;
+  width: 100%;
+}
+
+@media (min-width: 992px) {
+  .property-map-col {
+    position: -webkit-sticky;
+    position: sticky;
+    top: 0;
+    align-self: flex-start;
+    margin-top: 0;
+    height: 100vh;
+    min-height: 100vh;
+    padding: 0;
+    /* Sticks to viewport when page (list) scrolls */
+  }
+  .property-map-col .property-map-inner {
+    height: 100%;
+    min-height: 100vh;
+    width: 100%;
+  }
+  .properties-list-map-section .property-map-loading-skeleton {
+    min-height: 100vh;
+  }
+}
+
+/* Price range dropdown – modern panel */
 .dropdown-menu.price-range-dropdown {
-  border: $border-width solid $color-border-light;
-  border-radius: $border-radius-md;
-  box-shadow: $shadow-md;
+  border: none;
+  border-radius: $border-radius-lg;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06), 0 12px 32px rgba(0, 0, 0, 0.08);
   padding: 0;
   overflow: hidden;
   min-width: 400px;
@@ -934,3 +1301,29 @@ img {
     transform: translate(-40%, 48px) !important;
   }
 }
+
+/* Mobile: center-align search bar filter row (Price, Advanced Search, Favorites) */
+@media (max-width: 991.98px) {
+  .sticky-search-bar .container {
+    text-align: center;
+  }
+  .sticky-search-bar .adv-btn-row {
+    justify-content: center;
+  }
+  .sticky-search-bar .btn-con {
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+}
+
+/* Desktop only: search + filters bar – modern soft container */
+@media (min-width: 992px) {
+  .sticky-search-bar {
+    padding-top: $spacing-md;
+    padding-bottom: $spacing-sm;
+    background: $color-white;
+    border-bottom: none;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04), 0 4px 16px rgba(0, 0, 0, 0.03);
+  }
+}
+

@@ -66,7 +66,7 @@ export class PropertydetailsComponent implements OnInit, AfterViewInit, OnDestro
     { id: 'amenities', title: 'AMENITIES' },
     { id: 'description', title: 'DESCRIPTION' },
     { id: 'availability', title: 'AVAILABILITY' },
-    { id: 'reviews', title: 'REVIEWS' }
+    // { id: 'reviews', title: 'REVIEWS' }
   ];
 
   // Calendar variables - Change these to NgbDate

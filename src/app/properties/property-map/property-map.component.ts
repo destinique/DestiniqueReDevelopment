@@ -277,7 +277,7 @@ export class PropertyMapComponent implements AfterViewInit, OnChanges, OnDestroy
     if (!this.map || this.markers.length === 0 || this.markerListIds.length !== this.markers.length) {
       return;
     }
-    const iconConfig = (url: string) => ({
+    const defaultIconConfig = (url: string) => ({
       url,
       scaledSize: new google.maps.Size(this.markerIconSize.w, this.markerIconSize.h),
       anchor: new google.maps.Point(this.markerIconSize.w / 2, this.markerIconSize.h - 2),
@@ -285,12 +285,22 @@ export class PropertyMapComponent implements AfterViewInit, OnChanges, OnDestroy
     this.markers.forEach((marker, i) => {
       const listId = this.markerListIds[i];
       const isHovered = this.hoveredPropertyId === listId || this.mapHoveredListId === listId;
-      if (isHovered && this.markerIconUrlHighlight) {
-        marker.setIcon(iconConfig(this.markerIconUrlHighlight));
-      } else if (this.markerIconUrl) {
-        marker.setIcon(iconConfig(this.markerIconUrl));
+      if (isHovered) {
+        const prop = this.properties.find((p) => p.list_id === listId);
+        const price = prop?.price_per_night ?? 0;
+        const priceIconUrl = this.buildMarkerIconWithPrice('rgb(255, 222, 81)', price);
+        marker.setIcon({
+          url: priceIconUrl,
+          scaledSize: new google.maps.Size(44, 60),
+          anchor: new google.maps.Point(22, 58),
+        });
+        marker.setAnimation(google.maps.Animation.BOUNCE);
+      } else {
+        if (this.markerIconUrl) {
+          marker.setIcon(defaultIconConfig(this.markerIconUrl));
+        }
+        marker.setAnimation(null);
       }
-      marker.setAnimation(isHovered ? google.maps.Animation.BOUNCE : null);
       this.setMarkerZIndex(marker, i);
     });
   }
@@ -351,6 +361,35 @@ export class PropertyMapComponent implements AfterViewInit, OnChanges, OnDestroy
     this.markers.forEach((m) => m.setMap(null));
     this.markers = [];
     this.markerListIds = [];
+  }
+
+  /** Builds a house-pin with a price badge above (shown on hover). */
+  private buildMarkerIconWithPrice(pinColor: string, price: number): string {
+    const houseColor = '#333333';
+    const priceLabel = price > 0 ? `$${Math.round(price)}/nt` : 'Call';
+    const svg = `
+      <svg xmlns="http://www.w3.org/2000/svg" width="60" height="82" viewBox="0 0 60 82">
+        <defs>
+          <filter id="ps" x="-40%" y="-30%" width="180%" height="160%">
+            <feDropShadow dx="0" dy="2" stdDeviation="2.5" flood-color="rgba(0,0,0,0.35)"/>
+          </filter>
+        </defs>
+        <!-- Price badge -->
+        <rect x="1" y="1" width="58" height="20" rx="3" fill="${pinColor}" filter="url(#ps)"/>
+        <text x="30" y="15" font-family="Arial,sans-serif" font-size="11" font-weight="700"
+              fill="#333" text-anchor="middle">${priceLabel}</text>
+        <!-- Connector triangle -->
+        <polygon points="25,21 35,21 30,26" fill="${pinColor}"/>
+        <!-- Pin teardrop body -->
+        <path d="M30 24 C18.95 24 10 32.95 10 44 C10 56.5 30 78 30 78 C30 78 50 56.5 50 44 C50 32.95 41.05 24 30 24 Z"
+              fill="${pinColor}" stroke="#ffffff" stroke-width="1.5" filter="url(#ps)"/>
+        <!-- White inner circle -->
+        <circle cx="30" cy="43" r="12" fill="white" opacity="0.95"/>
+        <!-- House icon -->
+        <path d="M30 35.5 L22 42.5 H24.5 V49.5 H27.5 V45.5 H32.5 V49.5 H35.5 V42.5 H38 Z"
+              fill="${houseColor}"/>
+      </svg>`;
+    return 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(svg);
   }
 
   /** Builds a house-pin marker icon (SVG data URL). */

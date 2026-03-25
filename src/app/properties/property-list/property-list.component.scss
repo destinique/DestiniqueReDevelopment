@@ -1053,6 +1053,66 @@ img {
   white-space: nowrap;
 }
 
+.list-toolbar-show-map {
+  padding-left: $spacing-sm;
+  border-left: 1px solid $color-border-light;
+  margin-left: 2px;
+}
+
+.list-toolbar-view-more__info {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  margin-left: 4px;
+  color: $color-text-muted;
+  cursor: default;
+  vertical-align: middle;
+
+  &:hover {
+    color: $color-primary;
+
+    .list-toolbar-view-more__tooltip {
+      opacity: 1;
+      visibility: visible;
+      transform: translateX(-50%) translateY(0);
+    }
+  }
+}
+
+.list-toolbar-view-more__tooltip {
+  position: absolute;
+  bottom: calc(100% + 10px);
+  left: 50%;
+  transform: translateX(-50%) translateY(4px);
+  width: 240px;
+  padding: 9px 12px;
+  background: #222;
+  color: #fff;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 1.5;
+  border-radius: 8px;
+  white-space: normal;
+  text-align: left;
+  pointer-events: none;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.18s ease, transform 0.18s ease, visibility 0.18s;
+  z-index: 100;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.22);
+
+  // Arrow pointing down
+  &::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 6px solid transparent;
+    border-top-color: #222;
+  }
+}
+
 .list-toolbar-view-more__toggle {
   position: relative;
   width: 44px;

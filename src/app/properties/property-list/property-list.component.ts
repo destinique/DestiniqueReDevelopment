@@ -82,6 +82,8 @@ export class PropertyListComponent implements OnInit, OnDestroy {
   expandedPropertyIds: Set<number> = new Set();
   /** More Details: when true, all cards show expanded details */
   showMoreDetailsGlobal = false;
+  /** Show Map: when true (default), the map panel is visible */
+  showMap = true;
 
   // ========== FILTER OPTIONS ==========
   sortOptions = [
@@ -288,6 +290,11 @@ export class PropertyListComponent implements OnInit, OnDestroy {
   /** View more toggle: when on, all cards show expanded details */
   onViewMoreToggle(): void {
     this.showMoreDetailsGlobal = !this.showMoreDetailsGlobal;
+  }
+
+  /** Show Map toggle: when off, hides the map panel and expands the list to full width */
+  onShowMapToggle(): void {
+    this.showMap = !this.showMap;
   }
 
   /** Keyboard: Space/Enter on View more switch toggles it */

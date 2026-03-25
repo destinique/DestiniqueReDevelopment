@@ -44,7 +44,9 @@
 <div class="properties-list-map-section">
   <div class="row view-grid property-list-layout g-0">
     <!-- Left column: list toolbar + list content + pagination -->
-    <div class="col-12 col-lg-7 property-list-col">
+    <div class="col-12 property-list-col"
+         [class.col-lg-7]="showMap"
+         [class.col-lg-12]="!showMap">
       <!-- List toolbar – modern bar above property list only -->
       <div id="maindiv" #propertiesGridArea class="list-toolbar list-toolbar-modern">
         <div class="list-toolbar-inner">
@@ -64,7 +66,18 @@
             </div>
             <app-list-id-search (searchComplete)="onListIdSearchComplete($event)"></app-list-id-search>
             <label class="list-toolbar-view-more" (click)="onViewMoreToggle()">
-              <span class="list-toolbar-view-more__label">View more</span>
+              <span class="list-toolbar-view-more__label">
+                View Details
+                <span class="list-toolbar-view-more__info" (click)="$event.stopPropagation()">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true">
+                    <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>
+                    <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0"/>
+                  </svg>
+                  <span class="list-toolbar-view-more__tooltip">
+                    To see more details on the property cards below (such as number of bathrooms, pet policy, and starting price), click &ldquo;View Details&rdquo;
+                  </span>
+                </span>
+              </span>
               <span class="list-toolbar-view-more__toggle"
                     [class.list-toolbar-view-more__toggle--on]="showMoreDetailsGlobal"
                     role="switch"
@@ -72,6 +85,19 @@
                     [attr.aria-checked]="showMoreDetailsGlobal"
                     aria-label="View more details on all cards"
                     (keydown)="onViewMoreKeydown($event)">
+                <span class="list-toolbar-view-more__knob"></span>
+              </span>
+            </label>
+
+            <!-- Show Map toggle -->
+            <label class="list-toolbar-view-more list-toolbar-show-map" (click)="onShowMapToggle()">
+              <span class="list-toolbar-view-more__label">Show Map</span>
+              <span class="list-toolbar-view-more__toggle"
+                    [class.list-toolbar-view-more__toggle--on]="showMap"
+                    role="switch"
+                    tabindex="0"
+                    [attr.aria-checked]="showMap"
+                    aria-label="Show or hide the map">
                 <span class="list-toolbar-view-more__knob"></span>
               </span>
             </label>
@@ -149,6 +175,7 @@
               *ngFor="let property of properties; trackBy: trackByPropertyId"
               #propertyCardWrapper
               class="col-12 col-md-6 properties"
+              [class.col-lg-4]="!showMap"
               [attr.data-property-id]="property.list_id"
               (mouseenter)="hoveredPropertyId = property.list_id"
               (mouseleave)="hoveredPropertyId = null">
@@ -194,8 +221,8 @@
       </div>
     </div>
 
-    <!-- Right column: map (sticky) -->
-    <div class="col-12 col-lg-5 property-map-col">
+    <!-- Right column: map (sticky) – hidden when Show Map is off -->
+    <div *ngIf="showMap" class="col-12 col-lg-5 property-map-col">
       <ng-container *ngIf="isLoading && !isInitialLoad; else mapBlock">
         <div class="property-map-loading-skeleton"></div>
       </ng-container>

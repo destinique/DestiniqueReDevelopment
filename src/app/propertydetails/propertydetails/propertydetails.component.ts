@@ -326,19 +326,25 @@ export class PropertydetailsComponent implements OnInit, AfterViewInit, OnDestro
 
   private addMarker(lat: number, lng: number): void {
     const houseSvg = `
-      <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48">
+      <svg xmlns="http://www.w3.org/2000/svg" width="44" height="60" viewBox="0 0 44 60">
         <defs>
-          <filter id="ms" x="-50%" y="-50%" width="200%" height="200%">
-            <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="rgba(0,0,0,0.45)"/>
+          <filter id="ms" x="-40%" y="-20%" width="180%" height="160%">
+            <feDropShadow dx="0" dy="3" stdDeviation="3" flood-color="rgba(0,0,0,0.35)"/>
           </filter>
         </defs>
-        <circle cx="24" cy="24" r="20" fill="#2d2d2d" filter="url(#ms)"/>
-        <path d="M24 15 L15 24 H18 V32 H22 V27 H26 V32 H30 V24 H33 Z" fill="white"/>
+        <!-- Pin teardrop body -->
+        <path d="M22 2 C10.95 2 2 10.95 2 22 C2 34.5 22 56 22 56 C22 56 42 34.5 42 22 C42 10.95 33.05 2 22 2 Z"
+              fill="#378f86" stroke="#ffffff" stroke-width="1.5" filter="url(#ms)"/>
+        <!-- White inner circle -->
+        <circle cx="22" cy="21" r="12" fill="white" opacity="0.95"/>
+        <!-- House icon centered in circle -->
+        <path d="M22 13.5 L14 20.5 H16.5 V27.5 H19.5 V23.5 H24.5 V27.5 H27.5 V20.5 H30 Z"
+              fill="#378f86"/>
       </svg>`;
     const markerIcon: google.maps.Icon = {
       url: 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(houseSvg),
-      scaledSize: new google.maps.Size(48, 48),
-      anchor: new google.maps.Point(24, 24)
+      scaledSize: new google.maps.Size(28, 38),
+      anchor: new google.maps.Point(14, 36)
     };
     new google.maps.Marker({
       map: this.map,

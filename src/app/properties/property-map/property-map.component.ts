@@ -60,7 +60,7 @@ export class PropertyMapComponent implements AfterViewInit, OnChanges, OnDestroy
   private markerIconUrl: string | null = null;
   /** Location pin icon when hovered (highlight color) */
   private markerIconUrlHighlight: string | null = null;
-  private readonly markerIconSize = { w: 28, h: 42 };
+  private readonly markerIconSize = { w: 28, h: 38 };
   /** When user hovers a marker on the map (not the list), bring that marker to front */
   private mapHoveredListId: number | null = null;
   private readonly markerZIndexFront = 1000;
@@ -211,11 +211,11 @@ export class PropertyMapComponent implements AfterViewInit, OnChanges, OnDestroy
           position,
           map: this.map,
           title: `Property ID: ${listId} – ${priceText}/night`,
-          icon: this.markerIconUrl
+            icon: this.markerIconUrl
             ? {
                 url: this.markerIconUrl,
                 scaledSize: new google.maps.Size(this.markerIconSize.w, this.markerIconSize.h),
-                anchor: new google.maps.Point(this.markerIconSize.w / 2, this.markerIconSize.h),
+                anchor: new google.maps.Point(this.markerIconSize.w / 2, this.markerIconSize.h - 2),
               }
             : undefined,
           zIndex: this.markerZIndexBack,
@@ -280,7 +280,7 @@ export class PropertyMapComponent implements AfterViewInit, OnChanges, OnDestroy
     const iconConfig = (url: string) => ({
       url,
       scaledSize: new google.maps.Size(this.markerIconSize.w, this.markerIconSize.h),
-      anchor: new google.maps.Point(this.markerIconSize.w / 2, this.markerIconSize.h),
+      anchor: new google.maps.Point(this.markerIconSize.w / 2, this.markerIconSize.h - 2),
     });
     this.markers.forEach((marker, i) => {
       const listId = this.markerListIds[i];
@@ -353,13 +353,21 @@ export class PropertyMapComponent implements AfterViewInit, OnChanges, OnDestroy
     this.markerListIds = [];
   }
 
-  /** Builds a location pin marker icon (SVG data URL). */
-  private buildMarkerIcon(color: string): string {
+  /** Builds a house-pin marker icon (SVG data URL). */
+  private buildMarkerIcon(pinColor: string): string {
+    const houseColor = pinColor === '#378f86' ? '#378f86' : '#333333';
     const svg = `
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 36" width="28" height="42">
-        <path fill="${color}" stroke="#fff" stroke-width="1.5" stroke-linejoin="round"
-          d="M12 0C5.4 0 0 5.4 0 12c0 9 12 24 12 24s12-15 12-24C24 5.4 18.6 0 12 0z"/>
-        <circle cx="12" cy="12" r="5" fill="#fff"/>
+      <svg xmlns="http://www.w3.org/2000/svg" width="44" height="60" viewBox="0 0 44 60">
+        <defs>
+          <filter id="ms" x="-40%" y="-20%" width="180%" height="160%">
+            <feDropShadow dx="0" dy="3" stdDeviation="3" flood-color="rgba(0,0,0,0.35)"/>
+          </filter>
+        </defs>
+        <path d="M22 2 C10.95 2 2 10.95 2 22 C2 34.5 22 56 22 56 C22 56 42 34.5 42 22 C42 10.95 33.05 2 22 2 Z"
+              fill="${pinColor}" stroke="#ffffff" stroke-width="1.5" filter="url(#ms)"/>
+        <circle cx="22" cy="21" r="12" fill="white" opacity="0.95"/>
+        <path d="M22 13.5 L14 20.5 H16.5 V27.5 H19.5 V23.5 H24.5 V27.5 H27.5 V20.5 H30 Z"
+              fill="${houseColor}"/>
       </svg>`;
     return 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(svg);
   }

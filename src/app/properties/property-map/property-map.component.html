@@ -1,0 +1,19 @@
+<div class="property-map-wrapper">
+  <div class="property-map-skeleton" *ngIf="!mapReady"></div>
+  <div #mapContainer class="property-map-canvas" [class.is-hidden]="!mapReady"></div>
+
+  <!-- Centered loader when list is updating from map bounds -->
+  <div *ngIf="mapReady && mapPropertiesLoading" class="property-map-loading-overlay" aria-hidden="true">
+    <div class="property-map-loading-spinner"></div>
+  </div>
+
+  <!-- Reset map view to show all properties -->
+  <button
+    *ngIf="mapReady && properties?.length"
+    type="button"
+    class="property-map-reset-btn"
+    (click)="resetMapView()">
+    Reset map &amp; list
+  </button>
+</div>
+

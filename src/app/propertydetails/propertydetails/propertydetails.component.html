@@ -176,12 +176,12 @@
     </div>
 </div>
 
-<div class="container">
+<div class="p-4 mt-5">
     <div class="row mb-2">
         <div class="col-md-8">
-                <br>
                 <!-- NAV TABS -->
-                <div class="nav-tabs-container">
+                <div class="tab-scroll-wrapper">
+                  <div class="nav-tabs-container">
                   <tabset #propertyTabs
                           (selectTab)="onTabSelect($event)"
                           class="custom-tabset"
@@ -199,267 +199,416 @@
                                 <ng-container [ngSwitch]="tab.id">
                                     <!-- OVERVIEW TAB -->
                                     <div *ngSwitchCase="'overview'" class="tab-pane container active">
-                                        <div class="card flex-md-row mb-4 shadow-lg">
-                                            <div class="card-body d-flex flex-column align-items-start">
-                                                <div class="row w-100">
-                                                    <div class="col-lg-8 col-md-12">
-                                                        <div class="property-header-provider-name">
-                                                            <div *ngIf="propertyDetailData?.originalLink" class="t-header">Provider: &nbsp;<span class="t-text">{{ propertyDetailData?.Provider }}</span></div>
-                                                            <div *ngIf="propertyDetailData?.originalLink" class="t-header">Headline: &nbsp;<span class="t-text">{{ propertyDetailData?.Headline }}</span></div>
-                                                        </div>
-                                                        <h3 class="mb-0 pb-1">
-                                                            <span class="mr-2 t-header">Property ID:
-                                                                <span class="t-text">{{ propertyDetailData?.list_id }}</span>
-                                                            </span>
-                                                          <span *ngIf="isMobile || isIOS">
-                                                            <br>
-                                                            <a (click)="gotoRateAvailSection()" href="JavaScript:void(0);"
-                                                               class="btn btn-primary">CLICK HERE TO GET RATES</a>
-                                                          </span>
-                                                        </h3>
+                                      <div class="ov-card">
 
-                                                        <h3 class="mb-0 pb-1">
-                                                            <span class="mr-2 t-header">Property Manager ID:
-                                                                <span class="t-text">
-                                                                  {{ propertyDetailData?.APC === 'wander' ? (propertyDetailData?.slug || 'N/A') :
-                                                                    (propertyDetailData?.remote_product_id || 'N/A') }}
-                                                                </span>
-                                                            </span>
-                                                        </h3>
-
-                                                        <ul class="list-group p-0 list-inline">
-                                                            <hr/>
-                                                            <li>
-                                                                Destination: <span class="fw-normal">{{ propertyDetailData?.RegionContinent }}</span>
-                                                            </li>
-                                                            <li class="pt-2">
-                                                                Country/Island:
-                                                                <span class="fw-normal">{{ propertyDetailData?.CountryIsland }}</span>
-                                                            </li>
-                                                            <li class="pt-2">
-                                                                State/Region/Province:<span class="fw-normal">{{ propertyDetailData?.StateNme }}</span>
-                                                            </li>
-                                                            <li class="pt-2">
-                                                                City/Area: <span class="fw-normal">{{ propertyDetailData?.City }}</span>
-                                                            </li>
-                                                            <li class="py-2">
-                                                                Neighborhood/Community:
-                                                                <span class="fw-normal">{{ propertyDetailData?.Neighborhood }}</span>
-                                                            </li>
-                                                        </ul>
-                                                        <ul class="list-group pt-3 property-sub-details">
-                                                            <li class="list-group-item">
-                                                                <span>
-                                                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640"><path d="M298.2 72.6C310.5 61.2 329.5 61.2 341.7 72.6L432 156.3L432 144C432 126.3 446.3 112 464 112L496 112C513.7 112 528 126.3 528 144L528 245.5L565.8 280.6C575.4 289.6 578.6 303.5 573.8 315.7C569 327.9 557.2 336 544 336L528 336L528 512C528 547.3 499.3 576 464 576L176 576C140.7 576 112 547.3 112 512L112 336L96 336C82.8 336 71 327.9 66.2 315.7C61.4 303.5 64.6 289.5 74.2 280.6L298.2 72.6zM304 384C277.5 384 256 405.5 256 432L256 528L384 528L384 432C384 405.5 362.5 384 336 384L304 384z"/></svg>
-                                                                    &nbsp;Property Type :<span class="fw-normal">{{ propertyDetailData?.Category }}</span>
-                                                                </span>
-                                                            </li>
-                                                            <li class="list-group-item">
-                                                                <span>
-                                                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640"><path d="M320 80C377.4 80 424 126.6 424 184C424 241.4 377.4 288 320 288C262.6 288 216 241.4 216 184C216 126.6 262.6 80 320 80zM96 152C135.8 152 168 184.2 168 224C168 263.8 135.8 296 96 296C56.2 296 24 263.8 24 224C24 184.2 56.2 152 96 152zM0 480C0 409.3 57.3 352 128 352C140.8 352 153.2 353.9 164.9 357.4C132 394.2 112 442.8 112 496L112 512C112 523.4 114.4 534.2 118.7 544L32 544C14.3 544 0 529.7 0 512L0 480zM521.3 544C525.6 534.2 528 523.4 528 512L528 496C528 442.8 508 394.2 475.1 357.4C486.8 353.9 499.2 352 512 352C582.7 352 640 409.3 640 480L640 512C640 529.7 625.7 544 608 544L521.3 544zM472 224C472 184.2 504.2 152 544 152C583.8 152 616 184.2 616 224C616 263.8 583.8 296 544 296C504.2 296 472 263.8 472 224zM160 496C160 407.6 231.6 336 320 336C408.4 336 480 407.6 480 496L480 512C480 529.7 465.7 544 448 544L192 544C174.3 544 160 529.7 160 512L160 496z"/></svg>
-                                                                    &nbsp;Max Guests :<span class="fw-normal">{{ sleepsCt }}</span>
-                                                                </span>
-                                                            </li>
-                                                            <li class="list-group-item">
-                                                                <span>
-                                                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640"><path d="M64 96C81.7 96 96 110.3 96 128L96 352L320 352L320 224C320 206.3 334.3 192 352 192L512 192C565 192 608 235 608 288L608 512C608 529.7 593.7 544 576 544C558.3 544 544 529.7 544 512L544 448L96 448L96 512C96 529.7 81.7 544 64 544C46.3 544 32 529.7 32 512L32 128C32 110.3 46.3 96 64 96zM144 256C144 220.7 172.7 192 208 192C243.3 192 272 220.7 272 256C272 291.3 243.3 320 208 320C172.7 320 144 291.3 144 256z"/></svg>
-                                                                    &nbsp; Bedrooms :
-                                                                    <span class="fw-normal">{{ bedroomCt }}</span>
-                                                                </span>
-                                                            </li>
-                                                            <li class="list-group-item">
-                                                                <span>
-                                                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640"><path d="M160 141.3C160 134 165.9 128 173.3 128C176.8 128 180.2 129.4 182.7 131.9L197.6 146.8C194 155.9 192.1 165.7 192.1 176C192.1 195.9 199.3 214 211.3 228C206 237.2 207.3 249.1 215.1 257C224.5 266.4 239.7 266.4 249 257L353 153C362.4 143.6 362.4 128.4 353 119.1C345.2 111.2 333.2 110 324 115.3C310 103.3 291.9 96.1 272 96.1C261.7 96.1 251.8 98.1 242.8 101.6L227.9 86.6C213.4 72.1 193.7 64 173.3 64C130.6 64 96 98.6 96 141.3L96 320C78.3 320 64 334.3 64 352C64 369.7 78.3 384 96 384L96 432C96 460.4 108.4 486 128 503.6L128 544C128 561.7 142.3 576 160 576C177.7 576 192 561.7 192 544L192 528L448 528L448 544C448 561.7 462.3 576 480 576C497.7 576 512 561.7 512 544L512 503.6C531.6 486 544 460.5 544 432L544 384C561.7 384 576 369.7 576 352C576 334.3 561.7 320 544 320L160 320L160 141.3z"/></svg>
-                                                                    &nbsp; Bathrooms :
-                                                                    <span class="fw-normal">{{ bathroomCt }}</span>
-                                                                </span>
-                                                            </li>
-                                                            <li class="list-group-item">
-                                                                <span>
-                                                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640"><path d="M320 96C239.2 96 174.5 132.8 127.4 176.6C80.6 220.1 49.3 272 34.4 307.7C31.1 315.6 31.1 324.4 34.4 332.3C49.3 368 80.6 420 127.4 463.4C174.5 507.1 239.2 544 320 544C400.8 544 465.5 507.2 512.6 463.4C559.4 419.9 590.7 368 605.6 332.3C608.9 324.4 608.9 315.6 605.6 307.7C590.7 272 559.4 220 512.6 176.6C465.5 132.9 400.8 96 320 96zM176 320C176 240.5 240.5 176 320 176C399.5 176 464 240.5 464 320C464 399.5 399.5 464 320 464C240.5 464 176 399.5 176 320zM320 256C320 291.3 291.3 320 256 320C244.5 320 233.7 317 224.3 311.6C223.3 322.5 224.2 333.7 227.2 344.8C240.9 396 293.6 426.4 344.8 412.7C396 399 426.4 346.3 412.7 295.1C400.5 249.4 357.2 220.3 311.6 224.3C316.9 233.6 320 244.4 320 256z"/></svg>
-                                                                    &nbsp; View Type :<span class="fw-normal">{{ propertyDetailData?.ViewType }}</span>
-                                                                </span>
-                                                            </li>
-                                                            <li class="list-group-item">
-                                                                <span>
-                                                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640"><path d="M298.5 156.9C312.8 199.8 298.2 243.1 265.9 253.7C233.6 264.3 195.8 238.1 181.5 195.2C167.2 152.3 181.8 109 214.1 98.4C246.4 87.8 284.2 114 298.5 156.9zM164.4 262.6C183.3 295 178.7 332.7 154.2 346.7C129.7 360.7 94.5 345.8 75.7 313.4C56.9 281 61.4 243.3 85.9 229.3C110.4 215.3 145.6 230.2 164.4 262.6zM133.2 465.2C185.6 323.9 278.7 288 320 288C361.3 288 454.4 323.9 506.8 465.2C510.4 474.9 512 485.3 512 495.7L512 497.3C512 523.1 491.1 544 465.3 544C453.8 544 442.4 542.6 431.3 539.8L343.3 517.8C328 514 312 514 296.7 517.8L208.7 539.8C197.6 542.6 186.2 544 174.7 544C148.9 544 128 523.1 128 497.3L128 495.7C128 485.3 129.6 474.9 133.2 465.2zM485.8 346.7C461.3 332.7 456.7 295 475.6 262.6C494.5 230.2 529.6 215.3 554.1 229.3C578.6 243.3 583.2 281 564.3 313.4C545.4 345.8 510.3 360.7 485.8 346.7zM374.1 253.7C341.8 243.1 327.2 199.8 341.5 156.9C355.8 114 393.6 87.8 425.9 98.4C458.2 109 472.8 152.3 458.5 195.2C444.2 238.1 406.4 264.3 374.1 253.7z"/></svg>
-                                                                    &nbsp; Pets :
-                                                                    <span class="fw-normal">{{ propertyDetailData?.PetFriendly }}</span>
-                                                                </span>
-                                                            </li>
-                                                        </ul>
-                                                    </div>
-
-                                                    <div class="col-lg-4 col-md-12">
-                                                        <div *ngIf="propertyDetailData?.originalLink" class="text-end">
-                                                            <a href="{{ propertyDetailData?.originalLink }}" class="btn btn-primary mb-2" target="_blank">PROPERTY MANAGER SITE</a>
-                                                        </div>
-
-                                                        <div class="text-end" *ngIf="propertyDetailData?.originalLink">
-                                                            <a (click)="sendManagersiteURL()" class="btn btn-primary mb-2">DESTINIQUE PROPERTY PAGE</a>
-                                                        </div>
-
-                                                        <div class="text-end" *ngIf="getCheckinCheckout && propertyDetailData?.originalLink">
-                                                            <a (click)="getRatesAndShowPopup()" class="btn btn-primary mb-2">Get Rates</a>
-                                                        </div>
-
-                                                        <div class="text-end" *ngIf="propertyDetailData?.originalLink">
-                                                            <a (click)="getPropertyId()" class="btn btn-primary mb-2">PROPERTY Id</a>
-                                                        </div>
-
-                                                        <div class="text-end" *ngIf="propertyDetailData?.originalLink">
-                                                            <a target="_blank" *ngIf="propertyDetailData?.originalLink" (click)="sendDestiniqueManageIamgeURL()" class="btn btn-primary mb-2">DESTINIQUE MANAGE IMAGE PAGE</a>
-                                                        </div>
-                                                        <div class="text-end" *ngIf="propertyDetailData?.originalLink">
-                                                          <a target="_blank" *ngIf="propertyDetailData?.originalLink" 
-                                                          (click)="sendToDestiniqueImgeScanner()" 
-                                                          class="btn btn-primary mb-2">DESTINIQUE IMAGE SCANNER</a>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
+                                        <!-- Card header -->
+                                        <div class="ov-card-header">
+                                          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" viewBox="0 0 16 16">
+                                            <path d="M8.354 1.146a.5.5 0 0 0-.708 0l-6 6-.064.077a.5.5 0 0 0 .064.638l6 6a.5.5 0 0 0 .708 0l6-6a.5.5 0 0 0 0-.708l-6-6z"/>
+                                          </svg>
+                                          <h5 class="ov-card-title">Property Overview</h5>
                                         </div>
-                                    </div>
 
-                                    <!-- AMENITIES TAB -->
-                                    <div *ngSwitchCase="'amenities'" class="container tab-pane">
-                                        <div class="card mb-4 shadow-lg h-md-250">
-                                            <div class="card-body d-flex flex-column">
-                                              <div class="row">
-                                                <div
-                                                  *ngFor="let category of amenity; let catIndex = index"
-                                                  class="col-md-12 amenities-content"
-                                                >
-                                                  <h4 [ngClass]="'fontfa-montserrat'">
-                                                    {{ category.categoryName }}
-                                                  </h4>
-                                                  <ul>
-                                                    <li
-                                                      [ngClass]="'fontfa-montserrat'"
-                                                      *ngFor="
-                                                    let amenityItem of category.amenity;
-                                                    let amenIndex = index
-                                                    "
-                                                    >
-                                                      {{ amenityItem.name }}
-                                                    </li>
-                                                  </ul>
+                                        <!-- Card body -->
+                                        <div class="ov-body">
+                                          <div class="ov-layout" [class.ov-layout--no-sidebar]="!propertyDetailData?.originalLink">
+
+                                            <!-- ── Main content column ── -->
+                                            <div class="ov-main">
+
+                                              <!-- Provider / Headline (admin only) -->
+                                              <div *ngIf="propertyDetailData?.originalLink" class="ov-meta-strip">
+                                                <div *ngIf="propertyDetailData?.Provider" class="ov-meta-row">
+                                                  <span class="ov-meta-label">Provider</span>
+                                                  <span class="ov-meta-value">{{ propertyDetailData?.Provider }}</span>
+                                                </div>
+                                                <div *ngIf="propertyDetailData?.Headline" class="ov-meta-row">
+                                                  <span class="ov-meta-label">Headline</span>
+                                                  <span class="ov-meta-value">{{ propertyDetailData?.Headline }}</span>
                                                 </div>
                                               </div>
-                                            </div>
+
+                                              <!-- ID badges + mobile rates button -->
+                                              <div class="ov-ids-row">
+                                                <div class="ov-id-badge">
+                                                  <span class="ov-id-label">Property ID</span>
+                                                  <span class="ov-id-value">{{ propertyDetailData?.list_id }}</span>
+                                                </div>
+                                                <div class="ov-id-badge">
+                                                  <span class="ov-id-label">Manager ID</span>
+                                                  <span class="ov-id-value">
+                                                    {{ propertyDetailData?.APC === 'wander'
+                                                      ? (propertyDetailData?.slug || 'N/A')
+                                                      : (propertyDetailData?.remote_product_id || 'N/A') }}
+                                                  </span>
+                                                </div>
+                                                <a *ngIf="isMobile || isIOS"
+                                                   (click)="gotoRateAvailSection()"
+                                                   href="JavaScript:void(0);"
+                                                   class="ov-rates-btn">
+                                                  <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" fill="currentColor" viewBox="0 0 16 16">
+                                                    <path d="M1 2.828c.885-.37 2.154-.769 3.388-.893 1.33-.134 2.458.063 3.112.752v9.746c-.935-.53-2.12-.603-3.213-.493-1.18.12-2.37.461-3.287.811V2.828zm7.5-.141c.654-.689 1.782-.886 3.112-.752 1.234.124 2.503.523 3.388.893v9.923c-.918-.35-2.107-.692-3.287-.81-1.094-.111-2.278-.039-3.213.492V2.687zM8 1.783C7.015.936 5.587.81 4.287.94c-1.514.153-3.042.672-3.994 1.105A.5.5 0 0 0 0 2.5v11a.5.5 0 0 0 .707.455c.882-.4 2.303-.881 3.68-1.02 1.409-.142 2.59.087 3.223.877a.5.5 0 0 0 .78 0c.633-.79 1.814-1.019 3.222-.877 1.378.139 2.8.62 3.681 1.02A.5.5 0 0 0 16 13.5v-11a.5.5 0 0 0-.293-.455c-.952-.433-2.48-.952-3.994-1.105C10.413.809 8.985.936 8 1.783z"/>
+                                                  </svg>
+                                                  Get Rates
+                                                </a>
+                                              </div>
+
+                                              <!-- Location section -->
+                                              <div class="ov-section">
+                                                <div class="ov-section-header">
+                                                  <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" fill="currentColor" viewBox="0 0 16 16">
+                                                    <path d="M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10zm0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6z"/>
+                                                  </svg>
+                                                  <span class="ov-section-title">Location</span>
+                                                </div>
+                                                <div class="ov-location-grid">
+                                                  <div class="ov-loc-item">
+                                                    <span class="ov-loc-label">Destination</span>
+                                                    <span class="ov-loc-value">{{ propertyDetailData?.RegionContinent || '—' }}</span>
+                                                  </div>
+                                                  <div class="ov-loc-item">
+                                                    <span class="ov-loc-label">Country / Island</span>
+                                                    <span class="ov-loc-value">{{ propertyDetailData?.CountryIsland || '—' }}</span>
+                                                  </div>
+                                                  <div class="ov-loc-item">
+                                                    <span class="ov-loc-label">State / Region</span>
+                                                    <span class="ov-loc-value">{{ propertyDetailData?.StateNme || '—' }}</span>
+                                                  </div>
+                                                  <div class="ov-loc-item">
+                                                    <span class="ov-loc-label">City / Area</span>
+                                                    <span class="ov-loc-value">{{ propertyDetailData?.City || '—' }}</span>
+                                                  </div>
+                                                  <div class="ov-loc-item">
+                                                    <span class="ov-loc-label">Neighborhood</span>
+                                                    <span class="ov-loc-value">{{ propertyDetailData?.Neighborhood || '—' }}</span>
+                                                  </div>
+                                                </div>
+                                              </div>
+
+                                              <!-- Property details section -->
+                                              <div class="ov-section">
+                                                <div class="ov-section-header">
+                                                  <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" fill="currentColor" viewBox="0 0 16 16">
+                                                    <path d="M1 2.5A1.5 1.5 0 0 1 2.5 1h3A1.5 1.5 0 0 1 7 2.5v3A1.5 1.5 0 0 1 5.5 7h-3A1.5 1.5 0 0 1 1 5.5v-3zm8 0A1.5 1.5 0 0 1 10.5 1h3A1.5 1.5 0 0 1 15 2.5v3A1.5 1.5 0 0 1 13.5 7h-3A1.5 1.5 0 0 1 9 5.5v-3zm-8 8A1.5 1.5 0 0 1 2.5 9h3A1.5 1.5 0 0 1 7 10.5v3A1.5 1.5 0 0 1 5.5 15h-3A1.5 1.5 0 0 1 1 13.5v-3zm8 0A1.5 1.5 0 0 1 10.5 9h3a1.5 1.5 0 0 1 1.5 1.5v3a1.5 1.5 0 0 1-1.5 1.5h-3A1.5 1.5 0 0 1 9 13.5v-3z"/>
+                                                  </svg>
+                                                  <span class="ov-section-title">Property Details</span>
+                                                </div>
+                                                <div class="ov-stats-grid">
+                                                  <div class="ov-stat-item">
+                                                    <div class="ov-stat-icon">
+                                                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 640 640"><path d="M298.2 72.6C310.5 61.2 329.5 61.2 341.7 72.6L432 156.3L432 144C432 126.3 446.3 112 464 112L496 112C513.7 112 528 126.3 528 144L528 245.5L565.8 280.6C575.4 289.6 578.6 303.5 573.8 315.7C569 327.9 557.2 336 544 336L528 336L528 512C528 547.3 499.3 576 464 576L176 576C140.7 576 112 547.3 112 512L112 336L96 336C82.8 336 71 327.9 66.2 315.7C61.4 303.5 64.6 289.5 74.2 280.6L298.2 72.6zM304 384C277.5 384 256 405.5 256 432L256 528L384 528L384 432C384 405.5 362.5 384 336 384L304 384z"/></svg>
+                                                    </div>
+                                                    <div class="ov-stat-text">
+                                                      <span class="ov-stat-label">Property Type</span>
+                                                      <span class="ov-stat-value">{{ propertyDetailData?.Category || '—' }}</span>
+                                                    </div>
+                                                  </div>
+                                                  <div class="ov-stat-item">
+                                                    <div class="ov-stat-icon">
+                                                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 640 640"><path d="M320 80C377.4 80 424 126.6 424 184C424 241.4 377.4 288 320 288C262.6 288 216 241.4 216 184C216 126.6 262.6 80 320 80zM96 152C135.8 152 168 184.2 168 224C168 263.8 135.8 296 96 296C56.2 296 24 263.8 24 224C24 184.2 56.2 152 96 152zM0 480C0 409.3 57.3 352 128 352C140.8 352 153.2 353.9 164.9 357.4C132 394.2 112 442.8 112 496L112 512C112 523.4 114.4 534.2 118.7 544L32 544C14.3 544 0 529.7 0 512L0 480zM521.3 544C525.6 534.2 528 523.4 528 512L528 496C528 442.8 508 394.2 475.1 357.4C486.8 353.9 499.2 352 512 352C582.7 352 640 409.3 640 480L640 512C640 529.7 625.7 544 608 544L521.3 544zM472 224C472 184.2 504.2 152 544 152C583.8 152 616 184.2 616 224C616 263.8 583.8 296 544 296C504.2 296 472 263.8 472 224zM160 496C160 407.6 231.6 336 320 336C408.4 336 480 407.6 480 496L480 512C480 529.7 465.7 544 448 544L192 544C174.3 544 160 529.7 160 512L160 496z"/></svg>
+                                                    </div>
+                                                    <div class="ov-stat-text">
+                                                      <span class="ov-stat-label">Max Guests</span>
+                                                      <span class="ov-stat-value">{{ sleepsCt || '—' }}</span>
+                                                    </div>
+                                                  </div>
+                                                  <div class="ov-stat-item">
+                                                    <div class="ov-stat-icon">
+                                                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 640 640"><path d="M64 96C81.7 96 96 110.3 96 128L96 352L320 352L320 224C320 206.3 334.3 192 352 192L512 192C565 192 608 235 608 288L608 512C608 529.7 593.7 544 576 544C558.3 544 544 529.7 544 512L544 448L96 448L96 512C96 529.7 81.7 544 64 544C46.3 544 32 529.7 32 512L32 128C32 110.3 46.3 96 64 96zM144 256C144 220.7 172.7 192 208 192C243.3 192 272 220.7 272 256C272 291.3 243.3 320 208 320C172.7 320 144 291.3 144 256z"/></svg>
+                                                    </div>
+                                                    <div class="ov-stat-text">
+                                                      <span class="ov-stat-label">Bedrooms</span>
+                                                      <span class="ov-stat-value">{{ bedroomCt || '—' }}</span>
+                                                    </div>
+                                                  </div>
+                                                  <div class="ov-stat-item">
+                                                    <div class="ov-stat-icon">
+                                                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 640 640"><path d="M160 141.3C160 134 165.9 128 173.3 128C176.8 128 180.2 129.4 182.7 131.9L197.6 146.8C194 155.9 192.1 165.7 192.1 176C192.1 195.9 199.3 214 211.3 228C206 237.2 207.3 249.1 215.1 257C224.5 266.4 239.7 266.4 249 257L353 153C362.4 143.6 362.4 128.4 353 119.1C345.2 111.2 333.2 110 324 115.3C310 103.3 291.9 96.1 272 96.1C261.7 96.1 251.8 98.1 242.8 101.6L227.9 86.6C213.4 72.1 193.7 64 173.3 64C130.6 64 96 98.6 96 141.3L96 320C78.3 320 64 334.3 64 352C64 369.7 78.3 384 96 384L96 432C96 460.4 108.4 486 128 503.6L128 544C128 561.7 142.3 576 160 576C177.7 576 192 561.7 192 544L192 528L448 528L448 544C448 561.7 462.3 576 480 576C497.7 576 512 561.7 512 544L512 503.6C531.6 486 544 460.5 544 432L544 384C561.7 384 576 369.7 576 352C576 334.3 561.7 320 544 320L160 320L160 141.3z"/></svg>
+                                                    </div>
+                                                    <div class="ov-stat-text">
+                                                      <span class="ov-stat-label">Bathrooms</span>
+                                                      <span class="ov-stat-value">{{ bathroomCt || '—' }}</span>
+                                                    </div>
+                                                  </div>
+                                                  <div class="ov-stat-item">
+                                                    <div class="ov-stat-icon">
+                                                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 640 640"><path d="M320 96C239.2 96 174.5 132.8 127.4 176.6C80.6 220.1 49.3 272 34.4 307.7C31.1 315.6 31.1 324.4 34.4 332.3C49.3 368 80.6 420 127.4 463.4C174.5 507.1 239.2 544 320 544C400.8 544 465.5 507.2 512.6 463.4C559.4 419.9 590.7 368 605.6 332.3C608.9 324.4 608.9 315.6 605.6 307.7C590.7 272 559.4 220 512.6 176.6C465.5 132.9 400.8 96 320 96zM176 320C176 240.5 240.5 176 320 176C399.5 176 464 240.5 464 320C464 399.5 399.5 464 320 464C240.5 464 176 399.5 176 320zM320 256C320 291.3 291.3 320 256 320C244.5 320 233.7 317 224.3 311.6C223.3 322.5 224.2 333.7 227.2 344.8C240.9 396 293.6 426.4 344.8 412.7C396 399 426.4 346.3 412.7 295.1C400.5 249.4 357.2 220.3 311.6 224.3C316.9 233.6 320 244.4 320 256z"/></svg>
+                                                    </div>
+                                                    <div class="ov-stat-text">
+                                                      <span class="ov-stat-label">View Type</span>
+                                                      <span class="ov-stat-value">{{ propertyDetailData?.ViewType || '—' }}</span>
+                                                    </div>
+                                                  </div>
+                                                  <div class="ov-stat-item">
+                                                    <div class="ov-stat-icon">
+                                                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 640 640"><path d="M298.5 156.9C312.8 199.8 298.2 243.1 265.9 253.7C233.6 264.3 195.8 238.1 181.5 195.2C167.2 152.3 181.8 109 214.1 98.4C246.4 87.8 284.2 114 298.5 156.9zM164.4 262.6C183.3 295 178.7 332.7 154.2 346.7C129.7 360.7 94.5 345.8 75.7 313.4C56.9 281 61.4 243.3 85.9 229.3C110.4 215.3 145.6 230.2 164.4 262.6zM133.2 465.2C185.6 323.9 278.7 288 320 288C361.3 288 454.4 323.9 506.8 465.2C510.4 474.9 512 485.3 512 495.7L512 497.3C512 523.1 491.1 544 465.3 544C453.8 544 442.4 542.6 431.3 539.8L343.3 517.8C328 514 312 514 296.7 517.8L208.7 539.8C197.6 542.6 186.2 544 174.7 544C148.9 544 128 523.1 128 497.3L128 495.7C128 485.3 129.6 474.9 133.2 465.2zM485.8 346.7C461.3 332.7 456.7 295 475.6 262.6C494.5 230.2 529.6 215.3 554.1 229.3C578.6 243.3 583.2 281 564.3 313.4C545.4 345.8 510.3 360.7 485.8 346.7zM374.1 253.7C341.8 243.1 327.2 199.8 341.5 156.9C355.8 114 393.6 87.8 425.9 98.4C458.2 109 472.8 152.3 458.5 195.2C444.2 238.1 406.4 264.3 374.1 253.7z"/></svg>
+                                                    </div>
+                                                    <div class="ov-stat-text">
+                                                      <span class="ov-stat-label">Pets</span>
+                                                      <span class="ov-stat-value">{{ propertyDetailData?.PetFriendly || '—' }}</span>
+                                                    </div>
+                                                  </div>
+                                                </div>
+                                              </div>
+
+                                            </div><!-- /ov-main -->
+
+                                            <!-- ── Admin actions sidebar ── -->
+                                            <div class="ov-actions" *ngIf="propertyDetailData?.originalLink">
+                                              <p class="ov-actions-title">Quick Actions</p>
+
+                                              <div *ngIf="propertyDetailData?.originalLink" class="ov-action-wrap">
+                                                <a href="{{ propertyDetailData?.originalLink }}" class="btn btn-primary ov-action-full" target="_blank">Property Manager Site</a>
+                                              </div>
+
+                                              <div class="ov-action-wrap" *ngIf="propertyDetailData?.originalLink">
+                                                <a (click)="sendManagersiteURL()" class="btn btn-primary ov-action-full">Destinique Property Page</a>
+                                              </div>
+
+                                              <div class="ov-action-wrap" *ngIf="getCheckinCheckout && propertyDetailData?.originalLink">
+                                                <a (click)="getRatesAndShowPopup()" class="btn btn-primary ov-action-full">Get Rates</a>
+                                              </div>
+
+                                              <div class="ov-action-wrap" *ngIf="propertyDetailData?.originalLink">
+                                                <a (click)="getPropertyId()" class="btn btn-primary ov-action-full">Property ID</a>
+                                              </div>
+
+                                              <div class="ov-action-wrap" *ngIf="propertyDetailData?.originalLink">
+                                                <a target="_blank" *ngIf="propertyDetailData?.originalLink" (click)="sendDestiniqueManageIamgeURL()" class="btn btn-primary ov-action-full">Manage Images</a>
+                                              </div>
+                                            </div><!-- /ov-actions -->
+
+                                          </div><!-- /ov-layout -->
+                                        </div><!-- /ov-body -->
+
+                                      </div><!-- /ov-card -->
+                                    </div>
+ 
+                                    <!-- AMENITIES TAB -->
+                                    <div *ngSwitchCase="'amenities'" class="tab-pane">
+                                      <div class="amenities-card">
+
+                                        <!-- Section header -->
+                                        <div class="amenities-card-header">
+                                          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
+                                            <path d="M8 1a7 7 0 1 0 0 14A7 7 0 0 0 8 1M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8"/>
+                                            <path d="M6.271 5.055a.5.5 0 0 1 .52.038l3.5 2.5a.5.5 0 0 1 0 .814l-3.5 2.5A.5.5 0 0 1 6 10.5v-5a.5.5 0 0 1 .271-.445"/>
+                                          </svg>
+                                          <h5 class="amenities-card-title">Property Amenities</h5>
+                                          <span class="amenities-total-badge">
+                                            {{ getTotalAmenities() }} features
+                                          </span>
                                         </div>
+
+                                        <!-- Categories -->
+                                        <div class="amenities-body">
+                                          <div *ngFor="let category of amenity; let catIndex = index"
+                                               class="amenity-category"
+                                               [class.has-divider]="catIndex > 0">
+
+                                            <!-- Category title -->
+                                            <div class="amenity-category-header">
+                                              <span class="amenity-category-dot"></span>
+                                              <h6 class="amenity-category-name">{{ category.categoryName }}</h6>
+                                              <span class="amenity-category-count">{{ category.amenity.length }}</span>
+                                            </div>
+
+                                            <!-- Items grid -->
+                                            <div class="amenity-items-grid">
+                                              <div *ngFor="let item of category.amenity"
+                                                   class="amenity-item">
+                                                <svg class="amenity-check-icon" xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" viewBox="0 0 16 16">
+                                                  <path d="M10.97 4.97a.75.75 0 0 1 1.07 1.05l-3.99 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425z"/>
+                                                  <path d="M8 1a7 7 0 1 0 0 14A7 7 0 0 0 8 1M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8"/>
+                                                </svg>
+                                                <span class="amenity-item-name">{{ item.name }}</span>
+                                              </div>
+                                            </div>
+                                          </div>
+
+                                          <!-- Empty state -->
+                                          <div *ngIf="!amenity || amenity.length === 0" class="amenities-empty">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="currentColor" viewBox="0 0 16 16">
+                                              <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>
+                                              <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708"/>
+                                            </svg>
+                                            <p>No amenities listed for this property.</p>
+                                          </div>
+                                        </div>
+
+                                      </div>
                                     </div>
 
                                     <!-- DESCRIPTION TAB -->
-                                    <div *ngSwitchCase="'description'" class="container tab-pane">
-                                        <div class="card flex-md-row mb-4 shadow-lg h-md-250">
-                                            <div class="card-body d-flex flex-column align-items-start">
-                                                <h3 class="mb-3">Property Description</h3>
-                                                <p class="card-text mb-auto p-description"
-                                                  [ngClass]="'fontfa-montserrat'"
-                                                  [innerHTML]="propertyDetailData?.Description"></p>
-                                            </div>
+                                    <div *ngSwitchCase="'description'" class="tab-pane">
+                                      <div class="desc-card">
+
+                                        <!-- Card header -->
+                                        <div class="desc-card-header">
+                                          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
+                                            <path d="M5 4a.5.5 0 0 0 0 1h6a.5.5 0 0 0 0-1zm-.5 2.5A.5.5 0 0 1 5 6h6a.5.5 0 0 1 0 1H5a.5.5 0 0 1-.5-.5M5 8a.5.5 0 0 0 0 1h6a.5.5 0 0 0 0-1zm0 2a.5.5 0 0 0 0 1h3a.5.5 0 0 0 0-1z"/>
+                                            <path d="M2 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2zm10-1H4a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1"/>
+                                          </svg>
+                                          <h5 class="desc-card-title">Property Description</h5>
                                         </div>
+
+                                        <!-- Quick-stats strip -->
+                                        <div class="desc-stats-strip">
+                                          <div class="desc-stat-item" *ngIf="bedroomCt">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" viewBox="0 0 16 16">
+                                              <path d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v2a1 1 0 0 1-1 1v6a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V7a1 1 0 0 1-1-1zm8 0a2 2 0 0 0-2 2v1h4V6a2 2 0 0 0-2-2M7 7H2v2h5zm1 0v2h5V7zm-6 3v2h4v-2zm5 0v2h4v-2z"/>
+                                            </svg>
+                                            <div class="desc-stat-value">{{ bedroomCt }}</div>
+                                            <div class="desc-stat-label">Bedrooms</div>
+                                          </div>
+                                          <div class="desc-stat-item" *ngIf="bathroomCt">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" viewBox="0 0 16 16">
+                                              <path d="M7 0a.5.5 0 0 1 .5.5v1.5A1.5 1.5 0 0 1 9.5 3.5h.5V5h-.5A1.5 1.5 0 0 1 8 3.5V2a1 1 0 0 0-2 0v1.5A1.5 1.5 0 0 1 4.5 5H4V3.5h.5A1.5 1.5 0 0 1 6 2V.5A.5.5 0 0 1 7 0z"/>
+                                              <path d="M1.5 6a.5.5 0 0 0-.5.5V11a3 3 0 0 0 3 3h8a3 3 0 0 0 3-3V6.5a.5.5 0 0 0-.5-.5z"/>
+                                            </svg>
+                                            <div class="desc-stat-value">{{ bathroomCt }}</div>
+                                            <div class="desc-stat-label">Bathrooms</div>
+                                          </div>
+                                          <div class="desc-stat-item" *ngIf="sleepsCt">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" viewBox="0 0 16 16">
+                                              <path d="M7 14s-1 0-1-1 1-4 5-4 5 3 5 4-1 1-1 1zm4-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6m-5.784 6A2.24 2.24 0 0 1 5 13c0-1.355.68-2.75 1.936-3.72A6.3 6.3 0 0 0 5 9c-4 0-5 3-5 4s1 1 1 1zM4.5 8a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5"/>
+                                            </svg>
+                                            <div class="desc-stat-value">{{ sleepsCt }}</div>
+                                            <div class="desc-stat-label">Guests</div>
+                                          </div>
+                                          <div class="desc-stat-item" *ngIf="propertyDetailData?.Category">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" viewBox="0 0 16 16">
+                                              <path d="M8.354 1.146a.5.5 0 0 0-.708 0l-6 6A.5.5 0 0 0 1.5 7.5v7a.5.5 0 0 0 .5.5h4.5a.5.5 0 0 0 .5-.5v-4h2v4a.5.5 0 0 0 .5.5H14a.5.5 0 0 0 .5-.5v-7a.5.5 0 0 0-.146-.354z"/>
+                                            </svg>
+                                            <div class="desc-stat-value desc-stat-value--text">{{ propertyDetailData?.Category }}</div>
+                                            <div class="desc-stat-label">Type</div>
+                                          </div>
+                                          <div class="desc-stat-item" *ngIf="propertyDetailData?.ViewType">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" viewBox="0 0 16 16">
+                                              <path d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8M1.173 8a13 13 0 0 1 1.66-2.043C4.12 4.668 5.88 3.5 8 3.5s3.879 1.168 5.168 2.457A13 13 0 0 1 14.828 8q-.086.13-.195.288c-.335.48-.83 1.12-1.465 1.755C11.879 11.332 10.119 12.5 8 12.5s-3.879-1.168-5.168-2.457A13 13 0 0 1 1.172 8z"/>
+                                              <path d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5M4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0"/>
+                                            </svg>
+                                            <div class="desc-stat-value desc-stat-value--text">{{ propertyDetailData?.ViewType }}</div>
+                                            <div class="desc-stat-label">View</div>
+                                          </div>
+                                          <div class="desc-stat-item" *ngIf="propertyDetailData?.City">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" viewBox="0 0 16 16">
+                                              <path d="M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10m0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6"/>
+                                            </svg>
+                                            <div class="desc-stat-value desc-stat-value--text">{{ propertyDetailData?.City }}</div>
+                                            <div class="desc-stat-label">Location</div>
+                                          </div>
+                                        </div>
+
+                                        <!-- Description body -->
+                                        <div class="desc-body">
+                                          <div *ngIf="propertyDetailData?.Headline" class="desc-headline">
+                                            {{ propertyDetailData?.Headline }}
+                                          </div>
+                                          <div class="desc-text"
+                                               [innerHTML]="propertyDetailData?.Description">
+                                          </div>
+                                          <div *ngIf="!propertyDetailData?.Description" class="desc-empty">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" fill="currentColor" viewBox="0 0 16 16">
+                                              <path d="M14.5 3a.5.5 0 0 1 .5.5v9a.5.5 0 0 1-.5.5h-13a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5zm-13-1A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h13a1.5 1.5 0 0 0 1.5-1.5v-9A1.5 1.5 0 0 0 14.5 2z"/>
+                                              <path d="M3 5.5a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5M3 8a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9A.5.5 0 0 1 3 8m0 2.5a.5.5 0 0 1 .5-.5h6a.5.5 0 0 1 0 1h-6a.5.5 0 0 1-.5-.5"/>
+                                            </svg>
+                                            <p>No description available for this property.</p>
+                                          </div>
+                                        </div>
+
+                                      </div>
                                     </div>
 
                                     <!-- AVAILABILITY TAB -->
                                     <div *ngSwitchCase="'availability'" class="container tab-pane">
-                                      <div class="card flex-md-row mb-4 shadow-lg h-md-250">
-                                        <div class="card-body d-flex flex-column align-items-start">
-                                          <h3 class="mb-1">Availability</h3>
-                                          <small class="text-muted mb-3">Color-coded availability status</small>
+                                      <div class="avail-card">
 
-                                          <!-- Dual Calendar Container -->
-                                          <div class="row g-4">
-                                            <!-- Left Calendar -->
-                                            <div class="col-lg-6">
-                                              <div class="calendar-section">
-                                                <ngb-datepicker
-                                                  [firstDayOfWeek]="7"
-                                                  [startDate]="getDateStruct(leftCalendarDate)"
-                                                  [navigation]="'arrows'"
-                                                  [outsideDays]="'hidden'"
-                                                  [displayMonths]="1"
-                                                  class="custom-datepicker"
-                                                  [markDisabled]="markDisabled"
-                                                  (navigate)="onLeftCalendarNavigate($event)"
-                                                  [dayTemplate]="customDayTemplate">
-                                                </ngb-datepicker>
-                                              </div>
-                                            </div>
+                                        <!-- Card header -->
+                                        <div class="avail-card-header">
+                                          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
+                                            <path d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5M1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4z"/>
+                                          </svg>
+                                          <h5 class="avail-card-title">Availability Calendar</h5>
+                                          <span class="avail-header-hint">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" fill="currentColor" viewBox="0 0 16 16">
+                                              <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>
+                                              <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0"/>
+                                            </svg>
+                                            Color-coded availability status
+                                          </span>
+                                        </div>
 
-                                            <!-- Right Calendar -->
-                                            <div class="col-lg-6">
-                                              <div class="calendar-section">
-                                                <ngb-datepicker
-                                                  [firstDayOfWeek]="7"
-                                                  [startDate]="getDateStruct(rightCalendarDate)"
-                                                  [navigation]="'arrows'"
-                                                  [outsideDays]="'hidden'"
-                                                  [displayMonths]="1"
-                                                  class="custom-datepicker"
-                                                  [markDisabled]="markDisabled"
-                                                  (navigate)="onRightCalendarNavigate($event)"
-                                                  [dayTemplate]="customDayTemplate">
-                                                </ngb-datepicker>
-                                              </div>
-                                            </div>
-
-                                            <!-- Define the custom day template ONCE outside the datepickers -->
-                                            <ng-template #customDayTemplate let-date="date" let-currentMonth="currentMonth"
-                                                         let-selected="selected" let-disabled="disabled" let-focused="focused">
-                                              <div class="custom-day-wrapper"
-                                                   [class.date-fully-available]="getDateCustomClass(date) === 'date-fully-available'"
-                                                   [class.date-fully-unavailable]="getDateCustomClass(date) === 'date-fully-unavailable'"
-                                                   [class.date-am-only]="getDateCustomClass(date) === 'date-am-only'"
-                                                   [class.date-pm-only]="getDateCustomClass(date) === 'date-pm-only'"
-                                                   [class.date-no-checkin]="getDateCustomClass(date) === 'date-no-checkin'"
-                                                   [class.disabled]="disabled"
-                                                   [class.focused]="focused"
-                                                   [class.selected]="selected"
-                                                   [title]="getDateStatusText(date)">
-                                                {{ date.day }}
-                                              </div>
-                                            </ng-template>
+                                        <!-- Legend strip -->
+                                        <div class="avail-legend-strip">
+                                          <div class="avail-legend-item">
+                                            <span class="avail-legend-swatch avail-swatch--available"></span>
+                                            Available
                                           </div>
-
-                                          <!-- Enhanced Legend -->
-                                          <div class="legend mt-4 pt-3 border-top">
-                                            <div class="row justify-content-center g-3">
-                                              <div class="col-auto">
-                                                <div class="d-flex align-items-center">
-                                                  <div class="legend-dot fully-available me-2"></div>
-                                                  <small>Available</small>
-                                                </div>
-                                              </div>
-                                              <div class="col-auto">
-                                                <div class="d-flex align-items-center">
-                                                  <div class="legend-dot fully-unavailable me-2"></div>
-                                                  <small>Not Available</small>
-                                                </div>
-                                              </div>
-                                              <div class="col-auto">
-                                                <div class="d-flex align-items-center">
-                                                  <div class="legend-dot am-only me-2"></div>
-                                                  <small>AM Available</small>
-                                                </div>
-                                              </div>
-                                              <div class="col-auto">
-                                                <div class="d-flex align-items-center">
-                                                  <div class="legend-dot pm-only me-2"></div>
-                                                  <small>PM Available</small>
-                                                </div>
-                                              </div>
-                                              <div class="col-auto">
-                                                <div class="d-flex align-items-center">
-                                                  <div class="legend-dot no-checkin me-2"></div>
-                                                  <small>Available (No Check-in)</small>
-                                                </div>
-                                              </div>
-                                            </div>
+                                          <div class="avail-legend-item">
+                                            <span class="avail-legend-swatch avail-swatch--unavailable"></span>
+                                            Not Available
+                                          </div>
+                                          <div class="avail-legend-item">
+                                            <span class="avail-legend-swatch avail-swatch--am"></span>
+                                            AM Only
+                                          </div>
+                                          <div class="avail-legend-item">
+                                            <span class="avail-legend-swatch avail-swatch--pm"></span>
+                                            PM Only
+                                          </div>
+                                          <div class="avail-legend-item">
+                                            <span class="avail-legend-swatch avail-swatch--no-checkin"></span>
+                                            No Check-in
                                           </div>
                                         </div>
+
+                                        <!-- Single calendar — 2 months -->
+                                        <div class="avail-body">
+                                          <div class="avail-single-wrap">
+                                            <ngb-datepicker
+                                              [firstDayOfWeek]="7"
+                                              [startDate]="getDateStruct(leftCalendarDate)"
+                                              [navigation]="'arrows'"
+                                              [outsideDays]="'hidden'"
+                                              [displayMonths]="2"
+                                              [showWeekNumbers]="false"
+                                              class="custom-datepicker"
+                                              [markDisabled]="markDisabled"
+                                              (navigate)="onLeftCalendarNavigate($event)"
+                                              [dayTemplate]="customDayTemplate">
+                                            </ngb-datepicker>
+                                          </div>
+                                        </div>
+
+                                        <!-- Footer note -->
+                                        <div class="avail-footer">
+                                          <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" fill="currentColor" viewBox="0 0 16 16">
+                                            <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>
+                                            <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0"/>
+                                          </svg>
+                                          Use the arrows on each calendar to navigate months. Availability is updated in real time.
+                                        </div>
+
                                       </div>
+
+                                      <!-- Custom day template (shared by both calendars) -->
+                                      <ng-template #customDayTemplate let-date="date" let-currentMonth="currentMonth"
+                                                   let-selected="selected" let-disabled="disabled" let-focused="focused">
+                                        <div class="custom-day-wrapper"
+                                             [class.date-fully-available]="getDateCustomClass(date) === 'date-fully-available'"
+                                             [class.date-fully-unavailable]="getDateCustomClass(date) === 'date-fully-unavailable'"
+                                             [class.date-am-only]="getDateCustomClass(date) === 'date-am-only'"
+                                             [class.date-pm-only]="getDateCustomClass(date) === 'date-pm-only'"
+                                             [class.date-no-checkin]="getDateCustomClass(date) === 'date-no-checkin'"
+                                             [class.disabled]="disabled"
+                                             [class.focused]="focused"
+                                             [class.selected]="selected"
+                                             [title]="getDateStatusText(date)">
+                                          {{ date.day }}
+                                        </div>
+                                      </ng-template>
+
                                     </div>
 
                                     <!-- REVIEWS TAB -->
@@ -467,161 +616,249 @@
                                       <!--
                                         <app-add-property-reviews></app-add-property-reviews>
                                       -->
+                                      <div class="reviews-card">
+
+                                        <!-- Card header -->
+                                        <div class="reviews-card-header">
+                                          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
+                                            <path d="M2.678 11.894a1 1 0 0 1 .287.801 11 11 0 0 1-.398 2c1.395-.323 2.247-.697 2.634-.893a1 1 0 0 1 .71-.074A8 8 0 0 0 8 14c3.996 0 7-2.807 7-6s-3.004-6-7-6-7 2.808-7 6c0 1.468.617 2.83 1.678 3.894m-.493 3.905a22 22 0 0 1-.713.129c-.2.032-.352-.176-.273-.362a10 10 0 0 0 .244-.637l.003-.01c.248-.72.45-1.548.524-2.319C.743 11.37 0 9.76 0 8c0-3.866 3.582-7 8-7s8 3.134 8 7-3.582 7-8 7a9 9 0 0 1-2.347-.306c-.52.263-1.639.742-3.468 1.105"/>
+                                          </svg>
+                                          <h5 class="reviews-card-title">Property Reviews</h5>
+                                        </div>
+
+                                        <!-- Card body — empty state -->
+                                        <div class="reviews-card-body">
+                                          <div class="reviews-empty-icon">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="currentColor" viewBox="0 0 24 24">
+                                              <!-- Chat bubble -->
+                                              <path d="M12 2C6.477 2 2 6.028 2 11c0 2.1.76 4.03 2.02 5.57L2.1 20.45a.75.75 0 0 0 .96.96l3.94-1.9A10.1 10.1 0 0 0 12 20c5.523 0 10-4.028 10-9S17.523 2 12 2z" opacity="0.85"/>
+                                              <!-- X mark -->
+                                              <path fill="white" d="M9.293 8.293a1 1 0 0 1 1.414 0L12 9.586l1.293-1.293a1 1 0 1 1 1.414 1.414L13.414 11l1.293 1.293a1 1 0 0 1-1.414 1.414L12 12.414l-1.293 1.293a1 1 0 0 1-1.414-1.414L10.586 11 9.293 9.707a1 1 0 0 1 0-1.414z"/>
+                                            </svg>
+                                          </div>
+                                          <h5 class="reviews-empty-title">No Reviews Yet</h5>
+                                          <p class="reviews-empty-sub">This property hasn't received any reviews yet.<br>Check back later for guest feedback.</p>
+                                          <div class="reviews-empty-stars">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16"><path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"/></svg>
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16"><path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"/></svg>
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16"><path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"/></svg>
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16"><path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"/></svg>
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16"><path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"/></svg>
+                                          </div>
+                                        </div>
+
+                                      </div>
                                     </div>
                                 </ng-container>
                             </div>
                       </tab>
                   </tabset>
+                  </div>
                 </div>
         </div>
 
         <!-- Right Column (Social Media, Rates, etc.) -->
         <div class="col-md-4">
-            <div class="row">
-                <div class="col-12">
-                    <div class="property-details-s-media">
-                        Share this property to
-                    </div>
-                </div>
-                <div class="col-12">
-                    <div class="share-btn-container">
-                        <a href="{{ facebookURL }}" class="facebook-btn" target="_blank">
-                            <svg fill="currentColor" class="social-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640"><path d="M240 363.3L240 576L356 576L356 363.3L442.5 363.3L460.5 265.5L356 265.5L356 230.9C356 179.2 376.3 159.4 428.7 159.4C445 159.4 458.1 159.8 465.7 160.6L465.7 71.9C451.4 68 416.4 64 396.2 64C289.3 64 240 114.5 240 223.4L240 265.5L174 265.5L174 363.3L240 363.3z"/></svg>
-                        </a>
+          <div class="right-sidebar">
 
-                        <a href="https://www.instagram.com/destinique_travel/" class="instagram-btn" target="_blank">
-                            <svg fill="currentColor" class="social-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640"><path d="M320.3 205C256.8 204.8 205.2 256.2 205 319.7C204.8 383.2 256.2 434.8 319.7 435C383.2 435.2 434.8 383.8 435 320.3C435.2 256.8 383.8 205.2 320.3 205zM319.7 245.4C360.9 245.2 394.4 278.5 394.6 319.7C394.8 360.9 361.5 394.4 320.3 394.6C279.1 394.8 245.6 361.5 245.4 320.3C245.2 279.1 278.5 245.6 319.7 245.4zM413.1 200.3C413.1 185.5 425.1 173.5 439.9 173.5C454.7 173.5 466.7 185.5 466.7 200.3C466.7 215.1 454.7 227.1 439.9 227.1C425.1 227.1 413.1 215.1 413.1 200.3zM542.8 227.5C541.1 191.6 532.9 159.8 506.6 133.6C480.4 107.4 448.6 99.2 412.7 97.4C375.7 95.3 264.8 95.3 227.8 97.4C192 99.1 160.2 107.3 133.9 133.5C107.6 159.7 99.5 191.5 97.7 227.4C95.6 264.4 95.6 375.3 97.7 412.3C99.4 448.2 107.6 480 133.9 506.2C160.2 532.4 191.9 540.6 227.8 542.4C264.8 544.5 375.7 544.5 412.7 542.4C448.6 540.7 480.4 532.5 506.6 506.2C532.8 480 541 448.2 542.8 412.3C544.9 375.3 544.9 264.5 542.8 227.5zM495 452C487.2 471.6 472.1 486.7 452.4 494.6C422.9 506.3 352.9 503.6 320.3 503.6C287.7 503.6 217.6 506.2 188.2 494.6C168.6 486.8 153.5 471.7 145.6 452C133.9 422.5 136.6 352.5 136.6 319.9C136.6 287.3 134 217.2 145.6 187.8C153.4 168.2 168.5 153.1 188.2 145.2C217.7 133.5 287.7 136.2 320.3 136.2C352.9 136.2 423 133.6 452.4 145.2C472 153 487.1 168.1 495 187.8C506.7 217.3 504 287.3 504 319.9C504 352.5 506.7 422.6 495 452z"/></svg>
-                        </a>
-
-                        <a href="{{ twitterURL }}" class="twitter-btn" target="_blank">
-                            <svg fill="currentColor" class="social-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640"><path d="M453.2 112L523.8 112L369.6 288.2L551 528L409 528L297.7 382.6L170.5 528L99.8 528L264.7 339.5L90.8 112L236.4 112L336.9 244.9L453.2 112zM428.4 485.8L467.5 485.8L215.1 152L173.1 152L428.4 485.8z"/></svg>
-                        </a>
-
-                        <a href="https://www.pinterest.com/destiniquetravel/" class="pinterest-btn" target="_blank">
-                            <svg fill="currentColor" class="social-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640"><path d="M332 70.5C229.4 70.5 128 138.9 128 249.6C128 320 167.6 360 191.6 360C201.5 360 207.2 332.4 207.2 324.6C207.2 315.3 183.5 295.5 183.5 256.8C183.5 176.4 244.7 119.4 323.9 119.4C392 119.4 442.4 158.1 442.4 229.2C442.4 282.3 421.1 381.9 352.1 381.9C327.2 381.9 305.9 363.9 305.9 338.1C305.9 300.3 332.3 263.7 332.3 224.7C332.3 158.5 238.4 170.5 238.4 250.5C238.4 267.3 240.5 285.9 248 301.2C234.2 360.6 206 449.1 206 510.3C206 529.2 208.7 547.8 210.5 566.7C213.9 570.5 212.2 570.1 217.4 568.2C267.8 499.2 266 485.7 288.8 395.4C301.1 418.8 332.9 431.4 358.1 431.4C464.3 431.4 512 327.9 512 234.6C512 135.3 426.2 70.5 332 70.5z"/></svg>
-                        </a>
-
-                        <a href="{{ whatsappURL }}" class="whatsapp-btn" target="_blank">
-                            <svg fill="currentColor" class="social-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640"><path d="M476.9 161.1C435 119.1 379.2 96 319.9 96C197.5 96 97.9 195.6 97.9 318C97.9 357.1 108.1 395.3 127.5 429L96 544L213.7 513.1C246.1 530.8 282.6 540.1 319.8 540.1L319.9 540.1C442.2 540.1 544 440.5 544 318.1C544 258.8 518.8 203.1 476.9 161.1zM319.9 502.7C286.7 502.7 254.2 493.8 225.9 477L219.2 473L149.4 491.3L168 423.2L163.6 416.2C145.1 386.8 135.4 352.9 135.4 318C135.4 216.3 218.2 133.5 320 133.5C369.3 133.5 415.6 152.7 450.4 187.6C485.2 222.5 506.6 268.8 506.5 318.1C506.5 419.9 421.6 502.7 319.9 502.7zM421.1 364.5C415.6 361.7 388.3 348.3 383.2 346.5C378.1 344.6 374.4 343.7 370.7 349.3C367 354.9 356.4 367.3 353.1 371.1C349.9 374.8 346.6 375.3 341.1 372.5C308.5 356.2 287.1 343.4 265.6 306.5C259.9 296.7 271.3 297.4 281.9 276.2C283.7 272.5 282.8 269.3 281.4 266.5C280 263.7 268.9 236.4 264.3 225.3C259.8 214.5 255.2 216 251.8 215.8C248.6 215.6 244.9 215.6 241.2 215.6C237.5 215.6 231.5 217 226.4 222.5C221.3 228.1 207 241.5 207 268.8C207 296.1 226.9 322.5 229.6 326.2C232.4 329.9 268.7 385.9 324.4 410C359.6 425.2 373.4 426.5 391 423.9C401.7 422.3 423.8 410.5 428.4 397.5C433 384.5 433 373.4 431.6 371.1C430.3 368.6 426.6 367.2 421.1 364.5z"/></svg>
-                        </a>
-                    </div>
-                </div>
+            <!-- ── Social Share ── -->
+            <div class="sidebar-share-card">
+              <span class="sidebar-share-label">
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" viewBox="0 0 16 16">
+                  <path d="M13.5 1a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3M11 2.5a2.5 2.5 0 1 1 .603 1.628l-6.718 3.12a2.5 2.5 0 0 1 0 1.504l6.718 3.12a2.5 2.5 0 1 1-.488.876l-6.718-3.12a2.5 2.5 0 1 1 0-3.256l6.718-3.12A2.5 2.5 0 0 1 11 2.5"/>
+                </svg>
+                Share this property
+              </span>
+              <div class="sidebar-social-icons">
+                <a href="{{ facebookURL }}" class="social-icon-btn facebook" target="_blank" title="Facebook">
+                  <svg fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640"><path d="M240 363.3L240 576L356 576L356 363.3L442.5 363.3L460.5 265.5L356 265.5L356 230.9C356 179.2 376.3 159.4 428.7 159.4C445 159.4 458.1 159.8 465.7 160.6L465.7 71.9C451.4 68 416.4 64 396.2 64C289.3 64 240 114.5 240 223.4L240 265.5L174 265.5L174 363.3L240 363.3z"/></svg>
+                </a>
+                <a href="https://www.instagram.com/destinique_travel/" class="social-icon-btn instagram" target="_blank" title="Instagram">
+                  <svg fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640"><path d="M320.3 205C256.8 204.8 205.2 256.2 205 319.7C204.8 383.2 256.2 434.8 319.7 435C383.2 435.2 434.8 383.8 435 320.3C435.2 256.8 383.8 205.2 320.3 205zM319.7 245.4C360.9 245.2 394.4 278.5 394.6 319.7C394.8 360.9 361.5 394.4 320.3 394.6C279.1 394.8 245.6 361.5 245.4 320.3C245.2 279.1 278.5 245.6 319.7 245.4zM413.1 200.3C413.1 185.5 425.1 173.5 439.9 173.5C454.7 173.5 466.7 185.5 466.7 200.3C466.7 215.1 454.7 227.1 439.9 227.1C425.1 227.1 413.1 215.1 413.1 200.3zM542.8 227.5C541.1 191.6 532.9 159.8 506.6 133.6C480.4 107.4 448.6 99.2 412.7 97.4C375.7 95.3 264.8 95.3 227.8 97.4C192 99.1 160.2 107.3 133.9 133.5C107.6 159.7 99.5 191.5 97.7 227.4C95.6 264.4 95.6 375.3 97.7 412.3C99.4 448.2 107.6 480 133.9 506.2C160.2 532.4 191.9 540.6 227.8 542.4C264.8 544.5 375.7 544.5 412.7 542.4C448.6 540.7 480.4 532.5 506.6 506.2C532.8 480 541 448.2 542.8 412.3C544.9 375.3 544.9 264.5 542.8 227.5zM495 452C487.2 471.6 472.1 486.7 452.4 494.6C422.9 506.3 352.9 503.6 320.3 503.6C287.7 503.6 217.6 506.2 188.2 494.6C168.6 486.8 153.5 471.7 145.6 452C133.9 422.5 136.6 352.5 136.6 319.9C136.6 287.3 134 217.2 145.6 187.8C153.4 168.2 168.5 153.1 188.2 145.2C217.7 133.5 287.7 136.2 320.3 136.2C352.9 136.2 423 133.6 452.4 145.2C472 153 487.1 168.1 495 187.8C506.7 217.3 504 287.3 504 319.9C504 352.5 506.7 422.6 495 452z"/></svg>
+                </a>
+                <a href="{{ twitterURL }}" class="social-icon-btn twitter" target="_blank" title="X (Twitter)">
+                  <svg fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640"><path d="M453.2 112L523.8 112L369.6 288.2L551 528L409 528L297.7 382.6L170.5 528L99.8 528L264.7 339.5L90.8 112L236.4 112L336.9 244.9L453.2 112zM428.4 485.8L467.5 485.8L215.1 152L173.1 152L428.4 485.8z"/></svg>
+                </a>
+                <a href="https://www.pinterest.com/destiniquetravel/" class="social-icon-btn pinterest" target="_blank" title="Pinterest">
+                  <svg fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640"><path d="M332 70.5C229.4 70.5 128 138.9 128 249.6C128 320 167.6 360 191.6 360C201.5 360 207.2 332.4 207.2 324.6C207.2 315.3 183.5 295.5 183.5 256.8C183.5 176.4 244.7 119.4 323.9 119.4C392 119.4 442.4 158.1 442.4 229.2C442.4 282.3 421.1 381.9 352.1 381.9C327.2 381.9 305.9 363.9 305.9 338.1C305.9 300.3 332.3 263.7 332.3 224.7C332.3 158.5 238.4 170.5 238.4 250.5C238.4 267.3 240.5 285.9 248 301.2C234.2 360.6 206 449.1 206 510.3C206 529.2 208.7 547.8 210.5 566.7C213.9 570.5 212.2 570.1 217.4 568.2C267.8 499.2 266 485.7 288.8 395.4C301.1 418.8 332.9 431.4 358.1 431.4C464.3 431.4 512 327.9 512 234.6C512 135.3 426.2 70.5 332 70.5z"/></svg>
+                </a>
+                <a href="{{ whatsappURL }}" class="social-icon-btn whatsapp" target="_blank" title="WhatsApp">
+                  <svg fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640"><path d="M476.9 161.1C435 119.1 379.2 96 319.9 96C197.5 96 97.9 195.6 97.9 318C97.9 357.1 108.1 395.3 127.5 429L96 544L213.7 513.1C246.1 530.8 282.6 540.1 319.8 540.1L319.9 540.1C442.2 540.1 544 440.5 544 318.1C544 258.8 518.8 203.1 476.9 161.1zM319.9 502.7C286.7 502.7 254.2 493.8 225.9 477L219.2 473L149.4 491.3L168 423.2L163.6 416.2C145.1 386.8 135.4 352.9 135.4 318C135.4 216.3 218.2 133.5 320 133.5C369.3 133.5 415.6 152.7 450.4 187.6C485.2 222.5 506.6 268.8 506.5 318.1C506.5 419.9 421.6 502.7 319.9 502.7zM421.1 364.5C415.6 361.7 388.3 348.3 383.2 346.5C378.1 344.6 374.4 343.7 370.7 349.3C367 354.9 356.4 367.3 353.1 371.1C349.9 374.8 346.6 375.3 341.1 372.5C308.5 356.2 287.1 343.4 265.6 306.5C259.9 296.7 271.3 297.4 281.9 276.2C283.7 272.5 282.8 269.3 281.4 266.5C280 263.7 268.9 236.4 264.3 225.3C259.8 214.5 255.2 216 251.8 215.8C248.6 215.6 244.9 215.6 241.2 215.6C237.5 215.6 231.5 217 226.4 222.5C221.3 228.1 207 241.5 207 268.8C207 296.1 226.9 322.5 229.6 326.2C232.4 329.9 268.7 385.9 324.4 410C359.6 425.2 373.4 426.5 391 423.9C401.7 422.3 423.8 410.5 428.4 397.5C433 384.5 433 373.4 431.6 371.1C430.3 368.6 426.6 367.2 421.1 364.5z"/></svg>
+                </a>
+              </div>
             </div>
 
-            <div class="row">
-                <div class="col-12 check-availability-and-rates">
-                    <div class="card mb-1 shadow-lg property-rates">
-                        <div class="card-header">
-                            <h5 id="prop_details_rates_avail_sec" class="my-0 fw-normal text-center">
-                                Check Availability and Rates
-                            </h5>
-                        </div>
-                        <div class="card-body">
-                            <form [formGroup]="datesForm" (ngSubmit)="onDatesFormSubmit()">
-                                <div class="row">
-                                    <div class="col-12 col-lg-8">
-                                        <div class="mb-3">
-                                          <div *ngIf="isDatesFormSubmitting || isCalendarLoading" class="spinner-border spinner-border-sm"></div>
-                                          <label for="checkin_checkout_date" class="form-label required">CheckIn - CheckOut</label>
-                                          <input
-                                            id="checkin_checkout_date"
-                                            type="text"
-                                            class="form-control"
-                                            formControlName="searchCalender"
-                                            [placeholder]="getPlaceholderText()"
-                                            ngbDatepicker
-                                            #dpr="ngbDatepicker"
-                                            [displayMonths]="1"
-                                            [navigation]="'arrows'"
-                                            [outsideDays]="'hidden'"
-                                            [firstDayOfWeek]="7"
-                                            [dayTemplate]="rangeDayTemplate"
-                                            [markDisabled]="markDisabled"
-                                            (dateSelect)="onDateSelection($event, dpr)"
-                                            (click)="dpr.toggle()"
-                                            [value]="formatDateRange()"
-                                            [autoClose]="'outside'"
-                                            readonly
-                                          />
+            <!-- ── Booking Card ── -->
+            <div class="sidebar-booking-card" id="prop_details_rates_avail_sec">
 
-                                          <ng-template #rangeDayTemplate let-date="date"
-                                                       let-selected="selected"
-                                                       let-disabled="disabled"
-                                                       let-focused="focused">
-                                            <div class="custom-day-wrapper"
-                                                 [class.date-fully-available]="getDateCustomClass(date) === 'date-fully-available'"
-                                                 [class.date-fully-unavailable]="getDateCustomClass(date) === 'date-fully-unavailable'"
-                                                 [class.date-am-only]="getDateCustomClass(date) === 'date-am-only'"
-                                                 [class.date-pm-only]="getDateCustomClass(date) === 'date-pm-only'"
-                                                 [class.date-no-checkin]="getDateCustomClass(date) === 'date-no-checkin'"
-                                                 [class.range-start]="isRangeStart(date)"
-                                                 [class.range-end]="isRangeEnd(date)"
-                                                 [class.in-range]="isInsideRange(date)"
-                                                 [class.disabled]="disabled"
-                                                 [class.focused]="focused"
-                                                 [class.selected]="selected"
-                                                 [title]="getDateStatusText(date)">
-                                              {{ date.day }}
-                                            </div>
-                                          </ng-template>
+              <!-- Card Header -->
+              <div class="booking-card-header">
+                <div class="booking-header-icon">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
+                    <path d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5M1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4z"/>
+                  </svg>
+                </div>
+                <div>
+                  <h5 class="booking-card-title">Check Availability &amp; Rates</h5>
+                  <p class="booking-card-subtitle">Select dates to view pricing</p>
+                </div>
+                <div *ngIf="isDatesFormSubmitting || isCalendarLoading" class="booking-loading-badge">
+                  <span class="spinner-border spinner-border-sm"></span>
+                </div>
+              </div>
 
-                                          <!-- Validation message using getter -->
-                                          <div *ngIf="searchCalenderControl?.invalid && searchCalenderControl?.touched"
-                                               class="invalid-feedback d-block">
-                                              <span *ngIf="searchCalenderControl?.hasError('required')">
-                                                Please select check-in and check-out dates
-                                              </span>
-                                          </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-12 col-lg-4">
-                                        <div class="mb-3">
-                                            <label for="guests-number" class="form-label">Guests</label>
-                                            <input id="guests-number" type="number" class="form-control"
-                                                   formControlName="sleeps"
-                                                   min="1" name="guests-number">
-                                          <div *ngIf="sleepsControl?.invalid && sleepsControl?.touched"
-                                               class="invalid-feedback d-block">
-                                              <span *ngIf="sleepsControl?.hasError('min')">
-                                                Number of guests must be at least 1
-                                              </span>
-                                          </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-12">
-                                        <div class="mb-3 m-0">
-                                            <button type="submit" class="btn w-100">
-                                              <span *ngIf="isDatesFormSubmitting || isCalendarLoading" class="spinner-border spinner-border-sm mr-1"></span>Submit
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                    <div class="mb-2">
-                        <button type="button"
-                                class="btn property-inquiry-btn"
-                                (click)="openInquiryModal('PROPERTY INQUIRY')">
-                          PROPERTY INQUIRY
-                        </button>
+              <!-- Form -->
+              <div class="booking-card-body">
+                <form [formGroup]="datesForm" (ngSubmit)="onDatesFormSubmit()">
 
-                        <button type="button"
-                                class="btn book-now-btn"
-                                (click)="openInquiryModal('REQUEST TO BOOK')">
-                          REQUEST TO BOOK
-                        </button>
+                  <!-- Date Range Field -->
+                  <div class="booking-field-group date-range-field">
+                    <label for="checkin_checkout_date" class="booking-field-label required">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" fill="currentColor" viewBox="0 0 16 16">
+                        <path d="M11 6.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm-3 0a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm-5 3a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm3 0a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5z"/>
+                        <path d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5M1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4z"/>
+                      </svg>
+                      Check-in — Check-out
+                    </label>
+                    <div class="booking-input-wrapper">
+                      <svg class="booking-input-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                        <path d="M8 3.5a.5.5 0 0 0-1 0V9a.5.5 0 0 0 .252.434l3.5 2a.5.5 0 0 0 .496-.868L8 8.71z"/>
+                        <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16m7-8A7 7 0 1 1 1 8a7 7 0 0 1 14 0"/>
+                      </svg>
+                      <input
+                        id="checkin_checkout_date"
+                        type="text"
+                        class="booking-date-input"
+                        formControlName="searchCalender"
+                        [placeholder]="getPlaceholderText()"
+                        ngbDatepicker
+                        #dpr="ngbDatepicker"
+                        [displayMonths]="1"
+                        [navigation]="'arrows'"
+                        [outsideDays]="'hidden'"
+                        [firstDayOfWeek]="7"
+                        [dayTemplate]="rangeDayTemplate"
+                        [markDisabled]="markDisabled"
+                        (dateSelect)="onDateSelection($event, dpr)"
+                        (click)="dpr.toggle()"
+                        [value]="formatDateRange()"
+                        [autoClose]="'outside'"
+                        readonly
+                      />
                     </div>
 
-                    <div class="card mb-1 shadow-lg">
-                      <div class="card-body p-0">
-                        <div id="property-map" class="map-container"></div>
+                    <ng-template #rangeDayTemplate let-date="date"
+                                 let-selected="selected"
+                                 let-disabled="disabled"
+                                 let-focused="focused">
+                      <div class="custom-day-wrapper"
+                           [class.date-fully-available]="getDateCustomClass(date) === 'date-fully-available'"
+                           [class.date-fully-unavailable]="getDateCustomClass(date) === 'date-fully-unavailable'"
+                           [class.date-am-only]="getDateCustomClass(date) === 'date-am-only'"
+                           [class.date-pm-only]="getDateCustomClass(date) === 'date-pm-only'"
+                           [class.date-no-checkin]="getDateCustomClass(date) === 'date-no-checkin'"
+                           [class.range-start]="isRangeStart(date)"
+                           [class.range-end]="isRangeEnd(date)"
+                           [class.in-range]="isInsideRange(date)"
+                           [class.disabled]="disabled"
+                           [class.focused]="focused"
+                           [class.selected]="selected"
+                           [title]="getDateStatusText(date)">
+                        {{ date.day }}
                       </div>
+                    </ng-template>
+
+                    <div *ngIf="searchCalenderControl?.invalid && searchCalenderControl?.touched"
+                         class="booking-validation-msg">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" viewBox="0 0 16 16">
+                        <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>
+                        <path d="M7.002 11a1 1 0 1 1 2 0 1 1 0 0 1-2 0M7.1 4.995a.905.905 0 1 1 1.8 0l-.35 3.507a.552.552 0 0 1-1.1 0z"/>
+                      </svg>
+                      Please select check-in and check-out dates
                     </div>
-                </div>
+                  </div>
+
+                  <!-- Guests Field -->
+                  <div class="booking-field-group">
+                    <label for="guests-number" class="booking-field-label">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" fill="currentColor" viewBox="0 0 16 16">
+                        <path d="M7 14s-1 0-1-1 1-4 5-4 5 3 5 4-1 1-1 1zm4-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6m-5.784 6A2.24 2.24 0 0 1 5 13c0-1.355.68-2.75 1.936-3.72A6.3 6.3 0 0 0 5 9c-4 0-5 3-5 4s1 1 1 1zM4.5 8a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5"/>
+                      </svg>
+                      Number of Guests
+                    </label>
+                    <div class="booking-input-wrapper">
+                      <svg class="booking-input-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                        <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6"/>
+                      </svg>
+                      <input
+                        id="guests-number"
+                        type="number"
+                        class="booking-date-input"
+                        formControlName="sleeps"
+                        min="1"
+                        name="guests-number"
+                        placeholder="1"
+                      />
+                    </div>
+                    <div *ngIf="sleepsControl?.invalid && sleepsControl?.touched"
+                         class="booking-validation-msg">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" viewBox="0 0 16 16">
+                        <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>
+                        <path d="M7.002 11a1 1 0 1 1 2 0 1 1 0 0 1-2 0M7.1 4.995a.905.905 0 1 1 1.8 0l-.35 3.507a.552.552 0 0 1-1.1 0z"/>
+                      </svg>
+                      Number of guests must be at least 1
+                    </div>
+                  </div>
+
+                  <!-- Submit Button -->
+                  <button type="submit" class="booking-submit-btn" [disabled]="isDatesFormSubmitting || isCalendarLoading">
+                    <span *ngIf="isDatesFormSubmitting || isCalendarLoading" class="spinner-border spinner-border-sm"></span>
+                    <svg *ngIf="!(isDatesFormSubmitting || isCalendarLoading)" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                      <path d="M8 1a2.5 2.5 0 0 1 2.5 2.5V4h-5v-.5A2.5 2.5 0 0 1 8 1m3.5 3v-.5a3.5 3.5 0 1 0-7 0V4H1v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V4zM2 5h12v9a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1z"/>
+                    </svg>
+                    {{ (isDatesFormSubmitting || isCalendarLoading) ? 'Checking...' : 'Check Availability' }}
+                  </button>
+
+                </form>
+              </div>
+
+              <!-- Card Footer hint -->
+              <div class="booking-card-footer">
+                <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" viewBox="0 0 16 16">
+                  <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16m.93-9.412-1 4.705c-.07.34.029.533.304.533.194 0 .487-.07.686-.246l-.088.416c-.287.346-.92.598-1.465.598-.703 0-1.002-.422-.808-1.319l.738-3.468c.064-.293.006-.399-.287-.47l-.451-.081.082-.381 2.29-.287zM8 5.5a1 1 0 1 1 0-2 1 1 0 0 1 0 2"/>
+                </svg>
+                Rates include all taxes &amp; fees. Not guaranteed until booked.
+              </div>
             </div>
+
+            <!-- ── CTA Buttons ── -->
+            <div class="sidebar-cta-group">
+              <button type="button" class="sidebar-cta-inquiry" (click)="openInquiryModal('PROPERTY INQUIRY')">
+                <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" fill="currentColor" viewBox="0 0 16 16">
+                  <path d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2zm2-1a1 1 0 0 0-1 1v.217l7 4.2 7-4.2V4a1 1 0 0 0-1-1zm13 2.383-4.708 2.825L15 11.105zm-.034 6.876-5.64-3.471L8 9.583l-1.326-.795-5.64 3.47A1 1 0 0 0 2 13h12a1 1 0 0 0 .966-.741M1 11.105l4.708-2.897L1 5.383z"/>
+                </svg>
+                Property Inquiry
+              </button>
+              <button type="button" class="sidebar-cta-book" (click)="openInquiryModal('REQUEST TO BOOK')">
+                <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" fill="currentColor" viewBox="0 0 640 640">
+                  <path d="M568.4 37.7C578.2 34.2 589 36.7 596.4 44C603.8 51.3 606.2 62.2 602.7 72L424.7 568.9C419.7 582.8 406.6 592 391.9 592C377.7 592 364.9 583.4 359.6 570.3L295.4 412.3C290.9 401.3 292.9 388.7 300.6 379.7L395.1 267.3C400.2 261.2 399.8 252.3 394.2 246.7C388.6 241.1 379.6 240.7 373.6 245.8L261.2 340.1C252.1 347.7 239.6 349.7 228.6 345.3L70.1 280.8C57 275.5 48.4 262.7 48.4 248.5C48.4 233.8 57.6 220.7 71.5 215.7L568.4 37.7z"/>
+                </svg>
+                Request to Book
+              </button>
+            </div>
+
+            <!-- ── Map ── -->
+            <div class="sidebar-map-card">
+              <div class="sidebar-map-header">
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" viewBox="0 0 16 16">
+                  <path d="M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10m0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6"/>
+                </svg>
+                Property Location
+              </div>
+              <div id="property-map" class="map-container"></div>
+            </div>
+
+          </div>
         </div>
     </div>
 </div>

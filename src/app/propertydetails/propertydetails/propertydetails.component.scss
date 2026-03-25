@@ -1,5 +1,10 @@
 @use 'variables' as *;
 
+// Ensure the Angular host element is block-level so sticky propagates correctly
+:host {
+  display: block;
+}
+
 // ============================================
 // Mixins
 // ============================================
@@ -16,121 +21,929 @@
 // ============================================
 // Tab Styles
 // ============================================
-.nav-link {
-    padding: 0px 0px !important;
+
+// Wrapper — flat transparent strip, no card rounding
+.tab-scroll-wrapper {
+  display: flex;
+  align-items: stretch;
+  width: 100%;
+  background: transparent;
+  overflow: hidden;
+  position: relative;
 }
-.custom-tabset {
-    .nav-tabs {
-        border-bottom: 2px solid $color-border-light;
-        display: flex;
-        flex-wrap: nowrap;
-        overflow-x: auto;
-        overflow-y: hidden;
 
-        // Scrollbar styling
-        &::-webkit-scrollbar {
-            height: 4px;
-        }
+.nav-tabs-container {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+}
 
-        &::-webkit-scrollbar-track {
-            background: $color-bg-light;
-        }
+// Pierce ngx-bootstrap tabset internals with ::ng-deep
+:host ::ng-deep .custom-tabset {
 
-        &::-webkit-scrollbar-thumb {
-            background: $color-primary;
-        }
+  // The tab bar UL
+  > .nav-tabs {
+    display: flex !important;
+    flex-wrap: nowrap !important;
+    overflow-x: auto !important;
+    overflow-y: hidden !important;
+    border-bottom: 3px solid $color-border-light !important;
+    list-style: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    gap: 0 !important;
+
+    // Desktop: subtle teal scrollbar
+    &::-webkit-scrollbar          { height: 3px; }
+    &::-webkit-scrollbar-track    { background: transparent; }
+    &::-webkit-scrollbar-thumb    { background: $color-primary-light; border-radius: 2px; }
+
+    // Mobile: hide scrollbar — use touch/swipe
+    @media (max-width: 767px) {
+      scrollbar-width: none !important;
+      -ms-overflow-style: none !important;
+      &::-webkit-scrollbar { display: none !important; }
+    }
+  }
+
+  // LI wrapper
+  > .nav-tabs > .nav-item {
+    flex-shrink: 0 !important;
+    margin-bottom: 0 !important;
+  }
+
+  // The clickable anchor ngx-bootstrap renders
+  > .nav-tabs > .nav-item > .nav-link {
+    position: relative !important;
+    display: flex !important;
+    align-items: center !important;
+    padding: 14px 22px !important;
+    margin-bottom: -3px !important;   // overlap the UL bottom border
+    font-size: 0.72rem !important;
+    font-weight: $font-weight-700 !important;
+    letter-spacing: $letter-spacing-wider !important;
+    text-transform: uppercase !important;
+    color: $color-muted !important;
+    white-space: nowrap !important;
+    text-decoration: none !important;
+    cursor: pointer !important;
+    background: transparent !important;
+    border: none !important;
+    border-bottom: 3px solid transparent !important;
+    border-radius: 0 !important;
+    transition: color 0.2s ease, background 0.2s ease, border-color 0.2s ease !important;
+
+    &:hover {
+      color: $color-secondary !important;
+      background: rgba($color-primary, 0.05) !important;
+      border-bottom-color: rgba($color-primary, 0.35) !important;
+      text-decoration: none !important;
     }
 
-    .nav-item {
-        margin-bottom: -2px;
-        flex-shrink: 0;
+    &.active {
+      color: $color-primary !important;
+      background: rgba($color-primary, 0.07) !important;
+      border-bottom-color: $color-primary !important;
+      font-weight: $font-weight-700 !important;
     }
 
-    .nav-tab-link {
-        color: $color-gray-mid;
-        cursor: pointer;
-        border-bottom: 2px solid transparent;
-        margin-right: 12px;
-        text-decoration: none;
-        display: inline-block;
-        font-weight: $font-weight-600;
-        background: transparent;
-        border: none;
-        position: relative;
-
-        &:hover {
-            color: $color-primary;
-            border-color: $color-primary;
-        }
-
-        &.active {
-            color: $color-primary;
-            border-color: $color-primary;
-            background: transparent;
-        }
+    @media (max-width: 767px) {
+      padding: 12px 16px !important;
+      font-size: 0.68rem !important;
     }
-
+  }
 }
 
 // Tab content panels
 .tab-content-panel {
-    animation: fadeIn 0.3s ease-in-out;
+  animation: fadeIn 0.3s ease-in-out;
+  padding-top: $spacing-lg;
+}
+// ── Amenities Tab ──────────────────────────────────────────────
+.amenities-card {
+  background: $color-white;
+  border: 1px solid $color-border;
+  border-radius: $border-radius-lg;
+  box-shadow: 0 2px 16px rgba(0, 34, 69, 0.08);
+  overflow: hidden;
 }
 
-// Navigation controls
-.tab-navigation-controls {
-    padding: 15px;
-    background-color: $color-bg-light;
-    border-radius: $border-radius-sm;
-    border: $border-width solid $color-border-light;
+.amenities-card-header {
+  display: flex;
+  align-items: center;
+  gap: $spacing-sm;
+  padding: $spacing-lg $spacing-xl;
+  background: linear-gradient(135deg, $color-primary 0%, $color-primary-dark 100%);
+  color: $color-white;
 
-    .btn-outline-primary {
-        color: $color-primary;
-        border-color: $color-primary;
-
-        &:hover {
-            background-color: $color-primary;
-            color: $color-white;
-        }
-
-        &:disabled {
-            color: $color-muted;
-            border-color: $color-muted;
-            cursor: not-allowed;
-            opacity: 0.5;
-
-            &:hover {
-                background-color: transparent;
-                color: $color-muted;
-            }
-        }
-    }
-
-    .current-tab-indicator .badge {
-        background-color: $color-primary;
-        font-size: 0.9rem;
-        padding: 8px 15px;
-    }
+  svg { flex-shrink: 0; opacity: 0.9; }
 }
-.amenities-content ul li {
-    color: $color-text-light;
-    float: left;
+
+.amenities-card-title {
+  flex: 1;
+  margin: 0;
+  font-size: $font-size-base;
+  font-weight: $font-weight-600;
+  letter-spacing: $letter-spacing-wide;
+  text-transform: uppercase;
+  color: $color-white;
+}
+
+.amenities-total-badge {
+  background: rgba(255, 255, 255, 0.18);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 20px;
+  padding: 3px 12px;
+  font-size: 0.75rem;
+  font-weight: $font-weight-600;
+  color: $color-white;
+  white-space: nowrap;
+}
+
+.amenities-body {
+  padding: $spacing-xl;
+}
+
+.amenity-category {
+  &.has-divider {
+    margin-top: $spacing-xl;
+    padding-top: $spacing-xl;
+    border-top: 1px solid $color-border;
+  }
+}
+
+.amenity-category-header {
+  display: flex;
+  align-items: center;
+  gap: $spacing-sm;
+  margin-bottom: $spacing-md;
+}
+
+.amenity-category-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: $color-primary;
+  flex-shrink: 0;
+}
+
+.amenity-category-name {
+  flex: 1;
+  margin: 0;
+  font-size: 0.9rem;
+  font-weight: $font-weight-700;
+  color: $color-secondary;
+  text-transform: uppercase;
+  letter-spacing: $letter-spacing-wide;
+}
+
+.amenity-category-count {
+  background: $color-bg-light;
+  border: 1px solid $color-border;
+  border-radius: 12px;
+  padding: 2px 10px;
+  font-size: 0.72rem;
+  font-weight: $font-weight-600;
+  color: $color-muted;
+}
+
+.amenity-items-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: $spacing-sm $spacing-md;
+
+  @media (max-width: 992px) { grid-template-columns: repeat(2, 1fr); }
+  @media (max-width: 480px)  { grid-template-columns: 1fr; }
+}
+
+.amenity-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  background: $color-bg-light;
+  border: 1px solid $color-border;
+  border-radius: $border-radius-md;
+  transition: border-color 0.2s ease, background 0.2s ease;
+
+  &:hover {
+    background: rgba($color-primary, 0.06);
+    border-color: $color-primary-light;
+  }
+}
+
+.amenity-check-icon {
+  flex-shrink: 0;
+  color: $color-primary;
+}
+
+.amenity-item-name {
+  font-size: 0.82rem;
+  font-weight: $font-weight-500;
+  color: $color-secondary;
+  line-height: 1.3;
+}
+
+.amenities-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: $spacing-sm;
+  padding: $spacing-3xl;
+  color: $color-muted;
+  text-align: center;
+
+  p { margin: 0; font-size: $font-size-sm; }
+}
+
+// ── Description Tab ─────────────────────────────────────────────
+.desc-card {
+  background: $color-white;
+  border: 1px solid $color-border;
+  border-radius: $border-radius-lg;
+  box-shadow: 0 2px 16px rgba(0, 34, 69, 0.08);
+  overflow: hidden;
+}
+
+.desc-card-header {
+  display: flex;
+  align-items: center;
+  gap: $spacing-sm;
+  padding: $spacing-lg $spacing-xl;
+  background: linear-gradient(135deg, $color-primary 0%, $color-primary-dark 100%);
+  color: $color-white;
+
+  svg { flex-shrink: 0; opacity: 0.9; }
+}
+
+.desc-card-title {
+  margin: 0;
+  font-size: $font-size-base;
+  font-weight: $font-weight-600;
+  letter-spacing: $letter-spacing-wide;
+  text-transform: uppercase;
+  color: $color-white;
+}
+
+// Quick-stats strip
+.desc-stats-strip {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0;
+  border-bottom: 1px solid $color-border;
+  background: $color-bg-light;
+}
+
+.desc-stat-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  flex: 1 1 100px;
+  padding: $spacing-md $spacing-sm;
+  border-right: 1px solid $color-border;
+  text-align: center;
+  transition: background 0.2s ease;
+
+  &:last-child { border-right: none; }
+
+  svg { color: $color-primary; }
+
+  &:hover { background: rgba($color-primary, 0.05); }
+}
+
+.desc-stat-value {
+  font-size: 1.1rem;
+  font-weight: $font-weight-700;
+  color: $color-secondary;
+  line-height: 1;
+
+  &--text {
+    font-size: 0.78rem;
+    font-weight: $font-weight-600;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 90px;
+  }
+}
+
+.desc-stat-label {
+  font-size: 0.68rem;
+  font-weight: $font-weight-500;
+  color: $color-muted;
+  text-transform: uppercase;
+  letter-spacing: $letter-spacing-wider;
+}
+
+// Description body
+.desc-body {
+  padding: $spacing-xl;
+}
+
+.desc-headline {
+  font-size: $font-size-lg;
+  font-weight: $font-weight-600;
+  color: $color-secondary;
+  line-height: 1.4;
+  padding-bottom: $spacing-md;
+  margin-bottom: $spacing-md;
+  border-bottom: 2px solid $color-border;
+}
+
+.desc-text {
+  font-size: $font-size-sm;
+  font-weight: $font-weight-400;
+  color: $color-text-light;
+  line-height: 1.85;
+
+  p { margin-bottom: $spacing-md; }
+  p:last-child { margin-bottom: 0; }
+  a { color: $color-primary; text-decoration: none; &:hover { text-decoration: underline; } }
+  ul, ol { padding-left: $spacing-lg; margin-bottom: $spacing-md; }
+  li { margin-bottom: $spacing-xs; }
+}
+
+.desc-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: $spacing-sm;
+  padding: $spacing-3xl;
+  color: $color-muted;
+  text-align: center;
+
+  p { margin: 0; font-size: $font-size-sm; }
+}
+
+// ── Availability Tab ─────────────────────────────────────────────
+.avail-card {
+  background: $color-white;
+  border: 1px solid $color-border;
+  border-radius: $border-radius-lg;
+  box-shadow: 0 2px 16px rgba(0, 34, 69, 0.08);
+  overflow: visible;
+  width: 100%;
+}
+
+.avail-card-header {
+  display: flex;
+  align-items: center;
+  gap: $spacing-sm;
+  padding: $spacing-lg $spacing-xl;
+  background: linear-gradient(135deg, $color-primary 0%, $color-primary-dark 100%);
+  color: $color-white;
+  border-radius: $border-radius-lg $border-radius-lg 0 0;
+
+  svg { flex-shrink: 0; opacity: 0.9; }
+}
+
+.avail-card-title {
+  flex: 1;
+  margin: 0;
+  font-size: $font-size-base;
+  font-weight: $font-weight-600;
+  letter-spacing: $letter-spacing-wide;
+  text-transform: uppercase;
+  color: $color-white;
+}
+
+.avail-header-hint {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  background: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 20px;
+  padding: 3px 12px;
+  font-size: 0.72rem;
+  font-weight: $font-weight-500;
+  color: rgba(255, 255, 255, 0.9);
+  white-space: nowrap;
+
+  @media (max-width: 576px) { display: none; }
+}
+
+// Legend strip
+.avail-legend-strip {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: $spacing-sm $spacing-md;
+  padding: $spacing-sm $spacing-md;
+  background: $color-bg-light;
+  border-bottom: 1px solid $color-border;
+}
+
+.avail-legend-item {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 0.78rem;
+  font-weight: $font-weight-500;
+  color: $color-text-muted;
+}
+
+.avail-legend-swatch {
+  width: 18px;
+  height: 18px;
+  border-radius: 4px;
+  flex-shrink: 0;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+
+  &.avail-swatch--available   { background-color: $color-available; }
+  &.avail-swatch--unavailable { background-color: $color-error; }
+  &.avail-swatch--am          { background: linear-gradient(to right bottom, $color-available 50%, $color-error 50%); }
+  &.avail-swatch--pm          { background: linear-gradient(to right bottom, $color-error 50%, $color-available 50%); }
+  &.avail-swatch--no-checkin  {
+    background-color: $color-available;
     position: relative;
-    width: 33.333333%;
-    padding-right: 20px;
-    font-size: 18px;
-    font-weight: 300 !important;
-}
-@media (max-width: 992px) {
-    .amenities-content ul li {
-        width: 50%;
+    &::after {
+      content: '';
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      width: 6px; height: 6px;
+      background: $color-error;
+      border-radius: 50%;
+      border: 1px solid $color-white;
     }
+  }
 }
-@media (max-width: 460px) {
-    .amenities-content ul li {
-        width: 100%;
+
+// Calendar body
+.avail-body {
+  padding: $spacing-md $spacing-lg $spacing-lg;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.avail-single-wrap {
+  display: block;
+  width: 100%;
+  border: 1px solid $color-border;
+  border-radius: $border-radius-sm;
+  overflow: hidden;
+}
+
+// Force the inline datepicker to fill full width and split months evenly
+:host ::ng-deep .avail-single-wrap ngb-datepicker.custom-datepicker {
+  display: block !important;
+  width: 100% !important;
+
+  // Header bar spans full width
+  .ngb-dp-header {
+    width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  // Months row fills the full width
+  .ngb-dp-months {
+    display: flex !important;
+    width: 100% !important;
+    flex-wrap: nowrap !important;
+    min-width: 0 !important;
+    box-sizing: border-box !important;
+  }
+
+  // Component element — flex child, capped at 50%
+  ngb-dp-month {
+    flex: 1 1 0 !important;
+    min-width: 0 !important;
+    max-width: 50% !important;
+    width: 50% !important;
+    overflow: hidden !important;
+    box-sizing: border-box !important;
+  }
+
+  // Inner div rendered by ngb — fill its component host
+  .ngb-dp-month {
+    width: 100% !important;
+    min-width: 0 !important;
+    box-sizing: border-box !important;
+  }
+
+  // Week rows span full width
+  .ngb-dp-week {
+    display: flex !important;
+    width: 100% !important;
+    min-height: 38px !important;
+    box-sizing: border-box !important;
+  }
+
+  // Weekdays header row
+  .ngb-dp-weekdays {
+    display: flex !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  // Each day / weekday label stretches equally
+  .ngb-dp-day,
+  .ngb-dp-weekday,
+  .ngb-dp-week-number {
+    flex: 1 1 0 !important;
+    width: auto !important;
+    min-width: 0 !important;
+    height: 38px !important;
+    box-sizing: border-box !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+  }
+
+  // Mobile: stack months vertically, each full width
+  @media (max-width: 620px) {
+    .ngb-dp-months {
+      flex-direction: column !important;
     }
+
+    ngb-dp-month {
+      max-width: 100% !important;
+      width: 100% !important;
+    }
+  }
 }
+
+// Footer note
+.avail-footer {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: $spacing-sm $spacing-md;
+  background: $color-bg-light;
+  border-top: 1px solid $color-border;
+  border-radius: 0 0 $border-radius-lg $border-radius-lg;
+  font-size: 0.75rem;
+  color: $color-muted;
+  clear: both;
+  position: relative;
+  z-index: 1;
+
+  svg { flex-shrink: 0; color: $color-primary; }
+}
+
+
+// ============================================
+// Overview Tab
+// ============================================
+
+.ov-card {
+  background: $color-white;
+  border: 1px solid $color-border;
+  border-radius: $border-radius-lg;
+  box-shadow: $shadow-md;
+  overflow: hidden;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.ov-card-header {
+  display: flex;
+  align-items: center;
+  gap: $spacing-sm;
+  padding: $spacing-lg $spacing-xl;
+  background: linear-gradient(135deg, $color-primary 0%, $color-primary-dark 100%);
+  color: $color-white;
+
+  svg { flex-shrink: 0; opacity: 0.9; }
+}
+
+.ov-card-title {
+  flex: 1;
+  margin: 0;
+  font-size: $font-size-base;
+  font-weight: $font-weight-600;
+  letter-spacing: $letter-spacing-wide;
+  text-transform: uppercase;
+  color: $color-white;
+}
+
+.ov-body {
+  padding: $spacing-xl;
+  box-sizing: border-box;
+  width: 100%;
+
+  @media (max-width: 768px) { padding: $spacing-lg; }
+  @media (max-width: 480px) { padding: $spacing-md; }
+}
+
+// Two-column grid: main info left, actions sidebar right
+.ov-layout {
+  display: grid;
+  grid-template-columns: 1fr 210px;
+  gap: $spacing-xl;
+  align-items: start;
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+
+  @media (max-width: 960px) {
+    grid-template-columns: 1fr;
+    gap: $spacing-lg;
+  }
+
+  // No sidebar — full-width single column at all breakpoints
+  &--no-sidebar {
+    grid-template-columns: 1fr;
+  }
+}
+
+.ov-main {
+  min-width: 0;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+// ── Provider / Headline meta strip ──
+.ov-meta-strip {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  padding: $spacing-sm $spacing-md;
+  background: rgba($color-secondary, 0.04);
+  border-left: 3px solid $color-primary;
+  border-radius: 0 $border-radius-sm $border-radius-sm 0;
+  margin-bottom: $spacing-md;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.ov-meta-row {
+  display: flex;
+  align-items: baseline;
+  gap: $spacing-sm;
+  flex-wrap: wrap;
+  min-width: 0;
+}
+
+.ov-meta-label {
+  font-size: 0.68rem;
+  font-weight: $font-weight-600;
+  text-transform: uppercase;
+  letter-spacing: $letter-spacing-wider;
+  color: $color-muted;
+  flex-shrink: 0;
+}
+
+.ov-meta-value {
+  font-size: $font-size-sm;
+  color: $color-secondary;
+  font-weight: $font-weight-500;
+  word-break: break-word;
+  min-width: 0;
+}
+
+// ── ID badges row ──
+.ov-ids-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: stretch;
+  gap: $spacing-sm;
+  margin-bottom: $spacing-lg;
+  padding-bottom: $spacing-lg;
+  border-bottom: 1px solid $color-border;
+  width: 100%;
+  min-width: 0;
+}
+
+.ov-id-badge {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  background: $color-bg-light;
+  border: 1px solid $color-border;
+  border-radius: $border-radius-md;
+  padding: 8px 14px;
+  min-width: 0;
+  flex: 1 1 140px;
+  box-sizing: border-box;
+}
+
+.ov-id-label {
+  font-size: 0.63rem;
+  font-weight: $font-weight-600;
+  text-transform: uppercase;
+  letter-spacing: $letter-spacing-wider;
+  color: $color-muted;
+  white-space: nowrap;
+}
+
+.ov-id-value {
+  font-size: $font-size-sm;
+  font-weight: $font-weight-700;
+  color: $color-secondary;
+  word-break: break-all;
+  overflow-wrap: anywhere;
+}
+
+.ov-rates-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 8px 16px;
+  background: $color-primary;
+  color: $color-white;
+  border-radius: $border-radius-md;
+  font-size: $font-size-sm;
+  font-weight: $font-weight-600;
+  letter-spacing: $letter-spacing-wide;
+  text-transform: uppercase;
+  text-decoration: none;
+  transition: background 0.2s ease;
+  flex-shrink: 0;
+  align-self: center;
+
+  &:hover { background: $color-primary-dark; color: $color-white; text-decoration: none; }
+
+  @media (max-width: 480px) { flex: 1 1 100%; }
+}
+
+// ── Section headers ──
+.ov-section { margin-bottom: $spacing-lg; }
+
+.ov-section-header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: $spacing-sm;
+
+  svg { color: $color-primary; flex-shrink: 0; }
+}
+
+.ov-section-title {
+  font-size: 0.7rem;
+  font-weight: $font-weight-700;
+  text-transform: uppercase;
+  letter-spacing: $letter-spacing-wider;
+  color: $color-secondary;
+}
+
+// ── Location grid ──
+.ov-location-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: $spacing-sm;
+
+  @media (max-width: 768px) { grid-template-columns: repeat(2, 1fr); }
+  @media (max-width: 360px) { grid-template-columns: 1fr; }
+}
+
+.ov-loc-item {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  padding: 10px 12px;
+  background: $color-bg-light;
+  border: 1px solid $color-border;
+  border-radius: $border-radius-md;
+  min-width: 0;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+.ov-loc-label {
+  font-size: 0.63rem;
+  font-weight: $font-weight-600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: $color-muted;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.ov-loc-value {
+  font-size: $font-size-sm;
+  font-weight: $font-weight-500;
+  color: $color-secondary;
+  word-break: break-word;
+  overflow-wrap: anywhere;
+}
+
+// ── Property stats grid ──
+.ov-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: $spacing-sm;
+
+  @media (max-width: 768px) { grid-template-columns: repeat(2, 1fr); }
+  @media (max-width: 360px) { grid-template-columns: 1fr; }
+}
+
+.ov-stat-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  background: $color-bg-light;
+  border: 1px solid $color-border;
+  border-radius: $border-radius-md;
+  min-width: 0;
+  overflow: hidden;
+  box-sizing: border-box;
+  transition: border-color 0.2s ease, background 0.2s ease;
+
+  &:hover {
+    background: rgba($color-primary, 0.05);
+    border-color: rgba($color-primary, 0.3);
+  }
+}
+
+.ov-stat-icon {
+  flex-shrink: 0;
+  width: 30px;
+  height: 30px;
+  border-radius: $border-radius-sm;
+  background: rgba($color-primary, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: $color-primary;
+}
+
+.ov-stat-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.ov-stat-label {
+  font-size: 0.62rem;
+  font-weight: $font-weight-600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: $color-muted;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.ov-stat-value {
+  font-size: $font-size-sm;
+  font-weight: $font-weight-600;
+  color: $color-secondary;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+// ── Admin actions sidebar ──
+.ov-actions {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-sm;
+  padding: $spacing-md;
+  background: $color-bg-light;
+  border: 1px solid $color-border;
+  border-radius: $border-radius-lg;
+  box-sizing: border-box;
+  min-width: 0;
+
+  @media (max-width: 960px) {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+}
+
+.ov-actions-title {
+  font-size: 0.68rem;
+  font-weight: $font-weight-700;
+  text-transform: uppercase;
+  letter-spacing: $letter-spacing-wider;
+  color: $color-muted;
+  margin: 0 0 4px;
+
+  @media (max-width: 960px) { width: 100%; margin-bottom: 2px; }
+}
+
+.ov-action-wrap {
+  display: flex;
+  box-sizing: border-box;
+
+  @media (max-width: 960px) { flex: 1 1 160px; }
+  @media (max-width: 480px) { flex: 1 1 100%; }
+}
+
+.ov-action-full {
+  width: 100%;
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  font-size: 0.75rem !important;
+  font-weight: $font-weight-600 !important;
+  letter-spacing: $letter-spacing-wide !important;
+  white-space: normal;
+  word-break: break-word;
+  padding: 8px 12px !important;
+  box-sizing: border-box;
+}
+
 // ============================================
 // Animations
 // ============================================
@@ -241,55 +1054,491 @@ h3, h4 {
 }
 
 // ============================================
-// Social Media Section
+// Right Sidebar — Modern Redesign
 // ============================================
-.property-details-s-media {
-    margin-top: $spacing-md;
-    text-transform: uppercase;
-    font-size: 1.5rem;
-    font-weight: 300 !important;
+
+.right-sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-lg;
+  padding-top: $spacing-lg;
+  position: sticky;
+  top: 16px;
+  // Lift above the image gallery stacking context so the datepicker popup is visible
+  z-index: 200;
 }
 
-.share-btn-container {
-    .social-svg {
-        border: $border-width solid $color-black;
-        height: 45px;
-        border-radius: 50%;
-        padding: 10px;
-        color: $color-black;
-        margin-right: 8px;
-        margin-top: 3px;
-        margin-bottom: $spacing-md;
-        @include transition;
+// ── Social Share Card ──────────────────────
+.sidebar-share-card {
+  display: flex;
+  align-items: center;
+  gap: $spacing-md;
+  padding: $spacing-sm $spacing-lg;
+  background: $color-bg-light;
+  border: 1px solid $color-border-light;
+  border-radius: $border-radius-lg;
+  flex-wrap: wrap;
+}
 
-        &:hover {
-            background-color: $color-primary !important;
-            border: $border-width solid $color-primary !important;
-            color: $color-white !important;
+.sidebar-share-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: $font-size-sm;
+  font-weight: $font-weight-600;
+  color: $color-muted;
+  text-transform: uppercase;
+  letter-spacing: $letter-spacing-wide;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.sidebar-social-icons {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.social-icon-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1.5px solid $color-border;
+  color: $color-muted;
+  background: $color-white;
+  transition: all 0.22s ease;
+  text-decoration: none;
+
+  svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  &:hover { text-decoration: none; transform: translateY(-2px); }
+
+  &.facebook:hover  { background: #1877f2; border-color: #1877f2; color: $color-white; box-shadow: 0 4px 10px rgba(24,119,242,.35); }
+  &.instagram:hover { background: radial-gradient(circle at 30% 110%, #fdf497 0%, #fd5949 45%, #d6249f 60%, #285aeb 90%); border-color: transparent; color: $color-white; box-shadow: 0 4px 10px rgba(214,36,159,.35); }
+  &.twitter:hover   { background: #000; border-color: #000; color: $color-white; box-shadow: 0 4px 10px rgba(0,0,0,.25); }
+  &.pinterest:hover { background: #e60023; border-color: #e60023; color: $color-white; box-shadow: 0 4px 10px rgba(230,0,35,.35); }
+  &.whatsapp:hover  { background: #25d366; border-color: #25d366; color: $color-white; box-shadow: 0 4px 10px rgba(37,211,102,.35); }
+}
+
+// ── Booking Card ──────────────────────────
+.sidebar-booking-card {
+  background: $color-white;
+  border: 1.5px solid $color-border-light;
+  border-radius: $border-radius-lg;
+  // overflow: hidden removed — it clips the datepicker popup
+  overflow: visible;
+  box-shadow: $shadow-md;
+  position: relative;
+}
+
+.booking-card-header {
+  display: flex;
+  align-items: center;
+  gap: $spacing-md;
+  padding: $spacing-md $spacing-lg;
+  background: linear-gradient(135deg, $color-primary 0%, $color-primary-dark 100%);
+  color: $color-white;
+  // Rounded top corners to replace the parent overflow: hidden rounding
+  border-radius: $border-radius-lg $border-radius-lg 0 0;
+}
+
+.booking-header-icon {
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  border-radius: $border-radius-md;
+  background: rgba(255, 255, 255, 0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: $color-white;
+}
+
+.booking-card-title {
+  margin: 0;
+  font-size: $font-size-base;
+  font-weight: $font-weight-700;
+  color: $color-white;
+  line-height: $line-height-tight;
+}
+
+.booking-card-subtitle {
+  margin: 0;
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.65);
+  letter-spacing: $letter-spacing-wide;
+}
+
+.booking-loading-badge {
+  margin-left: auto;
+  flex-shrink: 0;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.booking-card-body {
+  padding: $spacing-lg;
+}
+
+.booking-field-group {
+  margin-bottom: $spacing-md;
+}
+
+.date-range-field {
+  position: relative;
+  z-index: 300;
+
+  // Scoped popup styles — only targets the datepicker opened from this specific field
+  ::ng-deep ngb-datepicker {
+    z-index: 300 !important;
+    position: absolute !important;
+
+    // Header & navigation
+    .ngb-dp-header,
+    .ngb-dp-month-name {
+      background-color: $color-primary;
+      color: $color-white !important;
+      font-weight: 300;
+      height: 42px;
+      font-size: 18px;
+    }
+    .ngb-dp-header { padding-top: .35rem; }
+    .ngb-dp-navigation-chevron { color: $color-white !important; font-weight: 300; }
+    .ngb-dp-arrow { width: 40px; height: 40px; top: -5px; position: relative; }
+
+    // Cells
+    .ngb-dp-weekdays { background-color: $color-white; border: 0; }
+    .ngb-dp-day,
+    .ngb-dp-weekday,
+    .ngb-dp-week-number {
+      width: 40px;
+      height: 40px;
+      font-style: normal;
+      color: $color-text-muted;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .ngb-dp-day { padding: 2px; }
+    .btn-light {
+      background-color: transparent !important;
+      border-color: transparent !important;
+      width: 100% !important;
+      height: 100% !important;
+      padding: 0 !important;
+    }
+
+    // Custom day wrapper states
+    .custom-day-wrapper {
+      width: 100% !important;
+      height: 100% !important;
+      border-radius: $border-radius-none !important;
+      border: $border-width solid transparent !important;
+      font-weight: $font-weight-500 !important;
+      font-size: $font-size-sm !important;
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      position: relative !important;
+      overflow: hidden !important;
+      cursor: default !important;
+
+      &.date-fully-unavailable {
+        background-color: $color-error !important;
+        color: $color-white !important;
+        border-color: $color-error !important;
+        text-decoration: line-through !important;
+        opacity: 0.8 !important;
+        cursor: not-allowed !important;
+        &.disabled { background-color: $color-error !important; opacity: 0.8 !important; }
+        &.in-range, &.range-start, &.range-end {
+          background-color: $color-error !important;
+          color: $color-white !important;
+          opacity: 0.8 !important;
+          cursor: not-allowed !important;
         }
+        &:hover { cursor: not-allowed; }
+      }
+
+      &.date-fully-available {
+        background-color: $color-available !important;
+        color: $color-white !important;
+        border-color: $color-available !important;
+        cursor: pointer !important;
+        &.disabled { background-color: $color-available !important; cursor: not-allowed !important; }
+        &:not(.disabled):hover {
+          background-color: #218838 !important;
+          border-color: #1e7e34 !important;
+          transform: scale(1.05) !important;
+          box-shadow: 0 2px 8px rgba(0,0,0,.2) !important;
+        }
+      }
+
+      &.date-am-only {
+        background: linear-gradient(to right bottom, $color-available 50%, $color-error 50%) !important;
+        color: $color-white !important;
+        cursor: pointer !important;
+        &.disabled { opacity: 0.8 !important; cursor: not-allowed !important; }
+        &:not(.disabled):hover { transform: scale(1.05) !important; box-shadow: 0 2px 8px rgba(0,0,0,.2) !important; }
+      }
+
+      &.date-pm-only {
+        background: linear-gradient(to right bottom, $color-error 50%, $color-available 50%) !important;
+        color: $color-white !important;
+        cursor: pointer !important;
+        &.disabled { opacity: 0.8 !important; cursor: not-allowed !important; }
+        &:not(.disabled):hover { transform: scale(1.05) !important; box-shadow: 0 2px 8px rgba(0,0,0,.2) !important; }
+      }
+
+      &.date-no-checkin {
+        background-color: $color-available !important;
+        color: $color-white !important;
+        cursor: pointer !important;
+        &::before {
+          content: '' !important;
+          position: absolute !important;
+          top: 50% !important; left: 50% !important;
+          transform: translate(-50%, -50%) !important;
+          width: 8px !important; height: 8px !important;
+          background-color: $color-error !important;
+          border-radius: 50% !important;
+          border: $border-width solid $color-white !important;
+        }
+        &.disabled { opacity: 0.8 !important; cursor: not-allowed !important; }
+        &:not(.disabled):hover {
+          background-color: #218838 !important;
+          transform: scale(1.05) !important;
+          box-shadow: 0 2px 8px rgba(0,0,0,.2) !important;
+        }
+      }
+
+      &:not(.date-fully-unavailable):not(.date-fully-available):not(.date-am-only):not(.date-pm-only):not(.date-no-checkin) {
+        background-color: $color-bg-light !important;
+        color: #212529 !important;
+        border-color: $color-border-light !important;
+        cursor: default !important;
+        &.disabled { background-color: $color-muted !important; color: $color-white !important; opacity: 0.5 !important; cursor: not-allowed !important; }
+        &:not(.disabled):hover { background-color: #e2e6ea !important; border-color: #dae0e5 !important; }
+        &:hover { cursor: not-allowed; }
+      }
+
+      &.in-range {
+        background-color: rgba(40,167,69,.2) !important;
+        color: #198754 !important;
+        border-radius: $border-radius-none !important;
+        &:hover { background-color: rgba(40,167,69,.3) !important; color: $color-white !important; }
+      }
+      &.range-start, &.range-end {
+        background-color: $color-available !important;
+        color: $color-white !important;
+        border-radius: 50% !important;
+        z-index: 1;
+        &:hover { background-color: #218838 !important; }
+      }
+      &.blocked-range {
+        background-color: rgba(220,53,69,.15) !important;
+        color: $color-error !important;
+        cursor: not-allowed !important;
+      }
     }
+  }
 }
 
-// ============================================
-// Property Rates Section
-// ============================================
-.property-rates {
-    .card-header {
-        background-color: $color-black;
-        color: $color-white;
-        border-radius: $border-radius-none;
-        height: 50px;
-        padding: 12px;
-    }
+.booking-field-label {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.72rem;
+  font-weight: $font-weight-600;
+  text-transform: uppercase;
+  letter-spacing: $letter-spacing-wide;
+  color: $color-muted;
+  margin-bottom: 6px;
 
-    label {
-        display: inline-block;
-        font-weight: $font-weight-400;
-        font-size: 15px;
-        text-transform: uppercase;
-        line-height: 1.5rem;
-        letter-spacing: $letter-spacing-wider;
-    }
+  &.required::after {
+    content: "*";
+    color: $color-error;
+    margin-left: 2px;
+  }
+}
+
+.booking-input-wrapper {
+  position: relative;
+
+  .booking-input-icon {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: $color-primary;
+    pointer-events: none;
+    flex-shrink: 0;
+  }
+}
+
+.booking-date-input {
+  width: 100%;
+  padding: 0.65rem 0.75rem 0.65rem 2.25rem;
+  font-size: $font-size-sm;
+  font-weight: $font-weight-500;
+  color: $color-secondary;
+  background: $color-bg-light;
+  border: 1.5px solid $color-border;
+  border-radius: $border-radius-md;
+  outline: none;
+  cursor: pointer;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  letter-spacing: $letter-spacing-wide;
+  line-height: 1.5;
+
+  &:focus {
+    border-color: $color-primary;
+    background: $color-white;
+    box-shadow: 0 0 0 3px $color-focus-ring;
+  }
+
+  &::placeholder {
+    color: $color-placeholder;
+    font-weight: $font-weight-400;
+  }
+}
+
+.booking-validation-msg {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin-top: 5px;
+  font-size: 0.75rem;
+  color: $color-error;
+  font-weight: $font-weight-500;
+}
+
+.booking-submit-btn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: $spacing-sm;
+  padding: 0.8rem;
+  margin-top: $spacing-sm;
+  background: linear-gradient(135deg, $color-primary 0%, $color-primary-dark 100%);
+  color: $color-white;
+  border: none;
+  border-radius: $border-radius-md;
+  font-size: $font-size-sm;
+  font-weight: $font-weight-700;
+  letter-spacing: $letter-spacing-wide;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  box-shadow: $shadow-primary;
+
+  &:hover:not(:disabled) {
+    background: linear-gradient(135deg, $color-primary-dark 0%, darken($color-primary-dark, 5%) 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 18px rgba(55, 143, 134, 0.4);
+  }
+
+  &:active:not(:disabled) {
+    transform: translateY(0);
+  }
+
+  &:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+  }
+}
+
+.booking-card-footer {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: $spacing-sm $spacing-lg;
+  background: $color-bg-light;
+  border-top: 1px solid $color-border-light;
+  font-size: 0.72rem;
+  color: $color-muted;
+  font-style: italic;
+  // Rounded bottom corners to replace the parent overflow: hidden rounding
+  border-radius: 0 0 $border-radius-lg $border-radius-lg;
+}
+
+// ── CTA Buttons ──────────────────────────
+.sidebar-cta-group {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: $spacing-sm;
+}
+
+.sidebar-cta-inquiry,
+.sidebar-cta-book {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 0.65rem $spacing-md;
+  border-radius: $border-radius-md;
+  font-size: $font-size-sm;
+  font-weight: $font-weight-600;
+  letter-spacing: $letter-spacing-wide;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  border: 2px solid transparent;
+}
+
+.sidebar-cta-inquiry {
+  background: $color-white;
+  color: $color-secondary;
+  border-color: $color-secondary;
+
+  &:hover {
+    background: $color-secondary;
+    color: $color-white;
+    transform: translateY(-2px);
+    box-shadow: $shadow-md;
+  }
+}
+
+.sidebar-cta-book {
+  background: $color-error;
+  color: $color-white;
+  border-color: $color-error;
+
+  &:hover {
+    background: $color-accent-hover;
+    border-color: $color-accent-hover;
+    transform: translateY(-2px);
+    box-shadow: $shadow-accent;
+  }
+}
+
+// ── Map Card ──────────────────────────────
+.sidebar-map-card {
+  border: 1.5px solid $color-border-light;
+  border-radius: $border-radius-lg;
+  overflow: hidden;
+  box-shadow: $shadow-sm;
+}
+
+.sidebar-map-header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: $spacing-sm $spacing-md;
+  background: $color-bg-light;
+  border-bottom: 1px solid $color-border-light;
+  font-size: $font-size-sm;
+  font-weight: $font-weight-600;
+  color: $color-secondary;
+  text-transform: uppercase;
+  letter-spacing: $letter-spacing-wide;
 }
 
 // Form controls
@@ -377,18 +1626,8 @@ h3, h4 {
     }
 }
 // ============================================
-// Button Variations
+// Button Variations (legacy - kept for other usages)
 // ============================================
-.property-inquiry-btn {
-    width: 49.5%;
-}
-
-.book-now-btn {
-    width: 49.5%;
-    background-color: $color-error !important;
-    border-color: $color-error !important;
-    float: right;
-}
 
 // ============================================
 // Responsive Styles
@@ -866,6 +2105,11 @@ h3, h4 {
     min-height: 320px;
     display: flex;
     flex-direction: column;
+    width: 100%;
+
+    ngb-datepicker {
+        width: 100% !important;
+    }
 }
 
 /* ===== CUSTOM DATE STYLES - TARGETING custom-day-wrapper IN BOTH CALENDAR TYPES ===== */
@@ -1084,56 +2328,43 @@ h3, h4 {
 
     /* Style for DUAL CALENDAR (availability tab) */
     .custom-datepicker {
-        /* Ensure proper sizing of date cells */
-        .ngb-dp-day {
-            width: 40px;
-            height: 40px;
-            padding: 2px;
 
-            /* Center content in the cell */
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        /* Ensure week rows have proper height */
-        .ngb-dp-week {
-            min-height: 40px;
-            min-width: 40px;
-        }
-
-        /* Override Bootstrap's default datepicker styles */
-        .btn-light {
-            background-color: transparent !important;
-            border-color: transparent !important;
-        }
         .ngb-dp-day, .ngb-dp-weekday, .ngb-dp-week-number {
-            width: 40px;
-            height: 40px;
+            /* width/height intentionally not set here — controlled by the
+               full-width block above so the fluid flex layout takes over */
             font-style: normal;
             color: $color-text-muted;
         }
+
+        .ngb-dp-week {
+            min-height: 38px;
+        }
+
+        .btn-light {
+            background-color: transparent !important;
+            border-color: transparent !important;
+            width: 100% !important;
+            height: 100% !important;
+            padding: 0 !important;
+        }
+
         .ngb-dp-weekdays {
             background-color: $color-white;
             border: 0;
         }
+
         .ngb-dp-header, .ngb-dp-month-name {
             background-color: $color-primary;
             color: $color-white !important;
             font-weight: 300;
-            height: 42px;
-            font-size: 18px;
-        }
-        .ngb-dp-header {
-            padding-top: .35rem;
-        }
-        .ngb-dp-navigation-chevron {
-            color: $color-white !important;
-            font-weight: 300;
-        }
-        .ngb-dp-arrow {
-            width: 40px;
             height: 40px;
+            font-size: 15px;
+        }
+        .ngb-dp-header { padding-top: .35rem; }
+        .ngb-dp-navigation-chevron { color: $color-white !important; font-weight: 300; }
+        .ngb-dp-arrow {
+            width: 34px;
+            height: 34px;
             top: -5px;
             position: relative;
         }
@@ -1226,65 +2457,9 @@ h3, h4 {
 /* Responsive adjustments */
 @media (max-width: 992px) {
     :host ::ng-deep {
-        .custom-datepicker,
-        ngb-datepicker {
-            .ngb-dp-day {
-                width: 36px;
-                height: 36px;
-            }
-
-            .custom-day-wrapper {
-                font-size: 0.8125rem !important;
-
-                &::after {
-                    font-size: 0.5rem !important;
-                }
-            }
-        }
-    }
-}
-
-@media (max-width: 768px) {
-    :host ::ng-deep {
-        .custom-datepicker,
-        ngb-datepicker {
-            .ngb-dp-day {
-                width: 40px;
-                height: 40px;
-            }
-
-            .custom-day-wrapper {
-                font-size: 0.75rem !important;
-
-                &::after {
-                    font-size: 0.45rem !important;
-                }
-            }
-        }
-    }
-}
-
-@media (max-width: 576px) {
-    .calendar-section {
-        min-height: 280px;
-        padding: 0.75rem;
-    }
-
-    :host ::ng-deep {
-        .custom-datepicker,
-        ngb-datepicker {
-            .ngb-dp-day {
-                width: 40px;
-                height: 40px;
-            }
-
-            .custom-day-wrapper {
-                font-size: 0.7rem !important;
-
-                &::after {
-                    font-size: 0.4rem !important;
-                }
-            }
+        .custom-datepicker {
+            .ngb-dp-week { min-height: 34px !important; }
+            .custom-day-wrapper { font-size: 0.75rem !important; }
         }
     }
 }
@@ -1304,9 +2479,93 @@ h3, h4 {
     .bi-shield-exclamation {
         color: $color-available !important;
     }
+
+    // Fix datepicker popup being cropped by parent overflow/z-index
+    ngb-datepicker.dropdown-menu {
+        z-index: 9999 !important;
+        position: absolute !important;
+        // Prevent the popup from being clipped by overflow: hidden on any ancestor
+        overflow: visible !important;
+    }
 }
 
 //for converting \n to newline in html
 .message-text {
-  white-space: pre-line; /* 👈 converts \n into line breaks */
+  white-space: pre-line;
 }
+
+// Reviews card
+.reviews-card {
+  background: $color-white;
+  border: 1px solid $color-border;
+  border-radius: $border-radius-lg;
+  box-shadow: 0 2px 16px rgba(0, 34, 69, 0.08);
+  overflow: hidden;
+  width: 100%;
+}
+
+.reviews-card-header {
+  display: flex;
+  align-items: center;
+  gap: $spacing-sm;
+  padding: $spacing-lg $spacing-xl;
+  background: linear-gradient(135deg, $color-primary 0%, $color-primary-dark 100%);
+  color: $color-white;
+  border-radius: $border-radius-lg $border-radius-lg 0 0;
+
+  svg { flex-shrink: 0; opacity: 0.9; }
+}
+
+.reviews-card-title {
+  flex: 1;
+  margin: 0;
+  font-size: $font-size-base;
+  font-weight: $font-weight-600;
+  letter-spacing: $letter-spacing-wide;
+  text-transform: uppercase;
+  color: $color-white;
+}
+
+.reviews-card-body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: $spacing-xl * 2 $spacing-xl;
+  text-align: center;
+  gap: $spacing-md;
+}
+
+.reviews-empty-icon {
+  width: 84px;
+  height: 84px;
+  border-radius: 50%;
+  background: #cfe8e4;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #4a8c84;
+  margin-bottom: $spacing-sm;
+}
+
+.reviews-empty-title {
+  font-size: $font-size-lg;
+  font-weight: $font-weight-600;
+  color: $color-black;
+  margin: 0;
+}
+
+.reviews-empty-sub {
+  font-size: $font-size-sm;
+  color: $color-text-muted;
+  margin: 0;
+  line-height: 1.6;
+}
+
+.reviews-empty-stars {
+  display: flex;
+  gap: 5px;
+  color: #d1d5db;
+  margin-top: $spacing-xs;
+}
+

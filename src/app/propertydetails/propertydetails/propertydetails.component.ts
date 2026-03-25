@@ -314,7 +314,6 @@ export class PropertydetailsComponent implements OnInit, AfterViewInit, OnDestro
     this.map = new google.maps.Map(mapEl, {
       center: { lat: lat, lng: lng },
       zoom: 10,
-      mapId: environment.googleMapsMapId,
       fullscreenControl: false,
       streetViewControl: false,
       disableDefaultUI: false,
@@ -326,11 +325,29 @@ export class PropertydetailsComponent implements OnInit, AfterViewInit, OnDestro
   }
 
   private addMarker(lat: number, lng: number): void {
-    const position = { lat, lng };
-
-    new google.maps.marker.AdvancedMarkerElement({
+    const houseSvg = `
+      <svg xmlns="http://www.w3.org/2000/svg" width="120" height="120" viewBox="0 0 120 120">
+        <defs>
+          <filter id="ms" x="-50%" y="-50%" width="200%" height="200%">
+            <feDropShadow dx="0" dy="2" stdDeviation="4" flood-color="rgba(0,0,0,0.5)"/>
+          </filter>
+        </defs>
+        <!-- Large translucent dark background circle -->
+        <circle cx="60" cy="60" r="54" fill="rgba(40,40,40,0.35)"/>
+        <!-- Small solid dark inner circle -->
+        <circle cx="60" cy="60" r="21" fill="#2d2d2d" filter="url(#ms)"/>
+        <!-- House icon: slightly larger, centered at (60,60) -->
+        <path d="M60 51 L51 60 H54 V68 H57.5 V63.5 H62.5 V68 H66 V60 H69 Z" fill="white"/>
+      </svg>`;
+    const markerIcon: google.maps.Icon = {
+      url: 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(houseSvg),
+      scaledSize: new google.maps.Size(120, 120),
+      anchor: new google.maps.Point(60, 60)
+    };
+    new google.maps.Marker({
       map: this.map,
-      position
+      position: { lat, lng },
+      icon: markerIcon
     });
   }
 
@@ -533,6 +550,11 @@ export class PropertydetailsComponent implements OnInit, AfterViewInit, OnDestro
     // Dates that are fully unavailable should be disabled
     return this.fullyUnavailableDates.some(d => d.equals(date));
   };
+
+  getTotalAmenities(): number {
+    if (!this.amenity) return 0;
+    return this.amenity.reduce((sum: number, cat: any) => sum + (cat.amenity?.length || 0), 0);
+  }
 
   // Method to get custom CSS classes for each date
 // Update getDateCustomClass to add debugging

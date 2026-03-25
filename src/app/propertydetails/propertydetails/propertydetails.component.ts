@@ -326,23 +326,19 @@ export class PropertydetailsComponent implements OnInit, AfterViewInit, OnDestro
 
   private addMarker(lat: number, lng: number): void {
     const houseSvg = `
-      <svg xmlns="http://www.w3.org/2000/svg" width="120" height="120" viewBox="0 0 120 120">
+      <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48">
         <defs>
           <filter id="ms" x="-50%" y="-50%" width="200%" height="200%">
-            <feDropShadow dx="0" dy="2" stdDeviation="4" flood-color="rgba(0,0,0,0.5)"/>
+            <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="rgba(0,0,0,0.45)"/>
           </filter>
         </defs>
-        <!-- Large translucent dark background circle -->
-        <circle cx="60" cy="60" r="54" fill="rgba(40,40,40,0.35)"/>
-        <!-- Small solid dark inner circle -->
-        <circle cx="60" cy="60" r="21" fill="#2d2d2d" filter="url(#ms)"/>
-        <!-- House icon: slightly larger, centered at (60,60) -->
-        <path d="M60 51 L51 60 H54 V68 H57.5 V63.5 H62.5 V68 H66 V60 H69 Z" fill="white"/>
+        <circle cx="24" cy="24" r="20" fill="#2d2d2d" filter="url(#ms)"/>
+        <path d="M24 15 L15 24 H18 V32 H22 V27 H26 V32 H30 V24 H33 Z" fill="white"/>
       </svg>`;
     const markerIcon: google.maps.Icon = {
       url: 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(houseSvg),
-      scaledSize: new google.maps.Size(120, 120),
-      anchor: new google.maps.Point(60, 60)
+      scaledSize: new google.maps.Size(48, 48),
+      anchor: new google.maps.Point(24, 24)
     };
     new google.maps.Marker({
       map: this.map,

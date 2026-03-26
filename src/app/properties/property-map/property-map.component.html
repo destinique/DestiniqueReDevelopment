@@ -7,6 +7,11 @@
     <div class="property-map-loading-spinner"></div>
   </div>
 
+  <!-- Live counter: visible properties / total properties -->
+  <div *ngIf="mapReady && properties?.length" class="property-map-count-pill">
+    {{ visiblePropertiesCount }}/{{ totalProperties || properties.length }} properties
+  </div>
+
   <!-- Reset map view to show all properties -->
   <button
     *ngIf="mapReady && properties?.length"

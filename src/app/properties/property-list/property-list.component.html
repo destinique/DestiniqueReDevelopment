@@ -230,6 +230,7 @@
         <div class="property-map-inner">
           <app-property-map
             [properties]="mapProperties"
+            [totalProperties]="paginationInfo.total"
             [selectedPropertyId]="activePropertyId"
             [hoveredPropertyId]="hoveredPropertyId"
             [mapPropertiesLoading]="isFiltering"

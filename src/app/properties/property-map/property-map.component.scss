@@ -98,6 +98,21 @@
   background-color: rgba($color-black, 0.9);
 }
 
+.property-map-count-pill {
+  position: absolute;
+  left: 50%;
+  top: 12px;
+  transform: translateX(-50%);
+  padding: 0.3rem 0.75rem;
+  background: rgba($color-black, 0.75);
+  color: $color-white;
+  font-size: $font-size-sm;
+  border-radius: 999px;
+  box-shadow: $shadow-md;
+  z-index: 6;
+  pointer-events: none;
+}
+
 /* Price-tag markers (image + price) – rendered inside map by AdvancedMarkerElement */
 :host ::ng-deep .map-price-tag-marker {
   width: 52px;

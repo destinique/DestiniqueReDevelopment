@@ -25,6 +25,7 @@ declare const google: any;
 })
 export class PropertyMapComponent implements AfterViewInit, OnChanges, OnDestroy {
   @Input() properties: Property[] = [];
+  @Input() totalProperties = 0;
   @Input() selectedPropertyId: number | null = null;
   /** When the user hovers a property card in the list, highlight the matching marker on the map */
   @Input() hoveredPropertyId: number | null = null;
@@ -52,6 +53,7 @@ export class PropertyMapComponent implements AfterViewInit, OnChanges, OnDestroy
   mapContainer!: ElementRef<HTMLDivElement>;
 
   map!: google.maps.Map;
+  visiblePropertiesCount = 0;
   markers: google.maps.Marker[] = [];
   /** list_id for each marker (same order as markers) for hover highlight */
   private markerListIds: number[] = [];
@@ -127,7 +129,7 @@ export class PropertyMapComponent implements AfterViewInit, OnChanges, OnDestroy
       zoomControl: true,
       streetViewControl: false,
       fullscreenControl: true,
-      mapTypeControl: true,
+      mapTypeControl: false,
       gestureHandling: 'greedy',
     });
 
@@ -425,12 +427,14 @@ export class PropertyMapComponent implements AfterViewInit, OnChanges, OnDestroy
 
   private emitVisiblePropertyIds(): void {
     if (!this.map || !this.properties?.length) {
+      this.visiblePropertiesCount = 0;
       this.visiblePropertyIdsChange.emit([]);
       return;
     }
 
     const bounds = this.map.getBounds();
     if (!bounds) {
+      this.visiblePropertiesCount = this.properties.length;
       this.visiblePropertyIdsChange.emit(this.properties.map((p) => p.list_id));
       return;
     }
@@ -444,6 +448,7 @@ export class PropertyMapComponent implements AfterViewInit, OnChanges, OnDestroy
       )
       .map((p) => p.list_id);
 
+    this.visiblePropertiesCount = visibleIds.length;
     this.visiblePropertyIdsChange.emit(visibleIds);
   }
 

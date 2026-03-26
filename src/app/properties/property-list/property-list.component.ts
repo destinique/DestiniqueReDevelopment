@@ -295,6 +295,18 @@ export class PropertyListComponent implements OnInit, OnDestroy {
   /** Show Map toggle: when off, hides the map panel and expands the list to full width */
   onShowMapToggle(): void {
     this.showMap = !this.showMap;
+
+    // Whenever map panel visibility changes, reset map-bounds filtering state
+    // and fetch a fresh unbounded list for current search params.
+    this.visiblePropertyIds = [];
+    this.lastAppliedVisiblePropertyIds = null;
+    this.mapFilteringEnabled = false;
+    this.isFiltering = true;
+    this.properties = this.mapProperties.slice();
+
+    // Force refresh even when params are unchanged (keep existing skeleton behavior).
+    this.lastApiParamsKey = null;
+    this.loadProperties();
   }
 
   /** Keyboard: Space/Enter on View more switch toggles it */

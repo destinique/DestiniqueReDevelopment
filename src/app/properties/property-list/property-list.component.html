@@ -111,7 +111,7 @@
       <!-- List content: loading skeleton (only when we have no data to show; avoids swap on pagination/sort) -->
       <div *ngIf="isLoading && !isInitialLoad && properties.length === 0" class="list-content">
         <div class="row">
-          <div *ngFor="let i of skeletonArray" class="col-12 col-md-6 properties">
+          <div *ngFor="let i of skeletonArray" class="col-12 col-md-6 properties" [class.col-lg-4]="!showMap">
             <div class="property-skeleton-card">
               <div class="skeleton-image"></div>
               <div class="skeleton-body">
@@ -193,7 +193,7 @@
         </ng-container>
         <ng-template #mapFilteringSkeleton>
           <div class="row">
-            <div *ngFor="let i of skeletonArray" class="col-12 col-md-6 properties">
+            <div *ngFor="let i of skeletonArray" class="col-12 col-md-6 properties" [class.col-lg-4]="!showMap">
               <div class="property-skeleton-card">
                 <div class="skeleton-image"></div>
                 <div class="skeleton-body">

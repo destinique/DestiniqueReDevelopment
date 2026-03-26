@@ -49,8 +49,8 @@
          [class.col-lg-12]="!showMap">
       <!-- List toolbar – modern bar above property list only -->
       <div id="maindiv" #propertiesGridArea class="list-toolbar list-toolbar-modern">
-        <div class="list-toolbar-inner">
-          <div class="list-toolbar-row" id="filter-properties">
+        <div class="list-toolbar-inner" [class.list-toolbar-inner--full]="!showMap">
+          <div class="list-toolbar-row" id="filter-properties" [class.list-toolbar-row--full]="!showMap">
             <span class="list-toolbar-count">{{ paginationInfo.total }} properties</span>
             <div class="list-toolbar-dropdowns">
               <app-page-size
@@ -65,6 +65,9 @@
               </app-sort-dropdown>
             </div>
             <app-list-id-search (searchComplete)="onListIdSearchComplete($event)"></app-list-id-search>
+          </div>
+
+          <div class="list-toolbar-toggles" [class.list-toolbar-toggles--full]="!showMap">
             <label class="list-toolbar-view-more" (click)="onViewMoreToggle()">
               <span class="list-toolbar-view-more__label">
                 View Details

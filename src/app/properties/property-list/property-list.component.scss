@@ -1015,9 +1015,44 @@ img {
 }
 .list-toolbar-row app-sort-dropdown,
 .list-toolbar-row app-list-id-search {
-  flex: 1 1 140px;
-  min-width: 140px;
+  flex: 1 1 220px;
+  min-width: 220px;
   max-width: 100%;
+}
+
+/* Put toggles on the next line */
+.list-toolbar-toggles {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: $spacing-sm;
+  padding-top: 2px;
+}
+
+/* Full-width list mode (map hidden): keep all toolbar controls on one line */
+@media (min-width: 992px) {
+  .list-toolbar-inner.list-toolbar-inner--full {
+    flex-wrap: nowrap;
+    align-items: center;
+  }
+
+  .list-toolbar-inner.list-toolbar-inner--full .list-toolbar-toggles {
+    width: auto;
+    padding-top: 0;
+    margin-left: $spacing-sm;
+    flex: 0 0 auto;
+  }
+
+  .list-toolbar-inner.list-toolbar-inner--full .list-toolbar-row {
+    width: auto;
+    flex: 1 1 auto;
+    flex-wrap: nowrap;
+    align-items: center;
+  }
+
+  .list-toolbar-inner.list-toolbar-inner--full .list-toolbar-row app-list-id-search {
+    min-width: 260px;
+  }
 }
 
 /* Inner controls fill their column */
@@ -1197,6 +1232,11 @@ img {
 
 /* Tablet (768px–991px): keep row layout so Search by List Id is not full width */
 @media (max-width: 991.98px) {
+  #filter-properties.list-toolbar-row {
+    flex-wrap: wrap !important;
+    float: none;
+    padding-right: 0 !important;
+  }
   .list-toolbar-inner {
     align-items: stretch;
     gap: $spacing-sm;
@@ -1215,13 +1255,22 @@ img {
   }
   .list-toolbar-row app-sort-dropdown,
   .list-toolbar-row app-list-id-search {
-    flex: 1 1 140px;
-    min-width: 140px;
+    flex: 1 1 200px;
+    min-width: 200px;
+  }
+  .list-toolbar-toggles {
+    width: 100%;
+    flex-wrap: wrap;
+    padding-top: 0;
   }
 }
 
 /* Mobile only: stack and full width for all three fields */
 @media (max-width: 767.98px) {
+  #filter-properties.list-toolbar-row {
+    flex-direction: column !important;
+    flex-wrap: nowrap !important;
+  }
   .list-toolbar-row {
     flex-direction: column;
     flex-wrap: nowrap;
@@ -1239,6 +1288,10 @@ img {
     min-width: 100%;
     max-width: 100%;
     width: 100%;
+  }
+  .list-toolbar-toggles {
+    width: 100%;
+    justify-content: flex-start;
   }
 }
 

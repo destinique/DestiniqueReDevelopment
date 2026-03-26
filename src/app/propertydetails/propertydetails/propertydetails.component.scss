@@ -123,7 +123,6 @@
 .amenities-card {
   background: $color-white;
   border: 1px solid $color-border;
-  border-radius: $border-radius-lg;
   box-shadow: 0 2px 16px rgba(0, 34, 69, 0.08);
   overflow: hidden;
 }
@@ -223,7 +222,6 @@
   padding: 8px 12px;
   background: $color-bg-light;
   border: 1px solid $color-border;
-  border-radius: $border-radius-md;
   transition: border-color 0.2s ease, background 0.2s ease;
 
   &:hover {
@@ -260,7 +258,6 @@
 .desc-card {
   background: $color-white;
   border: 1px solid $color-border;
-  border-radius: $border-radius-lg;
   box-shadow: 0 2px 16px rgba(0, 34, 69, 0.08);
   overflow: hidden;
 }
@@ -381,7 +378,6 @@
 .avail-card {
   background: $color-white;
   border: 1px solid $color-border;
-  border-radius: $border-radius-lg;
   box-shadow: 0 2px 16px rgba(0, 34, 69, 0.08);
   overflow: visible;
   width: 100%;
@@ -394,7 +390,6 @@
   padding: $spacing-lg $spacing-xl;
   background: linear-gradient(135deg, $color-primary 0%, $color-primary-dark 100%);
   color: $color-white;
-  border-radius: $border-radius-lg $border-radius-lg 0 0;
 
   svg { flex-shrink: 0; opacity: 0.9; }
 }
@@ -592,7 +587,6 @@
 .ov-card {
   background: $color-white;
   border: 1px solid $color-border;
-  border-radius: $border-radius-lg;
   box-shadow: $shadow-md;
   overflow: hidden;
   width: 100%;
@@ -714,7 +708,6 @@
   gap: 3px;
   background: $color-bg-light;
   border: 1px solid $color-border;
-  border-radius: $border-radius-md;
   padding: 8px 14px;
   min-width: 0;
   flex: 1 1 140px;
@@ -798,7 +791,6 @@
   padding: 10px 12px;
   background: $color-bg-light;
   border: 1px solid $color-border;
-  border-radius: $border-radius-md;
   min-width: 0;
   overflow: hidden;
   box-sizing: border-box;
@@ -840,7 +832,6 @@
   padding: 10px 12px;
   background: $color-bg-light;
   border: 1px solid $color-border;
-  border-radius: $border-radius-md;
   min-width: 0;
   overflow: hidden;
   box-sizing: border-box;
@@ -1076,7 +1067,6 @@ h3, h4 {
   padding: $spacing-sm $spacing-lg;
   background: $color-bg-light;
   border: 1px solid $color-border-light;
-  border-radius: $border-radius-lg;
   flex-wrap: wrap;
 }
 
@@ -1131,7 +1121,6 @@ h3, h4 {
 .sidebar-booking-card {
   background: $color-white;
   border: 1.5px solid $color-border-light;
-  border-radius: $border-radius-lg;
   // overflow: hidden removed — it clips the datepicker popup
   overflow: visible;
   box-shadow: $shadow-md;
@@ -1145,8 +1134,6 @@ h3, h4 {
   padding: $spacing-md $spacing-lg;
   background: linear-gradient(135deg, $color-primary 0%, $color-primary-dark 100%);
   color: $color-white;
-  // Rounded top corners to replace the parent overflow: hidden rounding
-  border-radius: $border-radius-lg $border-radius-lg 0 0;
 }
 
 .booking-header-icon {
@@ -1390,7 +1377,6 @@ h3, h4 {
   color: $color-secondary;
   background: $color-bg-light;
   border: 1.5px solid $color-border;
-  border-radius: $border-radius-md;
   outline: none;
   cursor: pointer;
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
@@ -1430,7 +1416,6 @@ h3, h4 {
   background: linear-gradient(135deg, $color-primary 0%, $color-primary-dark 100%);
   color: $color-white;
   border: none;
-  border-radius: $border-radius-md;
   font-size: $font-size-sm;
   font-weight: $font-weight-700;
   letter-spacing: $letter-spacing-wide;
@@ -1483,7 +1468,6 @@ h3, h4 {
   justify-content: center;
   gap: 6px;
   padding: 0.65rem $spacing-md;
-  border-radius: $border-radius-md;
   font-size: $font-size-sm;
   font-weight: $font-weight-600;
   letter-spacing: $letter-spacing-wide;
@@ -1522,7 +1506,6 @@ h3, h4 {
 // ── Map Card ──────────────────────────────
 .sidebar-map-card {
   border: 1.5px solid $color-border-light;
-  border-radius: $border-radius-lg;
   overflow: hidden;
   box-shadow: $shadow-sm;
 }

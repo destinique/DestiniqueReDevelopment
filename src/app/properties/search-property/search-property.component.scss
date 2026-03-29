@@ -229,10 +229,10 @@ button.resetbtn:hover {
   border-radius: $border-radius-none !important;
   padding: .75rem .75rem $spacing-sm !important;
   height: 46px;
-  font-size: $font-size-base !important;
+  font-size: $font-size-base;
   display: block;
   line-height: $line-height-base;
-  color: $color-muted !important;
+  color: $color-secondary !important;
   background-color: $color-white;
   background-clip: padding-box;
   text-transform: uppercase;
@@ -241,6 +241,11 @@ button.resetbtn:hover {
   transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
   margin-right: 0;
   cursor: pointer;
+
+  &::placeholder {
+    color: $color-muted;
+    opacity: 1;
+  }
 }
 .search-destination {
   cursor: text;
@@ -267,6 +272,21 @@ button.resetbtn:hover {
 .form-select {
   height: 46px;
   border-radius: $border-radius-none;
+}
+
+.search-form-container .input .form-select {
+  font-size: $font-size-base;
+  line-height: $line-height-base;
+  padding: 0.75rem 0.75rem $spacing-sm;
+  box-sizing: border-box;
+}
+
+.search-form-container .form-select.is-placeholder {
+  color: $color-muted !important;
+}
+
+.search-form-container .form-select:not(.is-placeholder) {
+  color: $color-secondary !important;
 }
 @media (min-width: 1366px) {
   .container {
@@ -737,8 +757,7 @@ input[type="date"] {
     .from-control {
       height: 50px;
       min-height: 50px;
-      padding: 0 1rem;
-      font-size: $font-size-sm;
+      font-size: $font-size-sm !important;
       border: none !important;
       border-radius: 0 !important;
       background: transparent !important;
@@ -753,6 +772,21 @@ input[type="date"] {
         outline: none;
         background: transparent !important;
       }
+    }
+
+    .input input,
+    .from-control {
+      padding: 0 1rem;
+      line-height: 50px;
+    }
+
+    /* Selects draw label slightly high vs text inputs; extra top padding aligns optical center */
+    .input .form-select {
+      line-height: $line-height-tight;
+      padding-top: 0.5rem;
+      padding-bottom: 0.3125rem;
+      padding-left: 1rem;
+      padding-right: 1rem;
     }
     /* Widths + padding so placeholders are not cropped (desktop) */
     .innerdiv .inputs .input:nth-child(1) input {

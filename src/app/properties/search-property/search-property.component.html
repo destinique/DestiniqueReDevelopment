@@ -114,6 +114,7 @@
           <div class="input">
             <select
               class="form-select shadow-none"
+              [class.is-placeholder]="(searchForm.get('bedrooms')?.value ?? 0) == 0"
               formControlName="bedrooms"
             >
               <option *ngFor="let option of bedroomOptions" [ngValue]="option.value">
@@ -126,6 +127,7 @@
           <div class="input">
             <select
               class="form-select shadow-none"
+              [class.is-placeholder]="(searchForm.get('guests')?.value ?? 0) == 0"
               formControlName="guests"
             >
               <option *ngFor="let option of guestOptions" [value]="option.value">

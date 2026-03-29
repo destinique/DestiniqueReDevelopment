@@ -1,12 +1,32 @@
 @use 'variables' as *;
 
+/* Brand teal theme — overrides Bootstrap pagination blue */
+:host {
+  --bs-pagination-active-bg: #{$color-primary};
+  --bs-pagination-active-border-color: #{$color-primary};
+  --bs-pagination-active-color: #{$color-white};
+  --bs-pagination-color: #{$color-secondary};
+  --bs-pagination-bg: transparent;
+  --bs-pagination-border-color: #{$color-border-light};
+  --bs-pagination-hover-color: #{$color-primary-dark};
+  --bs-pagination-hover-bg: #{rgba($color-primary, 0.08)};
+  --bs-pagination-hover-border-color: #{rgba($color-primary, 0.35)};
+  --bs-pagination-focus-color: #{$color-primary-dark};
+  --bs-pagination-focus-bg: #{rgba($color-primary, 0.06)};
+  --bs-pagination-focus-box-shadow: 0 0 0 0.2rem #{$color-focus-ring};
+  --bs-pagination-disabled-color: #{$color-placeholder};
+  --bs-pagination-border-radius: #{$border-radius-md};
+}
+
 .pagination-container {
   justify-content: center;
 }
 
 .pagination {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
+  justify-content: center;
   gap: $spacing-xs;
   list-style: none;
   padding: 0;
@@ -21,26 +41,38 @@
     min-width: 2rem;
     padding: 0.375rem 0.75rem;
     font-size: 0.9375rem;
-    color: $color-black;
+    color: $color-secondary;
     text-decoration: none;
     background: transparent;
-    border: none;
+    border: 1px solid transparent;
+    border-radius: $border-radius-md;
     cursor: pointer;
+    transition:
+      color 0.2s ease,
+      background-color 0.2s ease,
+      border-color 0.2s ease;
+  }
 
-    &:hover:not(.active .page-link) {
-      color: $color-text-muted;
-    }
+  &:not(.active):not(.disabled) .page-link:hover {
+    color: $color-primary-dark;
+    background-color: rgba($color-primary, 0.08);
+    border-color: rgba($color-primary, 0.25);
   }
 
   &.active .page-link {
     color: $color-white;
-    background-color: $color-info;
+    background-color: $color-primary;
+    border-color: $color-primary;
     cursor: default;
+    font-weight: $font-weight-600;
+    box-shadow: 0 2px 8px rgba($color-primary, 0.35);
   }
 
   &.disabled .page-link {
     color: $color-placeholder;
     cursor: not-allowed;
     pointer-events: none;
+    background: transparent;
+    border-color: transparent;
   }
 }

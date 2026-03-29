@@ -4,7 +4,7 @@
     <div id="carousel-{{property.list_id}}" class="carousel slide">
       <!-- The slideshow/carousel -->
       <div class="carousel-inner">
-        <div *ngFor="let image of displayImages; let i = index"
+        <div *ngFor="let image of displayImages; let i = index; trackBy: trackById"
              class="carousel-item"
              [class.active]="i === currentSlideIndex">
           <a class="property-card__image-link"

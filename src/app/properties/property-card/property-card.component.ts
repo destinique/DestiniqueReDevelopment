@@ -21,6 +21,10 @@ export class PropertyCardComponent implements OnChanges {
     }
   }
 
+  trackById(index: number, image: { URLTxt: string }): string {
+    return `${this.property?.list_id ?? 0}-${index}-${image.URLTxt}`;
+  }
+
   // Safe getter methods using EXACT field names from API
   get country(): string {
     return this.property.country || 'Not specified';

@@ -382,6 +382,11 @@
                                               <div class="ov-action-wrap" *ngIf="propertyDetailData?.originalLink">
                                                 <a target="_blank" *ngIf="propertyDetailData?.originalLink" (click)="sendDestiniqueManageIamgeURL()" class="btn btn-primary ov-action-full">Manage Images</a>
                                               </div>
+
+                                              <div class="ov-action-wrap" *ngIf="propertyDetailData?.originalLink">
+                                                <a target="_blank" *ngIf="propertyDetailData?.originalLink" (click)="sendToDestiniqueImgeScanner()" class="btn btn-primary ov-action-full">Image Scanner</a>
+                                              </div>
+
                                             </div><!-- /ov-actions -->
 
                                           </div><!-- /ov-layout -->
@@ -508,7 +513,7 @@
 
                                         <!-- Description body -->
                                         <div class="desc-body">
-                                          <div *ngIf="propertyDetailData?.Headline" class="desc-headline">
+                                          <div *ngIf="propertyDetailData?.originalLink && propertyDetailData?.Headline" class="desc-headline">
                                             {{ propertyDetailData?.Headline }}
                                           </div>
                                           <div class="desc-text"

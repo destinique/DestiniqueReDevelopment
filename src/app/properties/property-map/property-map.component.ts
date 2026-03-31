@@ -48,6 +48,11 @@ export class PropertyMapComponent implements AfterViewInit, OnChanges, OnDestroy
   private readonly visibleIdsDebounceMs = 400;
   /** Padding (px) when fitting bounds so all property markers stay inside the visible map */
   private readonly fitBoundsPadding = 80;
+  /**
+   * Global zoom floor (not tied to fitBounds). Stops zoom 0–1 where the map repeats the world
+   * horizontally and shows large gray bands — same idea as most consumer map UIs.
+   */
+  private readonly mapMinZoom = 2;
 
   @ViewChild('mapContainer', { static: false })
   mapContainer!: ElementRef<HTMLDivElement>;
@@ -69,8 +74,6 @@ export class PropertyMapComponent implements AfterViewInit, OnChanges, OnDestroy
   private readonly markerZIndexBack = 0;
   /** Delayed fitBounds timeout so initial load fits after map container has dimensions */
   private fitBoundsTimeout: ReturnType<typeof setTimeout> | null = null;
-  /** When true, next map idle will set minZoom to current zoom (prevent zooming out past all-properties view) */
-  private pendingMinZoomFromFitBounds = false;
 
   mapReady = false;
 
@@ -125,12 +128,15 @@ export class PropertyMapComponent implements AfterViewInit, OnChanges, OnDestroy
     this.map = new google.maps.Map(this.mapContainer.nativeElement, {
       center: { lat: 30.3935, lng: -86.4958 },
       zoom: 6,
+      minZoom: this.mapMinZoom,
       mapTypeId: 'roadmap',
       zoomControl: true,
       streetViewControl: false,
       fullscreenControl: true,
       mapTypeControl: false,
       gestureHandling: 'greedy',
+      // Fills letterboxing when tiles don’t cover the viewport (matches default Maps styling)
+      backgroundColor: '#e5e3df',
     });
 
     this.infoWindow = new google.maps.InfoWindow();
@@ -146,13 +152,6 @@ export class PropertyMapComponent implements AfterViewInit, OnChanges, OnDestroy
 
     this.map.addListener('idle', () => {
       this.ngZone.run(() => {
-        if (this.pendingMinZoomFromFitBounds && this.map) {
-          this.pendingMinZoomFromFitBounds = false;
-          const zoom = this.map.getZoom();
-          if (typeof zoom === 'number') {
-            this.map.setOptions({ minZoom: zoom });
-          }
-        }
         if (this.skipNextIdleEmit) {
           this.skipNextIdleEmit = false;
           return;
@@ -247,7 +246,6 @@ export class PropertyMapComponent implements AfterViewInit, OnChanges, OnDestroy
       });
 
     if (!bounds.isEmpty() && !this.hasUserInteracted) {
-      this.pendingMinZoomFromFitBounds = true;
       this.programmaticZoomInProgress = true;
       if (typeof google !== 'undefined' && google.maps?.event && this.map) {
         google.maps.event.trigger(this.map, 'resize');
@@ -259,7 +257,6 @@ export class PropertyMapComponent implements AfterViewInit, OnChanges, OnDestroy
       this.fitBoundsTimeout = setTimeout(() => {
         this.fitBoundsTimeout = null;
         if (this.map && !this.hasUserInteracted && !bounds.isEmpty()) {
-          this.pendingMinZoomFromFitBounds = true;
           this.programmaticZoomInProgress = true;
           if (typeof google !== 'undefined' && google.maps?.event) {
             google.maps.event.trigger(this.map, 'resize');
@@ -471,7 +468,6 @@ export class PropertyMapComponent implements AfterViewInit, OnChanges, OnDestroy
 
     if (!bounds.isEmpty()) {
       this.hasUserInteracted = false;
-      this.pendingMinZoomFromFitBounds = true;
       this.programmaticZoomInProgress = true;
       if (typeof google !== 'undefined' && google.maps?.event && this.map) {
         google.maps.event.trigger(this.map, 'resize');

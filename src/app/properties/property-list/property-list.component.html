@@ -35,6 +35,19 @@
           <img class="heartimgclass" title="My Favorites" src="https://destinique.com/assets/svg/icons8heart.png" alt="heart"/>
         </button>
       </div>
+
+      <!-- Show Map toggle -->
+      <label class="list-toolbar-view-more list-toolbar-show-map" (click)="onShowMapToggle()">
+        <span class="list-toolbar-view-more__label">Show Map</span>
+        <span class="list-toolbar-view-more__toggle"
+              [class.list-toolbar-view-more__toggle--on]="showMap"
+              role="switch"
+              tabindex="0"
+              [attr.aria-checked]="showMap"
+              aria-label="Show or hide the map">
+          <span class="list-toolbar-view-more__knob"></span>
+        </span>
+      </label>
     </div>
   </div>
   </div>
@@ -92,18 +105,6 @@
               </span>
             </label>
 
-            <!-- Show Map toggle -->
-            <label class="list-toolbar-view-more list-toolbar-show-map" (click)="onShowMapToggle()">
-              <span class="list-toolbar-view-more__label">Show Map</span>
-              <span class="list-toolbar-view-more__toggle"
-                    [class.list-toolbar-view-more__toggle--on]="showMap"
-                    role="switch"
-                    tabindex="0"
-                    [attr.aria-checked]="showMap"
-                    aria-label="Show or hide the map">
-                <span class="list-toolbar-view-more__knob"></span>
-              </span>
-            </label>
           </div>
         </div>
       </div>

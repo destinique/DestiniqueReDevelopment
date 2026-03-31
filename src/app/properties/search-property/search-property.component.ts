@@ -1,5 +1,5 @@
 // search-property.component.ts
-import { Component, OnInit, OnDestroy, AfterViewInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, AfterViewInit, ViewChild, ElementRef, Input, Output, EventEmitter } from '@angular/core';
 import { LoadSpinnerService } from 'src/app/shared/services/load-spinner.service';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { SearchStateService } from 'src/app/shared/services/search-state.service';
@@ -16,6 +16,9 @@ import { NgbDateStruct, NgbInputDatepicker } from '@ng-bootstrap/ng-bootstrap';
   styleUrls: ['./search-property.component.scss']
 })
 export class SearchPropertyComponent implements OnInit, AfterViewInit, OnDestroy {
+  @Input() showMap = true;
+  @Output() showMapToggle = new EventEmitter<void>();
+
   // ========== FORM PROPERTIES ==========
   searchForm: FormGroup;
 

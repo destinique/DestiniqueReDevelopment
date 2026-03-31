@@ -32,6 +32,8 @@ export class PropertyMapComponent implements AfterViewInit, OnChanges, OnDestroy
   /** When true, show a centered loader on the map (e.g. while list is filtering by visible bounds) */
   @Input() mapPropertiesLoading = false;
   @Output() propertyFocused = new EventEmitter<number>();
+  /** list_id on marker hover, null on mouseout — parent can highlight the list card */
+  @Output() markerListHover = new EventEmitter<number | null>();
   @Output() visiblePropertyIdsChange = new EventEmitter<number[]>();
   @Output() resetRequested = new EventEmitter<void>();
   @Output() filteringActivated = new EventEmitter<void>();
@@ -223,20 +225,24 @@ export class PropertyMapComponent implements AfterViewInit, OnChanges, OnDestroy
         });
 
         marker.addListener('click', () => {
-          this.propertyFocused.emit(listId);
-          this.openInfoWindow(marker, prop);
+          this.ngZone.run(() => {
+            this.propertyFocused.emit(listId);
+            this.openInfoWindow(marker, prop);
+          });
         });
 
         marker.addListener('mouseover', () => {
           this.ngZone.run(() => {
             this.mapHoveredListId = listId;
             this.updateMarkerHighlights();
+            this.markerListHover.emit(listId);
           });
         });
         marker.addListener('mouseout', () => {
           this.ngZone.run(() => {
             this.mapHoveredListId = null;
             this.updateMarkerHighlights();
+            this.markerListHover.emit(null);
           });
         });
 

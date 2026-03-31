@@ -35,6 +35,16 @@ export class PropertyListComponent implements OnInit, OnDestroy {
   activePropertyId: number | null = null;
   /** When user hovers a list card, this is set so the map can highlight the matching marker */
   hoveredPropertyId: number | null = null;
+  /** Marker under pointer on map (list highlight while hovering) */
+  mapMarkerHoverListId: number | null = null;
+  /** Last property chosen by clicking a map marker (keeps list ring after pointer leaves marker) */
+  lastMapClickedListId: number | null = null;
+  private mapListScrollDebounce: ReturnType<typeof setTimeout> | null = null;
+  private readonly mapListScrollDebounceMs = 90;
+  /** Which list_id gets the map-sync highlight (hover wins over last click) */
+  get mapListMarkerHighlightId(): number | null {
+    return this.mapMarkerHoverListId ?? this.lastMapClickedListId;
+  }
   visiblePropertyIds: number[] = [];
   private lastAppliedVisiblePropertyIds: number[] | null = null;
   mapFilteringEnabled = false;
@@ -134,6 +144,10 @@ export class PropertyListComponent implements OnInit, OnDestroy {
     if (this.intersectionObserver) {
       this.intersectionObserver.disconnect();
     }
+    if (this.mapListScrollDebounce) {
+      clearTimeout(this.mapListScrollDebounce);
+      this.mapListScrollDebounce = null;
+    }
   }
 
   // ========== DATA LOADING ==========
@@ -230,6 +244,8 @@ export class PropertyListComponent implements OnInit, OnDestroy {
         this.mapProperties = response.data;
         this.properties = response.data;
         this.activePropertyId = this.properties.length ? this.properties[0].list_id : null;
+        this.mapMarkerHoverListId = null;
+        this.lastMapClickedListId = null;
         this.updatePaginationInfo(response);
         this.isLoading = false;
         this.isFiltering = false;
@@ -295,6 +311,8 @@ export class PropertyListComponent implements OnInit, OnDestroy {
   /** Show Map toggle: when off, hides the map panel and expands the list to full width */
   onShowMapToggle(): void {
     this.showMap = !this.showMap;
+    this.mapMarkerHoverListId = null;
+    this.lastMapClickedListId = null;
 
     // Whenever map panel visibility changes, reset map-bounds filtering state
     // and fetch a fresh unbounded list for current search params.
@@ -327,6 +345,8 @@ export class PropertyListComponent implements OnInit, OnDestroy {
       this.mapProperties = results;
       this.properties = results;
       this.activePropertyId = this.properties[0]?.list_id ?? null;
+      this.mapMarkerHoverListId = null;
+      this.lastMapClickedListId = null;
       // Update pagination for single result
       this.paginationInfo = {
         page: 1,
@@ -346,6 +366,49 @@ export class PropertyListComponent implements OnInit, OnDestroy {
 
   onMapPropertyFocused(listId: number): void {
     this.activePropertyId = listId;
+    this.lastMapClickedListId = listId;
+    if (this.mapListScrollDebounce) {
+      clearTimeout(this.mapListScrollDebounce);
+      this.mapListScrollDebounce = null;
+    }
+    this.scheduleScrollListToPropertyCard(listId, true);
+  }
+
+  onMapMarkerListHover(listId: number | null): void {
+    this.mapMarkerHoverListId = listId;
+    if (this.mapListScrollDebounce) {
+      clearTimeout(this.mapListScrollDebounce);
+      this.mapListScrollDebounce = null;
+    }
+    if (listId == null) {
+      return;
+    }
+    this.scheduleScrollListToPropertyCard(listId, false);
+  }
+
+  private scheduleScrollListToPropertyCard(listId: number, immediate: boolean): void {
+    const run = () => {
+      this.mapListScrollDebounce = null;
+      this.scrollListToPropertyCard(listId);
+    };
+    if (immediate) {
+      requestAnimationFrame(() => run());
+      return;
+    }
+    this.mapListScrollDebounce = setTimeout(run, this.mapListScrollDebounceMs);
+  }
+
+  private scrollListToPropertyCard(listId: number): void {
+    const idStr = String(listId);
+    const fromQuery = this.propertyCardWrappers
+      ?.toArray()
+      .find((r) => r.nativeElement?.getAttribute('data-property-id') === idStr);
+    const el =
+      fromQuery?.nativeElement ??
+      (typeof document !== 'undefined'
+        ? (document.querySelector(`[data-property-id="${idStr}"]`) as HTMLElement | null)
+        : null);
+    el?.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
 
   onVisiblePropertyIdsChange(ids: number[]): void {

@@ -180,6 +180,7 @@
               #propertyCardWrapper
               class="col-12 col-md-6 properties"
               [class.col-lg-4]="!showMap"
+              [class.properties--map-marker-highlight]="showMap && mapListMarkerHighlightId === property.list_id"
               [attr.data-property-id]="property.list_id"
               (mouseenter)="hoveredPropertyId = property.list_id"
               (mouseleave)="hoveredPropertyId = null">
@@ -239,6 +240,7 @@
             [hoveredPropertyId]="hoveredPropertyId"
             [mapPropertiesLoading]="isFiltering"
             (propertyFocused)="onMapPropertyFocused($event)"
+            (markerListHover)="onMapMarkerListHover($event)"
             (visiblePropertyIdsChange)="onVisiblePropertyIdsChange($event)"
             (resetRequested)="onMapReset()"
             (filteringActivated)="onMapFilteringActivated()">

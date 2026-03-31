@@ -596,33 +596,37 @@ img {
     --align-items: stretch;
     --gap: 10px 10px;
     --background-transition: 0.3s;
-    border: none;
+    border: none !important;
     --border-style: none;
-    border-width: 0;
+    border-width: 0 !important;
     --border-block-start-width: 0;
     --border-inline-end-width: 0;
     --border-block-end-width: 0;
     --border-inline-start-width: 0;
     border-color: transparent;
-    /* --border-color: #eaeff2; */
     --border-radius: 0px 0px 0px 0px;
-    box-shadow: $shadow-lg;
+    /* Elevation replaces borders */
+    box-shadow:
+      $shadow-sm,
+      0 10px 28px rgba(0, 0, 0, 0.08),
+      0 2px 8px rgba(0, 0, 0, 0.04);
     --padding-block-start: 0px;
     --padding-block-end: 0px;
     --padding-inline-start: 0px;
     --padding-inline-end: 0px;
     min-height: 100%;
-    transition: all 0.4s ease-in-out;
+    transition: box-shadow 0.35s ease;
     h3 {
         text-align: center;
     }
 }
 
 .cardcustomcss:hover {
-    box-shadow: $shadow-primary;
-    transition-property: transform, opacity;
-    transition-timing-function: cubic-bezier(0, 0.33, 0.07, 1.03);
-    transition: all 0.4s ease-in-out;
+    box-shadow:
+      $shadow-md,
+      $shadow-primary,
+      0 18px 44px rgba(0, 0, 0, 0.1);
+    transition: box-shadow 0.35s ease;
 }
 .cardcustomcss .card-body {
     border-radius: 0;
@@ -644,11 +648,23 @@ img {
   word-wrap: break-word;
   background-color: $color-white;
   background-clip: border-box;
-  border-radius: 0;
+  border-radius: $border-radius-md;
   letter-spacing: 1px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04), 0 8px 24px rgba(0, 0, 0, 0.06);
-  margin-bottom: 0.5rem;
   border: none !important;
+  --bs-card-border-width: 0;
+  box-shadow:
+    $shadow-sm,
+    0 10px 28px rgba(0, 0, 0, 0.08),
+    0 2px 8px rgba(0, 0, 0, 0.04);
+  margin-bottom: 0.5rem;
+  transition: box-shadow 0.35s ease;
+
+  &:hover {
+    box-shadow:
+      $shadow-md,
+      $shadow-primary,
+      0 18px 44px rgba(0, 0, 0, 0.1);
+  }
 }
 .absolute {
     position: absolute;
@@ -1212,6 +1228,23 @@ img {
     padding-top: 0.5rem;
     padding-bottom: 0.5rem;
   }
+}
+
+/* Map marker hover/click: primary ring on matching list card */
+.properties-list-map-section .property-list-col .properties.properties--map-marker-highlight {
+  position: relative;
+  z-index: 2;
+  scroll-margin-top: clamp(120px, 20vh, 300px);
+}
+
+.properties-list-map-section .property-list-col .properties.properties--map-marker-highlight app-property-card {
+  border-radius: $border-radius-md;
+  box-shadow:
+    0 0 0 2px $color-primary,
+    $shadow-sm,
+    0 10px 28px rgba(0, 0, 0, 0.08),
+    0 2px 8px rgba(0, 0, 0, 0.04);
+  transition: box-shadow 0.25s ease;
 }
 
 .properties-list-map-section .property-list-col app-property-card {

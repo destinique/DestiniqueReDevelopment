@@ -1,5 +1,28 @@
 @use 'variables' as *;
 
+/* Card shell: no stroke — elevation only (Bootstrap .card + custom) */
+.cardcustomcss.card {
+  --bs-card-border-width: 0;
+  --bs-card-border-color: transparent;
+  border: none !important;
+  outline: none;
+  border-radius: $border-radius-md;
+  overflow: hidden;
+  background: $color-white;
+  box-shadow:
+    $shadow-sm,
+    0 10px 28px rgba(0, 0, 0, 0.08),
+    0 2px 8px rgba(0, 0, 0, 0.04);
+  transition: box-shadow 0.35s ease;
+
+  &:hover {
+    box-shadow:
+      $shadow-md,
+      $shadow-primary,
+      0 18px 44px rgba(0, 0, 0, 0.1);
+  }
+}
+
 /* Property Card Carousel - matches screenshot design */
 
 .property-carousel {

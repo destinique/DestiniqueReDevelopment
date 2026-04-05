@@ -23,6 +23,7 @@ export class DestiniqueMapComponent implements OnInit, AfterViewInit {
   // Default: Destin, FL
   defaultCenter = { lat: 30.3935, lng: -86.4958 };
   defaultLocationText = 'Destin, Florida';
+  private readonly mapMinZoom = 4;
 
   /** Site theme green/teal for markers (#378f86) */
   private readonly markerColor = '#378f86';
@@ -117,7 +118,13 @@ export class DestiniqueMapComponent implements OnInit, AfterViewInit {
     this.map = new google.maps.Map(this.mapContainer.nativeElement, {
       center: this.defaultCenter,
       zoom: 10,
+      minZoom: this.mapMinZoom,
       mapTypeId: 'roadmap',
+      streetViewControl: false,
+      zoomControl: true,
+      zoomControlOptions: {
+        position: google.maps.ControlPosition.RIGHT_BOTTOM,
+      },
     });
 
     this.infoWindow = new google.maps.InfoWindow();

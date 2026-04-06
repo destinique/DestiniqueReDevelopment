@@ -1,4 +1,6 @@
 import { Injectable } from "@angular/core";
+import { Inject, PLATFORM_ID } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 
 export enum Environment {
   Prod = "prod",
@@ -137,8 +139,17 @@ export class EnvService {
     return this._upArrowURL;
   }
 
-  constructor() {
-    const hostname = window && window.location && window.location.hostname;
+  constructor(@Inject(PLATFORM_ID) private platformId: Object) {
+    // const hostname = window && window.location && window.location.hostname;
+    let hostname = '';
+
+    if (isPlatformBrowser(this.platformId)) {
+        hostname = window.location.hostname;
+    }
+
+    if (!hostname) {
+        hostname = 'dev.destinique.com'; // fallback for SSR
+    }
 
     // this._imagesURL = "https://"+hostname+"/";
     this._imagesURL = "https://destinique.org/";
@@ -172,7 +183,7 @@ export class EnvService {
 
     if (/^.*localhost.*/.test(hostname)) {
       this._env = Environment.Local;
-      this._applicationURLInitials = "https://destinique.com";
+      this._applicationURLInitials = "https://dev.destinique.com";
 
       // this._apiUrl = "http://localhost:8080/";
       // this._ratesApiUrl = "http://localhost:8800/?task=";
@@ -187,7 +198,7 @@ export class EnvService {
     }
     else if (/^dev.destinique.com/.test(hostname)) {
       this._env = Environment.Prod;
-      this._applicationURLInitials = "https://destinique.com";
+      this._applicationURLInitials = "https://dev.destinique.com";
       this._apiUrl = "https://api.destinique.com/api-user/";
       this._ratesApiUrl = "https://destinique.com/ratesapp4website/?task=";
       this._authMapKey = "AIzaSyCdQ8e5JTa-hVDQc9iTxuA_iQFdb9X3dWI";
@@ -211,7 +222,11 @@ export class EnvService {
       this._apiUrl = "https://api.destinique.com/api-user/";
       this._ratesApiUrl = "https://destinique.com/ratesapp4website/?task=";
     } else {
-      // console.warn(`Cannot find environment for host name ${hostname}`);
+      this._env = Environment.Prod;
+      this._applicationURLInitials = 'https://destinique.com';
+      this._apiUrl = 'https://api.destinique.com/api-user/';
+      this._ratesApiUrl = 'https://destinique.com/ratesapp4website/?task=';
+      this._authMapKey = 'AIzaSyCdQ8e5JTa-hVDQc9iTxuA_iQFdb9X3dWI';
     }
   }
 }

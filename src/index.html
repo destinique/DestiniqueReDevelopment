@@ -3,9 +3,18 @@
     <head>
         <!-- ========================================= -->
         <!-- PERFORMANCE & CACHE HEADERS -->
+        <!-- REMOVE Cache Meta Tags (IMPORTANT) -->
+        <!-- These are bad practice in HTML -->
+        <!-- Should be set via server headers (NGINX / CDN) -->
+        <!-- WILL REMOVE LATER -->
         <!-- ========================================= -->
         <meta http-equiv="Cache-Control" content="public, max-age=31536000">
         <meta http-equiv="Expires" content="31536000">
+
+        <!-- ========================================= -->
+        <!-- Content-Security-Policy -->
+        <!-- You can keep it, But ideally move to server config later. -->
+        <!-- ========================================= -->
         <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
 
         <meta charset="utf-8">
@@ -16,6 +25,8 @@
         <base href="/">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="icon" type="image/x-icon" href="https://destinique.com/favicon.ico">
+        <!-- Default canonical -->
+        <link rel="canonical" href="https://destinique.com/" />        
 
         <!-- Preconnect to Google Maps domains -->
 <!--        <link rel="preconnect" href="https://maps.googleapis.com" crossorigin>-->
@@ -24,15 +35,6 @@
 <!--        <link rel="dns-prefetch" href="https://maps.gstatic.com">-->
         <!-- Optional: Preload the script if you know it'll be used -->
 <!--        <link rel="preload" href="https://maps.googleapis.com/maps/api/js?key=AIzaSyCdQ8e5JTa-hVDQc9iTxuA_iQFdb9X3dWI&libraries=places" as="script">-->
-
-        <!-- ========================================= -->
-        <!-- SOCIAL META TAGS -->
-        <!-- ========================================= -->
-        <meta property="og:title" content="Luxury Villas Vacation Rentals | Luxury Travel Advisor -Destinique.">
-        <meta property="og:description" content="Book luxury villas vacation rentals worldwide with Destinique. Enjoy elite stays, private amenities & personalized travel advice from top luxury Travel advisors.">
-        <meta property="og:image" content="assets/website_images/home/banner/banner_404.webp">
-        <meta property="og:url" content="https://destinique.com/">
-        <meta property="og:type" content="website">
 
         <!-- LOCAL Montserrat (recommended for scores >95) -->
         <link rel="preload" href="assets/fonts/montserrat-regular.woff2" as="font" type="font/woff2" crossorigin>

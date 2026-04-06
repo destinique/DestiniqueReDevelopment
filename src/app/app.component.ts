@@ -1,8 +1,9 @@
-import { Component, AfterViewInit, Inject, PLATFORM_ID } from '@angular/core';
+import { Component, AfterViewInit, OnInit, Inject, PLATFORM_ID } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
-import { Router, NavigationEnd } from '@angular/router';
+import { Router, NavigationEnd, ActivatedRoute } from '@angular/router';
 import { filter } from 'rxjs/operators';
 import { LoadSpinnerService } from './shared/services/load-spinner.service';
+import { SeoService } from './shared/services/seo.service';
 
 declare global {
   interface Window {
@@ -18,7 +19,7 @@ declare global {
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent implements AfterViewInit {
+export class AppComponent implements OnInit, AfterViewInit {
   private readonly gtmId = 'G-122QQMGN2V';
   // private destroyed$ = new Subject<void>();
   // private isGtmReady = false;
@@ -31,11 +32,40 @@ export class AppComponent implements AfterViewInit {
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object,
     private LoadSpinnerService: LoadSpinnerService,
-    private router: Router
+    private router: Router,
+    private seoService: SeoService
   ) {
     this.router.events
       .pipe(filter((e): e is NavigationEnd => e instanceof NavigationEnd))
       .subscribe(() => this.LoadSpinnerService.reset());
+  }
+
+  ngOnInit(): void {
+    // SSR / prerender: use Router.routerState (reliable). Injected ActivatedRoute on
+    // the bootstrap component is not always the same as routerState.root during initial render.
+    this.applySeoFromRouterState();
+
+    this.router.events
+      .pipe(filter((e): e is NavigationEnd => e instanceof NavigationEnd))
+      .subscribe(() => this.applySeoFromRouterState());
+  }
+
+  /** Walk to deepest activated route and apply route `data.seo` (or nearest parent that defines it). */
+  private applySeoFromRouterState(): void {
+    let route: ActivatedRoute = this.router.routerState.root;
+    while (route.firstChild) {
+      route = route.firstChild;
+    }
+
+    let cursor: ActivatedRoute | null = route;
+    while (cursor) {
+      const seo = cursor.snapshot.data?.['seo'];
+      if (seo) {
+        this.seoService.updateSeo(seo);
+        return;
+      }
+      cursor = cursor.parent;
+    }
   }
 
   onRouterOutletActivate(): void {

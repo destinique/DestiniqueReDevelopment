@@ -201,8 +201,8 @@
               "/aboutus",
               "/register",
               "/my-profile",
-              "destinique-forgotpassword",
-              "reset-password"
+              "/destinique-forgotpassword",
+              "/reset-password"
             ]
           },
           "configurations": {

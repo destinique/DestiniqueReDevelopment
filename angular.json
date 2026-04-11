@@ -185,25 +185,8 @@
         "prerender": {
           "builder": "@nguniversal/builders:prerender",
           "options": {
-            "routes": [
-              "/",
-              "/home",
-              "/destinations",
-              "/properties",
-              "/property",
-              "/contact",
-              "/map",
-              "/promotions",
-              "/our-services",
-              "/terms-and-conditions",
-              "/privacypolicies",
-              "/testimonials",
-              "/aboutus",
-              "/register",
-              "/my-profile",
-              "/destinique-forgotpassword",
-              "/reset-password"
-            ]
+            "routesFile": "prerender-routes.txt",
+            "guessRoutes": false
           },
           "configurations": {
             "production": {

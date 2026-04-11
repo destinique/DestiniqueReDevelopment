@@ -57,6 +57,11 @@ export class AppComponent implements OnInit, AfterViewInit {
       route = route.firstChild;
     }
 
+    // Property details: PropertyMetaResolver already called SeoService from API data.
+    if (route.snapshot.data?.['propertyMeta']) {
+      return;
+    }
+
     let cursor: ActivatedRoute | null = route;
     while (cursor) {
       const seo = cursor.snapshot.data?.['seo'];

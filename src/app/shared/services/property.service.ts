@@ -65,6 +65,14 @@ export interface PropertyResponse {
   };
 }
 
+export interface PropertyMetaData {
+  url: string;
+  title: string;
+  keywords: string;
+  description: string;
+  image: string;
+}
+
 export interface SearchParams {
   // Location
   city?: string;
@@ -251,6 +259,15 @@ export class PropertyService {
    */
   getPropertyById(listId: number): Observable<PropertyResponse> {
     return this.http.get<PropertyResponse>(`${this.apiUserBase}properties_by_list_id.php?list_id=${listId}`);
+  }
+
+  /**
+   * Get property meta data by list_id (SEO / Open Graph)
+   */
+  getPropertyMetaDataById(listId: number): Observable<PropertyMetaData> {
+    return this.http.get<PropertyMetaData>(
+      `${this.apiUserBase}property_metadata_by_list_id.php?list_id=${listId}`
+    );
   }
 
   /**

@@ -8,7 +8,7 @@
              class="carousel-item"
              [class.active]="i === currentSlideIndex">
           <a class="property-card__image-link"
-             [routerLink]="['/property', property.list_id]"
+             [routerLink]="property.seo_url ? [property.seo_url] : ['/property', property.list_id]"
              target="_blank">
             <img [src]="image.URLTxt"
                  [alt]="property.headline || property.city"
@@ -52,10 +52,10 @@
           <input type="checkbox" class="form-check-input" [id]="'property-' + property.list_id">
           <label class="form-check-label property-card__id-label" [for]="'property-' + property.list_id">ID:</label>
         </div>
-        <a target="_blank" [routerLink]="['/property', property.list_id]" class="property-card__id-value">{{property.list_id}}</a>
+        <a target="_blank" [routerLink]="property.seo_url ? [property.seo_url] : ['/property', property.list_id]" class="property-card__id-value">{{property.list_id}}</a>
       </div>
       <h3 class="property-card__city">
-        <a class="property-card__city-link" [routerLink]="['/property', property.list_id]">
+        <a class="property-card__city-link" [routerLink]="property.seo_url ? [property.seo_url] : ['/property', property.list_id]">
           {{property.city || 'Not specified'}}
         </a>
       </h3>

@@ -269,19 +269,19 @@ img {
 }
 
 @media all and (max-width: 768px) {
-    .dropdown-menu-center {
+    .sticky-search-bar .dropdown-menu-center {
         width: 20rem;
         left: auto !important;
         right: auto !important;
         transform: translate(-25%, 3%) !important;
-        overflow-y: scroll;
+        overflow-y: auto;
     }
-    .dropdown-menu {
+    .sticky-search-bar .dropdown-menu {
         width: 20rem;
         left: auto !important;
         right: auto !important;
         transform: translate(-25%, 3%) !important;
-        overflow-y: scroll;
+        overflow-y: auto;
     }
     .bedroomClass {
         margin-bottom: $spacing-lg;
@@ -294,19 +294,19 @@ img {
     }
 }
 @media all and (max-width: 910px) {
-    .dropdown-menu-center {
+    .sticky-search-bar .dropdown-menu-center {
         width: 20rem;
         left: auto !important;
         right: auto !important;
         transform: translate(-20%, 3%) !important;
-        overflow-y: scroll;
+        overflow-y: auto;
     }
-    .dropdown-menu {
+    .sticky-search-bar .dropdown-menu {
         width: 20rem;
         left: auto !important;
         right: auto !important;
         transform: translate(-20%, 3%) !important;
-        overflow-y: scroll;
+        overflow-y: auto;
     }
     .bedroomClass {
         margin-bottom: $spacing-lg;
@@ -324,19 +324,19 @@ img {
     }
 }
 @media all and (min-width: 910px) and (max-width: 1024px) {
-    .dropdown-menu-center {
+    .sticky-search-bar .dropdown-menu-center {
         width: 20rem;
         left: auto !important;
         right: auto !important;
         transform: translate(-20%, 3%) !important;
-        overflow-y: scroll;
+        overflow-y: auto;
     }
-    .dropdown-menu {
+    .sticky-search-bar .dropdown-menu {
         width: 20rem;
         left: auto !important;
         right: auto !important;
         transform: translate(-25%, 3%) !important;
-        overflow-y: scroll;
+        overflow-y: auto;
     }
     .bedroomClass {
         margin-bottom: $spacing-lg;

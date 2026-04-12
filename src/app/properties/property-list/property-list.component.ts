@@ -10,9 +10,9 @@ import {
   QueryList,
   ChangeDetectorRef,
 } from '@angular/core';
-import { Router } from '@angular/router';
+import { NavigationEnd, NavigationStart, Router } from '@angular/router';
 import { Subject, Subscription } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { filter, takeUntil } from 'rxjs/operators';
 import { PropertyService, PropertyResponse, Property } from 'src/app/shared/services/property.service';
 import { SearchStateService } from 'src/app/shared/services/search-state.service';
 import { LoadSpinnerService } from 'src/app/shared/services/load-spinner.service';
@@ -41,6 +41,8 @@ export class PropertyListComponent implements OnInit, OnDestroy {
   lastMapClickedListId: number | null = null;
   private mapListScrollDebounce: ReturnType<typeof setTimeout> | null = null;
   private readonly mapListScrollDebounceMs = 90;
+  /** Same-path navigations (e.g. query-only pageSize/sort) should not jump scroll — Router scrollPositionRestoration scrolls to top otherwise */
+  private windowScrollToRestoreAfterNav: number | null = null;
   /** Which list_id gets the map-sync highlight (hover wins over last click) */
   get mapListMarkerHighlightId(): number | null {
     return this.mapMarkerHoverListId ?? this.lastMapClickedListId;
@@ -77,7 +79,6 @@ export class PropertyListComponent implements OnInit, OnDestroy {
   private syncInProgress = false;
   /** Prevents a second loadProperties() from running until the current request finishes (stops duplicate API calls) */
   private loadInProgress = false;
-  private intersectionObserver?: IntersectionObserver;
   isLoading = false;
   /** While map-based filtering is in progress, show card skeletons */
   isFiltering = false;
@@ -131,8 +132,55 @@ export class PropertyListComponent implements OnInit, OnDestroy {
   // ========== LIFECYCLE HOOKS ==========
   ngOnInit(): void {
     this.setupSearchListener();
+    this.setupSamePathScrollPreservation();
     //this.loadProperties();
     // we don't need to call this method as setupSearchListener has subscribed to a BehaviorSubject
+  }
+
+  /**
+   * When only query params change (per page, sort, filters), the root Router still scrolls the window.
+   * Preserve vertical scroll for same-path navigations on the properties routes.
+   */
+  private setupSamePathScrollPreservation(): void {
+    const pathOnly = (url: string): string => {
+      const t = url.trim();
+      const withSlash = t.startsWith('/') ? t : '/' + t;
+      return withSlash.split('?')[0].split('#')[0].replace(/\/+$/, '') || '/';
+    };
+
+    this.router.events
+      .pipe(
+        takeUntil(this.destroy$),
+        filter((e): e is NavigationStart => e instanceof NavigationStart)
+      )
+      .subscribe((e) => {
+        const prevPath = pathOnly(this.router.url);
+        const nextPath = pathOnly(e.url);
+        if (prevPath !== nextPath || !prevPath.startsWith('/properties')) {
+          this.windowScrollToRestoreAfterNav = null;
+          return;
+        }
+        this.windowScrollToRestoreAfterNav =
+          window.scrollY || document.documentElement.scrollTop || 0;
+      });
+
+    this.router.events
+      .pipe(
+        takeUntil(this.destroy$),
+        filter((e): e is NavigationEnd => e instanceof NavigationEnd)
+      )
+      .subscribe(() => {
+        const y = this.windowScrollToRestoreAfterNav;
+        if (y === null) {
+          return;
+        }
+        this.windowScrollToRestoreAfterNav = null;
+        const restore = (): void => {
+          window.scrollTo({ top: y, left: 0, behavior: 'auto' });
+        };
+        setTimeout(restore, 0);
+        setTimeout(restore, 50);
+      });
   }
 
   ngOnDestroy(): void {
@@ -140,9 +188,6 @@ export class PropertyListComponent implements OnInit, OnDestroy {
     this.destroy$.complete();
     if (this.searchSubscription) {
       this.searchSubscription.unsubscribe();
-    }
-    if (this.intersectionObserver) {
-      this.intersectionObserver.disconnect();
     }
     if (this.mapListScrollDebounce) {
       clearTimeout(this.mapListScrollDebounce);
@@ -336,7 +381,11 @@ export class PropertyListComponent implements OnInit, OnDestroy {
   }
 
   private scrollToPropertiesGrid(): void {
-    this.propertiesGridArea?.nativeElement?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    this.propertiesGridArea?.nativeElement?.scrollIntoView({
+      behavior: 'auto',
+      block: 'nearest',
+      inline: 'nearest',
+    });
   }
 
   onListIdSearchComplete(results: any): void {
@@ -471,57 +520,6 @@ export class PropertyListComponent implements OnInit, OnDestroy {
     this.mapFilteringEnabled = true;
     this.isFiltering = true;
     this.cdr.detectChanges();
-  }
-
-  private setupIntersectionObserver(): void {
-    if (typeof window === 'undefined' || !(window as any).IntersectionObserver) {
-      return;
-    }
-
-    this.intersectionObserver = new IntersectionObserver(
-      (entries) => {
-        const visible: Array<{ id: number; distance: number }> = [];
-        const viewportCenter = window.innerHeight / 2;
-
-        for (const entry of entries) {
-          if (!entry.isIntersecting) continue;
-          const target = entry.target as HTMLElement;
-          const idAttr = target.getAttribute('data-property-id');
-          if (!idAttr) continue;
-          const rect = entry.boundingClientRect;
-          const elementCenter = rect.top + rect.height / 2;
-          const distance = Math.abs(elementCenter - viewportCenter);
-          visible.push({ id: Number(idAttr), distance });
-        }
-
-        if (!visible.length) return;
-
-        visible.sort((a, b) => a.distance - b.distance);
-        const closest = visible[0];
-        if (closest && closest.id !== this.activePropertyId) {
-          this.activePropertyId = closest.id;
-        }
-      },
-      {
-        threshold: 0.4
-      }
-    );
-
-    const observeAll = (list: QueryList<ElementRef<HTMLDivElement>>) => {
-      this.intersectionObserver?.disconnect();
-      list.forEach((el) => {
-        if (el.nativeElement) {
-          this.intersectionObserver?.observe(el.nativeElement);
-        }
-      });
-    };
-
-    if (this.propertyCardWrappers) {
-      observeAll(this.propertyCardWrappers);
-      this.propertyCardWrappers.changes.subscribe(
-        (list: QueryList<ElementRef<HTMLDivElement>>) => observeAll(list)
-      );
-    }
   }
 
   /** Stable identity for list items so Angular reuses DOM and images don’t re-render on scroll */

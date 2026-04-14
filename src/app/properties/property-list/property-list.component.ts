@@ -63,6 +63,7 @@ export class PropertyListComponent implements OnInit, OnDestroy {
     page: 1,
     pageSize: 12,
     total: 0,
+    summary: '',
     totalPages: 0,
     hasNext: false,
     hasPrev: false
@@ -317,10 +318,12 @@ export class PropertyListComponent implements OnInit, OnDestroy {
   }
 
   private updatePaginationInfo(response: PropertyResponse): void {
+    const paginationSummary = (response.pagination as any).summary;
     this.paginationInfo = {
       page: response.pagination.page,
       pageSize: response.pagination.pageSize,
       total: response.pagination.total,
+      summary: paginationSummary ?? `${response.pagination.total} properties`,
       totalPages: response.pagination.totalPages,
       hasNext: response.pagination.page < response.pagination.totalPages,
       hasPrev: response.pagination.page > 1
@@ -401,6 +404,7 @@ export class PropertyListComponent implements OnInit, OnDestroy {
         page: 1,
         pageSize: this.paginationInfo.pageSize,
         total: results.length,
+        summary: `${results.length} properties`,
         totalPages: 1,
         hasNext: false,
         hasPrev: false

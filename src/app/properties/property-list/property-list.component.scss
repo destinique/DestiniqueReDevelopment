@@ -995,8 +995,9 @@ img {
 }
 
 .list-toolbar-count {
-  font-size: $font-size-base;
-  font-weight: $font-weight-600;
+  font-size: $font-size-sm;
+  font-weight: $font-weight-700;
+  line-height: $line-height-base;
   color: $color-secondary;
   letter-spacing: 0.02em;
 }
@@ -1068,6 +1069,38 @@ img {
 
   .list-toolbar-inner.list-toolbar-inner--full .list-toolbar-row app-list-id-search {
     min-width: 260px;
+  }
+
+  /* Map-visible mode: keep summary + controls in a single compact row */
+  .list-toolbar-inner.list-toolbar-inner--map .list-toolbar-row {
+    width: 100%;
+    flex-wrap: nowrap;
+    align-items: center;
+    gap: $spacing-sm;
+  }
+
+  .list-toolbar-inner.list-toolbar-inner--map .list-toolbar-row .list-toolbar-count {
+    flex: 0 1 auto;
+    white-space: nowrap;
+    min-width: 0;
+    margin-right: 0;
+  }
+
+  .list-toolbar-inner.list-toolbar-inner--map .list-toolbar-row app-page-size {
+    flex: 0 0 130px;
+    min-width: 130px;
+    max-width: 130px;
+  }
+
+  .list-toolbar-inner.list-toolbar-inner--map .list-toolbar-row app-sort-dropdown {
+    flex: 0 1 180px;
+    min-width: 150px;
+  }
+
+  .list-toolbar-inner.list-toolbar-inner--map .list-toolbar-row app-list-id-search {
+    flex: 1 1 230px;
+    min-width: 210px;
+    max-width: 320px;
   }
 }
 

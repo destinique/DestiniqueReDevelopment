@@ -62,9 +62,14 @@
          [class.col-lg-12]="!showMap">
       <!-- List toolbar – modern bar above property list only -->
       <div id="maindiv" #propertiesGridArea class="list-toolbar list-toolbar-modern">
-        <div class="list-toolbar-inner" [class.list-toolbar-inner--full]="!showMap">
-          <div class="list-toolbar-row" id="filter-properties" [class.list-toolbar-row--full]="!showMap">
-            <span class="list-toolbar-count">{{ paginationInfo.total }} properties</span>
+        <div class="list-toolbar-inner"
+             [class.list-toolbar-inner--full]="!showMap"
+             [class.list-toolbar-inner--map]="showMap">
+          <div class="list-toolbar-row"
+               id="filter-properties"
+               [class.list-toolbar-row--full]="!showMap"
+               [class.list-toolbar-row--map]="showMap">
+            <span class="list-toolbar-count">{{ paginationInfo.summary || (paginationInfo.total + ' properties') }}</span>
             <div class="list-toolbar-dropdowns">
               <app-page-size
                 [pageSizeOptions]="pageSizeOptions"

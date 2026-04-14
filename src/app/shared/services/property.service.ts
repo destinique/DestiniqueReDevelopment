@@ -59,6 +59,7 @@ export interface PropertyResponse {
     page: number;
     pageSize: number;
     total: number;
+    summary?: string;
     totalPages: number;
     hasNext: boolean;
     hasPrev: boolean;

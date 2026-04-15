@@ -1,0 +1,28 @@
+# 1) Install nvm (one-time)
+curl -fsSL https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
+source ~/.bashrc   # or: source ~/.profile
+
+# 2) Install and use Node 24.11.1
+nvm install 24.11.1
+nvm use 24.11.1
+
+# 3) Make it default for new shells
+nvm alias default 24.11.1
+
+node -v
+npm -v
+
+Next:
+git clone https://github.com/destinique/DestiniqueReDevelopment.git
+cd /var/www/DestiniqueReDevelopment
+
+
+export NODE_OPTIONS="--max_old_space_size=6144"
+export NG_BUILD_MAX_WORKERS=3
+
+npm install -g @angular/cli
+npm ci
+
+npm run build:ssr
+npm run prerender
+sudo rsync -av --delete /var/www/DestiniqueReDevelopment/dist/destinique/browser/ /var/www/dev.destinique.com/public_html/

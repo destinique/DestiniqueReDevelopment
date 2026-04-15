@@ -1,3 +1,4 @@
+import '@angular/localize/init';
 import 'zone.js/node';
 
 import { APP_BASE_HREF } from '@angular/common';

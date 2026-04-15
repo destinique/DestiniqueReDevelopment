@@ -193,6 +193,11 @@ export class PropertydetailsComponent implements OnInit, AfterViewInit, OnDestro
   }
 
   ngAfterViewInit (){
+    // SSR / prerender guard: never touch window or load scripts server-side
+    if (!this.storageService.isBrowser()) {
+      return;
+    }
+
     if (!this.gmapScriptLoaded) {
       if ('requestIdleCallback' in window) {
         (window as any).requestIdleCallback(() => {

@@ -50,6 +50,8 @@ export class PropertyListComponent implements OnInit, OnDestroy {
   }
   visiblePropertyIds: number[] = [];
   private lastAppliedVisiblePropertyIds: number[] | null = null;
+  /** True after map has emitted at least one bounds-based visible IDs result */
+  hasMapBoundsResult = false;
   mapFilteringEnabled = false;
   private mapFilterDebounceHandle: any = null;
 
@@ -293,18 +295,20 @@ export class PropertyListComponent implements OnInit, OnDestroy {
       )
       .subscribe({
         next: (response: PropertyResponse) => {
-          if (response?.success === false) {
-            this.applyLoadFailure(PropertyListComponent.loadPropertiesFailedMessage);
-            return;
-          }
+          const records = Array.isArray((response as any)?.data)
+            ? (response as any).data
+            : Array.isArray(response as any)
+              ? (response as any)
+              : [];
+
           this.lastApiParamsKey = key;
           this.loadError = null;
-          this.mapProperties = response.data ?? [];
-          this.properties = response.data ?? [];
+          this.mapProperties = records;
+          this.properties = records;
           this.activePropertyId = this.properties.length ? this.properties[0].list_id : null;
           this.mapMarkerHoverListId = null;
           this.lastMapClickedListId = null;
-          this.updatePaginationInfo(response);
+          this.updatePaginationInfo(response, records.length);
         },
         error: (error: unknown) => {
           console.error('Error loading properties:', error);
@@ -336,16 +340,30 @@ export class PropertyListComponent implements OnInit, OnDestroy {
     this.loadProperties();
   }
 
-  private updatePaginationInfo(response: PropertyResponse): void {
-    const paginationSummary = (response.pagination as any).summary;
+  private updatePaginationInfo(response: PropertyResponse, fallbackTotal: number): void {
+    const pagination = (response as any)?.pagination;
+    if (!pagination) {
+      this.paginationInfo = {
+        page: 1,
+        pageSize: this.paginationInfo.pageSize,
+        total: fallbackTotal,
+        summary: `${fallbackTotal} properties`,
+        totalPages: 1,
+        hasNext: false,
+        hasPrev: false
+      };
+      return;
+    }
+
+    const paginationSummary = (pagination as any).summary;
     this.paginationInfo = {
-      page: response.pagination.page,
-      pageSize: response.pagination.pageSize,
-      total: response.pagination.total,
-      summary: paginationSummary ?? `${response.pagination.total} properties`,
-      totalPages: response.pagination.totalPages,
-      hasNext: response.pagination.page < response.pagination.totalPages,
-      hasPrev: response.pagination.page > 1
+      page: pagination.page,
+      pageSize: pagination.pageSize,
+      total: pagination.total,
+      summary: paginationSummary ?? `${pagination.total} properties`,
+      totalPages: pagination.totalPages,
+      hasNext: pagination.page < pagination.totalPages,
+      hasPrev: pagination.page > 1
     };
   }
 
@@ -385,6 +403,7 @@ export class PropertyListComponent implements OnInit, OnDestroy {
     // and fetch a fresh unbounded list for current search params.
     this.visiblePropertyIds = [];
     this.lastAppliedVisiblePropertyIds = null;
+    this.hasMapBoundsResult = false;
     this.mapFilteringEnabled = false;
     this.isFiltering = true;
     this.properties = this.mapProperties.slice();
@@ -498,6 +517,7 @@ export class PropertyListComponent implements OnInit, OnDestroy {
     this.visiblePropertyIds = ids ?? [];
 
     this.mapFilterDebounceHandle = setTimeout(() => {
+      this.hasMapBoundsResult = true;
       if (!this.visiblePropertyIds || this.visiblePropertyIds.length === 0) {
         this.properties = [];
         this.lastAppliedVisiblePropertyIds = [];
@@ -535,14 +555,13 @@ export class PropertyListComponent implements OnInit, OnDestroy {
   onMapReset(): void {
     this.visiblePropertyIds = [];
     this.lastAppliedVisiblePropertyIds = null;
+    this.hasMapBoundsResult = false;
     this.mapFilteringEnabled = false;
     this.properties = this.mapProperties.slice();
   }
 
   onMapFilteringActivated(): void {
     this.mapFilteringEnabled = true;
-    this.isFiltering = true;
-    this.cdr.detectChanges();
   }
 
   /** Stable identity for list items so Angular reuses DOM and images don’t re-render on scroll */

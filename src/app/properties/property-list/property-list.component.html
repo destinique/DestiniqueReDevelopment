@@ -175,7 +175,7 @@
         class="list-content"
         [class.list-content-loading]="isLoading && properties.length > 0">
         <ng-container *ngIf="!isFiltering; else mapFilteringSkeleton">
-          <div *ngIf="mapFilteringEnabled && (!visiblePropertyIds || visiblePropertyIds.length === 0)" class="map-area-info-banner">
+          <div *ngIf="mapFilteringEnabled && hasMapBoundsResult && (!visiblePropertyIds || visiblePropertyIds.length === 0)" class="map-area-info-banner">
             <div class="map-area-info-icon">
               <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
                 <path d="M12 2L4 5v8c0 4 3 7 8 9 5-2 8-5 8-9V5l-8-3z" stroke="#378f86" stroke-width="1.4" stroke-linejoin="round"/>

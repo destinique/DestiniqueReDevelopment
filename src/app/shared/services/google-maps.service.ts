@@ -1,4 +1,5 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Inject, PLATFORM_ID } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 import { environment } from 'src/environments/environment';
 
 declare const google: any;
@@ -40,10 +41,17 @@ export class GoogleMapsService {
   private autocompleteService: any;
   private placesService: any;
 
+  constructor(@Inject(PLATFORM_ID) private platformId: object) {}
+
   // ========== CORE LOADING METHODS ==========
 
   // Ultra-lazy loading - only when explicitly called
   loadGoogleMaps(): Promise<void> {
+    // SSR / prerender safety: never touch document/window on the server.
+    if (!isPlatformBrowser(this.platformId)) {
+      return Promise.resolve();
+    }
+
     if (this.apiLoaded || typeof google !== 'undefined') {
       this.apiLoaded = true;
       this.initializeServices();
@@ -84,6 +92,9 @@ export class GoogleMapsService {
   }
 
   private initializeServices() {
+    if (!isPlatformBrowser(this.platformId)) {
+      return;
+    }
     if (typeof google !== 'undefined') {
       this.autocompleteService = new google.maps.places.AutocompleteService();
       this.placesService = new google.maps.places.PlacesService(document.createElement('div'));

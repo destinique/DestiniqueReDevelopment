@@ -14,6 +14,7 @@ import {
 import { Subject } from 'rxjs';
 import { debounceTime, takeUntil } from 'rxjs/operators';
 import { GoogleMapsService } from 'src/app/shared/services/google-maps.service';
+import { StorageService } from 'src/app/shared/services/storage.service';
 import { Property } from 'src/app/shared/services/property.service';
 
 declare const google: any;
@@ -81,10 +82,15 @@ export class PropertyMapComponent implements AfterViewInit, OnChanges, OnDestroy
 
   constructor(
     private googleMapsService: GoogleMapsService,
+    private storageService: StorageService,
     private ngZone: NgZone
   ) {}
 
   ngAfterViewInit(): void {
+    // SSR/prerender guard
+    if (!this.storageService.isBrowser()) {
+      return;
+    }
     this.googleMapsService
       .loadGoogleMaps()
       .then(() => {

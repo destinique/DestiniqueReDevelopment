@@ -1,6 +1,7 @@
 import { Component, OnInit, AfterViewInit, ElementRef, ViewChild, NgZone } from '@angular/core';
 import { MapPropertiesService, MapProperty } from '../map-properties.service';
 import { GoogleMapsService } from 'src/app/shared/services/google-maps.service';
+import { StorageService } from 'src/app/shared/services/storage.service';
 
 declare const google: any;
 
@@ -43,10 +44,15 @@ export class DestiniqueMapComponent implements OnInit, AfterViewInit {
   constructor(
     private mapPropertiesService: MapPropertiesService,
     private googleMapsService: GoogleMapsService,
+    private storageService: StorageService,
     private ngZone: NgZone
   ) {}
 
   ngOnInit(): void {
+    // SSR/prerender guard
+    if (!this.storageService.isBrowser()) {
+      return;
+    }
     this.googleMapsService
       .loadGoogleMaps()
       .then(() => {
@@ -59,6 +65,9 @@ export class DestiniqueMapComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
+    if (!this.storageService.isBrowser()) {
+      return;
+    }
     if (this.isApiLoaded) {
       this.initializeMapAndSearch();
     } else {

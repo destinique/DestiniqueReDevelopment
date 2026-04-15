@@ -122,7 +122,10 @@ export class NavbarComponent implements OnInit, OnDestroy {
 
     // Subscribe to role changes
     this.roleSubscription = this.userRoleService.role$.subscribe(role => {
-      console.log('Navbar: Role updated to:', role);
+      // Avoid noisy logs during SSR/prerender
+      // if (this.storageService.isBrowser()) {
+      //   console.log('Navbar: Role updated to:', role);
+      // }
       this.userRole = role;
     });
 

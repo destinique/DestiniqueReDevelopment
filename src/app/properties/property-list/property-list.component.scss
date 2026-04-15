@@ -892,6 +892,23 @@ img {
   }
 }
 
+/* Load / API error banner */
+.property-list-load-error__inner {
+  max-width: 520px;
+  margin: 0 auto;
+  padding: $spacing-md $spacing-lg;
+  border-radius: $border-radius-lg;
+  background: rgba($color-primary, 0.06);
+  border: 1px solid rgba($color-primary, 0.2);
+  text-align: center;
+}
+
+.property-list-load-error__text {
+  margin: 0;
+  font-size: $font-size-base;
+  color: $color-secondary;
+}
+
 /* No-results (empty state) card */
 .no-results-wrapper {
   display: flex;

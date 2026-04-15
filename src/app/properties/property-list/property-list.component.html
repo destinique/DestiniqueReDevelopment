@@ -114,8 +114,16 @@
         </div>
       </div>
 
-      <!-- List content: loading skeleton (only when we have no data to show; avoids swap on pagination/sort) -->
-      <div *ngIf="isLoading && !isInitialLoad && properties.length === 0" class="list-content">
+      <!-- List / API error (retry without changing filters) -->
+      <div *ngIf="loadError && !isLoading" class="list-content property-list-load-error py-3" role="alert">
+        <div class="property-list-load-error__inner">
+          <p class="property-list-load-error__text mb-2">{{ loadError }}</p>
+          <button type="button" class="btn btn-primary btn-sm" (click)="retryLoad()">Try again</button>
+        </div>
+      </div>
+
+      <!-- List content: loading skeleton whenever list is empty (includes first load so slow APIs show placeholders) -->
+      <div *ngIf="isLoading && properties.length === 0 && !loadError" class="list-content">
         <div class="row">
           <div *ngFor="let i of skeletonArray" class="col-12 col-md-6 properties" [class.col-lg-4]="!showMap">
             <div class="property-skeleton-card">
@@ -135,7 +143,7 @@
       </div>
 
       <!-- List content: no results -->
-      <div *ngIf="!isLoading && properties.length === 0 && !mapFilteringEnabled" class="list-content no-results-wrapper py-5">
+      <div *ngIf="!isLoading && properties.length === 0 && !mapFilteringEnabled && !loadError" class="list-content no-results-wrapper py-5">
         <div class="no-results-card text-center">
           <div class="no-results-icon mb-3">
             <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="none" viewBox="0 0 24 24">
@@ -233,7 +241,7 @@
 
     <!-- Right column: map (sticky) – hidden when Show Map is off -->
     <div *ngIf="showMap" class="col-12 col-lg-5 property-map-col">
-      <ng-container *ngIf="isLoading && !isInitialLoad; else mapBlock">
+      <ng-container *ngIf="isLoading && mapProperties.length === 0; else mapBlock">
         <div class="property-map-loading-skeleton"></div>
       </ng-container>
       <ng-template #mapBlock>

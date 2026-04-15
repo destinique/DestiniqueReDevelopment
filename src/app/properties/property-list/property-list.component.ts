@@ -12,10 +12,9 @@ import {
 } from '@angular/core';
 import { NavigationEnd, NavigationStart, Router } from '@angular/router';
 import { Subject, Subscription } from 'rxjs';
-import { filter, takeUntil } from 'rxjs/operators';
+import { filter, finalize, takeUntil } from 'rxjs/operators';
 import { PropertyService, PropertyResponse, Property } from 'src/app/shared/services/property.service';
 import { SearchStateService } from 'src/app/shared/services/search-state.service';
-import { LoadSpinnerService } from 'src/app/shared/services/load-spinner.service';
 import {
   buildUrlFromState,
   areUrlsEquivalent,
@@ -29,6 +28,8 @@ import { SearchState } from 'src/app/shared/interfaces/search-state.interface';
   styleUrls: ['./property-list.component.scss']
 })
 export class PropertyListComponent implements OnInit, OnDestroy {
+  private static readonly loadPropertiesFailedMessage = 'Failed to load the properties.';
+
   // ========== PROPERTY DATA ==========
   properties: Property[] = [];
   mapProperties: Property[] = [];
@@ -83,7 +84,8 @@ export class PropertyListComponent implements OnInit, OnDestroy {
   isLoading = false;
   /** While map-based filtering is in progress, show card skeletons */
   isFiltering = false;
-  isInitialLoad = true; // spinner on first load, skeleton on pagination/filter changes
+  /** User-visible message when the list request fails (HTTP or API success: false) */
+  loadError: string | null = null;
   /** Skeleton placeholders count = pageSize so list height doesn't shrink when showing skeleton */
   get skeletonArray(): number[] {
     const n = this.paginationInfo?.pageSize ?? 12;
@@ -125,7 +127,6 @@ export class PropertyListComponent implements OnInit, OnDestroy {
   constructor(
     private propertyService: PropertyService,
     public searchState: SearchStateService,
-    private loadSpinner: LoadSpinnerService,
     private router: Router,
     private cdr: ChangeDetectorRef
   ) {}
@@ -276,45 +277,63 @@ export class PropertyListComponent implements OnInit, OnDestroy {
     const key = this.stableParamsKey(params);
 
     if (this.lastApiParamsKey === key) return;
-    this.lastApiParamsKey = key;
+
     this.loadInProgress = true;
-
     this.isLoading = true;
+    this.loadError = null;
 
-    if (this.isInitialLoad) {
-      this.loadSpinner.show('Loading properties...');
-    }
+    this.propertyService
+      .searchProperties(params)
+      .pipe(
+        finalize(() => {
+          this.isLoading = false;
+          this.isFiltering = false;
+          this.loadInProgress = false;
+        })
+      )
+      .subscribe({
+        next: (response: PropertyResponse) => {
+          if (response?.success === false) {
+            this.applyLoadFailure(PropertyListComponent.loadPropertiesFailedMessage);
+            return;
+          }
+          this.lastApiParamsKey = key;
+          this.loadError = null;
+          this.mapProperties = response.data ?? [];
+          this.properties = response.data ?? [];
+          this.activePropertyId = this.properties.length ? this.properties[0].list_id : null;
+          this.mapMarkerHoverListId = null;
+          this.lastMapClickedListId = null;
+          this.updatePaginationInfo(response);
+        },
+        error: (error: unknown) => {
+          console.error('Error loading properties:', error);
+          this.applyLoadFailure(PropertyListComponent.loadPropertiesFailedMessage);
+        }
+      });
+  }
 
-    this.propertyService.searchProperties(params).subscribe({
-      next: (response: PropertyResponse) => {
-        this.mapProperties = response.data;
-        this.properties = response.data;
-        this.activePropertyId = this.properties.length ? this.properties[0].list_id : null;
-        this.mapMarkerHoverListId = null;
-        this.lastMapClickedListId = null;
-        this.updatePaginationInfo(response);
-        this.isLoading = false;
-        this.isFiltering = false;
-        this.loadInProgress = false;
-        if (this.isInitialLoad) {
-          this.isInitialLoad = false;
-          this.loadSpinner.hide();
-        }
-      },
-      error: (error) => {
-        console.error('Error loading properties:', error);
-        this.mapProperties = [];
-        this.properties = [];
-        this.activePropertyId = null;
-        this.isLoading = false;
-        this.isFiltering = false;
-        this.loadInProgress = false;
-        if (this.isInitialLoad) {
-          this.isInitialLoad = false;
-          this.loadSpinner.hide();
-        }
-      }
-    });
+  /** Clears list state and shows an error; does not update lastApiParamsKey so the same search can be retried */
+  private applyLoadFailure(message: string): void {
+    this.loadError = message;
+    this.mapProperties = [];
+    this.properties = [];
+    this.activePropertyId = null;
+    this.paginationInfo = {
+      page: 1,
+      pageSize: this.paginationInfo.pageSize,
+      total: 0,
+      summary: '',
+      totalPages: 0,
+      hasNext: false,
+      hasPrev: false
+    };
+  }
+
+  retryLoad(): void {
+    this.loadError = null;
+    this.lastApiParamsKey = null;
+    this.loadProperties();
   }
 
   private updatePaginationInfo(response: PropertyResponse): void {

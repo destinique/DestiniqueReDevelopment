@@ -234,7 +234,7 @@
                                                   <span class="ov-id-label">Property ID</span>
                                                   <span class="ov-id-value">{{ propertyDetailData?.list_id }}</span>
                                                 </div>
-                                                <div class="ov-id-badge">
+                                                <div *ngIf="propertyDetailData?.originalLink" class="ov-id-badge">
                                                   <span class="ov-id-label">Manager ID</span>
                                                   <span class="ov-id-value">
                                                     {{ propertyDetailData?.APC === 'wander'

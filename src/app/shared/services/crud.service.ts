@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { retry, catchError, map, delay } from 'rxjs/operators';
+import { StorageService } from 'src/app/shared/services/storage.service';
 
 export interface BannerImage {
   title: string;
@@ -51,7 +52,10 @@ export class CrudService {
   private readonly rateAppWithDetailsBaseUrl= 'https://api.destinique.com/ratesapp4website/index-debug.php';
   private destinationAPIUrl = "https://api.destinique.com/api-user/get_destination_data.php";
 
-  constructor(private http: HttpClient) {}
+  constructor(
+    private http: HttpClient,
+    private storageService: StorageService
+  ) {}
 
   // Registration method
   registerUser(userData: RegisterUserData): Observable<any> {
@@ -91,7 +95,7 @@ export class CrudService {
 
   getPropertyDetails(id: string | number): Observable<any> {
     try {
-      const currentUserStr = localStorage.getItem("currentUser");
+      const currentUserStr = this.storageService.getItem("currentUser");
 
       if (!currentUserStr) {
         return this.makeUnauthenticatedRequest(id);
@@ -130,7 +134,7 @@ export class CrudService {
 
   getAllPublishedPromotions(id: string | number): Observable<any[]> {
     const headers: any = {'Content-Type': 'application/json'};
-    const currentUser = localStorage.getItem("currentUser");
+    const currentUser = this.storageService.getItem("currentUser");
 
     if (currentUser) {
       headers.Authorization = 'Bearer ' + JSON.parse(currentUser).token;

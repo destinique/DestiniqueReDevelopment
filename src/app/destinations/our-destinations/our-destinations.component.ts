@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CrudService } from "src/app/shared/services/crud.service";
 import { LoadSpinnerService } from 'src/app/shared/services/load-spinner.service';
+import { StorageService } from 'src/app/shared/services/storage.service';
 
 @Component({
   selector: 'app-our-destinations',
@@ -15,7 +16,8 @@ export class OurDestinationsComponent implements OnInit {
   showUSADestination:boolean = true;
 
   constructor(private service: CrudService,
-              private loadSpinner: LoadSpinnerService) {
+              private loadSpinner: LoadSpinnerService,
+              private storageService: StorageService) {
 
   }
 
@@ -39,11 +41,13 @@ export class OurDestinationsComponent implements OnInit {
         this.showUSADestination = false;
     }
 
-    document.getElementById("v-pills-tabContent")?.scrollIntoView({
-      behavior: "smooth",
-      block: "start",
-      inline: "nearest"
-    });
+    if (this.storageService.isBrowser()) {
+      document.getElementById("v-pills-tabContent")?.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+        inline: "nearest"
+      });
+    }
   }
 
   loadDestinationJSON() {
@@ -63,6 +67,9 @@ export class OurDestinationsComponent implements OnInit {
     });
   }
   private lazyLoadBackgroundImages() {
+    if (!this.storageService.isBrowser()) {
+      return;
+    }
     const lazyBackgrounds = document.querySelectorAll('.lazy-bg');
 
     const lazyBackgroundObserver = new IntersectionObserver((entries) => {

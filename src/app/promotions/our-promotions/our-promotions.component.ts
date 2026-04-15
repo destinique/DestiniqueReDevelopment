@@ -3,6 +3,7 @@ import { LoadSpinnerService } from 'src/app/shared/services/load-spinner.service
 import { ActivatedRoute } from "@angular/router";
 import { CrudService } from "src/app/shared/services/crud.service";
 import { UserRoleService } from 'src/app/shared/services/user-role.service';
+import { StorageService } from 'src/app/shared/services/storage.service';
 import { Subscription } from 'rxjs';
 import { finalize } from 'rxjs/operators';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -30,6 +31,7 @@ export class OurPromotionsComponent implements OnInit, AfterViewInit, OnDestroy 
     private loadSpinner: LoadSpinnerService,
     private actRoute: ActivatedRoute,
     private userRoleService: UserRoleService,
+    private storageService: StorageService,
     private cdr: ChangeDetectorRef
   ) { }
 
@@ -52,6 +54,10 @@ export class OurPromotionsComponent implements OnInit, AfterViewInit, OnDestroy 
   }
 
   ngAfterViewInit() {
+    // SSR/prerender guard
+    if (!this.storageService.isBrowser()) {
+      return;
+    }
     this.loadPromoData(this.id);
   }
 

@@ -139,6 +139,10 @@ export class PropertyMapComponent implements AfterViewInit, OnChanges, OnDestroy
       minZoom: this.mapMinZoom,
       mapTypeId: 'roadmap',
       zoomControl: true,
+      zoomControlOptions: {
+        position: google.maps.ControlPosition.RIGHT_BOTTOM,
+      },
+      scrollwheel: false,
       streetViewControl: false,
       fullscreenControl: true,
       mapTypeControl: false,

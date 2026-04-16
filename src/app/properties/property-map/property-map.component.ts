@@ -66,7 +66,7 @@ export class PropertyMapComponent implements AfterViewInit, OnChanges, OnDestroy
   /** list_id for each marker (same order as markers) for hover highlight */
   private markerListIds: number[] = [];
   infoWindow!: google.maps.InfoWindow;
-  /** Default location pin icon (teal) */
+  /** Default location pin icon (navy blue) */
   private markerIconUrl: string | null = null;
   /** Location pin icon when hovered (highlight color) */
   private markerIconUrlHighlight: string | null = null;
@@ -130,7 +130,7 @@ export class PropertyMapComponent implements AfterViewInit, OnChanges, OnDestroy
       return;
     }
 
-    this.markerIconUrl = this.buildMarkerIcon('#378f86');
+    this.markerIconUrl = this.buildMarkerIcon('#001f5b');
     this.markerIconUrlHighlight = this.buildMarkerIcon('rgb(255, 222, 81)');
 
     this.map = new google.maps.Map(this.mapContainer.nativeElement, {
@@ -405,7 +405,7 @@ export class PropertyMapComponent implements AfterViewInit, OnChanges, OnDestroy
 
   /** Builds a house-pin marker icon (SVG data URL). */
   private buildMarkerIcon(pinColor: string): string {
-    const houseColor = pinColor === '#378f86' ? '#378f86' : '#333333';
+    const houseColor = pinColor === '#001f5b' ? '#001f5b' : '#333333';
     const svg = `
       <svg xmlns="http://www.w3.org/2000/svg" width="44" height="60" viewBox="0 0 44 60">
         <defs>

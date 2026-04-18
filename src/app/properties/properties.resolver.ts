@@ -13,6 +13,8 @@ export const propertiesResolver: ResolveFn<void> = (route, _state) => {
   if (route.paramMap.get('city') != null) {
     merged['city'] = route.paramMap.get('city');
   }
+  // Share links only — not part of SearchState; omit so "list_ids-only" URLs do not re-emit defaults via initializeFromUrlParams
+  delete merged['list_ids'];
   if (Object.keys(merged).length > 0) {
     searchState.initializeFromUrlParams(merged);
   }

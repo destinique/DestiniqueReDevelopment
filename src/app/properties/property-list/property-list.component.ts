@@ -11,8 +11,8 @@ import {
   ChangeDetectorRef,
 } from '@angular/core';
 import { NavigationEnd, NavigationStart, Router } from '@angular/router';
-import { Subject, Subscription } from 'rxjs';
-import { filter, finalize, takeUntil } from 'rxjs/operators';
+import { forkJoin, of, Subject, Subscription } from 'rxjs';
+import { catchError, filter, finalize, map, takeUntil } from 'rxjs/operators';
 import { PropertyService, PropertyResponse, Property } from 'src/app/shared/services/property.service';
 import { SearchStateService } from 'src/app/shared/services/search-state.service';
 import {
@@ -21,6 +21,8 @@ import {
   DEFAULT_PROPERTIES_URL_CONFIG
 } from '../properties-url.config';
 import { SearchState } from 'src/app/shared/interfaces/search-state.interface';
+import { UserRoleService } from 'src/app/shared/services/user-role.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-property-list',
@@ -29,6 +31,7 @@ import { SearchState } from 'src/app/shared/interfaces/search-state.interface';
 })
 export class PropertyListComponent implements OnInit, OnDestroy {
   private static readonly loadPropertiesFailedMessage = 'Failed to load the properties.';
+  private static readonly SELECTED_ITEMS_STORAGE_KEY = 'selectedItems';
 
   // ========== PROPERTY DATA ==========
   properties: Property[] = [];
@@ -101,6 +104,10 @@ export class PropertyListComponent implements OnInit, OnDestroy {
   /** Show Map: when true (default), the map panel is visible */
   showMap = true;
 
+  /** Admin multi-select: selected property list_ids (persisted in localStorage) */
+  selectedValues: number[] = [];
+  private lastAppliedListIdsFromUrl: string | null = null;
+
   // ========== FILTER OPTIONS ==========
   sortOptions = [
     { value: 'newest', label: 'Newest First' },
@@ -130,13 +137,23 @@ export class PropertyListComponent implements OnInit, OnDestroy {
     private propertyService: PropertyService,
     public searchState: SearchStateService,
     private router: Router,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    public userRoleService: UserRoleService,
+    private toast: ToastrService
   ) {}
 
   // ========== LIFECYCLE HOOKS ==========
   ngOnInit(): void {
     this.setupSearchListener();
     this.setupSamePathScrollPreservation();
+    this.loadSelectionFromStorage();
+    this.applyListIdsFromUrl(this.router.url);
+    this.router.events
+      .pipe(
+        takeUntil(this.destroy$),
+        filter((e): e is NavigationEnd => e instanceof NavigationEnd)
+      )
+      .subscribe(() => this.applyListIdsFromUrl(this.router.url));
     //this.loadProperties();
     // we don't need to call this method as setupSearchListener has subscribed to a BehaviorSubject
   }
@@ -199,6 +216,134 @@ export class PropertyListComponent implements OnInit, OnDestroy {
     }
   }
 
+  isSelected(listId: number): boolean {
+    return this.selectedValues.includes(listId);
+  }
+
+  toggleSelection(listId: number): void {
+    if (!this.userRoleService.isAdmin()) {
+      return;
+    }
+
+    const idx = this.selectedValues.indexOf(listId);
+    if (idx > -1) {
+      this.selectedValues.splice(idx, 1);
+    } else {
+      this.selectedValues.push(listId);
+    }
+    this.saveSelectionToStorage();
+    this.cdr.markForCheck();
+  }
+
+  showSelectedProperties(): void {
+    if (!this.userRoleService.isAdmin()) {
+      return;
+    }
+    if (this.selectedValues.length === 0) {
+      this.toast.warning('Please select at least one item.');
+      return;
+    }
+
+    const listIds = this.selectedValues.join(',');
+    void this.router.navigate([], {
+      queryParams: { list_ids: listIds },
+      queryParamsHandling: 'merge',
+    });
+  }
+
+  clearSelectedProperties(): void {
+    if (!this.userRoleService.isAdmin()) {
+      return;
+    }
+    this.selectedValues = [];
+    try {
+      localStorage.removeItem(PropertyListComponent.SELECTED_ITEMS_STORAGE_KEY);
+    } catch {
+      // ignore quota / privacy mode
+    }
+    window.location.assign('/properties');
+  }
+
+  private loadSelectionFromStorage(): void {
+    if (!this.userRoleService.isAdmin()) {
+      return;
+    }
+    try {
+      const raw = localStorage.getItem(PropertyListComponent.SELECTED_ITEMS_STORAGE_KEY);
+      if (!raw) return;
+      const parsed = JSON.parse(raw);
+      if (!Array.isArray(parsed)) return;
+      this.selectedValues = parsed.map((v) => Number(v)).filter((n) => !isNaN(n));
+    } catch {
+      // ignore invalid storage
+    }
+  }
+
+  private saveSelectionToStorage(): void {
+    if (!this.userRoleService.isAdmin()) {
+      return;
+    }
+    try {
+      localStorage.setItem(
+        PropertyListComponent.SELECTED_ITEMS_STORAGE_KEY,
+        JSON.stringify(this.selectedValues)
+      );
+    } catch {
+      // ignore quota / privacy mode
+    }
+  }
+
+  private applyListIdsFromUrl(url: string): void {
+    const listIdsRaw = this.router.parseUrl(url).queryParams['list_ids'];
+    if (!listIdsRaw || !listIdsRaw.trim()) {
+      this.lastAppliedListIdsFromUrl = null;
+      return;
+    }
+
+    if (this.lastAppliedListIdsFromUrl === listIdsRaw) {
+      return;
+    }
+    this.lastAppliedListIdsFromUrl = listIdsRaw;
+
+    const ids = listIdsRaw
+      .split(',')
+      .map((s: string) => Number(String(s).trim()))
+      .filter((n: number) => !isNaN(n) && n > 0);
+
+    if (!ids.length) {
+      return;
+    }
+
+    this.loadPropertiesForListIds(ids);
+  }
+
+  private loadPropertiesForListIds(listIds: number[]): void {
+    this.isLoading = true;
+    this.isFiltering = true;
+    this.loadError = null;
+
+    forkJoin(
+      listIds.map((id) =>
+        this.propertyService.getPropertyById(id).pipe(
+          map((resp: PropertyResponse) => (resp?.success && resp.data?.length ? resp.data[0] : null)),
+          catchError(() => of(null))
+        )
+      )
+    )
+      .pipe(
+        takeUntil(this.destroy$),
+        finalize(() => {
+          this.isLoading = false;
+          this.isFiltering = false;
+        })
+      )
+      .subscribe((rows) => {
+        const results = (rows ?? []).filter((p): p is Property => !!p);
+        this.onListIdSearchComplete(results);
+        this.cdr.markForCheck();
+      });
+  }
+
   // ========== DATA LOADING ==========
   private setupSearchListener(): void {
     this.searchState.state$
@@ -238,10 +383,16 @@ export class PropertyListComponent implements OnInit, OnDestroy {
     this.skipNextEmissionFromUrlSync = true;
     this.syncInProgress = true;
     const { pathCommands, queryParams } = buildUrlFromState(state, config);
-    const hasQueryParams = Object.keys(queryParams).length > 0;
+    /** Passthrough share links — not part of SearchState / buildUrlFromState */
+    const mergedQuery: Record<string, string> = { ...queryParams };
+    const listIdsPassthrough = this.router.parseUrl(this.router.url).queryParams['list_ids'];
+    if (listIdsPassthrough != null && String(listIdsPassthrough).trim() !== '') {
+      mergedQuery['list_ids'] = String(listIdsPassthrough);
+    }
+    const hasQueryParams = Object.keys(mergedQuery).length > 0;
 
     this.router.navigate(pathCommands, {
-      queryParams: hasQueryParams ? queryParams : null,
+      queryParams: hasQueryParams ? mergedQuery : null,
       replaceUrl: true
     }).then(() => {
       setTimeout(() => {
@@ -273,6 +424,12 @@ export class PropertyListComponent implements OnInit, OnDestroy {
   }
 
   private loadProperties(): void {
+    const listIdsRaw = this.router.parseUrl(this.router.url).queryParams['list_ids'];
+    if (listIdsRaw != null && String(listIdsRaw).trim() !== '') {
+      this.applyListIdsFromUrl(this.router.url);
+      return;
+    }
+
     if (this.loadInProgress) return;
 
     const params = this.searchState.getSearchParams();

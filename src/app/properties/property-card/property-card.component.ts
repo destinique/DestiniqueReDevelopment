@@ -1,5 +1,6 @@
 import { Component, Input, Output, EventEmitter, OnChanges, SimpleChanges } from '@angular/core';
 import { Property } from 'src/app/shared/services/property.service';
+import { UserRoleService } from 'src/app/shared/services/user-role.service';
 
 @Component({
   selector: 'app-property-card',
@@ -12,8 +13,12 @@ export class PropertyCardComponent implements OnChanges {
   @Input() isExpanded = false;
   @Input() showMoreDetailsGlobal = false;
   @Output() toggleExpand = new EventEmitter<number>();
+  @Input() isSelectedCard = false;
+  @Output() toggleSelect = new EventEmitter<number>();
 
   currentSlideIndex = 0;
+
+  constructor(private userRoleService: UserRoleService) {}
 
   ngOnChanges(_: SimpleChanges): void {
     if (this.currentSlideIndex >= this.displayImages.length) {
@@ -133,5 +138,9 @@ export class PropertyCardComponent implements OnChanges {
     return this.property.description.length > 150
       ? this.property.description.substring(0, 150) + '...'
       : this.property.description;
+  }
+
+  get showCheckBoxOnCard(): boolean {
+    return this.userRoleService.isAdmin();
   }
 }

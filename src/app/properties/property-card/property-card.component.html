@@ -44,12 +44,19 @@
     </div>
   </div>
 
-  <div class="card-body property-card__body">
+  <div
+    class="card-body property-card__body"
+    [class.property-card__body--selected]="isSelectedCard">
     <!-- Header: ID + City -->
     <div class="property-card__header">
       <div class="property-card__id">
         <div class="form-check">
-          <input type="checkbox" class="form-check-input" [id]="'property-' + property.list_id">
+          <input *ngIf="showCheckBoxOnCard"
+                 type="checkbox"
+                 class="form-check-input"
+                 [id]="'property-' + property.list_id"
+                 [checked]="isSelectedCard"
+                 (change)="$event.stopPropagation(); toggleSelect.emit(property.list_id)">
           <label class="form-check-label property-card__id-label" [for]="'property-' + property.list_id">ID:</label>
         </div>
         <a target="_blank" [routerLink]="property.seo_url ? [property.seo_url] : ['/property', property.list_id]" class="property-card__id-value">{{property.list_id}}</a>

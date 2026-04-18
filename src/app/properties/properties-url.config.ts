@@ -173,7 +173,7 @@ export function areUrlsEquivalent(
   } catch {
     if (curPath !== desPath) return false;
   }
-  const curParams = parseQueryString(curQuery || '');
+  const curParams = stripPassthroughQueryParams(parseQueryString(curQuery || ''));
   const desParams = parseQueryString(desQuery || '');
   const curKeys = Object.keys(curParams).sort();
   const desKeys = Object.keys(desParams).sort();
@@ -195,5 +195,18 @@ function parseQueryString(qs: string): Record<string, string> {
     const v = eq >= 0 ? decodeURIComponent(pair.slice(eq + 1)) : '';
     if (k) out[k] = v ?? '';
   });
+  return out;
+}
+
+/**
+ * Query params that are intentionally not represented in SearchState / buildUrlFromState,
+ * but may be present in the browser URL for admin workflows.
+ *
+ * If we don't strip these before URL equivalence checks, SearchState-driven sync will
+ * constantly think the URL is "wrong" and will strip them via Router.navigate().
+ */
+function stripPassthroughQueryParams(params: Record<string, string>): Record<string, string> {
+  const out: Record<string, string> = { ...params };
+  delete out['list_ids'];
   return out;
 }

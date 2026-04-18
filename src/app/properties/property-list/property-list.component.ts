@@ -245,10 +245,11 @@ export class PropertyListComponent implements OnInit, OnDestroy {
     }
 
     const listIds = this.selectedValues.join(',');
-    void this.router.navigate([], {
+    const urlTree = this.router.createUrlTree(['/properties'], {
       queryParams: { list_ids: listIds },
-      queryParamsHandling: 'merge',
     });
+    const path = this.router.serializeUrl(urlTree);
+    window.open(path, '_blank', 'noopener,noreferrer');
   }
 
   clearSelectedProperties(): void {
@@ -383,16 +384,15 @@ export class PropertyListComponent implements OnInit, OnDestroy {
     this.skipNextEmissionFromUrlSync = true;
     this.syncInProgress = true;
     const { pathCommands, queryParams } = buildUrlFromState(state, config);
-    /** Passthrough share links — not part of SearchState / buildUrlFromState */
-    const mergedQuery: Record<string, string> = { ...queryParams };
-    const listIdsPassthrough = this.router.parseUrl(this.router.url).queryParams['list_ids'];
-    if (listIdsPassthrough != null && String(listIdsPassthrough).trim() !== '') {
-      mergedQuery['list_ids'] = String(listIdsPassthrough);
-    }
-    const hasQueryParams = Object.keys(mergedQuery).length > 0;
+    const hasQueryParams = Object.keys(queryParams).length > 0;
+
+    // Do not merge list_ids here. If we keep list_ids while syncing SearchState → URL,
+    // loadProperties() always treats the URL as a pinned list and never runs search.
+    // Share links still work: initial load uses areUrlsEquivalent + list_ids guard; opening
+    // /properties?list_ids=… does not go through sync until the user changes search.
 
     this.router.navigate(pathCommands, {
-      queryParams: hasQueryParams ? mergedQuery : null,
+      queryParams: hasQueryParams ? queryParams : null,
       replaceUrl: true
     }).then(() => {
       setTimeout(() => {

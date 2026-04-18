@@ -82,22 +82,23 @@
                 (sortChange)="onSortChange($event)">
               </app-sort-dropdown>
             </div>
-            <ng-container *ngIf="userRoleService.isAdmin()">
-              <button type="button"
-                      class="btn btn-outline-secondary btn-sm ms-2"
-                      (click)="$event.stopPropagation(); showSelectedProperties()"
-                      [disabled]="selectedValues.length === 0">
-                View selected ({{ selectedValues.length }})
-              </button>
-              <button type="button"
-                      class="btn btn-outline-danger btn-sm ms-1"
-                      (click)="$event.stopPropagation(); clearSelectedProperties()"
-                      [disabled]="selectedValues.length === 0">
-                Clear selection
-              </button>
-            </ng-container>
             <app-list-id-search (searchComplete)="onListIdSearchComplete($event)"></app-list-id-search>
           </div>
+
+          <ng-container *ngIf="userRoleService.isAdmin()">
+            <button type="button"
+                    class="btn btn-outline-secondary btn-sm ms-2"
+                    (click)="$event.stopPropagation(); showSelectedProperties()"
+                    [disabled]="selectedValues.length === 0">
+              View selected ({{ selectedValues.length }})
+            </button>
+            <button type="button"
+                    class="btn btn-outline-danger btn-sm ms-1"
+                    (click)="$event.stopPropagation(); clearSelectedProperties()"
+                    [disabled]="selectedValues.length === 0">
+              Clear selection
+            </button>
+          </ng-container>
 
           <div class="list-toolbar-toggles" [class.list-toolbar-toggles--full]="!showMap">
             <label class="list-toolbar-view-more" (click)="onViewMoreToggle()">

@@ -126,10 +126,13 @@ export class DestiniqueMapComponent implements OnInit, AfterViewInit {
 
     this.map = new google.maps.Map(this.mapContainer.nativeElement, {
       center: this.defaultCenter,
-      zoom: 10,
+      zoom: 6,
       minZoom: this.mapMinZoom,
       mapTypeId: 'roadmap',
       streetViewControl: false,
+      // Allow zoom with mouse wheel without requiring Ctrl
+      scrollwheel: true,
+      gestureHandling: 'greedy',
       zoomControl: true,
       zoomControlOptions: {
         position: google.maps.ControlPosition.RIGHT_BOTTOM,

@@ -68,7 +68,7 @@ export class MapPropertiesService {
   }): Observable<MapProperty[]> {
     let httpParams = new HttpParams();
 
-    const effectivePageSize = params.pageSize && params.pageSize > 0 ? params.pageSize : 200;
+    const effectivePageSize = params.pageSize && params.pageSize > 0 ? params.pageSize : 5000;
     httpParams = httpParams.set('pageSize', effectivePageSize.toString());
     httpParams = httpParams.set('sortBy', 'newest');
 

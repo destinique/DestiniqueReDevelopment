@@ -23,7 +23,7 @@ export class DestiniqueMapComponent implements OnInit, AfterViewInit {
 
   // Default: Destin, FL
   defaultCenter = { lat: 30.3935, lng: -86.4958 };
-  defaultLocationText = 'Destin, Florida';
+  defaultLocationText = '';//'Destin, Florida';
   private readonly mapMinZoom = 4;
 
   /** Site theme green/teal for markers (#378f86) */

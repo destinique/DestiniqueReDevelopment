@@ -19,7 +19,13 @@ export class DestiniqueMapComponent implements OnInit, AfterViewInit {
   infoWindow!: google.maps.InfoWindow;
   markers: google.maps.Marker[] = [];
 
+  /** All properties loaded once on page load (4512) */
+  private allProperties: MapProperty[] = [];
+  /** Currently displayed properties on map (filtered from allProperties) */
   properties: MapProperty[] = [];
+  /** localStorage cache key + TTL (24h) */
+  private static readonly MAP_PROPS_CACHE_KEY = 'dest_map_all_properties_v1';
+  private static readonly MAP_PROPS_CACHE_TTL_MS = 24 * 60 * 60 * 1000;
 
   // Default: Destin, FL
   defaultCenter = { lat: 30.3935, lng: -86.4958 };
@@ -86,7 +92,7 @@ export class DestiniqueMapComponent implements OnInit, AfterViewInit {
     this.registerCarouselHandlers();
     this.initMap();
     this.initAutocomplete();
-    this.loadPropertiesForLocation(this.defaultCenter.lat, this.defaultCenter.lng, this.defaultLocationText);
+    this.loadAllPropertiesOnce();
   }
 
   /** SVG pin marker in theme green (#378f86). */
@@ -182,34 +188,37 @@ export class DestiniqueMapComponent implements OnInit, AfterViewInit {
         this.map.setCenter({ lat, lng });
         this.map.setZoom(10);
 
-        this.loadPropertiesForLocation(lat, lng, locationText, city, state, country);
+        this.applyClientSideFilter(lat, lng, locationText, city, state, country);
       });
     });
   }
 
-  private loadPropertiesForLocation(
-    lat: number,
-    lng: number,
-    locationText: string,
-    city?: string,
-    state?: string,
-    country?: string
-  ): void {
+  /**
+   * Load the full map dataset once (e.g. 4512 properties),
+   * then reuse in-memory filtering for subsequent searches.
+   */
+  private loadAllPropertiesOnce(): void {
+    const cached = this.tryLoadAllPropertiesFromCache();
+    if (cached && cached.length) {
+      this.allProperties = cached;
+      this.properties = cached;
+      this.refreshMarkers();
+      this.loading = false;
+      this.mapReady = true;
+      return;
+    }
+
     this.loading = true;
     this.mapPropertiesService
-      .getProperties({
-        latitude: lat,
-        longitude: lng,
-        locationText,
-        city,
-        state,
-        country,
-      })
+      .getProperties({ pageSize: 5000 })
       .subscribe({
         next: (props) => {
-          this.properties = props.filter(
+          const valid = (props ?? []).filter(
             (p) => typeof p.latitude === 'number' && typeof p.longitude === 'number'
           );
+          this.allProperties = valid;
+          this.properties = valid;
+          this.saveAllPropertiesToCache(valid);
           this.refreshMarkers();
           this.loading = false;
           this.mapReady = true;
@@ -220,6 +229,137 @@ export class DestiniqueMapComponent implements OnInit, AfterViewInit {
           this.mapReady = true;
         },
       });
+  }
+
+  private tryLoadAllPropertiesFromCache(): MapProperty[] | null {
+    if (!this.storageService.isBrowser()) return null;
+    try {
+      const raw = localStorage.getItem(DestiniqueMapComponent.MAP_PROPS_CACHE_KEY);
+      if (!raw) return null;
+      const parsed = JSON.parse(raw) as { savedAt?: number; data?: unknown };
+      const savedAt = typeof parsed?.savedAt === 'number' ? parsed.savedAt : 0;
+      if (!savedAt) return null;
+
+      const age = Date.now() - savedAt;
+      if (age > DestiniqueMapComponent.MAP_PROPS_CACHE_TTL_MS) {
+        // Expired
+        localStorage.removeItem(DestiniqueMapComponent.MAP_PROPS_CACHE_KEY);
+        return null;
+      }
+
+      const data = parsed?.data;
+      if (!Array.isArray(data)) return null;
+
+      // Minimal validation: ensure required fields exist and coordinates are numbers
+      return (data as any[]).filter(
+        (p) =>
+          p &&
+          typeof p.list_id === 'number' &&
+          typeof p.latitude === 'number' &&
+          typeof p.longitude === 'number'
+      ) as MapProperty[];
+    } catch {
+      return null;
+    }
+  }
+
+  private saveAllPropertiesToCache(data: MapProperty[]): void {
+    if (!this.storageService.isBrowser()) return;
+    try {
+      localStorage.setItem(
+        DestiniqueMapComponent.MAP_PROPS_CACHE_KEY,
+        JSON.stringify({ savedAt: Date.now(), data })
+      );
+    } catch {
+      // ignore quota / privacy mode
+    }
+  }
+
+  /** Clear search box and redraw all properties */
+  onResetSearch(): void {
+    if (!this.storageService.isBrowser()) return;
+    try {
+      if (this.searchInput?.nativeElement) {
+        this.searchInput.nativeElement.value = '';
+      }
+    } catch {
+      // ignore
+    }
+    if (this.map) {
+      this.map.setCenter(this.defaultCenter);
+      this.map.setZoom(6);
+    }
+    this.properties = this.allProperties.slice();
+    this.refreshMarkers();
+  }
+
+  private applyClientSideFilter(
+    lat: number,
+    lng: number,
+    locationText: string,
+    city?: string,
+    state?: string,
+    country?: string
+  ): void {
+    const src = this.allProperties ?? [];
+    if (!src.length) {
+      return;
+    }
+
+    const norm = (v: unknown): string => String(v ?? '').trim().toLowerCase();
+    const cityN = norm(city);
+    const stateN = norm(state);
+    const countryN = norm(country);
+    const textN = norm(locationText);
+
+    // 1) Prefer exact-ish matches on administrative fields when available
+    let filtered: MapProperty[] = src;
+    if (cityN) {
+      filtered = src.filter((p) => norm(p.city) === cityN);
+    } else if (stateN) {
+      filtered = src.filter((p) => norm(p.state) === stateN);
+    } else if (countryN) {
+      filtered = src.filter((p) => norm(p.country) === countryN);
+    }
+
+    // 2) If no matches, fall back to a broad text contains search
+    if ((!filtered || filtered.length === 0) && textN) {
+      filtered = src.filter((p) => {
+        const hay = [
+          p.city,
+          p.state,
+          p.country,
+          p.Neighborhood,
+          p.Complex,
+          p.RegionContinent,
+          p.Zip,
+        ]
+          .map(norm)
+          .filter(Boolean)
+          .join(' ');
+        return hay.includes(textN);
+      });
+    }
+
+    // 3) If still nothing, fall back to a radius search around the selected point
+    if (!filtered || filtered.length === 0) {
+      const radiusKm = 160; // ~100 miles
+      filtered = src.filter((p) => this.haversineKm(lat, lng, p.latitude, p.longitude) <= radiusKm);
+    }
+
+    this.properties = filtered;
+    this.refreshMarkers();
+  }
+
+  private haversineKm(lat1: number, lon1: number, lat2: number, lon2: number): number {
+    const toRad = (d: number): number => (d * Math.PI) / 180;
+    const R = 6371;
+    const dLat = toRad(lat2 - lat1);
+    const dLon = toRad(lon2 - lon1);
+    const a =
+      Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+      Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) * Math.sin(dLon / 2) * Math.sin(dLon / 2);
+    return 2 * R * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
   }
 
   private refreshMarkers(): void {

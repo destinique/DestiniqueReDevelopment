@@ -110,6 +110,27 @@ label {
   border-color: $color-primary;
   box-shadow: 0 0 0 3px $color-focus-ring;
 }
+
+/* Search reset button next to input */
+.map-search-reset-btn {
+  background: $color-nav-dark;
+  color: $color-white;
+  border: $border-width solid $color-nav-dark;
+  font-weight: 300;
+  border-radius: $border-radius-sm;
+  padding: $spacing-sm $spacing-md;
+  letter-spacing: 0;
+
+  &:hover {
+    background: $color-nav-dark;
+    border-color: $color-primary;
+    color: $color-white;
+  }
+
+  &:focus {
+    box-shadow: 0 0 0 3px $color-focus-ring;
+  }
+}
 @media all and (max-width: 768px) {
     .location-locator-search-map {
         position: relative;

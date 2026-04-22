@@ -226,8 +226,9 @@ export class PropertydetailsComponent implements OnInit, AfterViewInit, OnDestro
       return;
     }
 
-    this.initMap(this.latitude, this.longitude);
-    this.mapInitialized = true;
+    if (this.initMap(this.latitude, this.longitude)) {
+      this.mapInitialized = true;
+    }
   }
 
   loadPropertyDetails(listId:any){
@@ -287,33 +288,27 @@ export class PropertydetailsComponent implements OnInit, AfterViewInit, OnDestro
   }
 
   private async loadGoogleMapsScript() {
-    // Prevent multiple loads
-    if (this.gmapScriptLoaded ) {
-    // || this.googleMapsService.isApiLoaded()
+    if (this.gmapScriptLoaded) {
+      this.tryInitMap();
       return;
     }
 
     try {
       await this.googleMapsService.loadGoogleMaps();
       this.gmapScriptLoaded = true;
-      // ✅ SAFE POINT — API + DOM both ready
-      // this.tryInitMap();
-      console.log('Google Maps script loaded');
+      this.tryInitMap();
     }
     catch (error) {
       console.error('Failed to load Google Maps:', error);
     }
-    finally {
-
-    }
   }
 
-  private initMap(lat: number, lng: number): void {
+  private initMap(lat: number, lng: number): boolean {
     const mapEl = document.getElementById('property-map');
 
     if (!mapEl) {
       console.warn('Map element not found');
-      return;
+      return false;
     }
 
     this.map = new google.maps.Map(mapEl, {
@@ -327,6 +322,7 @@ export class PropertydetailsComponent implements OnInit, AfterViewInit, OnDestro
       draggable: false
     });
     this.addMarker(lat, lng);
+    return true;
   }
 
   private addMarker(lat: number, lng: number): void {

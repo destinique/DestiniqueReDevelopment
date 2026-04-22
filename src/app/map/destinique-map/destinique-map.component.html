@@ -5,9 +5,20 @@
         <h1 class="text-center">Property Locations</h1>
     </div>
 </div>
-
+<br/>
 <div class="container-fluid">
     <div class="row">
+        <div class="col-sm-12">
+          <div class="map-summary-bar" *ngIf="mapReady">
+            Displaying <strong>{{ displayedPropertiesCount }}</strong> properties
+            <ng-container *ngIf="summaryLocationLabel; else fromAll">
+              filtered from <strong>{{ totalPropertiesCount }}</strong> properties for "<strong>{{ summaryLocationLabel }}</strong>"
+            </ng-container>
+            <ng-template #fromAll>
+              from <strong>{{ totalPropertiesCount }}</strong> properties
+            </ng-template>
+          </div>         
+        </div>
         <div class="col-sm-12">
             <div class="location-locator-search-map" [class.is-hidden-until-map-ready]="!mapReady">
                 <div class="mb-3">
@@ -35,15 +46,6 @@
                 </div>
             </div>
             <div class="dest-map-wrapper">
-              <div class="map-summary-bar" *ngIf="mapReady">
-                Displaying <strong>{{ displayedPropertiesCount }}</strong> properties
-                <ng-container *ngIf="summaryLocationLabel; else fromAll">
-                  filtered from <strong>{{ totalPropertiesCount }}</strong> properties for "<strong>{{ summaryLocationLabel }}</strong>"
-                </ng-container>
-                <ng-template #fromAll>
-                  from <strong>{{ totalPropertiesCount }}</strong> properties
-                </ng-template>
-              </div>
               <div class="dest-map-skeleton" *ngIf="!mapReady"></div>
               <div #mapContainer class="dest-map-canvas" [class.is-hidden]="!mapReady"></div>
             </div>

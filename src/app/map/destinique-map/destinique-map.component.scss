@@ -77,6 +77,24 @@ h1{
   opacity: 0;
   pointer-events: none;
 }
+
+.map-summary-bar {
+  position: absolute;
+  top: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 4;
+  background: rgba($color-white, 0.92);
+  color: $color-secondary;
+  border-radius: $border-radius-md;
+  padding: 10px 14px;
+  box-shadow: $shadow-sm;
+  border: $border-width solid $color-border-light;
+  font-size: 14px;
+  line-height: 1.3;
+  max-width: min(860px, calc(100% - 2rem));
+  text-align: center;
+}
 img.img-fluid {
     margin-bottom: $spacing-3xl;
 }

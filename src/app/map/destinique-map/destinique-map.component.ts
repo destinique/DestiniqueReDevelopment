@@ -27,6 +27,17 @@ export class DestiniqueMapComponent implements OnInit, AfterViewInit {
   private static readonly MAP_PROPS_CACHE_KEY = 'dest_map_all_properties_v1';
   private static readonly MAP_PROPS_CACHE_TTL_MS = 24 * 60 * 60 * 1000;
 
+  /** Summary text for UI */
+  summaryLocationLabel: string | null = null;
+
+  get totalPropertiesCount(): number {
+    return this.allProperties?.length ?? 0;
+  }
+
+  get displayedPropertiesCount(): number {
+    return this.properties?.length ?? 0;
+  }
+
   // Default: Destin, FL
   defaultCenter = { lat: 30.3935, lng: -86.4958 };
   defaultLocationText = '';//'Destin, Florida';
@@ -202,6 +213,7 @@ export class DestiniqueMapComponent implements OnInit, AfterViewInit {
     if (cached && cached.length) {
       this.allProperties = cached;
       this.properties = cached;
+      this.summaryLocationLabel = null;
       this.refreshMarkers();
       this.loading = false;
       this.mapReady = true;
@@ -218,6 +230,7 @@ export class DestiniqueMapComponent implements OnInit, AfterViewInit {
           );
           this.allProperties = valid;
           this.properties = valid;
+          this.summaryLocationLabel = null;
           this.saveAllPropertiesToCache(valid);
           this.refreshMarkers();
           this.loading = false;
@@ -289,6 +302,7 @@ export class DestiniqueMapComponent implements OnInit, AfterViewInit {
       this.map.setCenter(this.defaultCenter);
       this.map.setZoom(6);
     }
+    this.summaryLocationLabel = null;
     this.properties = this.allProperties.slice();
     this.refreshMarkers();
   }
@@ -347,8 +361,25 @@ export class DestiniqueMapComponent implements OnInit, AfterViewInit {
       filtered = src.filter((p) => this.haversineKm(lat, lng, p.latitude, p.longitude) <= radiusKm);
     }
 
+    const label = this.buildSummaryLocationLabel(locationText, city, state, country);
+    this.summaryLocationLabel = label || null;
     this.properties = filtered;
     this.refreshMarkers();
+  }
+
+  private buildSummaryLocationLabel(
+    locationText: string,
+    city?: string,
+    state?: string,
+    country?: string
+  ): string {
+    const clean = (v: unknown): string => String(v ?? '').trim();
+    const c = clean(city);
+    const s = clean(state);
+    const co = clean(country);
+    const parts = [c, s, co].filter(Boolean);
+    if (parts.length) return parts.join(', ');
+    return clean(locationText);
   }
 
   private haversineKm(lat1: number, lon1: number, lat2: number, lon2: number): number {

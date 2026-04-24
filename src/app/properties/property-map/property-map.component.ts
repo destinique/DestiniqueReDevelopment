@@ -79,6 +79,7 @@ export class PropertyMapComponent implements AfterViewInit, OnChanges, OnDestroy
   private fitBoundsTimeout: ReturnType<typeof setTimeout> | null = null;
 
   mapReady = false;
+  searchAsIMove = false;
 
   constructor(
     private googleMapsService: GoogleMapsService,
@@ -168,26 +169,31 @@ export class PropertyMapComponent implements AfterViewInit, OnChanges, OnDestroy
           this.skipNextIdleEmit = false;
           return;
         }
-        this.visibleIdsTrigger$.next();
+        if (this.searchAsIMove) {
+          this.visibleIdsTrigger$.next();
+        }
       });
     });
 
     this.map.addListener('zoom_changed', () => {
       this.ngZone.run(() => {
         if (this.programmaticZoomInProgress) {
-          // Clear the flag and ignore this zoom event.
           this.programmaticZoomInProgress = false;
           return;
         }
         this.hasUserInteracted = true;
-        this.filteringActivated.emit();
+        if (this.searchAsIMove) {
+          this.filteringActivated.emit();
+        }
       });
     });
 
     this.map.addListener('dragend', () => {
       this.ngZone.run(() => {
         this.hasUserInteracted = true;
-        this.filteringActivated.emit();
+        if (this.searchAsIMove) {
+          this.filteringActivated.emit();
+        }
       });
     });
 

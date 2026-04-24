@@ -12,6 +12,19 @@
     {{ visiblePropertiesCount }} / {{ totalProperties || properties.length }} properties
   </div>
 
+  <!-- Search-as-I-move toggle -->
+  <label *ngIf="mapReady" class="property-map-search-toggle" [class.is-active]="searchAsIMove">
+    <span class="property-map-search-toggle__track">
+      <input
+        type="checkbox"
+        class="property-map-search-toggle__input"
+        [(ngModel)]="searchAsIMove"
+        aria-label="Search as I move the map" />
+      <span class="property-map-search-toggle__thumb"></span>
+    </span>
+    <span class="property-map-search-toggle__label">Search as I move the map</span>
+  </label>
+
   <!-- Reset map view to show all properties -->
   <button
     *ngIf="mapReady && properties?.length"

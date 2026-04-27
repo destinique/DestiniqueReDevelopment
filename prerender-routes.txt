@@ -13,6 +13,7 @@
 /aboutus
 /register
 /my-profile
+/blog
 /destinique-forgotpassword
 /reset-password
 /property/Gulf-front-condos/105976

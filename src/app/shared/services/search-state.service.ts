@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, distinctUntilChanged, map } from 'rxjs';
 import { SearchState, LocationData, SearchParams } from '../interfaces/search-state.interface';
+import { normalizeLocationData, normalizeLocationString, shouldKeepCityWhenEqualsCountry } from '../helpers/location-normalization.helper';
 
 /** Valid sortBy values for URL param validation */
 const VALID_SORT_BY = new Set([
@@ -69,7 +70,8 @@ export class SearchStateService {
    * Update location from Google Places
    */
   updateLocation(location: LocationData | null): void {
-    this.updateState({ location, page: 1 });
+    const normalized = location ? normalizeLocationData(location) : null;
+    this.updateState({ location: normalized, page: 1 });
   }
 
   /**
@@ -190,7 +192,12 @@ export class SearchStateService {
     // For country-level search (e.g. Italy, United States): omit city to avoid API returning 0 results
     const rawCity = state.location?.city;
     const country = state.location?.country;
-    const city = rawCity && country && rawCity === country ? undefined : rawCity;
+    const omitCityWhenEqualsCountry =
+      !!rawCity &&
+      !!country &&
+      rawCity === country &&
+      !shouldKeepCityWhenEqualsCountry(country);
+    const city = omitCityWhenEqualsCountry ? undefined : rawCity;
 
     const params: SearchParams = {
       // Flatten location (convert null to undefined)
@@ -300,17 +307,18 @@ export class SearchStateService {
     // --- Location (path :city + query latitude, longitude, state, country) ---
     const pathCity = this.safeDecodeParam(params['city']);
     if (pathCity) {
-      const stateParam = this.safeDecodeParam(params['state']) || '';
-      const countryParam = this.safeDecodeParam(params['country']) || '';
+      const stateParam = normalizeLocationString(this.safeDecodeParam(params['state']) || '');
+      const countryParam = normalizeLocationString(this.safeDecodeParam(params['country']) || '');
       const lat = this.parseNum(params['latitude']);
       const lng = this.parseNum(params['longitude']);
       const placeId = typeof params['placeId'] === 'string' ? params['placeId'].trim() : undefined;
       // For country-level paths (e.g. "Italy", "Caribbean"): keep city empty to avoid API returning 0 results
-      const extractedCity = this.extractCityFromPath(pathCity);
+      const extractedCity = normalizeLocationString(this.extractCityFromPath(pathCity));
+      const normalizedPathText = normalizeLocationString(pathCity);
       const city = extractedCity && countryParam && extractedCity === countryParam ? '' : (extractedCity || '');
 
       updates.location = {
-        text: pathCity,
+        text: normalizedPathText,
         city,
         state: stateParam,
         country: countryParam,

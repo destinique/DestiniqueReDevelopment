@@ -1,0 +1,236 @@
+<div class="blog-shell">
+  <div class="container py-4 py-lg-5">
+    <ng-container *ngIf="vm$ | async as vm; else loading">
+      <div *ngIf="!vm.heroPost" class="alert alert-light border">
+        No posts found.
+      </div>
+
+      <!-- 1) Big latest hero post -->
+      <section class="blog-latest-hero" *ngIf="vm.heroPost">
+        <app-blog-post-card [post]="vm.heroPost" variant="featured"></app-blog-post-card>
+      </section>
+
+      <!-- 2) Latest news grid -->
+      <section class="blog-latest-grid" *ngIf="vm.latestPosts.length">
+        <hr class="blog-divider" />
+        <div class="blog-section-heading">
+          <h2 class="blog-section-heading__title mb-0">Latest news</h2>
+        </div>
+
+        <div class="row g-4">
+          <div class="col-12 col-md-6 col-lg-3" *ngFor="let post of vm.latestPosts">
+            <app-blog-post-card [post]="post" variant="compact"></app-blog-post-card>
+          </div>
+        </div>
+      </section>
+
+      <!-- 3) Exclusives slider -->
+      <section class="blog-exclusive" *ngIf="vm.exclusivePosts.length">
+        <div class="container">
+          <div class="blog-exclusive__inner">
+            <div class="blog-section-heading">
+              <div>
+                <h2 class="blog-section-heading__title mb-1">Exclusively on Destinique</h2>
+                <div class="blog-section-heading__subtitle">
+                  Explore how Destinique is connecting people to iconic spaces, places, and experiences.
+                </div>
+              </div>
+
+              <div class="blog-exclusive__controls" *ngIf="vm.exclusivePosts.length > 3" aria-label="Exclusive carousel controls">
+                <button
+                  class="blog-exclusive__control"
+                  type="button"
+                  (click)="scrollExclusive('prev')"
+                  aria-label="Previous"
+                >
+                  ‹
+                </button>
+                <button
+                  class="blog-exclusive__control"
+                  type="button"
+                  (click)="scrollExclusive('next')"
+                  aria-label="Next"
+                >
+                  ›
+                </button>
+              </div>
+            </div>
+
+            <div class="blog-slider-wrap" [class.blog-slider-wrap--few]="vm.exclusivePosts.length <= 3">
+              <div
+                class="blog-slider"
+                #exclusiveTrack
+                (pointerdown)="onExclusivePointerDown($event)"
+                (pointermove)="onExclusivePointerMove($event)"
+                (pointerup)="onExclusivePointerUp($event)"
+                (pointercancel)="onExclusivePointerUp($event)"
+                (pointerleave)="onExclusivePointerUp($event)"
+                (click)="onExclusiveClickCapture($event)"
+              >
+                <div class="blog-slider__item" *ngFor="let post of vm.exclusivePosts">
+                  <app-blog-post-card [post]="post" variant="exclusive"></app-blog-post-card>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 4) News by topic (tabs from WP categories) -->
+      <section class="blog-topics" *ngIf="vm.categories.length">
+        <div class="blog-section-heading">
+          <h2 class="blog-section-heading__title mb-0">News by topic</h2>
+        </div>
+
+        <div class="blog-topic-tabs" role="tablist" aria-label="Blog topics">
+          <button
+            type="button"
+            class="blog-topic-tab"
+            [class.is-active]="vm.selectedTopicId === 'all'"
+            [disabled]="vm.topicLoading"
+            (click)="setTopic('all')"
+          >
+            All
+          </button>
+          <button
+            type="button"
+            class="blog-topic-tab"
+            *ngFor="let cat of vm.categories"
+            [class.is-active]="vm.selectedTopicId === cat.id"
+            [disabled]="vm.topicLoading"
+            (click)="setTopic(cat.id)"
+          >
+            {{ cat.name }}
+          </button>
+        </div>
+
+        <div class="blog-topic-results mt-3" aria-live="polite" [attr.aria-busy]="vm.topicLoading">
+          <div class="blog-topic-overlay" *ngIf="vm.topicLoading">
+            <div class="blog-topic-overlay__inner">
+              <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+              <span>Loading…</span>
+            </div>
+          </div>
+
+          <div class="row g-4">
+            <div class="col-12 col-md-6 col-lg-3" *ngFor="let post of vm.topicPosts">
+              <app-blog-post-card [post]="post"></app-blog-post-card>
+            </div>
+
+            <ng-container *ngIf="vm.topicLoading">
+              <div class="col-12 col-md-6 col-lg-3" *ngFor="let _ of [0,1,2,3]">
+                <div class="blog-skeleton blog-skeleton--card"></div>
+              </div>
+            </ng-container>
+          </div>
+        </div>
+      </section>
+
+      <!-- Newsletter subscribe hero -->
+      <section class="blog-newsletter" aria-label="Newsletter subscription">
+        <div class="container">
+          <div class="blog-newsletter-card">
+            <div class="blog-newsletter-card__media" aria-hidden="true"></div>
+
+            <div class="blog-newsletter-card__body">
+              <h2 class="blog-newsletter-card__title mb-2">Subscribe to our newsletter</h2>
+              <div class="blog-newsletter-card__subtitle mb-3">
+                Get the latest Destinique stories, travel inspiration, and exclusive updates—straight to your inbox.
+              </div>
+
+              <div class="blog-newsletter__form">
+                <label class="visually-hidden" for="blogNewsletterEmail">Email address</label>
+                <div class="input-group input-group-lg">
+                  <input
+                    id="blogNewsletterEmail"
+                    #newsletterEmail
+                    type="email"
+                    class="form-control blog-newsletter__input"
+                    placeholder="Enter your email"
+                    [disabled]="newsletterLoading"
+                    (keydown.enter)="subscribeNewsletter(newsletterEmail.value)"
+                    (input)="newsletterError = ''; newsletterDone = false"
+                  />
+                  <button
+                    class="btn btn-dark blog-newsletter__btn"
+                    type="button"
+                    [disabled]="newsletterLoading"
+                    (click)="subscribeNewsletter(newsletterEmail.value)"
+                  >
+                    <span *ngIf="newsletterLoading" class="spinner-border spinner-border-sm me-2" aria-hidden="true"></span>
+                    Subscribe
+                  </button>
+                </div>
+
+                <div class="blog-newsletter__meta mt-2">
+                  <div class="text-danger" *ngIf="newsletterError">{{ newsletterError }}</div>
+                  <div class="text-success" *ngIf="newsletterDone">Thanks! You’re subscribed.</div>
+                  <div class="text-muted" *ngIf="!newsletterError && !newsletterDone">
+                    You can unsubscribe anytime.
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Keep existing paginated “All stories” list -->
+      <section class="blog-grid">
+        <div class="blog-section-heading">
+          <h2 class="blog-section-heading__title mb-0">All stories</h2>
+        </div>
+
+        <div class="row g-4">
+          <div class="col-12 col-md-6 col-lg-3" *ngFor="let post of vm.allStories.posts">
+            <app-blog-post-card [post]="post"></app-blog-post-card>
+          </div>
+        </div>
+      </section>
+
+      <nav class="d-flex justify-content-center mt-5" *ngIf="vm.allStories.totalPages > 1" aria-label="Blog pagination">
+        <ul class="pagination blog-pagination mb-0">
+          <li class="page-item" [class.disabled]="vm.page <= 1">
+            <button class="page-link" (click)="setPage(vm.page - 1)" [disabled]="vm.page <= 1">Previous</button>
+          </li>
+
+          <li class="page-item disabled d-none d-sm-block">
+            <span class="page-link">Page {{ vm.page }} of {{ vm.allStories.totalPages }}</span>
+          </li>
+
+          <li class="page-item" [class.disabled]="vm.page >= vm.allStories.totalPages">
+            <button class="page-link" (click)="setPage(vm.page + 1)" [disabled]="vm.page >= vm.allStories.totalPages">Next</button>
+          </li>
+        </ul>
+      </nav>
+    </ng-container>
+
+    <ng-template #loading>
+      <section class="blog-skeleton blog-skeleton--hero mb-4"></section>
+
+      <section class="mt-4 mt-lg-5">
+        <div class="blog-section-heading">
+          <div class="blog-skeleton blog-skeleton--heading"></div>
+        </div>
+        <div class="row g-4">
+          <div class="col-12 col-md-6 col-lg-3" *ngFor="let _ of [0,1,2,3]">
+            <div class="blog-skeleton blog-skeleton--card"></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="mt-4 mt-lg-5">
+        <div class="blog-section-heading">
+          <div class="blog-skeleton blog-skeleton--heading"></div>
+          <div class="blog-skeleton blog-skeleton--pills"></div>
+        </div>
+        <div class="row g-4">
+          <div class="col-12 col-md-6 col-lg-4" *ngFor="let _ of [0,1,2]">
+            <div class="blog-skeleton blog-skeleton--card"></div>
+          </div>
+        </div>
+      </section>
+    </ng-template>
+  </div>
+</div>
+

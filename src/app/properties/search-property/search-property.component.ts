@@ -4,6 +4,7 @@ import { LoadSpinnerService } from 'src/app/shared/services/load-spinner.service
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { SearchStateService } from 'src/app/shared/services/search-state.service';
 import { GoogleMapsService, PlacePrediction, PlaceDetails } from 'src/app/shared/services/google-maps.service';
+import { normalizeLocationString } from 'src/app/shared/helpers/location-normalization.helper';
 import { Subject, from, combineLatest } from 'rxjs';
 import { debounceTime, filter, switchMap, takeUntil, catchError, tap, map, distinctUntilChanged } from 'rxjs/operators';
 import { of } from 'rxjs';
@@ -280,12 +281,13 @@ export class SearchPropertyComponent implements OnInit, AfterViewInit, OnDestroy
       // Get structured place details (city, state, coordinates, etc.)
       const placeDetails = await this.googleMapsService.getPlaceDetails(prediction.place_id);
 
+      const normalizedAddress = normalizeLocationString(placeDetails.formatted_address);
       // Update form with formatted address (visual only)
-      this.searchForm.get('destination')?.setValue(placeDetails.formatted_address, { emitEvent: false });
+      this.searchForm.get('destination')?.setValue(normalizedAddress, { emitEvent: false });
 
       // Remember we selected from dropdown so blur does not overwrite with basic location
 
-      this.lastSelectedPlaceAddress = placeDetails.formatted_address;
+      this.lastSelectedPlaceAddress = normalizedAddress;
 
       // Update search state with structured location data
       this.updateSearchStateWithLocation(placeDetails);

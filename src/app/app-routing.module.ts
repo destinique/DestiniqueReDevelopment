@@ -110,6 +110,11 @@ const routes: Routes = [
     loadChildren: () =>
       import("./myprofile/myprofile.module").then((m) => m.MyprofileModule),
   },
+  {
+    path: 'blog',
+    loadChildren: () =>
+      import('./blog/blog.module').then(m => m.BlogModule)
+  },
   { path: '**', redirectTo: '', pathMatch: 'full' }
 ];
 

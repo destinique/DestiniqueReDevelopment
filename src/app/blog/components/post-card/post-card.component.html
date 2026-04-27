@@ -1,0 +1,50 @@
+<article
+  class="blog-post-card"
+  [class.blog-post-card--featured]="variant === 'featured'"
+  [class.blog-post-card--compact]="variant === 'compact'"
+  [class.blog-post-card--carousel]="variant === 'carousel'"
+  [class.blog-post-card--exclusive]="variant === 'exclusive'"
+>
+  <!-- Featured hero (Airbnb Newsroom-like) -->
+  <a class="blog-post-hero" *ngIf="variant === 'featured'; else defaultCard" [routerLink]="['/blog', post.slug]">
+    <div class="blog-post-hero__text">
+      <div class="blog-post-hero__date">{{ post.date | date: 'mediumDate' }}</div>
+      <h2 class="blog-post-hero__title">
+        <span class="blog-post-hero__title-text" [innerHTML]="titleHtml"></span>
+      </h2>
+      <div class="blog-post-hero__actions">
+        <span class="blog-post-hero__button">Read more</span>
+      </div>
+    </div>
+
+    <div class="blog-post-hero__media" *ngIf="featuredImageUrl">
+      <img class="blog-post-hero__image" [src]="featuredImageUrl" [alt]="post.title.rendered || 'Blog post'" />
+    </div>
+  </a>
+
+  <ng-template #defaultCard>
+    <a class="blog-post-card__link" [routerLink]="['/blog', post.slug]">
+      <div class="blog-post-card__media" *ngIf="featuredImageUrl">
+        <img class="blog-post-card__image" [src]="featuredImageUrl" [alt]="post.title.rendered || 'Blog post'" />
+      </div>
+
+      <div class="blog-post-card__body">
+        <div class="blog-post-card__meta">
+          <span class="blog-post-card__date">{{ post.date | date: 'mediumDate' }}</span>
+        </div>
+
+        <h2 class="blog-post-card__title" [innerHTML]="titleHtml"></h2>
+
+        <ng-container *ngIf="variant !== 'compact' && variant !== 'carousel' && variant !== 'exclusive'">
+          <div class="blog-post-card__excerpt" [innerHTML]="excerptHtml"></div>
+
+          <div class="blog-post-card__cta">
+            <span>Read story</span>
+            <span aria-hidden="true">→</span>
+          </div>
+        </ng-container>
+      </div>
+    </a>
+  </ng-template>
+</article>
+

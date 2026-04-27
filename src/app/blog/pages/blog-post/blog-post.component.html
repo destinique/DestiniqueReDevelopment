@@ -1,0 +1,39 @@
+<div class="container py-4 py-lg-5" *ngIf="vm$ | async as vm; else loading">
+  <ng-container *ngIf="vm.post; else notFound">
+    <div class="blog-article">
+      <a class="blog-article__back" routerLink="/blog">← Back to Blog</a>
+
+      <header class="blog-article__header">
+        <div class="blog-article__date">{{ vm.post.date | date: 'mediumDate' }}</div>
+        <h1 class="blog-article__title" [innerHTML]="vm.post.title.rendered"></h1>
+      </header>
+
+      <figure *ngIf="vm.featuredImageUrl" class="blog-article__hero">
+        <img class="blog-article__hero-img" [src]="vm.featuredImageUrl" [alt]="vm.post.title.rendered || 'Blog post'" />
+      </figure>
+
+      <section class="blog-article__content" [innerHTML]="vm.post.content.rendered"></section>
+    </div>
+  </ng-container>
+
+  <ng-template #notFound>
+    <div class="alert alert-light border">
+      Post not found.
+    </div>
+  </ng-template>
+</div>
+
+<ng-template #loading>
+  <div class="container py-4 py-lg-5">
+    <div class="blog-article">
+      <div class="blog-skeleton blog-skeleton--line w-25 mb-4"></div>
+      <div class="blog-skeleton blog-skeleton--line w-50 mb-3"></div>
+      <div class="blog-skeleton blog-skeleton--title mb-4"></div>
+      <div class="blog-skeleton blog-skeleton--hero mb-4"></div>
+      <div class="blog-skeleton blog-skeleton--para mb-2"></div>
+      <div class="blog-skeleton blog-skeleton--para mb-2"></div>
+      <div class="blog-skeleton blog-skeleton--para w-75"></div>
+    </div>
+  </div>
+</ng-template>
+

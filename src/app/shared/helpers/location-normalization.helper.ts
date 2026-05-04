@@ -9,6 +9,7 @@ export const LOCATION_TEXT_REPLACEMENTS: ReadonlyArray<{ pattern: RegExp; replac
   { pattern: /\bSt\.?\s+Barth[eé]lemy\b/gi, replacement: 'Saint Barthélemy' },
   { pattern: /\bEivissa\b/gi, replacement: 'Ibiza' },  
   { pattern: /\bMetropolitan City of Rome Capital\b/gi, replacement: 'Rome' },
+  { pattern: /\bCockburn Town TKCA 1ZZ\b/gi, replacement: 'Turks Islands' },
 ];
 
 /**

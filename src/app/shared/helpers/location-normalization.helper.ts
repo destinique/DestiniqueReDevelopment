@@ -7,6 +7,8 @@ import { LocationData } from '../interfaces/search-state.interface';
 export const LOCATION_TEXT_REPLACEMENTS: ReadonlyArray<{ pattern: RegExp; replacement: string }> = [
   // St Barthélemy → Saint Barthélemy (covers "St", "St.", and non-accented variants)
   { pattern: /\bSt\.?\s+Barth[eé]lemy\b/gi, replacement: 'Saint Barthélemy' },
+  { pattern: /\bEivissa\b/gi, replacement: 'Ibiza' },  
+  { pattern: /\bMetropolitan City of Rome Capital\b/gi, replacement: 'Rome' },
 ];
 
 /**

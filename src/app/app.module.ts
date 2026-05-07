@@ -17,6 +17,7 @@ import { enGbLocale } from 'ngx-bootstrap/locale'; // Use enGbLocale but configu
 // Define locale
 defineLocale('en-gb', enGbLocale);
 import { CookieBannerComponent } from './shared/components/cookie-banner/cookie-banner.component';
+import { NotificationsModule } from './shared/notifications/notifications.module';
 
 @NgModule({
   declarations: [
@@ -49,7 +50,8 @@ import { CookieBannerComponent } from './shared/components/cookie-banner/cookie-
     FooterModule,
     TopScrollModule,
     BsDatepickerModule.forRoot(),
-    CookieBannerComponent
+    CookieBannerComponent,
+    NotificationsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

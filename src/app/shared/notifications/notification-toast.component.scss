@@ -1,0 +1,86 @@
+:host {
+  display: block;
+  width: 100%;
+  pointer-events: auto;
+  animation: appNotificationSlideIn 220ms ease-out both;
+}
+
+:host(.is-leaving) {
+  animation: appNotificationSlideOut 220ms ease-in both;
+}
+
+.app-notification-toast {
+  margin: 0;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  border-radius: 0.5rem;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  padding: 0.75rem 1rem;
+  background-clip: padding-box;
+}
+
+.app-notification-toast__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 0.6rem;
+  margin-top: 0.1rem;
+  flex: 0 0 auto;
+  line-height: 1;
+}
+
+.app-notification-toast__body {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.app-notification-toast__title {
+  font-weight: 600;
+  margin-bottom: 0.15rem;
+  line-height: 1.25;
+}
+
+.app-notification-toast__message {
+  line-height: 1.35;
+  word-wrap: break-word;
+  overflow-wrap: anywhere;
+
+  /* Anchors are injected via [innerHTML]; ng-deep lets us style them across scope. */
+  ::ng-deep a {
+    color: inherit;
+    text-decoration: underline;
+    font-weight: 600;
+
+    &:hover,
+    &:focus {
+      text-decoration: none;
+      opacity: 0.85;
+    }
+  }
+}
+
+.app-notification-toast__close {
+  flex: 0 0 auto;
+  margin-top: 0.25rem;
+}
+
+@keyframes appNotificationSlideIn {
+  from {
+    transform: translateY(-12px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes appNotificationSlideOut {
+  from {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateY(-12px);
+    opacity: 0;
+  }
+}

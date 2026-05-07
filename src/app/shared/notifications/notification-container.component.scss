@@ -1,0 +1,19 @@
+.app-notification-container {
+  position: fixed;
+  top: 1rem;
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(560px, calc(100% - 2rem));
+  z-index: 1080; // above Bootstrap navbar/modal-backdrop layers
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  pointer-events: none;
+}
+
+@media (max-width: 576px) {
+  .app-notification-container {
+    width: calc(100% - 1rem);
+    top: 0.5rem;
+  }
+}

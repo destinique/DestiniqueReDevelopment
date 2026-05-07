@@ -9,6 +9,7 @@ import { FormsModule } from '@angular/forms'; // <-- Add this import
 // Import NgxSpinner and Toastr modules (without forRoot())
 import { NgxSpinnerModule } from 'ngx-spinner';
 import { ToastrModule } from 'ngx-toastr';
+import { NotificationsModule } from '../shared/notifications/notifications.module';
 
 @NgModule({
   declarations: [
@@ -24,6 +25,7 @@ import { ToastrModule } from 'ngx-toastr';
     // Import the modules (without forRoot() in feature modules)
     NgxSpinnerModule, // <-- Just import, no forRoot()
     ToastrModule,     // <-- Just import, no forRoot()
+    NotificationsModule, // exposes <app-notification-tray>
   ],
   exports: [
     NavbarComponent

@@ -1,0 +1,12 @@
+<div
+  class="app-notification-container"
+  [attr.aria-live]="'polite'"
+  [attr.aria-atomic]="'true'"
+  *ngIf="visible.length > 0"
+>
+  <app-notification-toast
+    *ngFor="let n of visible; trackBy: trackById"
+    [notification]="n"
+    (closed)="onClosed($event)"
+  ></app-notification-toast>
+</div>

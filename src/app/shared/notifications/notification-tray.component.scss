@@ -1,0 +1,160 @@
+:host {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  vertical-align: middle;
+  margin-left: 0.6rem;
+  /* Above main content; navbar is dark so panel needs to render above it. */
+  z-index: 1080;
+}
+
+.app-notification-tray__btn {
+  position: relative;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  border: 1px solid transparent;
+  background: transparent;
+  color: #fff;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background-color 120ms ease, border-color 120ms ease;
+  padding: 0;
+
+  &:hover,
+  &:focus-visible {
+    background: rgba(255, 255, 255, 0.12);
+    border-color: rgba(255, 255, 255, 0.18);
+    outline: none;
+  }
+
+  &.has-active {
+    color: #ffffff;
+  }
+
+  svg {
+    line-height: 1;
+    display: block;
+  }
+}
+
+.app-notification-tray__badge {
+  position: absolute;
+  top: -3px;
+  right: -3px;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 4px;
+  border-radius: 9px;
+  background: #d6336c;
+  color: #fff;
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 18px;
+  text-align: center;
+  border: 2px solid #000; // matches the dark navbar background
+}
+
+.app-notification-tray__panel {
+  position: absolute;
+  top: calc(100% + 0.5rem);
+  right: 0;
+  width: min(380px, calc(100vw - 1.5rem));
+  max-height: min(70vh, 560px);
+  background: #fff;
+  color: #212529; // reset to default text color (host text is white)
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 0.5rem;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.24);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  z-index: 1090;
+}
+
+.app-notification-tray__panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.6rem 0.85rem;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+  background: #fafafa;
+}
+
+.app-notification-tray__panel-title {
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+.app-notification-tray__panel-body {
+  padding: 0.6rem 0.6rem;
+  overflow-y: auto;
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.app-notification-tray__item {
+  margin: 0;
+  border-radius: 0.4rem;
+  padding: 0.6rem 0.75rem;
+  border: 1px solid rgba(0, 0, 0, 0.04);
+
+  &.is-dismissed {
+    opacity: 0.6;
+  }
+}
+
+.app-notification-tray__item-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 0.5rem;
+  margin-top: 0.1rem;
+  flex: 0 0 auto;
+  line-height: 1;
+}
+
+.app-notification-tray__item-body {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.app-notification-tray__item-title {
+  font-weight: 600;
+  margin-bottom: 0.1rem;
+  line-height: 1.2;
+}
+
+.app-notification-tray__item-message {
+  line-height: 1.3;
+  word-wrap: break-word;
+  overflow-wrap: anywhere;
+
+  /* Anchors are injected via [innerHTML]; ng-deep lets us style them across scope. */
+  ::ng-deep a {
+    color: inherit;
+    text-decoration: underline;
+    font-weight: 600;
+
+    &:hover,
+    &:focus {
+      text-decoration: none;
+      opacity: 0.85;
+    }
+  }
+}
+
+@media (max-width: 576px) {
+  :host {
+    margin-left: 0.4rem;
+  }
+
+  .app-notification-tray__btn {
+    width: 32px;
+    height: 32px;
+  }
+}

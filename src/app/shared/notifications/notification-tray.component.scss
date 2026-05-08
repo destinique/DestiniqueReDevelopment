@@ -157,4 +157,18 @@
     width: 32px;
     height: 32px;
   }
+
+  /* On mobile the bell sits on the left of the topbar; anchoring the panel's
+     right edge to the bell would push the 380px panel off-screen to the left.
+     Switch to viewport-fixed centering so it always stays in view. */
+  .app-notification-tray__panel {
+    position: fixed;
+    top: 4rem; /* clear the navbar */
+    left: 0.5rem;
+    right: 0.5rem;
+    width: auto;
+    max-width: 560px;
+    margin: 0 auto;
+    max-height: calc(100vh - 5rem);
+  }
 }

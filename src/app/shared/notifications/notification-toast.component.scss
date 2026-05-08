@@ -1,6 +1,9 @@
 :host {
   display: block;
   width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
   pointer-events: auto;
   animation: appNotificationSlideIn 220ms ease-out both;
 }
@@ -16,6 +19,9 @@
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
   padding: 0.75rem 1rem;
   background-clip: padding-box;
+  max-width: 100%;
+  box-sizing: border-box;
+  word-break: break-word;
 }
 
 .app-notification-toast__icon {

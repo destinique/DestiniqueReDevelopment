@@ -1,19 +1,28 @@
 .app-notification-container {
   position: fixed;
   top: 1rem;
-  left: 50%;
-  transform: translateX(-50%);
-  width: min(560px, calc(100% - 2rem));
+  left: 1rem;
+  right: 1rem;
+  margin: 0 auto;
+  max-width: 560px;
+  width: auto;
   z-index: 1080; // above Bootstrap navbar/modal-backdrop layers
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
   pointer-events: none;
+
+  /* Defensive: ensure the container itself never overflows horizontally
+     even if a child injects an unbreakable string. */
+  box-sizing: border-box;
 }
 
 @media (max-width: 576px) {
   .app-notification-container {
-    width: calc(100% - 1rem);
-    top: 0.5rem;
+    /* Match the tray panel's mobile top so the first auto-toast also clears
+       the navbar instead of overlapping it. */
+    top: 4rem;
+    left: 0.5rem;
+    right: 0.5rem;
   }
 }

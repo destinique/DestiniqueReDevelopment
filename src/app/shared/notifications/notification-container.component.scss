@@ -1,6 +1,8 @@
 .app-notification-container {
   position: fixed;
-  top: 1rem;
+  /* Pushed down 112px from the original 1rem (16px) baseline to clear the
+     fixed navbar on desktop. Mobile baseline is overridden below. */
+  top: calc(1rem + 112px);
   left: 1rem;
   right: 1rem;
   margin: 0 auto;

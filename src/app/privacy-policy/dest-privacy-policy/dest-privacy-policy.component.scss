@@ -3,7 +3,9 @@
 .privacy-page {
   padding: $spacing-xl $spacing-md $spacing-3xl;
   font-family: $font-family-base;
-  background-color: $color-bg-light;
+  background:
+    linear-gradient(180deg, rgba($color-primary, 0.06) 0%, $color-bg-light 18rem, $color-bg-light 100%);
+  color: $color-text-muted;
 
   @media (min-width: 768px) {
     padding: $spacing-2xl $spacing-lg $spacing-3xl;
@@ -11,11 +13,12 @@
 }
 
 .privacy-wrap {
-  max-width: 720px;
+  max-width: 42rem;
   margin: 0 auto;
   background-color: $color-white;
   border-radius: $border-radius-lg;
-  box-shadow: $shadow-md;
+  box-shadow: $shadow-lg;
+  border: $border-width solid rgba($color-secondary, 0.06);
   padding: $spacing-xl $spacing-lg;
 
   @media (min-width: 768px) {
@@ -24,66 +27,95 @@
 }
 
 .privacy-header {
-  margin-bottom: $spacing-xl;
-  padding-bottom: $spacing-lg;
-  border-bottom: $border-width solid $color-border-light;
+  margin-bottom: $spacing-2xl;
+  // padding-bottom: $spacing-xl;
+  // border-bottom: $border-width solid $color-border-light;
+}
+
+.privacy-eyebrow {
+  margin: 0 0 $spacing-sm 0;
+  font-size: $font-size-sm;
+  font-weight: $font-weight-600;
+  letter-spacing: $letter-spacing-wider;
+  text-transform: uppercase;
+  color: $color-primary;
 }
 
 .privacy-title {
-  margin: 0 0 $spacing-sm 0;
-  font-size: 1.75rem;
-  font-weight: $font-weight-600;
+  margin: 0 0 $spacing-md 0;
+  font-size: clamp(1.625rem, 1.35rem + 1.2vw, 2.125rem);
+  font-weight: $font-weight-700;
   line-height: $line-height-tight;
+  letter-spacing: -0.02em;
   color: $color-secondary;
-
-  @media (min-width: 768px) {
-    font-size: 2rem;
-  }
 }
 
 .privacy-meta {
-  margin: 0 0 $spacing-md 0;
+  margin: 0 0 $spacing-sm 0;
   font-size: $font-size-sm;
-  color: $color-text-muted;
-}
-
-.privacy-intro {
-  margin: 0 0 $spacing-md 0;
-  font-size: $font-size-base;
-  line-height: $line-height-base;
-  color: $color-text-muted;
-
-  &:last-of-type {
-    margin-bottom: 0;
-  }
-}
-
-.privacy-section {
-  margin-bottom: $spacing-xl;
+  color: $color-text-light;
 
   &:last-child {
     margin-bottom: 0;
   }
 }
 
+.privacy-intro {
+  margin: 0;
+  max-width: 38rem;
+  font-size: $font-size-sm;
+  font-weight: $font-weight-400;
+  line-height: 1.55;
+  color: $color-text-muted;
+}
+
+.privacy-section {
+  margin-bottom: $spacing-2xl;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+
+  &--nested {
+    margin-bottom: $spacing-xl;
+    padding-left: $spacing-md;
+    border-left: 3px solid rgba($color-primary, 0.35);
+
+    @media (min-width: 768px) {
+      padding-left: $spacing-lg;
+    }
+  }
+
+  &--contact {
+    margin-bottom: 0;
+  }
+}
+
 .privacy-section-title {
   margin: 0 0 $spacing-md 0;
-  font-size: $font-size-lg;
+  padding-bottom: $spacing-sm;
+  font-size: clamp(1.0625rem, 1rem + 0.35vw, 1.25rem);
+  font-weight: $font-weight-600;
+  color: $color-secondary;
+  line-height: $line-height-tight;
+  letter-spacing: -0.01em;
+  border-bottom: $border-width solid rgba($color-primary, 0.2);
+}
+
+.privacy-subtitle {
+  margin: 0 0 $spacing-sm 0;
+  font-size: $font-size-base;
   font-weight: $font-weight-600;
   color: $color-secondary;
   line-height: $line-height-tight;
 }
 
-.privacy-subtitle {
-  margin: $spacing-md 0 $spacing-sm 0;
+.privacy-share-heading {
+  margin: 0 0 $spacing-sm 0;
   font-size: $font-size-base;
   font-weight: $font-weight-600;
   color: $color-secondary;
   line-height: $line-height-tight;
-
-  &:first-child {
-    margin-top: 0;
-  }
 }
 
 .privacy-text {
@@ -95,16 +127,29 @@
   &:last-child {
     margin-bottom: 0;
   }
+
+  &--flush:last-child {
+    margin-bottom: 0;
+  }
 }
 
 .privacy-list {
   margin: 0 0 $spacing-md 0;
-  padding-left: $spacing-xl;
+  padding-left: $spacing-lg;
+  list-style-position: outside;
 
   li {
     margin-bottom: $spacing-sm;
+    padding-left: $spacing-xs;
+    font-size: $font-size-sm;
+    font-weight: $font-weight-600;
     line-height: $line-height-base;
-    color: $color-text-muted;
+    color: $color-secondary;
+
+    &::marker {
+      color: $color-primary;
+      font-weight: $font-weight-700;
+    }
 
     &:last-child {
       margin-bottom: 0;
@@ -112,34 +157,28 @@
   }
 }
 
-.privacy-note {
+.privacy-contact-card {
   margin-top: $spacing-md;
-  padding: $spacing-md $spacing-lg;
-  background-color: rgba($color-warning, 0.12);
-  border-left: 4px solid $color-warning;
-  border-radius: 0 $border-radius-sm $border-radius-sm 0;
-  font-size: $font-size-sm;
-  line-height: $line-height-base;
-  color: $color-text-muted;
+  padding: $spacing-lg;
+  background: linear-gradient(135deg, rgba($color-primary, 0.08) 0%, $color-bg-light 55%);
+  border: $border-width solid $color-border-light;
+  border-radius: $border-radius-md;
+  box-shadow: $shadow-sm;
 }
 
-.privacy-block {
-  p {
-    margin: 0 0 $spacing-md 0;
-    font-size: $font-size-base;
-    line-height: $line-height-base;
-    color: $color-text-muted;
-
-    &:last-child {
-      margin-bottom: 0;
-    }
-  }
+.privacy-contact-name {
+  margin: 0 0 $spacing-xs 0;
+  font-size: $font-size-lg;
+  font-weight: $font-weight-600;
+  color: $color-secondary;
 }
 
 .privacy-link {
   color: $color-primary;
   font-weight: $font-weight-500;
   text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 2px;
 
   &:hover {
     color: $color-primary-dark;
@@ -149,5 +188,14 @@
     outline: none;
     box-shadow: 0 0 0 3px $color-focus-ring;
     border-radius: $border-radius-sm;
+  }
+
+  &--standalone {
+    font-weight: $font-weight-600;
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
   }
 }

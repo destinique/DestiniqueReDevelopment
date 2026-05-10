@@ -10,6 +10,14 @@ export const LOCATION_TEXT_REPLACEMENTS: ReadonlyArray<{ pattern: RegExp; replac
   { pattern: /\bEivissa\b/gi, replacement: 'Ibiza' },  
   { pattern: /\bMetropolitan City of Rome Capital\b/gi, replacement: 'Rome' },
   { pattern: /\bCockburn Town TKCA 1ZZ\b/gi, replacement: 'Turks Islands' },
+  { pattern: /\b8200 Albufeira\b/gi, replacement: 'Albufeira' },
+  { pattern: /\b73040 Santa Maria di Leuca LE\b/gi, replacement: 'Santa Maria di Leuca' },
+  { pattern: /\bCockburn Harbour TKCA 1ZZ\b/gi, replacement: 'Cockburn Harbour' },
+  { pattern: /\b84400 Apt\b/gi, replacement: 'Apt' },
+  { pattern: /\b6370 Kitzbuhel\b/gi, replacement: 'Kitzbuhel' },
+  { pattern: /\bNord de Palma District\b/gi, replacement: 'Palma de Mallorca' },
+  { pattern: /\b07840 Santa Eulària des Riu\b/gi, replacement: 'Santa Eulària des Riu' },
+  { pattern: /\b50000 Saint-Lô\b/gi, replacement: 'Saint-Lô' },  
 ];
 
 /**

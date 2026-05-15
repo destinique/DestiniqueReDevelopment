@@ -36,6 +36,10 @@ export const LOCATION_TEXT_REPLACEMENTS: ReadonlyArray<{ pattern: RegExp; replac
   { pattern: /\b97015 Modica\b/gi, replacement: 'Modica' },
   { pattern: /\bFree municipal consortium of Ragusa\b/gi, replacement: 'Ragusa' },
   { pattern: /\b84017 Positano\b/gi, replacement: 'Positano' },
+  { pattern: /\b07150 Andratx\b/gi, replacement: 'Andratx' },
+  { pattern: /\b58015 Orbetello\b/gi, replacement: 'Orbetello' },
+  { pattern: /\b63728 Sayulita\b/gi, replacement: 'Sayulita' },
+  { pattern: /\b07830 Sant Josep de sa Talaia\b/gi, replacement: 'Sant Josep de sa Talaia' },
 ];
 
 /**

@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { EnvService } from 'src/app/env.service';
 
 export interface MapImage {
   URLTxt?: string;
@@ -48,10 +49,15 @@ export interface MapApiResponse {
   providedIn: 'root',
 })
 export class MapPropertiesService {
-  // Map-specific endpoint (wrapper around properties.php)
-  private apiUrl = 'https://api.destinique.com/api-user/properties_map.php';
+  /** Map-specific endpoint (properties_map.php under api-user/) */
+  private readonly apiUrl: string;
 
-  constructor(private http: HttpClient) {}
+  constructor(
+    private http: HttpClient,
+    private env: EnvService
+  ) {
+    this.apiUrl = `${this.env.apiUrl}properties_map.php`;
+  }
 
   /**
    * Fetch properties for the map.

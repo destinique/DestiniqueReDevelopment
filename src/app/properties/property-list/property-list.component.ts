@@ -11,9 +11,10 @@ import {
   ChangeDetectorRef,
 } from '@angular/core';
 import { NavigationEnd, NavigationStart, Router } from '@angular/router';
-import { forkJoin, of, Subject, Subscription } from 'rxjs';
+import { of, Subject, Subscription } from 'rxjs';
 import { catchError, filter, finalize, map, takeUntil } from 'rxjs/operators';
-import { PropertyService, PropertyResponse, Property } from 'src/app/shared/services/property.service';
+import { PropertyService } from 'src/app/shared/services/property.service';
+import { Property, PropertyResponse } from 'src/app/shared/interfaces/property.interface';
 import { SearchStateService } from 'src/app/shared/services/search-state.service';
 import {
   buildUrlFromState,
@@ -323,23 +324,18 @@ export class PropertyListComponent implements OnInit, OnDestroy {
     this.isFiltering = true;
     this.loadError = null;
 
-    forkJoin(
-      listIds.map((id) =>
-        this.propertyService.getPropertyById(id).pipe(
-          map((resp: PropertyResponse) => (resp?.success && resp.data?.length ? resp.data[0] : null)),
-          catchError(() => of(null))
-        )
-      )
-    )
+    this.propertyService
+      .getPropertiesByListIds(listIds)
       .pipe(
+        map((resp: PropertyResponse) => (resp?.success && resp.data?.length ? resp.data : [])),
+        catchError(() => of([] as Property[])),
         takeUntil(this.destroy$),
         finalize(() => {
           this.isLoading = false;
           this.isFiltering = false;
         })
       )
-      .subscribe((rows) => {
-        const results = (rows ?? []).filter((p): p is Property => !!p);
+      .subscribe((results) => {
         this.onListIdSearchComplete(results);
         this.cdr.markForCheck();
       });

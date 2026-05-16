@@ -187,11 +187,11 @@ export class EnvService {
 
       // this._apiUrl = "http://localhost:8080/";
       // this._ratesApiUrl = "http://localhost:8800/?task=";
-
       // this._apiUrl = "https://destinique.com/api-user/";
       // this._ratesApiUrl = "https://destinique.com/ratesapp4website/?task=";
+
       this._apiUrl = "https://api.destinique.com/api-user/";
-      this._ratesApiUrl = "https://destinique.com/ratesapp4website/?task=";
+      this._ratesApiUrl = "https://api.destinique.com/ratesapp4website/";
 
       // this._ratesAvailApiUrl = "http://localhost/ratesapp4website/availabilitydate.php/?task=";
       this._authMapKey = "AIzaSyAPpH4FGQaj_JIJOViHAeHGAjl7RDeW8OQ";
@@ -200,32 +200,32 @@ export class EnvService {
       this._env = Environment.Prod;
       this._applicationURLInitials = "https://dev.destinique.com";
       this._apiUrl = "https://api.destinique.com/api-user/";
-      this._ratesApiUrl = "https://destinique.com/ratesapp4website/?task=";
+      this._ratesApiUrl = "https://api.destinique.com/ratesapp4website/";
       this._authMapKey = "AIzaSyCdQ8e5JTa-hVDQc9iTxuA_iQFdb9X3dWI";
     }
     else if (/^sandbox.destinique.com/.test(hostname)) {
       this._env = Environment.Prod;
       this._applicationURLInitials = "https://sandbox.destinique.com";
       this._apiUrl = "https://sandbox.destinique.com/api-user/";
-      this._ratesApiUrl = "https://sandbox.destinique.com/ratesapp4website/?task=";
+      this._ratesApiUrl = "https://api.destinique.com/ratesapp4website/";
       this._authMapKey = "AIzaSyCdQ8e5JTa-hVDQc9iTxuA_iQFdb9X3dWI";
     }
     else if (/^destinique.org/.test(hostname)) {
       this._env = Environment.Prod;
       this._applicationURLInitials = "https://destinique.org";
       this._apiUrl = "https://api.destinique.com/api-user/";
-      this._ratesApiUrl = "https://destinique.org/ratesapp4website/?task=";
+      this._ratesApiUrl = "https://api.destinique.com/ratesapp4website/";
       this._authMapKey = "AIzaSyCdQ8e5JTa-hVDQc9iTxuA_iQFdb9X3dWI";
     } else if (/^destinique.com/.test(hostname)) {
       this._env = Environment.Prod;
       this._applicationURLInitials = "https://destinique.com";
       this._apiUrl = "https://api.destinique.com/api-user/";
-      this._ratesApiUrl = "https://destinique.com/ratesapp4website/?task=";
+      this._ratesApiUrl = "https://api.destinique.com/ratesapp4website/";
     } else {
       this._env = Environment.Prod;
       this._applicationURLInitials = 'https://destinique.com';
       this._apiUrl = 'https://api.destinique.com/api-user/';
-      this._ratesApiUrl = 'https://destinique.com/ratesapp4website/?task=';
+      this._ratesApiUrl = 'https://api.destinique.com/ratesapp4website/';
       this._authMapKey = 'AIzaSyCdQ8e5JTa-hVDQc9iTxuA_iQFdb9X3dWI';
     }
   }

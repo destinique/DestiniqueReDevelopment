@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 
 import { PropertyCardComponent } from './property-card.component';
-import { Property } from 'src/app/shared/services/property.service';
+import { Property } from 'src/app/shared/interfaces/property.interface';
 
 describe('PropertyCardComponent', () => {
   let component: PropertyCardComponent;
@@ -36,7 +36,9 @@ describe('PropertyCardComponent', () => {
     petFriendly: false,
     amenities: [],
     country: 'United States',
-    RegionContinent: 'North America'
+    RegionContinent: 'North America',
+    location_match_tier: null,
+    distance_km: null
   };
 
   beforeEach(async () => {

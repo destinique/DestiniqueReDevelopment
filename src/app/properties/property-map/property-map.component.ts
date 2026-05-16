@@ -15,7 +15,7 @@ import { Subject } from 'rxjs';
 import { debounceTime, takeUntil } from 'rxjs/operators';
 import { GoogleMapsService } from 'src/app/shared/services/google-maps.service';
 import { StorageService } from 'src/app/shared/services/storage.service';
-import { Property } from 'src/app/shared/services/property.service';
+import { Property } from 'src/app/shared/interfaces/property.interface';
 
 declare const google: any;
 

@@ -1,5 +1,5 @@
 import { Component, Input, Output, EventEmitter, OnChanges, SimpleChanges } from '@angular/core';
-import { Property } from 'src/app/shared/services/property.service';
+import { Property } from 'src/app/shared/interfaces/property.interface';
 import { UserRoleService } from 'src/app/shared/services/user-role.service';
 
 @Component({
@@ -59,7 +59,7 @@ export class PropertyCardComponent implements OnChanges {
     return this.formatProviderName(this.property.provider);
   }
 
-  private formatProviderName(provider: string): string {
+  private formatProviderName(provider?: string | null): string {
     if (!provider) return 'Unknown';
     return provider
       .replace(/([a-z])([A-Z])/g, '$1 $2')

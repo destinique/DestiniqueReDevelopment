@@ -3,6 +3,7 @@ import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http
 import { Observable, throwError } from 'rxjs';
 import { retry, catchError, map, delay } from 'rxjs/operators';
 import { StorageService } from 'src/app/shared/services/storage.service';
+import { EnvService } from 'src/app/env.service';
 
 export interface BannerImage {
   title: string;
@@ -47,15 +48,21 @@ import { InquiryApiRequest, InquiryApiResponse } from 'src/app/shared/interfaces
   providedIn: 'root'
 })
 export class CrudService {
-  private readonly baseUrl= 'https://api.destinique.com/api-user/';
-  private readonly rateAppBaseUrl= 'https://api.destinique.com/ratesapp4website/';
-  private readonly rateAppWithDetailsBaseUrl= 'https://api.destinique.com/ratesapp4website/index-debug.php';
-  private destinationAPIUrl = "https://api.destinique.com/api-user/get_destination_data.php";
+  private readonly baseUrl: string;
+  private readonly rateAppBaseUrl: string;
+  private readonly rateAppWithDetailsBaseUrl: string;
+  private readonly destinationAPIUrl: string;
 
   constructor(
     private http: HttpClient,
-    private storageService: StorageService
-  ) {}
+    private storageService: StorageService,
+    private env: EnvService
+  ) {
+    this.baseUrl = this.env.apiUrl;
+    this.rateAppBaseUrl = this.env.ratesApiUrl;
+    this.rateAppWithDetailsBaseUrl = `${this.env.ratesApiUrl}index-debug.php`;
+    this.destinationAPIUrl = `${this.env.apiUrl}get_destination_data.php`;
+  }
 
   // Registration method
   registerUser(userData: RegisterUserData): Observable<any> {

@@ -4,6 +4,7 @@ import { NgbDate } from '@ng-bootstrap/ng-bootstrap';
 import { Observable, of } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { map } from 'rxjs/operators';
+import { EnvService } from 'src/app/env.service';
 
 export interface DateAvailability {
   date: NgbDate;
@@ -46,10 +47,14 @@ export interface ApiAvailabilityResponse {
   providedIn: 'root'
 })
 export class AvailabilityService {
-  // private apiUrl = 'https://destinique.com/ratesapp4website/';
-  private apiUrl= 'https://api.destinique.com/ratesapp4website/';
+  private readonly apiUrl: string;
 
-  constructor(private http: HttpClient) {}
+  constructor(
+    private http: HttpClient,
+    private env: EnvService
+  ) {
+    this.apiUrl = this.env.ratesApiUrl;
+  }
 
   getAvailability(propertyId: string): Observable<DateAvailability[]> {
     return this.http.get<ApiAvailabilityResponse>(`${this.apiUrl}?task=get_avails&list_id=${propertyId}`)

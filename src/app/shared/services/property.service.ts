@@ -3,67 +3,24 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { catchError, map, shareReplay, finalize } from 'rxjs/operators';
+import { EnvService } from 'src/app/env.service';
 import { FilterOption } from '../interfaces/advanced-filter-form.interface';
 import { VIEW_TYPES_REMOVE_LIST } from '../constants/view-type-remove-list.constant';
+import type { Property, PropertyResponse } from '../interfaces/property.interface';
+
+export type {
+  Property,
+  PropertyListImage,
+  PropertyResponse,
+  PropertySearchPagination,
+  LocationMatchTier,
+  Image,
+} from '../interfaces/property.interface';
 
 /** API response for getAllViewTypeAndHouseType.php */
 export interface ViewTypeAndHouseTypeResponse {
   viewtypes: string[];
   categories: string[] | Array<{ name: string; id?: string }>;
-}
-
-export interface Image {
-  URLTxt?: string;
-}
-
-export interface Property {
-  // Exact field names from API response
-  list_id: number;
-  provider: string;           // lowercase
-  headline: string;
-  bedrooms: number;
-  bathrooms: number;
-  sleeps: number;
-  price_per_night: number;
-  city: string;
-  state: string;
-  address1: string;
-  property_type: string;
-  view_type: string;          // Note: sometimes empty string
-  latitude: number;
-  longitude: number;
-  rating: number;
-  seo_url: string | null;
-  description: string;
-  Neighborhood: string;       // Capital N (from API)
-  Zip: number;                // Capital Z (from API)
-  Complex: string;            // Capital C (from API)
-  meta_title: string | null;
-  meta_description: string | null;
-  URL: string;                // Capital URL (from API)
-  created_at: string;
-  petFriendly: boolean;       // lowercase F (from API)
-  amenities: any[];
-
-  // Optional fields that might not always be present
-  country?: string;
-  RegionContinent?: string;
-  images?: Image[];
-}
-
-export interface PropertyResponse {
-  success: boolean;
-  data: Property[];
-  message: string;
-  pagination: {
-    page: number;
-    pageSize: number;
-    total: number;
-    summary?: string;
-    totalPages: number;
-    hasNext: boolean;
-    hasPrev: boolean;
-  };
 }
 
 export interface PropertyMetaData {
@@ -114,8 +71,10 @@ export interface SearchParams {
   providedIn: 'root'
 })
 export class PropertyService {
-  private apiUrl = 'https://api.destinique.com/api-user/properties.php';
-  private apiUserBase = 'https://api.destinique.com/api-user/';
+  /** GET properties.php (search / pagination) */
+  private readonly apiUrl: string;
+  /** api-user/ base for filter options, by-id, headline, metadata endpoints */
+  private readonly apiUserBase: string;
 
   /** Cached observable for filter options (property types + view types). */
   private filterOptions$: Observable<{ propertyTypes: FilterOption[]; viewTypes: FilterOption[] }> | null = null;
@@ -126,8 +85,12 @@ export class PropertyService {
    */
   private inFlightSearches = new Map<string, Observable<PropertyResponse>>();
 
-  constructor(private http: HttpClient) {
-    // No dependency on SearchStateService
+  constructor(
+    private http: HttpClient,
+    private env: EnvService
+  ) {
+    this.apiUserBase = this.env.apiUrl;
+    this.apiUrl = `${this.env.apiUrl}properties.php`;
   }
 
   /**
@@ -260,6 +223,18 @@ export class PropertyService {
    */
   getPropertyById(listId: number): Observable<PropertyResponse> {
     return this.http.get<PropertyResponse>(`${this.apiUserBase}properties_by_list_id.php?list_id=${listId}`);
+  }
+
+  /**
+   * Get multiple properties by list_id(s) in one request
+   */
+  getPropertiesByListIds(listIds: number[]): Observable<PropertyResponse> {
+    const ids = listIds.filter((id) => id > 0);
+    if (!ids.length) {
+      return of({ success: true, data: [], message: '', pagination: { page: 1, pageSize: 0, total: 0, totalPages: 0, hasNext: false, hasPrev: false } });
+    }
+    const params = new HttpParams().set('list_ids', ids.join(','));
+    return this.http.get<PropertyResponse>(`${this.apiUserBase}properties_by_list_id.php`, { params });
   }
 
   /**

@@ -41,6 +41,10 @@ export class AppComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit(): void {
+    if (this.isPropertyDeepLinkUrl(this.router.url)) {
+      this.contentReady = true;
+    }
+
     // SSR / prerender: use Router.routerState (reliable). Injected ActivatedRoute on
     // the bootstrap component is not always the same as routerState.root during initial render.
     this.applySeoFromRouterState();
@@ -48,6 +52,11 @@ export class AppComponent implements OnInit, AfterViewInit {
     this.router.events
       .pipe(filter((e): e is NavigationEnd => e instanceof NavigationEnd))
       .subscribe(() => this.applySeoFromRouterState());
+  }
+
+  private isPropertyDeepLinkUrl(rawUrl: string): boolean {
+    const path = rawUrl.trim().split('?')[0].split('#')[0];
+    return path === '/property' || path.startsWith('/property/');
   }
 
   /** Walk to deepest activated route and apply route `data.seo` (or nearest parent that defines it). */
